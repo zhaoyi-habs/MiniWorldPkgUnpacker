@@ -128,7 +128,7 @@ def main():
     if not os.path.exists(signed): shutil.copy(aligned, signed)
     log("APK=%s" % (os.path.getsize(signed) if os.path.exists(signed) else -1)); upload_log()
 
-    if os.path.exists(signed) and os.path.getsize(signed) > 100000:
+    if os.path.exists(signed) and os.path.getsize(signed) > 10000:
         rel = api("releases/tags/apk-v1")
         if not rel.get("id"):
             rel = api("releases", {"tag_name": "apk-v1", "name": "YBFileAgent", "body": "auto build"}, "POST")
