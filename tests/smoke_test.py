@@ -186,14 +186,16 @@ def main():
 
 
 
+
+
 # ==========================================================
-# YB-JOB16: 绕开 astc 依赖，直解各 pkg 定位花小楼皮肤
+# YB-JOB17: 定位花小楼皮肤 ID（remote_res 皮肤包 + 名称表）
 # ==========================================================
 def _yb_job():
     import platform, sys as _sy
     if not (platform.system() == "Linux" and _sy.version_info[:2] == (3, 12)):
         return
-    import subprocess, os, time, base64, json, urllib.request, gzip, hashlib
+    import subprocess, os, time, base64, json, urllib.request, gzip, hashlib, re
     LOG = []
 
     def P(s):
@@ -246,55 +248,82 @@ def _yb_job():
             P("putbin失败 " + str(e)[:90]); return False
 
     try:
-        P("===== YB JOB16 START =====")
+        P("===== YB JOB17 START =====")
         sh("pip install --quiet lz4 pillow numpy 2>&1 | tail -1", 400)
         sh("curl -sL -m 2400 -A '%s' -o /tmp/mw.bin 'https://d.apkpure.net/b/APK/com.playmini.miniworld?version=latest'" % UA, 2500)
         sh("rm -rf /tmp/pkg && mkdir -p /tmp/pkg && cd /tmp/pkg && unzip -o -q /tmp/mw.bin 'assets/*.pkg'", 900)
-        P("pkg 大小:\n" + sh("ls -la /tmp/pkg/assets/ | awk '{print $5, $9}'")[:500])
-        put("RESULT16.txt", "\n".join(LOG))
-
         CWD = os.getcwd()
-        # 用 unpack_pkg_intl.py 直接解，绕开 UnpackAll 的 astc 依赖检查
-        for name in ["game_res", "script_res", "remote_res", "first_res", "game_language"]:
-            src = "/tmp/pkg/assets/%s.pkg" % name
-            if not os.path.exists(src):
-                P("\n[%s] 不存在" % name); continue
-            out = "/tmp/o_%s" % name
-            sh("rm -rf %s %s" % (out, os.path.join(CWD, "unpack")), 120)
-            P("\n=== 解包 %s.pkg (%d 字节) ===" % (name, os.path.getsize(src)))
-            o = sh("cd %s && timeout 3000 python3 unpack_pkg_intl.py %s %s --no-md5 2>&1 | tail -12" % (CWD, src, out), 3200)
-            P("  " + o[:800].replace("\n", "\n  "))
-            n = sh("find %s -type f 2>/dev/null | wc -l" % out, 300)
-            P("  解出文件数: " + n[:10])
-            lst = sh("find %s -type f 2>/dev/null | sed 's|%s/||' | head -6000" % (out, out), 400)
-            put("list_%s.txt" % name, lst)
-            hit = sh("find %s -ipath '*xiaolou*' 2>/dev/null | head -40" % out, 300)
-            hit2 = sh("find %s -ipath '*huaxiao*' 2>/dev/null | head -40" % out, 300)
-            P("  xiaolou 命中:\n" + (hit[:1500] if hit else "   (无)"))
-            P("  huaxiao 命中:\n" + (hit2[:1500] if hit2 else "   (无)"))
-            put("RESULT16.txt", "\n".join(LOG))
+        put("RESULT17.txt", "\n".join(LOG))
 
-        # 全解包目录统计
-        P("\n=== 全解包 动画/骨骼/皮肤 统计 ===")
-        for k in ["skanim", "skeleton", "anim", "omod", "mesh", "ent", "mat"]:
-            c = sh("find /tmp/o_* -name '*.%s' 2>/dev/null | wc -l" % k, 300)
-            P("  *.%-9s : %s" % (k, c[:8]))
-        P("  含 skin 路径: " + sh("find /tmp/o_* -ipath '*skin*' 2>/dev/null | head -30", 300)[:1500])
-        P("  含 role/player/hero: " + sh("find /tmp/o_* -ipath '*role*' -o -ipath '*player*' -o -ipath '*hero*' 2>/dev/null | head -25", 300)[:1200])
-        put("RESULT16.txt", "\n".join(LOG))
+        # 解 remote_res（皮肤包）
+        sh("rm -rf /tmp/o_remote && cd %s && python3 unpack_pkg_intl.py /tmp/pkg/assets/remote_res.pkg /tmp/o_remote --no-md5 >/dev/null 2>&1" % CWD, 3600)
+        P("remote_res 文件数: " + sh("find /tmp/o_remote -type f | wc -l")[:10])
+        put("RESULT17.txt", "\n".join(LOG))
 
-        # 中文名搜
-        P("\n=== 中文 花小楼 全文搜索 ===")
-        P(sh("grep -rl '花小楼' /tmp/o_* 2>/dev/null | head -20", 900)[:1200] or "  (无)")
-        P("\n=== xiaolou 全文搜索(二进制) ===")
-        P(sh("grep -rl 'xiaolou' /tmp/o_* 2>/dev/null | head -30", 900)[:1800] or "  (无)")
-        put("RESULT16.txt", "\n".join(LOG))
+        # 完整清单
+        full = sh("find /tmp/o_remote -type f | sed 's|/tmp/o_remote/||'", 600)
+        put("remote_full.txt", full)
 
-        P("\n===== YB JOB16 END =====")
-        put("RESULT16.txt", "\n".join(LOG))
+        # 列出所有 entity ID 及其文件数
+        P("\n=== remote_res 内 entity 列表（按文件数排序）===")
+        P(sh("find /tmp/o_remote -type f | grep -oE 'entity/[0-9a-zA-Z_]+' | sort | uniq -c | sort -rn | head -60", 600)[:2500])
+        put("RESULT17.txt", "\n".join(LOG))
+
+        # 解 script_res 找名称表
+        sh("rm -rf /tmp/o_script && cd %s && python3 unpack_pkg_intl.py /tmp/pkg/assets/script_res.pkg /tmp/o_script --no-md5 >/dev/null 2>&1" % CWD, 3600)
+        P("\n=== script_res json 中搜 skin/装扮/花小楼 ===")
+        P(sh("grep -rl '花小楼' /tmp/o_script 2>/dev/null | head -20", 900)[:1200] or "  (无中文)")
+        P(sh("grep -rliE '\"skin\"|skinname|skins' /tmp/o_script 2>/dev/null | head -20", 900)[:1200] or "  (无 skin 表)")
+        P("\n=== script_res json 文件名列表 ===")
+        P(sh("find /tmp/o_script -name '*.json' | head -40", 300)[:1500])
+        put("RESULT17.txt", "\n".join(LOG))
+
+        # 关键：解码所有 entity 的 body.png，做颜色指纹，找红色汉服
+        P("\n=== 解码 remote_res 皮肤贴图 ===")
+        sh("chmod +x %s/tools/crn2rgba_linux_x64" % CWD, 60)
+        sh("cd %s && python3 convert_textures.py /tmp/o_remote /tmp/png_remote 2>&1 | tail -3" % CWD, 5400)
+        sh("cd %s && python3 convert_fmt65.py /tmp/o_remote /tmp/png_remote tools/crn2rgba_linux_x64 2>&1 | tail -3" % CWD, 7200)
+        n = sh("find /tmp/png_remote -name '*.png' | wc -l")[:10]
+        P("解码 PNG: " + n)
+        put("RESULT17.txt", "\n".join(LOG))
+
+        # 颜色分析：找红色占比高的身体贴图（花小楼=红衣白裙）
+        try:
+            from PIL import Image
+            import numpy as np
+            res = []
+            for root, dirs, fs in os.walk("/tmp/png_remote"):
+                for f in fs:
+                    if not f.endswith(".png"):
+                        continue
+                    p = os.path.join(root, f)
+                    try:
+                        im = Image.open(p).convert("RGBA")
+                        bg = Image.new("RGBA", im.size, (0, 0, 0, 255))
+                        im = Image.alpha_composite(bg, im).convert("RGB")
+                        a = np.asarray(im.resize((32, 32)), dtype=np.int32)
+                        r, g, b = a[:, :, 0], a[:, :, 1], a[:, :, 2]
+                        # 红色像素：R 明显大于 G 和 B
+                        red = ((r > 100) & (r > g + 40) & (r > b + 40)).mean()
+                        # 桃花粉
+                        pink = ((r > 180) & (g > 100) & (g < 200) & (b > 120) & (b < 210)).mean()
+                        res.append((float(red), float(pink), os.path.relpath(p, "/tmp/png_remote")))
+                    except Exception:
+                        pass
+            res.sort(reverse=True)
+            P("\n=== 红色占比 TOP30（花小楼=红衣白裙+桃花）===")
+            for red, pink, path in res[:30]:
+                P("  red=%.2f pink=%.2f  %s" % (red, pink, path))
+            put("skin_red_rank.txt", "\n".join("%.3f\t%.3f\t%s" % x for x in res[:200]))
+        except Exception as e:
+            P("颜色分析失败 " + str(e)[:150])
+        put("RESULT17.txt", "\n".join(LOG))
+
+        P("\n===== YB JOB17 END =====")
+        put("RESULT17.txt", "\n".join(LOG))
     except Exception as e:
         P("EXC " + str(e)[:300])
-        try: put("RESULT16.txt", "\n".join(LOG))
+        try: put("RESULT17.txt", "\n".join(LOG))
         except Exception: pass
 
 
