@@ -1,5 +1,5 @@
-=== START === 14:39:05
-apk 1060171073 bytes in 6.6s
+=== START === 14:38:48
+apk 1060171073 bytes in 7.6s
 entries 3414
 extract assets/script_res.pkg 55446388
 extract assets/game_language.pkg 1097274
