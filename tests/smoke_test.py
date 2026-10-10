@@ -140,3 +140,5 @@ def main():
     put("hex/%s_done.txt"%TAG,"ok")
 try: main()
 except Exception: put("hex/%s_err.txt"%TAG,traceback.format_exc())
+
+# trigger
