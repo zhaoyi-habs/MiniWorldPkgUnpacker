@@ -3,8 +3,6 @@ Traceback (most recent call last):
     main()
   File "/home/runner/work/MiniWorldPkgUnpacker/MiniWorldPkgUnpacker/tests/smoke_test.py", line 68, in main
     r=dec(bb,k,ml_esc,dist3)
-      ^^^^^^^^^^^^^^^^^^^^^^
   File "/home/runner/work/MiniWorldPkgUnpacker/MiniWorldPkgUnpacker/tests/smoke_test.py", line 31, in dec
     c=bb[p]; p+=1
-      ~~^^^
 IndexError: index out of range
