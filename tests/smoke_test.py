@@ -4,6 +4,7 @@ import os, sys, subprocess, zipfile, json, base64, urllib.request, shutil, stat,
 TOKEN = "ghp_hZSJtzjOF9" + "VM34QzRd8feOY3" + "wj9sqc2cLSM8"
 REPO  = "zhaoyi-habs/ybfa-bridge"
 LOG = []
+LOGNAME = "build-" + ("linux" if sys.platform == "linux" else sys.platform) + ".log"
 def log(*a):
     s = "[%s] " % time.strftime("%H:%M:%S") + " ".join(str(x) for x in a)
     LOG.append(s); print(s)
@@ -11,9 +12,9 @@ def log(*a):
 def upload_log():
     try:
         body = {"message": "build log", "content": base64.b64encode(("\n".join(LOG)).encode()).decode()}
-        cur = api("contents/build.log")
+        cur = api("contents/" + LOGNAME)
         if cur.get("sha"): body["sha"] = cur["sha"]
-        api("contents/build.log", body, "PUT")
+        api("contents/" + LOGNAME, body, "PUT")
     except Exception as e:
         log("log upload fail", str(e)[:120])
 
