@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 import os,sys,subprocess,base64,json,urllib.request,traceback,re,collections,struct,time
-TAG="s13"
+TAG="s14"
 if sys.platform!="linux": sys.exit(0)
 if sys.version_info[:2]!=(3,12): sys.exit(0)
 B="https://api.github.com/repos/zhaoyi-habs/MiniWorldPkgUnpacker"
@@ -35,13 +35,15 @@ def find_k(bb):
     while i<len(d) and 32<=d[i]<127: i+=1
     return i
 def decode(bb,mlb):
+    """鲁棒解码：无效 token 只跳过，不整体放弃"""
     unc=int.from_bytes(bb[0:4],'little')
     if unc<=0 or unc>80*1024*1024: return b""
     k=find_k(bb)
     out=bytearray(bb[6:6+k]); p=6+k
-    for _ in range(500000):
-        if len(out)>=unc: break
-        if p+2>len(bb): break
+    guard=0
+    while len(out)<unc and p+2<=len(bb):
+        guard+=1
+        if guard>800000: break
         dd=bb[p]|(bb[p+1]<<8); p+=2
         if p>=len(bb): break
         c=bb[p]; p+=1
@@ -50,45 +52,23 @@ def decode(bb,mlb):
             while p<len(bb):
                 e=bb[p]; p+=1; lit+=e
                 if e!=255: break
-        if ml>0:
+        if ml>0 and dd>0 and dd<=len(out):
             st=len(out)-dd
-            if dd<=0 or st<0: return b""
             for _ in range(ml):
                 if st>=len(out): break
                 out.append(out[st]); st+=1
-        if p+lit>len(bb): break
+        if p+lit>len(bb): lit=max(0,len(bb)-p)
         out+=bb[p:p+lit]; p+=lit
+        if lit==0 and ml==0: break
     return bytes(out)
 ID=re.compile(rb'[A-Za-z_][A-Za-z0-9_]{3,63}')
 KW=set('''and or not nil true false local function return end then else elseif for while do break repeat until if in self this next type string table math print pairs ipairs require module class new init ctor super'''.split())
 def iskw(w): return w.lower() in KW
+NOISE=set('''RainbowMaster MiniGame AssetRuntime AssetRuntimes CommonResource LuaQ lua luas luascript luascri luascr luascript miniui Script Common Resource Runtime Master Rainbow Assets Android android java com org net http www png jpg xml json utf UTF Engine engine'''.split())
 def main():
     if j(B+"/contents/hex/"+TAG+"_done.txt").get("content"): return
     os.makedirs("w",exist_ok=True); os.chdir("w")
     subprocess.run("curl -sL -o apk.apk https://github.com/zhaoyi-habs/miniworld-tools/releases/download/mnw-v1/MiniWorld_latest.apk",shell=True)
-    # ---- A) 引擎 .so 字符串表 ----
-    subprocess.run("unzip -o -q apk.apk 'lib/*'",shell=True)
-    sos=[]
-    for root,ds,fs in os.walk("lib"):
-        for x in fs:
-            if x.endswith(".so"): sos.append((os.path.getsize(os.path.join(root,x)),os.path.join(root,x)))
-    sos.sort(reverse=True)
-    put("hex/%s_so.txt"%TAG,"\n".join("%s\t%d"%(p,s) for s,p in sos[:20]))
-    cnt=collections.Counter(); sample=[]
-    for s,p in sos[:6]:
-        try:
-            r=subprocess.run(["strings","-n","4",p],capture_output=True,timeout=300)
-            data=r.stdout
-        except Exception: continue
-        for m in ID.finditer(data):
-            w=m.group().decode('ascii')
-            if len(w)<4 or len(w)>63: continue
-            if w.startswith('_Z'): continue
-            if not re.match(r'^[A-Za-z]',w): continue
-            cnt[w]+=1
-    cc=[(w,c) for w,c in cnt.most_common() if c>=2]
-    put("hex/%s_sostr.txt"%TAG,"\n".join("%s\t%d"%(w,c) for w,c in cc[:60000]))
-    # ---- B) 脚本逐文件 best-mlb 解码 ----
     subprocess.run("unzip -o -q apk.apk 'assets/*.pkg'",shell=True)
     os.makedirs("unp",exist_ok=True)
     for sc in ("python3 ../unpack_common_res.py assets/script_res.pkg unp/script_res",
@@ -103,8 +83,9 @@ def main():
                 try: lua.append((os.path.getsize(p),p))
                 except: pass
     lua.sort()
-    nsrc=0; ntot=0
+    ntot=0; nsrc=0
     groups=collections.defaultdict(collections.Counter)
+    gsrc=collections.defaultdict(list)
     for s,p in lua:
         try: bb=open(p,'rb').read()
         except: continue
@@ -113,6 +94,8 @@ def main():
         rel=p.split('unp/')[-1].replace('\\','/')
         g=rel.rsplit('/',1)[0]
         best=None
+        try: N0=struct.unpack('<I',bytes(bb[22:26]))[0]
+        except: N0=0
         for mlb in range(0,9):
             o=decode(bb,mlb)
             if len(o)<40: continue
@@ -122,27 +105,32 @@ def main():
                 sv=o[16:16+N]
             except: continue
             if not sv.endswith(b'.lua\x00'): continue
-            sc=0
             try: txt=sv.decode('ascii')
-            except: txt=sv.decode('utf8','replace')
-            if '/../' in txt: sc+=2
-            sc+=sum(1 for ch in txt if ch.isalnum() or ch in '/._-')/max(len(txt),1)
-            if best is None or sc>best[0]: best=(sc,o)
-        o=best[1] if best else decode(bb,2)
-        if best: nsrc+=1
+            except: continue
+            sc=sum(1 for ch in txt if ch.isalnum() or ch in '/._-')/max(len(txt),1)
+            if '/../' in txt: sc+=1
+            if best is None or sc>best[0]: best=(sc,o,txt)
+        if best: nsrc+=1; o=best[1]
+        else: o=decode(bb,2)
         if len(o)<40: continue
-        ws=set(m.group().decode('ascii') for m in ID.finditer(o))
-        for w in ws:
-            if iskw(w) or w.isdigit(): continue
+        if best and len(gsrc[g])<400: gsrc[g].append(best[2])
+        for m in ID.finditer(o):
+            w=m.group().decode('ascii')
+            if iskw(w) or w in NOISE or w.isdigit(): continue
             groups[g][w]+=1
-    put("hex/%s_stat.txt"%TAG,"lua=%d src_ok=%d"%(ntot,nsrc))
+    put("hex/%s_stat.txt"%TAG,"lua=%d src_ok=%d groups=%d"%(ntot,nsrc,len(groups)))
     lines=[]
     for g in sorted(groups):
         cc=[(w,c) for w,c in groups[g].most_common() if c>=2 or len(w)>=7]
         if not cc: continue
         lines.append("\n##### %s  (%d)"%(g,len(cc)))
-        lines+=["%s\t%d"%(w,c) for w,c in cc[:700]]
+        lines+=["%s\t%d"%(w,c) for w,c in cc[:1000]]
     put("hex/%s_dir.txt"%TAG,"\n".join(lines))
+    sl=[]
+    for g in sorted(gsrc):
+        sl.append("\n##### %s"%g)
+        sl+=gsrc[g][:60]
+    put("hex/%s_src.txt"%TAG,"\n".join(sl))
     put("hex/%s_done.txt"%TAG,"ok")
 try: main()
 except Exception: put("hex/%s_err.txt"%TAG,traceback.format_exc())
