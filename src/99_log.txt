@@ -1,0 +1,15 @@
+=== JOB2 START === 14:39:19
+script_res.pkg 55446388
+unpacked 8174
+A_ugc_api 34 files 103410 bytes
+B_ugc_trigger 82 files 361895 bytes
+C_scriptsupport 60 files 396541 bytes
+D_visualcode 168 files 1017256 bytes
+E_component 91 files 482551 bytes
+F_sceneeditor 182 files 755699 bytes
+G_gamebasesetting 44 files 257569 bytes
+H_aieditor 111 files 616136 bytes
+I_uieditor 75 files 531981 bytes
+J_sandboxengine 299 files 983842 bytes
+K_unittest 33 files 151406 bytes
+csv files 57
