@@ -1,0 +1,18 @@
+$ curl -sL -o apk.apk https://github.com/zhaoyi-habs/miniworld-tools/releases/download/mnw-v1/MiniWorld_latest.apk
+ rc=0
+ out=
+ err=
+apk size=1060171073
+$ python3 ../unpack_common_res.py assets/script_res.pkg unp/script_res
+ rc=0
+ out=header: ver=0x130ba unk=17 index@55111078+335310
+index: 881390 bytes
+records: 8172   paths: 8172   (index consumed 881390 / 881390 bytes)
+  5000/8172 ... extracted=5000
+extracted: 8172  md5 ok: 8172 bad: 0
+pathless (orphan) records: 0 -> _orphans/
+
+ err=
+total files=8174
+lua files=6092
+targets=['unp/script_res/commonresource/script/luascript/ugc/logic/trigger/triggersound.lua', 'unp/script_res/commonresource/script/luascript/ugc/logic/trigger/triggerquest.lua', 'unp/script_res/commonresource/script/luascript/ugc/logic/trigger/triggerlistenpram.lua', 'unp/script_res/commonresource/script/luascript/ugc/logic/gamevmapiconfigex.lua']
