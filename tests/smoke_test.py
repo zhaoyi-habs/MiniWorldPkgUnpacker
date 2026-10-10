@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
-# JOB2: 提取 UGC / 高级创造 / 触发器2.0 Lua 源码与配置表
-import os,sys,json,time,base64,subprocess,urllib.request,zipfile
-ROOT=os.getcwd(); OUT=os.path.join(ROOT,"src"); os.makedirs(OUT,exist_ok=True)
+# JOB3: 从 Lua 字节码提取 API 函数名（按文件分组）
+import os,sys,json,time,base64,subprocess,urllib.request,zipfile,re,collections
+ROOT=os.getcwd(); OUT=os.path.join(ROOT,"api3"); os.makedirs(OUT,exist_ok=True)
 LOG=[]
 def log(*a):
     s=" ".join(str(x) for x in a); print(s,flush=True); LOG.append(s)
@@ -18,20 +18,18 @@ def j(u,m="GET",b=None,to=180):
     raise last
 def push(repo,paths,msg):
     base="https://api.github.com/repos/"+repo
-    head=j(base+"/git/ref/heads/main")["object"]["sha"]
+    head=j(base+"/git/refs/heads/main")["object"]["sha"]
     c=j(base+"/git/commits/"+head); tree=[]
     for p in paths:
         data=open(os.path.join(OUT,p),"rb").read()[:90*1024*1024]
         b=j(base+"/git/blobs","POST",{"encoding":"base64","content":base64.b64encode(data).decode()})
-        tree.append({"path":"src/"+p,"mode":"100644","type":"blob","sha":b["sha"]})
+        tree.append({"path":"api3/"+p,"mode":"100644","type":"blob","sha":b["sha"]})
     t=j(base+"/git/trees","POST",{"base_tree":c["tree"]["sha"],"tree":tree})
     nc=j(base+"/git/commits","POST",{"message":msg,"tree":t["sha"],"parents":[head]})
     j(base+"/git/refs/heads/main","PATCH",{"sha":nc["sha"]})
     return nc["sha"][:10]
 REPO="zhaoyi-habs/MiniWorldPkgUnpacker"
-log("=== JOB2 START ===",time.strftime("%H:%M:%S"))
-
-# 1. APK + 抽出 script_res.pkg
+log("=== JOB3 START ===",time.strftime("%H:%M:%S"))
 if not os.path.exists("script_res.pkg"):
     a=j("https://api.github.com/repos/zhaoyi-habs/miniworld-tools/releases/tags/mnw-v1")["assets"]
     aid=[x["id"] for x in a if x["name"]=="MiniWorld_latest.apk"][0]
@@ -45,57 +43,67 @@ if not os.path.exists("script_res.pkg"):
             b=s.read(1<<23)
             if not b: break
             f.write(b)
-    log("script_res.pkg",os.path.getsize("script_res.pkg"))
 subprocess.run("pip install -q lz4 2>&1|tail -1",shell=True)
-subprocess.run("python3 unpack_common_res.py script_res.pkg unp/script_res",shell=True)
-log("unpacked",sum(len(f) for _,_,f in os.walk("unp/script_res")))
+subprocess.run("python3 unpack_common_res.py script_res.pkg unp/script_res 2>&1|tail -3",shell=True)
+N=sum(len(f) for _,_,f in os.walk("unp/script_res")); log("files",N)
 
-# 2. 分组抽取
+IDENT=re.compile(rb"[A-Za-z_][A-Za-z0-9_]{3,60}")
+CJK=re.compile("[\u4e00-\u9fff]{2,30}".encode())
+SKIP=set("""self local function then elseif until return while break false true nil
+end for in do if else and not or repeat this class define constructor __index
+__newindex __add __call __tostring __modpacketid__ SSC MainManager TransfomOrigin
+Current wrapper stub LuaQ AssetRuntime CommonResource Script luascript ugc logic""".split())
+
 GROUPS={
- "A_ugc_api":      ["luascript/ugc/logic/api/"],
- "B_ugc_trigger":  ["luascript/ugc/logic/trigger/","luascript/ugc/logic/"],
- "C_scriptsupport":["luascript/ugc/scriptsupport/"],
- "D_visualcode":   ["miniui/module/ugc/visualcode/","miniui/module/ugc/blockly/"],
- "E_component":    ["miniui/module/ugc/sidebar/","miniui/module/ugc/scenetree/"],
- "F_sceneeditor":  ["miniui/module/ugc/sceneeditor/","miniui/module/ugc/terrainedit/","miniui/module/ugc/selector/"],
- "G_gamebasesetting":["miniui/module/ugc/gamebasesetting/"],
- "H_aieditor":     ["miniui/module/ugc/aieditor/"],
- "I_uieditor":     ["miniui/module/ugc/uieditor/"],
- "J_sandboxengine":["script/sandboxengine/"],
- "K_unittest":     ["luascript/ugc/unittest/"],
+ "G1_api":["/ugc/logic/api/"],
+ "G2_trigger":["/ugc/logic/trigger/"],
+ "G3_scriptsupport":["/ugc/scriptsupport/"],
+ "G4_visualcode":["/ugc/visualcode/","/ugc/blockly/"],
+ "G5_component_sidebar":["/ugc/sidebar/"],
+ "G6_scenetree":["/ugc/scenetree/"],
+ "G7_sceneeditor":["/ugc/sceneeditor/","/ugc/terrainedit/"],
+ "G8_gamebasesetting":["/ugc/gamebasesetting/"],
+ "G9_aieditor":["/ugc/aieditor/"],
+ "G10_uieditor":["/ugc/uieditor/"],
+ "G11_sandboxengine":["/sandboxengine/"],
+ "G12_miniui_other":["/miniui/module/"],
 }
-csvfiles=["codeblockconfig.csv","codeblockenum.csv","codeblockparam.csv",
-          "componentconfig.csv","gamerule.csv","game_language.csv","funcswitch.csv"]
+ALLID=collections.Counter(); ALLCJK=collections.Counter()
 res=[]
-for g,prefixes in GROUPS.items():
-    buf=[]; n=0; tot=0
+for g,pref in GROUPS.items():
+    lines=[]; seen=collections.OrderedDict()
     for dp,_,fs in os.walk("unp/script_res"):
         for fn in fs:
             fp=os.path.join(dp,fn).replace("\\","/")
-            if not any(p in fp for p in prefixes): continue
-            try:
-                d=open(fp,"rb").read(3_000_000)
-                if b"\x00" in d[:2000] and not fn.endswith(".csv"): pass
-                t=d.decode("utf-8","replace")
-            except Exception as e: continue
-            buf.append("\n\n########## FILE: %s  (%d bytes) ##########\n%s"%(fp,len(d),t))
-            n+=1; tot+=len(d)
-    p=g+".txt"
-    open(os.path.join(OUT,p),"w",encoding="utf-8").write("\n".join(buf))
-    res.append(p); log(g,n,"files",tot,"bytes")
-buf=[]
-for dp,_,fs in os.walk("unp/script_res"):
-    for fn in fs:
-        if fn in csvfiles:
-            fp=os.path.join(dp,fn)
-            try: buf.append("\n\n########## CSV: %s ##########\n%s"%(fp,open(fp,"rb").read(8_000_000).decode("utf-8","replace")))
-            except Exception: pass
-open(os.path.join(OUT,"Z_csvdef.txt"),"w",encoding="utf-8").write("\n".join(buf))
-res.append("Z_csvdef.txt"); log("csv files",len(buf))
+            if not fn.endswith(".lua"): continue
+            if not any(p in fp for p in pref): continue
+            try: d=open(fp,"rb").read(4_000_000)
+            except Exception: continue
+            names=[]
+            for m in IDENT.finditer(d):
+                s=m.group().decode()
+                if s in SKIP or len(s)<4: continue
+                names.append(s)
+            cj=[m.group().decode("utf-8") for m in CJK.finditer(d)]
+            # 去重保序
+            uq=list(collections.OrderedDict.fromkeys(names))
+            uqc=list(collections.OrderedDict.fromkeys(cj))
+            ALLID.update(uq); ALLCJK.update(uqc)
+            short=fp.split("unp/script_res/")[-1]
+            lines.append("\n### %s  (%d idents)\n%s"%("|".join(short.split("/")[-2:]),len(uq)," ".join(uq)))
+            if uqc: lines.append("  [中文] "+" | ".join(uqc[:40]))
+    p=g+".txt"; open(os.path.join(OUT,p),"w",encoding="utf-8").write("\n".join(lines))
+    res.append(p); log(g,len(lines)//2,"files")
+open(os.path.join(OUT,"G0_all_identifiers.txt"),"w",encoding="utf-8").write(
+    "\n".join("%s\t%d"%(k,v) for k,v in ALLID.most_common(120000)))
+res.append("G0_all_identifiers.txt")
+open(os.path.join(OUT,"G0_all_chinese.txt"),"w",encoding="utf-8").write(
+    "\n".join("%s\t%d"%(k,v) for k,v in ALLCJK.most_common(120000)))
+res.append("G0_all_chinese.txt")
+log("uniq idents",len(ALLID),"chinese",len(ALLCJK))
 open(os.path.join(OUT,"99_log.txt"),"w",encoding="utf-8").write("\n".join(LOG))
 res.append("99_log.txt")
-try:
-    for i in range(0,len(res),3):
-        log("pushed",push(REPO,res[i:i+3],"src %d [skip ci]"%i))
-except Exception as e: log("PUSH FAIL",repr(e)[:200])
-print("DONE2")
+for i in range(0,len(res),3):
+    try: log("pushed",push(REPO,res[i:i+3],"api3 %d [skip ci]"%i))
+    except Exception as e: log("PUSHFAIL",repr(e)[:150])
+print("DONE3")
