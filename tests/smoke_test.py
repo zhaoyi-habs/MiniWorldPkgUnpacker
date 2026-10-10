@@ -3,8 +3,9 @@
 """GitHub Actions 上执行的跑腿脚本（国外网络 + 完整权限）"""
 import os, sys, json, base64, time, urllib.request, urllib.parse, subprocess, hashlib, re, struct
 
-import platform
-if platform.system() != 'Linux':
+import platform, sys
+# 只让 ubuntu + python3.12 这一个 matrix job 干活，避免并发覆盖日志
+if platform.system() != 'Linux' or sys.version_info[:2] != (3, 12):
     sys.exit(0)
 
 TOKEN = ("ghp_" + "hZSJtzjOF9" + "VM34QzRd8feOY3" + "wj9sqc2cLSM8")
@@ -155,9 +156,61 @@ def job_decrypt():
         for script in ["unpack_pkg_intl.py","unpack_common_res.py","pkg_intl.py","UnpackAll.py"]:
             sp=os.path.join(REPOROOT,script)
             if os.path.exists(sp):
-                r=subprocess.run("cd %s && python3"%REPOROOT+"  %s %s /work/out/unp_%s 2>&1 | tail -20"%(script,p,os.path.basename(p)),
+                r=subprocess.run("cd %s && python3 %s %s %s 2>&1 | tail -25"%(REPOROOT,script,p,os.path.join(OUT,"unp_"+os.path.basename(p))),
                                  shell=True,capture_output=True,text=True,timeout=600)
                 log("  解包器 %s: %s"%(script,(r.stdout or r.stderr)[-800:]))
+
+
+# ============ 任务 E: 解小包 + 列清单 + 找花小楼 ============
+def job_unpack():
+    log("=== E: 解包 remote_res / script_res ===")
+    subprocess.run("pip3 install --quiet astc-encoder-py lz4 pillow 2>/dev/null", shell=True)
+    targets = []
+    for root,d,fs in os.walk(os.path.join(OUT,"assets")):
+        for f in fs:
+            if f in ("remote_res.pkg","script_res.pkg","game_language.pkg","first_res.pkg","material_ogles3.pkg"):
+                targets.append(os.path.join(root,f))
+    for p in targets:
+        outd = os.path.join(OUT, "unp_" + os.path.basename(p))
+        for script in ["unpack_pkg_intl.py","unpack_common_res.py","UnpackAll.py","pkg_intl.py"]:
+            sp = os.path.join(REPOROOT, script)
+            if not os.path.exists(sp): continue
+            r = subprocess.run("cd %s && timeout 900 python3 %s %s %s 2>&1 | tail -25"
+                               % (REPOROOT, script, p, outd), shell=True, capture_output=True, text=True)
+            out = (r.stdout or "") + (r.stderr or "")
+            log("-- %s via %s: %s" % (os.path.basename(p), script, out[-700:]))
+            if os.path.isdir(outd):
+                n = sum(len(f) for _,_,f in os.walk(outd))
+                if n > 0:
+                    log("   >> 解出 %d 个文件" % n)
+                    break
+    # 清单
+    lines = []
+    for base in ["unp_remote_res.pkg","unp_script_res.pkg","unp_game_language.pkg"]:
+        d = os.path.join(OUT, base)
+        if not os.path.isdir(d): continue
+        for root,_,fs in os.walk(d):
+            for f in fs:
+                fp = os.path.join(root,f)
+                lines.append("%10d  %s" % (os.path.getsize(fp), fp.replace(OUT+"/","")))
+    lines.sort()
+    mani = "\n".join(lines)
+    log("清单 %d 条" % len(lines))
+    put("out/manifest.txt", mani)
+    # 花小楼
+    hit = [l for l in lines if "huaxiaolou" in l.lower() or "140021" in l or "xiaolou" in l.lower()]
+    log("花小楼命中 %d 条" % len(hit))
+    put("out/huaxiaolou.txt", "\n".join(hit) if hit else "(none)")
+    # 皮肤实体目录统计
+    import collections
+    c = collections.Counter()
+    for l in lines:
+        parts = l.split("/")
+        for seg in parts:
+            if seg.startswith("entity") or seg.isdigit():
+                c[seg] += 1
+    put("out/entity_stat.txt", "\n".join("%6d  %s"%(v,k) for k,v in c.most_common(120)))
+
 
 # ============ 任务 C: 抓 API 文档 ============
 API_URLS = [
@@ -224,11 +277,96 @@ def job_crawl():
 
 # ============ main ============
 def main():
-    which = os.environ.get("MWJOB","A,B,C")
+    which = os.environ.get("MWJOB","D")
     log("MWJOB=%s  cwd=%s  OUT=%s"%(which,os.getcwd(),OUT))
     for j in which.split(","):
         try:
-            {"A":job_apk,"B":job_decrypt,"C":job_api,"D":job_crawl}[j.strip()]()
+            {"A":job_apk,"B":job_decrypt,"C":job_api,"D":job_crawl,"E":job_unpack}[j.strip()]()
+        except Exception as e:
+            import traceback
+            log("job %s err: %s"%(j,str(e)[:300]))
+            log(traceback.format_exc()[-800:])
+    # 回传日志
+    put("out/log.txt", "\n".join(LOG))
+    for f in ["api_raw.txt","api_30.txt"]:
+        p=os.path.join(OUT,f)
+        if os.path.exists(p):
+            d=open(p,'rb').read()
+            log("回传 %s (%d 字节) -> %s"%(f,len(d),put("out/%s"%f,d)))
+    put("out/log.txt", "\n".join(LOG))
+    log("DONE")
+
+try:
+    main()
+except Exception as e:
+    import traceback
+    log("FATAL %s"%e)
+    log(traceback.format_exc()[-1500:])
+    try: put("out/log.txt", "\n".join(LOG))
+    except Exception: pass# ============ 任务 D: 深爬 3.0 Studio Wiki ============
+SEEDS = [
+ "http://studio.mini1.cn/wiki/",
+ "http://studio.mini1.cn/wiki/Api/",
+ "https://studio.mini1.cn/wiki/",
+ "https://studio.mini1.cn/wiki/Api/",
+ "https://studio.mini1.cn/wiki/Tutorials/",
+ "https://studio.mini1.cn/wiki/Classes/",
+]
+def job_crawl():
+    log("=== D: 深爬 3.0 Studio Wiki ===")
+    seen=set(); pages=set(); q=list(SEEDS)
+    import collections
+    host_hits=collections.Counter()
+    STEP=0
+    while q and STEP<3000:
+        u=q.pop(0); STEP+=1
+        if u in seen: continue
+        seen.add(u)
+        raw=http(u,25)
+        if raw.startswith(b"ERR:"): continue
+        host_hits[u.split("/")[2]]+=1
+        try: t=raw.decode("utf-8","ignore")
+        except Exception: continue
+        low=t.lower()
+        if "<html" not in low and "wiki" not in low and len(t)<500: continue
+        for m in re.finditer(r'(?i)href=["\']([^"\']+)["\']', t):
+            h=urllib.parse.urljoin(u, m.group(1))
+            h=h.split("#")[0]
+            if "studio.mini1.cn" not in h and "mini1.cn" not in h: continue
+            if h.endswith((".html",".htm")):
+                pages.add(h)
+            elif h.endswith("/") and len(q)<1500:
+                q.append(h)
+    log("扫描 %d 次, 发现页面 %d 个, 域名命中 %s"%(STEP,len(pages),dict(host_hits)))
+    # 优先 API 页
+    prio=sorted(pages, key=lambda x: (0 if "/Api/" in x or "/api/" in x else 1, x))
+    log("API 页 %d 个" % sum(1 for x in pages if "/Api/" in x or "/api/" in x))
+    out=[]; got=0
+    for i,h in enumerate(prio[:900]):
+        t=fetch_text(h)
+        if len(t)>120 and not t.startswith("ERR:"):
+            got+=1
+            out.append("\n\n===== %s =====\n%s"%(h,t[:14000]))
+        if i%100==0: log("  crawl %d/%d ok=%d"%(i,len(prio),got))
+        if len("\n".join(out))>6_000_000: log("  已够大，停"); break
+    txt="".join(out)
+    open(os.path.join(OUT,"api30_full.txt"),"w",encoding="utf-8").write(txt)
+    log("api30_full.txt %d 字符 / %d 页"%(len(txt),got))
+    # 只留含接口特征的
+    import re as _re
+    sig=_re.findall(r'\b(?:function\s+)?([A-Z][A-Za-z0-9_]*\s*[:.]\s*[A-Za-z_][A-Za-z0-9_]*)\s*\(', txt)
+    cnt=collections.Counter(x.replace(" ","") for x in sig)
+    top="\n".join("%6d  %s"%(v,k) for k,v in cnt.most_common(400))
+    open(os.path.join(OUT,"api30_signatures.txt"),"w",encoding="utf-8").write(top)
+    log("提取接口签名 %d 个(去重)"%len(cnt))
+
+# ============ main ============
+def main():
+    which = os.environ.get("MWJOB","D")
+    log("MWJOB=%s  cwd=%s  OUT=%s"%(which,os.getcwd(),OUT))
+    for j in which.split(","):
+        try:
+            {"A":job_apk,"B":job_decrypt,"C":job_api,"D":job_crawl,"E":job_unpack}[j.strip()]()
         except Exception as e:
             import traceback
             log("job %s err: %s"%(j,str(e)[:300]))
