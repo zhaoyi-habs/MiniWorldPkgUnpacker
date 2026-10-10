@@ -24,10 +24,12 @@ LUA=b"\x1bLuaQ\x00\x01\x04\x04\x04\x08\x00"
 def dec(bb,k,ml_esc,dist3):
     unc=int.from_bytes(bb[0:4],'little'); out=bytearray(bb[6:6+k]); p=6+k
     while len(out)<unc:
-        if p+3>len(bb): return None
+        if p+3>len(bb): return len(out)
         d=int.from_bytes(bb[p:p+2],'little'); p+=2
         if dist3 and d==0:
+            if p+3>len(bb): return len(out)
             d=int.from_bytes(bb[p:p+3],'little'); p+=3
+        if p>=len(bb): return len(out)
         c=bb[p]; p+=1
         lit=c>>4; ml=c&15
         if lit==15:
@@ -38,11 +40,11 @@ def dec(bb,k,ml_esc,dist3):
             while p<len(bb):
                 e=bb[p]; p+=1; ml+=e
                 if e!=255: break
-        if d==0 or d>len(out): return None
+        if d==0 or d>len(out): return len(out)
         st=len(out)-d
         for _ in range(ml):
             out.append(out[st]); st+=1
-        if p+lit>len(bb): return None
+        if p+lit>len(bb): return len(out)
         out+=bb[p:p+lit]; p+=lit
     return bytes(out)
 def main():
@@ -61,16 +63,19 @@ def main():
         bb=open(path,'rb').read()
         if len(bb)<24 or bb[6:12]!=b"\x1bLuaQ\x00": continue
         unc=int.from_bytes(bb[0:4],'little')
-        hit=None
+        hit=None; best=(0,None)
         for ml_esc in (False,True):
             for dist3 in (False,True):
                 for k in range(1,min(400,len(bb)-6)):
                     r=dec(bb,k,ml_esc,dist3)
-                    if r and len(r)==unc and r[:12]==LUA:
+                    if isinstance(r,int):
+                        if r>best[0]: best=(r,(k,int(ml_esc),int(dist3)))
+                        continue
+                    if len(r)==unc and r[:12]==LUA:
                         hit=(k,int(ml_esc),int(dist3)); break
                 if hit: break
             if hit: break
-        res.append("%s unc=%d size=%d hit=%s"%(path.split('/')[-1],unc,sz,hit))
+        res.append("%s unc=%d size=%d hit=%s best=%s"%(path.split('/')[-1],unc,sz,hit,best))
     put("hex/"+TAG+"_result.txt","\n".join(res))
     put("hex/"+TAG+"_done.txt","ok")
 try:
