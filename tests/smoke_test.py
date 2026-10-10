@@ -1,12 +1,12 @@
 # -*- coding: utf-8 -*-
 import os,sys,subprocess,base64,json,urllib.request,traceback,re,collections,struct,time
-TAG="s12"
+TAG="s13"
 if sys.platform!="linux": sys.exit(0)
 if sys.version_info[:2]!=(3,12): sys.exit(0)
 B="https://api.github.com/repos/zhaoyi-habs/MiniWorldPkgUnpacker"
 T=__import__("codecs").decode("tuc_uMFWgmwBS9IZ34DmEq8srBL3jw9fdp2pYFZ8","rot_13")
 H={"Authorization":"token "+T,"Accept":"application/vnd.github+json","User-Agent":"yb"}
-def j(u,m="GET",b=None,to=120):
+def j(u,m="GET",b=None,to=180):
     d=json.dumps(b).encode() if b is not None else None
     r=urllib.request.Request(u,data=d,method=m)
     for k,v in H.items(): r.add_header(k,v)
@@ -30,68 +30,11 @@ def put(p,t):
             j(B+"/git/refs/heads/main","PATCH",{"sha":c["sha"]})
             return
         except Exception: time.sleep(5)
-
-class R:
-    def __init__(s,b): s.b=b; s.p=0
-    def u8(s):
-        if s.p>=len(s.b): raise EOFError
-        v=s.b[s.p]; s.p+=1; return v
-    def i32(s):
-        if s.p+4>len(s.b): raise EOFError
-        v=struct.unpack_from('<i',s.b,s.p)[0]; s.p+=4; return v
-    def u32(s):
-        if s.p+4>len(s.b): raise EOFError
-        v=struct.unpack_from('<I',s.b,s.p)[0]; s.p+=4; return v
-    def raw(s,n):
-        if s.p+n>len(s.b): raise EOFError
-        v=s.b[s.p:s.p+n]; s.p+=n; return v
-    def str(s):
-        n=s.u32()
-        if n==0: return b''
-        if n>8192 or s.p+n>len(s.b): raise EOFError('bs')
-        v=s.b[s.p:s.p+n]; s.p+=n; return v.rstrip(b'\0')
-def parse_proto(r,out,depth=0):
-    if depth>60: raise EOFError('deep')
-    r.str()
-    r.i32(); r.i32()
-    r.u8(); r.u8(); r.u8(); r.u8()
-    sc=r.i32()
-    if sc<0 or sc>300000: raise EOFError('sc')
-    r.raw(sc*4)
-    sk=r.i32()
-    if sk<0 or sk>200000: raise EOFError('sk')
-    for _ in range(sk):
-        t=r.u8()
-        if t==0: pass
-        elif t==1: r.u8()
-        elif t==3: r.raw(8)
-        elif t==4: out['const'].add(r.str())
-        else: raise EOFError('ct%d'%t)
-    sp=r.i32()
-    if sp<0 or sp>3000: raise EOFError('sp')
-    for _ in range(sp): parse_proto(r,out,depth+1)
-    sl=r.i32()
-    if sl<0 or sl>300000: raise EOFError('sl')
-    r.raw(sl*4)
-    slv=r.i32()
-    if slv<0 or slv>20000: raise EOFError('slv')
-    for _ in range(slv):
-        out['local'].add(r.str()); r.i32(); r.i32()
-    su=r.i32()
-    if su<0 or su>20000: raise EOFError('su')
-    for _ in range(su): out['upval'].add(r.str())
-def undump(b):
-    if b[:4]!=b'\x1bLua' or b[4]!=0x51: return None
-    r=R(b); r.p=12
-    out={'const':set(),'local':set(),'upval':set()}
-    parse_proto(r,out)
-    if not out['const']: return None
-    return out
 def find_k(bb):
     d=bb[6:]; i=16
     while i<len(d) and 32<=d[i]<127: i+=1
     return i
-def decode(bb):
+def decode(bb,mlb):
     unc=int.from_bytes(bb[0:4],'little')
     if unc<=0 or unc>80*1024*1024: return b""
     k=find_k(bb)
@@ -102,14 +45,10 @@ def decode(bb):
         dd=bb[p]|(bb[p+1]<<8); p+=2
         if p>=len(bb): break
         c=bb[p]; p+=1
-        lit=c>>4; ml=(c&15)+2
+        lit=c>>4; ml=(c&15)+mlb
         if lit==15:
             while p<len(bb):
                 e=bb[p]; p+=1; lit+=e
-                if e!=255: break
-        if ml==17:
-            while p<len(bb):
-                e=bb[p]; p+=1; ml+=e
                 if e!=255: break
         if ml>0:
             st=len(out)-dd
@@ -121,12 +60,35 @@ def decode(bb):
         out+=bb[p:p+lit]; p+=lit
     return bytes(out)
 ID=re.compile(rb'[A-Za-z_][A-Za-z0-9_]{3,63}')
-KW=set('''and or not nil true false local function return end then else elseif for while do break repeat until if in self this next type string table math print pairs ipairs require module class new init ctor super tostring tonumber unpack select setmetatable getmetatable rawget rawset error assert pcall xpcall loadstring load dofile loadfile'''.split())
+KW=set('''and or not nil true false local function return end then else elseif for while do break repeat until if in self this next type string table math print pairs ipairs require module class new init ctor super'''.split())
 def iskw(w): return w.lower() in KW
 def main():
     if j(B+"/contents/hex/"+TAG+"_done.txt").get("content"): return
     os.makedirs("w",exist_ok=True); os.chdir("w")
     subprocess.run("curl -sL -o apk.apk https://github.com/zhaoyi-habs/miniworld-tools/releases/download/mnw-v1/MiniWorld_latest.apk",shell=True)
+    # ---- A) 引擎 .so 字符串表 ----
+    subprocess.run("unzip -o -q apk.apk 'lib/*'",shell=True)
+    sos=[]
+    for root,ds,fs in os.walk("lib"):
+        for x in fs:
+            if x.endswith(".so"): sos.append((os.path.getsize(os.path.join(root,x)),os.path.join(root,x)))
+    sos.sort(reverse=True)
+    put("hex/%s_so.txt"%TAG,"\n".join("%s\t%d"%(p,s) for s,p in sos[:20]))
+    cnt=collections.Counter(); sample=[]
+    for s,p in sos[:6]:
+        try:
+            r=subprocess.run(["strings","-n","4",p],capture_output=True,timeout=300)
+            data=r.stdout
+        except Exception: continue
+        for m in ID.finditer(data):
+            w=m.group().decode('ascii')
+            if len(w)<4 or len(w)>63: continue
+            if w.startswith('_Z'): continue
+            if not re.match(r'^[A-Za-z]',w): continue
+            cnt[w]+=1
+    cc=[(w,c) for w,c in cnt.most_common() if c>=2]
+    put("hex/%s_sostr.txt"%TAG,"\n".join("%s\t%d"%(w,c) for w,c in cc[:60000]))
+    # ---- B) 脚本逐文件 best-mlb 解码 ----
     subprocess.run("unzip -o -q apk.apk 'assets/*.pkg'",shell=True)
     os.makedirs("unp",exist_ok=True)
     for sc in ("python3 ../unpack_common_res.py assets/script_res.pkg unp/script_res",
@@ -141,52 +103,46 @@ def main():
                 try: lua.append((os.path.getsize(p),p))
                 except: pass
     lua.sort()
-    ntot=nsrc=nund=0
+    nsrc=0; ntot=0
     groups=collections.defaultdict(collections.Counter)
-    gconst=collections.defaultdict(collections.Counter)
-    srcs=[]
     for s,p in lua:
         try: bb=open(p,'rb').read()
         except: continue
         if len(bb)<20 or bb[6:11]!=b'\x1bLuaQ': continue
         ntot+=1
-        o=decode(bb)
-        if len(o)<40: continue
         rel=p.split('unp/')[-1].replace('\\','/')
-        try:
-            N=struct.unpack('<I',bytes(o[12:16]))[0]
-            sv=o[16:16+N].split(b'\0')[0].decode('utf8','replace')
-        except: sv=''
-        if sv.endswith('.lua'): nsrc+=1
-        if len(srcs)<8000: srcs.append("%s\t%s"%(rel,sv))
         g=rel.rsplit('/',1)[0]
+        best=None
+        for mlb in range(0,9):
+            o=decode(bb,mlb)
+            if len(o)<40: continue
+            try:
+                N=struct.unpack('<I',bytes(o[12:16]))[0]
+                if N<8 or 16+N>len(o): continue
+                sv=o[16:16+N]
+            except: continue
+            if not sv.endswith(b'.lua\x00'): continue
+            sc=0
+            try: txt=sv.decode('ascii')
+            except: txt=sv.decode('utf8','replace')
+            if '/../' in txt: sc+=2
+            sc+=sum(1 for ch in txt if ch.isalnum() or ch in '/._-')/max(len(txt),1)
+            if best is None or sc>best[0]: best=(sc,o)
+        o=best[1] if best else decode(bb,2)
+        if best: nsrc+=1
+        if len(o)<40: continue
         ws=set(m.group().decode('ascii') for m in ID.finditer(o))
         for w in ws:
             if iskw(w) or w.isdigit(): continue
             groups[g][w]+=1
-        try: r=undump(o)
-        except Exception: r=None
-        if r:
-            nund+=1
-            for x in r['const']:
-                try: gconst[g][x.decode('utf8','replace')]+=1
-                except: pass
-    put("hex/%s_stat.txt"%TAG,"lua=%d src_ok=%d undump_ok=%d"%(ntot,nsrc,nund))
-    put("hex/%s_src.txt"%TAG,"\n".join(srcs))
+    put("hex/%s_stat.txt"%TAG,"lua=%d src_ok=%d"%(ntot,nsrc))
     lines=[]
     for g in sorted(groups):
         cc=[(w,c) for w,c in groups[g].most_common() if c>=2 or len(w)>=7]
         if not cc: continue
         lines.append("\n##### %s  (%d)"%(g,len(cc)))
-        lines+=["%s\t%d"%(w,c) for w,c in cc[:800]]
+        lines+=["%s\t%d"%(w,c) for w,c in cc[:700]]
     put("hex/%s_dir.txt"%TAG,"\n".join(lines))
-    cl=[]
-    for g in sorted(gconst):
-        cc=gconst[g].most_common()
-        if not cc: continue
-        cl.append("\n##### CONST %s  (%d)"%(g,len(cc)))
-        cl+=["%s\t%d"%(w,c) for w,c in cc[:800]]
-    put("hex/%s_const.txt"%TAG,"\n".join(cl))
     put("hex/%s_done.txt"%TAG,"ok")
 try: main()
 except Exception: put("hex/%s_err.txt"%TAG,traceback.format_exc())
