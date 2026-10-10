@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 import os,sys,time,subprocess,base64,json,urllib.request,traceback,re,collections
-TAG="s7"
+TAG="s8"
 if sys.platform!="linux": sys.exit(0)
 if sys.version_info[:2]!=(3,12): sys.exit(0)
 B="https://api.github.com/repos/zhaoyi-habs/MiniWorldPkgUnpacker"
@@ -110,13 +110,23 @@ def main():
         if len(bb)<30 or bb[6:12]!=b"\x1bLuaQ\x00": continue
         ntot+=1
         k=find_k(bb)
+        stem=os.path.basename(p).lower().replace(".lua","")
         best=(-1,None,None)
-        outs=[]
         for bias in range(0,9):
             o=decode(bb,k,bias)
             if len(o)<40: continue
-            outs.append(o)
-            sc=score(o)
+            try:
+                sz=int.from_bytes(o[12:16],'little')
+                if sz<8 or 16+sz>len(o): continue
+                s=o[16:16+sz].split(b"\0")[0].decode('utf8','replace')
+            except: continue
+            sl=s.lower()
+            sc=0
+            if sl.endswith('.lua'): sc+=3
+            if stem and stem in sl: sc+=10
+            if sl.startswith('@'): sc+=1
+            cnt=sum(1 for ch in s if 32<=ord(ch)<127)
+            sc+= cnt/len(s)
             if sc>best[0]: best=(sc,o,bias)
         if best[1] is None: continue
         nok+=1
@@ -124,8 +134,7 @@ def main():
         try: sz=int.from_bytes(best[1][12:16],'little'); Src.append("%s\t%s"%(rel,best[1][16:16+sz].split(b"\0")[0].decode('utf8','replace')))
         except: pass
         allw=set()
-        for o in outs:
-            for m in IDRE.finditer(o): allw.add(m.group().decode('ascii'))
+        for m in IDRE.finditer(best[1]): allw.add(m.group().decode('ascii'))
         for w in allw:
             Cnt[w]+=1
             Dir[rel][w]+=1
