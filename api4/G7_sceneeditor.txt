@@ -1,16 +1,4 @@
 
-### sceneeditorobjinspector/sceneeditorobjinspectorautogen.lua  (29)
-LuaQ Script sceneEditor ObjInspec AutoGen List CNodeN GetIn Manager PMVC Binit donShow qHide Remove Regi UIEvents Handle afirstI Octrl comingParamn Broot_ SuiTyp OFGUI RStart Rmodel qRefresh setn uwidgetsq DView
-
-### sceneeditorobjinspector/sceneeditorobjinspectorctrl.lua  (30)
-LuaQ Script sceneEditor ObjInspec Ctrl List UIBase preate BInita Start Refresh Reset move FGUIHandleEven STab gself Uparam Xsuperu _dataCenter PGetIn Bviewu _callFunc UregBy Name open_obj_iR Khide Ashow Btn_ GHide eswitch
-
-### sceneeditorobjinspector/sceneeditorobjinspectormodel.lua  (12)
-LuaQ Script sceneEditor ObjInspec Model List UIBase preate cInit gself Uparam Wsuper
-
-### sceneeditorobjinspector/sceneeditorobjinspectorview.lua  (55)
-LuaQ Script sceneEditor ObjInspec View List UIBase preate sInit show Hide Rfresh OnBtnObj Click ABack TLogic gself Uparam curType aitemId controller root GgetC btn_objed Bhild0 UIEventDispatcher Bener Tnel_i text_title icon_b makeFullScreen SetFrameStrata FS_BACKGROUND TLevel objV rManager ShowUI AutoGen tSelectedIndex Rhoice objId Pg_Mon _ToEgg Gname Bdesc uiSetA rDefByIdY bloX DefO Sdef MsgHandlel qectOper Def9 VisualCodeInterface FOpen
-
 ### cmd/sceneeditorcmdbase.lua  (15)
 LuaQ Script sceneEditor CmdBase BInit Execute Revok SEnabl NotAdd _dataCenter GetInst msgHandl CmdList type Uparam
 
@@ -43,6 +31,12 @@ LuaQ Script sceneEditor CmdTreeDel List Base BInitY Execute Revok cmove _dataCen
 
 ### cmd/sceneeditorcmdtreedelcomponent.lua  (26)
 LuaQ Script sceneEditor CmdTreeDelComponent List Base BInitb Execute Revok cmove _dataCenter GetCurNode isEnable rProject _cmdData bparent Aselfa Uparam fDeleteM msgHandl dispatch RUIDeft atree_nF _refresh CreateChildByP YsuperL
+
+### sceneobject/sceneeditorcmddestoryblock.lua  (22)
+LuaQ Script sceneEditor Object CmdDestoryBlock List Base BInit Execute Revok cmove _cmdData idxc cmdIdx isEnable cself Uparam UGCg CmdMgr _Place Rprint Ysuper
+
+### sceneobject/sceneeditorcmdplaceblock.lua  (21)
+LuaQ Script sceneEditor Object CmdPlaceBlock List Base BInit Execute Revok cmove _cmdData idxs cmdI print isEnable cself Earam CmdMgr Destory Ysuper
 
 ### scenetree/scenetreecmdactionadd.lua  (33)
 LuaQ Script sceneEditor FTree CmdActionAdd GList CmdBase BInit1 Remove tExecute4 voke _cmdData objId component propertyId arrayIdx displayNameD Aselfe Uparam PGetIn ProjectMgr GetNodeBy ancem CreateItem rFromCfg Add0 MemberValu MsgHandlers atch RUIDef botify_9 BDelee YsuperR
@@ -86,23 +80,173 @@ LuaQ Script sceneEditor FTree CmdSyncAllReferNode tList CmdBase BInit Execute Re
 ### scenetree/scenetreecmdtransform.lua  (38)
 LuaQ Script sceneEditor FTree CmdTransform tList CmdBase BInitY Execute Revok cmove _cmdDatak cself Uparam Otype rtable msgHandler dispatch RUIDefH Notify_ Node_Attribute_Change objId ponentId propertyId position funcNameL ISetP Brota Cscal BSetS Client getCur rUGCMode freshSelectObj index Vlimit Fstep Iuperv
 
-### sceneobject/sceneeditorcmddestoryblock.lua  (22)
-LuaQ Script sceneEditor Object CmdDestoryBlock List Base BInit Execute Revok cmove _cmdData idxc cmdIdx isEnable cself Uparam UGCg CmdMgr _Place Rprint Ysuper
+### common/sceneeditorbackpackitem.lua  (266)
+LuaQ Script sceneEditor BackpackItem zList refishiconZ RefreshOfficial2 CustomAc dUIInfo4 HBuffZ XCraft xFurnace aModPkg status XModelv iPictur Hudio BluePrin4 aPrefab block Bplot bmodpkg qobject NOT_DOWNLOADED rILLEGALN aVERIFY REATED_BY_ME rOFFICAL uMODIFY_ BInit BData SOnExi kUpdate IsShowNewUITips SetM TouchBegin_PC AMove MouseEnter RUdpat bMobile UClick Process ManageOp CCanB SelectThis rLibrary PClean8 SingleCheckD SColor DealScrollText Align ForbiddenI XUiBkg NeedUnLockUI wFlagVisib ImportUI fLabelB5 Author ncludeDownload YusTip iUnKownY rTheSame EventTab BHide MultiPlaye OthersMap IsSearchw qableTag moveLongDx DeltaMaxZ Blist ingG _callFunc MsgHandler VregBy bClient sPCf RiNodes getChild DispatcherW Bener RType_V sche BrKey gGlo TSpeed ADireJ cTime Bself Uparam _super bwidget Xname2 _title5 Qfirst Vecond rmath iERROR fail value booD func Acend ishConfi GLoad DefF bMapRes Buuid Involved VuiSet RefCsv DbuffZ Libb QFileP AnpcP sub2 defaultRes LOT_ACTOR_ICON_PATH PICTURE_SUFFIXB _isStdio UGIN_DEFAULT_PIC Rmusic FUgcA RAUDIO k_COMMOb CUSTOM_SOUND_TYPE8 KNKOW APackN GROUP EL_MOTION_ nSINGLE RresId PworldJ PTreeI Component info limiterIndex fairygui QAsync Btemp0 AVers crep cGetOpe sopen_sv hnumber Qerver6 bResult Wd_dot iceR _Cache OnePlugin SformaTCR SUIHel ion_green LOwC Oshar Wlib redDot SUrl Aip_t WsDowi InBay _STATUS onshelvez AViold ed0I Midi MById NFound anCancel RESb IJdesc RpenUIq fAutoGe BCtrl agrid_i CInpu OgetX3f DHold MYrE just pStandRen0 h4UGC BPool RESOURCE_BACKPACK_ITEMOPERA Rndby1 useButton QudurMain PCControl8 Codg4 SDLK_SHIFT assz New4 RRight bhiftpr newq _Framev shortcutBar Ause_ m2And Brror Sdebug raceback UsCopy SAMp BGrid CectB aAFrom TCD4 Smg_bk dprogb_ grayMark SRedTa cProg Wban AMask o4AC FD1D All0S uAccount COLOREDE Sottom4 trQn STxt WidthK zE2osi Aaa0 Atrue ULuaMg nalUgcTe Dfloo _EOper Robj_o dRforce mgBj fNewTag PUBLISHE pcsq Ortagx pic_warni exame pillegal cverify0 _doing_r A_banF sator Skey Qwitch NG1T UBackp ge0g j_INDEX vQtips_ alownerui egetUin _effect rParticl aValidEn BrIni delete8 dFullPaR scheduler dunreg Kbel K1add O_Exi
 
-### sceneobject/sceneeditorcmdplaceblock.lua  (21)
-LuaQ Script sceneEditor Object CmdPlaceBlock List Base BInit Execute Revok cmove _cmdData idxs cmdI print isEnable cself Earam CmdMgr Destory Ysuper
+### common/sceneeditorbackpacknewitem.lua  (88)
+LuaQ Script sceneEditor BackpackNewItem zList DefaultID block getdefI Tactor customui bstatusW Dplot1 Ecraf tfurnace bmodpkg pInit BData DOnEx OnTouchEnd_PC Mobile UClick reatePlugin ResetMap bSelect AddUIButtonDown DefCsv AgetS ModH NpcPlotDefById ingf Eself lparam _super ucontext Qfirst qnterfac rGetInst WManag FFlag SSingl eFrame Wcfg ATypeM PModUU RModBy DDesc trequestR cuuid gamemod qmoddesc TdisabZ uAccount qCurWorl MultiPlayer alowneruin Show BGetSC Yring ModsLibPkg LoadTmpIsAdd Finished TpenUI iniwW AutoGen threadpool cwork BTempu utemplat bipairs gCopyID Bnser generator Uvalue Qinner clter btmpPkgM civeMod Aui_e _ui_project vcallbac MsgHandler dispatch ReventI reload_r alibrar MAP_MODEL_CLASS agey notfresh
 
-### sceneeditortreelist/sceneeditortreelistautogen.lua  (35)
-LuaQ Script sceneEditor TreeList AutoGen CNodeJ GetIn Manager PMVC Binit donShow qHide Remove Regi UIEvents Handle afirstI Octrl comingParamj Broot SuiTyp OFGUI RStart Rmodel qRefresh setn Dispatcher Bener BviewH rwidgets _ClickItemV tCallback Render ucontext getChild
+### common/sceneeditoritem.lua  (60)
+LuaQ Script sceneEditor Item pList UINode OnExit_ Refresh PEventN ener UnReg rEnterUpdate TouchBegin f_PC AMove QMouse Hdpat bMobileo UClick GetClientID bButton IsDoubleY KeyDown tMTipsInfo5 GHide SetupOldUIAttribute ovePass AselfA Uparam grid_index BisPC rGetInst Dispatcher VType_ handlerH RollOv ucontext aSchedu Vunreg regGloabel getCustomData Btypeu tabh RInput qKeyCodek OutSideCall aSetNew eitemId TManag FrameAutoGenJ BCtrl uonClose localToGlobal BHack CPoin ctoplef effsetY node_pos UWidth oHeight
 
-### sceneeditortreelist/sceneeditortreelistctrl.lua  (66)
-LuaQ Script sceneEditor TreeList Ctrl UIBase preate BInit Start Refresh Reset FGUIHandleEvent lickItem Renderer OnButtonSelectDown CallBack STab gself Uparam Wsuper Bview _callFunc PGetInv Msgn regBy VideoControlMgrLua PlayInGLoader widgets http mdownload latest huacheng mp4L eSchedu Name Dispatch QType_ _isTouch RUIDef Bui_eS _menu_pop stopPropagation Sobj ucontext begin earQ Rmodel NodeData bipairsD bExpend ataCenter GetCur sator Vstate rgetCell Bhild OKeysJ ickB0 AMove ighN Ecomp ectBtn Edata EPriv kfunc switch
+### common/sceneeditormsghandler.lua  (36)
+LuaQ Script sceneEditor MsgHandler GetInst sInit ClearUp regEvent aTab dispatcher fdelayD OList instance cself BFunc table PMsg jnew TreeNode RInpecO ObjOperatQ pairs eOnExitD Vstate vcontrol EName Acall UGCM KeyAndCallBackD Skey Uvalue Rdebug traceback threadpool1 Twork Tait
 
-### sceneeditortreelist/sceneeditortreelistmodel.lua  (25)
-LuaQ Script sceneEditor TreeList Model UIBase preate GetL NodeData ChildrenFrom Snew gself Uparam Wsuper bCenter rGetRoot groot rCount ByIndex Ctabl binsert print SNum Vlimit Fstep
+### common/sceneeditorshortcutitem.lua  (141)
+LuaQ Script sceneEditor ShortcutItem zList OnExitd rRefresh8 OnTouchBegin_PC MouseEnter QLeave RUdpat Mobile UClick UpdZ EventTab DownCanPick BanState IsBackpackShown SNum isEmpty RBan isScrolling _callFunc8 PGetIn_ MsgHandler UregBy AselfY Uparam super4 fuiNode getChild itemIconFumoEffect1 FAnim Picon_ SCount itle_numw setText Duration dClient rgetGrid rVisiblez Dayedm CheckAllServerBad rManager getMultiPlay DCtrl rBagMain QurAdd Index HORTCUT_START_INDEX_EDIT bmg_add ITEM_LETTERS flen UserdataStrH R_USED sDyeableBlockLuaW GetDefault CSetI uLibDataZ ARealQ PColor BFromo Copy RresidG B_str Pplace _byd RuneOrEnchan sUGC ontY TpDegree Selected agrid_in from SBtn oure1 SIdx SDur curO tempr Pnew_b maxdurVal RInput OgetX EButt dispatch RUIDef cGetKey KeyC SDLK_SHIFTS ShiftMov0 MOUSE_PICK Btype bnumber UGCStandRepor p5005 INI_ADVANCEDMODEASSEMBLING_BACKPACK bChoose by1G ear2 risRight StaX iftpressed ectCreate TipsFrameAutoGen Regi PHideME PLongP bFinish bglobal BluePrintDrawing TBF_Se JSign ccalToGg UWidth ldUI CPoinn ctoplef parx node_pos orageBoxZ poveProg AltarAwards QPutin bDefCsv BFlag Lock Bagm ABoolj UhasUnS1 ODesc obottom CValu Wfloor XSimpl discardI ipsJ alist_s9 end5 eswitch realn
 
-### sceneeditortreelist/sceneeditortreelistview.lua  (41)
-LuaQ Script sceneEditor TreeList View UIBase preate sInit ontentVisibleW earW BNodeh bExpend fRender Pfresh CellSelec gself Uparam Wsuper Broot makeFullScreen Qtreel widgets0 removeChildrenToPool bgetRoo RGetId BData addP Sipair generator Vstate vcontrol Nrint SdefinC arrow5 QCount Ecomp obj4 CentH urNC bcurSel setColor
+### common/sceneeditoruidatacenter.lua  (93)
+LuaQ Script sceneEditor UIDataCenter GetInst BInit ClearUp etProject CurNode BRoot5 ESaveV KeyCodeEvent qDown nKeyboard ICall Rwitch NeedReLoadBackpack SetSpecial dParamsA tIsInObjPlace3 ObjSelect VTreeM etToolType rDisable InPlayViewH IsVisualE BHigh AreaFillID SBeforh bPrefab BagAfter QtoUGC OList instance cself D_cur code RIdx BdataX MAIN_TAB TYPE_RES FUNCTION_BTN RBUILD qcurrent TimT PGAME_ CREATE priB Manager ipairs priority generator Vstate vcontrol nilc Cnser Esort Snum DnewPJ KtmpK RremovY index Vlimit dexv Dispatcher DaddEi Y_Exit ERROR Logm RientC isInModif BHIGH dCreate EDIT_MODE OBJ_PLAC eSELECT SCENE_TRER MINI_ADVANCED ASSEMBLING_ DEVELOP GPLAY Cdby1 Cceil fAccoun WorldDescQ Apwid ExKeyValu theMapFrom Qfrom_ getLastRpts cReport ostG STxt
+
+### common/sceneeditoruidef.lua  (188)
+LuaQ Script sceneEditor UIDef key_message esc_down switch_ _ugc_mode AUGCM game_type _okC select_area block actor operateS Shange Co_ruH mape _button_tool QToolD Bopen _ui_view visual_c _pool close5 mrefres Fshow7 list_popup how4 RListP cond_classify_renam1 _delet6 NewJ Rright7 hide_all_failygui onHideAllF Astor urviv Pdevel r_center9 setting teach_msg rhowAddM SactioF _introdu et_gun_magazin music_item_ qsidebar obj_inspe Stabid C_out ype9 zdisableX click_tubesstate icancel csearch9 bag1 Cmenu kmodifyR Ocopy6 brigger J_pos BmaskP mainfr Prevok uchbegin kend icoveryB ashrink ybtns conformity gesture isplayboard nrocker4 Batus Cback R_call WplaceO Lquit SCREEN_SIZE_CHANGE _just_ bJustUI shortcut blueprin Avisi pos_anim_ material Xevent eutoaim HnodeX Qgular bparams leave Mturn _NumberInput_ NUMBER_INPUT_RES w_templa IColoU Revert_TreeNodeToPrefab Timpor _Attribute_A NrrayQ eIndica Axl7 mponent_M a_Objec Physics Dtop_ iRemove PathPo CDatai Kroll rToIndex r_2_Back GGoto RJumpVw rAddObj_ aTopTip ick2 Cstar addO Qbecom APackd FAddC eChildN rforwardm bforWar4 Sa_num CmdNumLeft Cpoun reat oolPanelt BNeedB Mscal Nbind Sempty MAIN_TAB BTYPE dOBJECTB DPLAY DMORE COMPONENTLISh BASE_NOD8 EDIT_M SCENE_TREE NONO BAREA4 ACTOR_EGG RBOARD4 BITEM DDROP _ADD b_PARAMc LASSIFYID_n BFROM OBJ9 z_NORMAL FUNCTION_BTNQ SBUILD BRUSH bREGION bDELETE FLYBTN_POS_c RFAULTF vSIDEBARW OBJm cSHRINK gROCKER BHIGH rGESTURE CTUBE VPOINT GLINE FLANE CSHER wYLINDER BJPOSI fCREATU CGAME SorEnuD AGoTo atSG VxyzOp Sgloba _one_step tz_equalY Bsorb QalignS
+
+### common/sceneeditoruiinterface.lua  (200)
+LuaQ Script sceneEditor UIInterface CreateNode BShow FRoot hReload movR HotFixMvcClass OpenUI EscKeyClick SetCurProject BExitR FreshInspector5 pPool Jlose ModelIntroduction ChangeTreePosBegin EndD DataModify ObjOperateFrame gTouchLongCallBa DevelopM ideBagBy2 rVisible SetMousePickItemTextShadowM ooseStandReport Updatw oToObj Multiple PhowCe oTip aCancelR PicMask Regi qPreview laym Gesture ureConfig PetNotW NotifyWorldObj GetAreaDefaultSiz IsBlockID etScaleEqually PCoord _has print MInst MsgHandler PManag AddPackageZ iniw TopTipLayJ Augc_ rAutoGen sdisable RMainf Menus HORTCUT_SINGLE_INDEX_EDIT TeachingEvent Ppatch ui_e6 hide_message_ Emity sUGC AMETYPE_BUILD VisualCod OView fSideba ESave earUp jUIHelp LibS QtoUGC1 pOnlyFun Ocall BCtrl unpW etree_n Bui_rU pageIndex Qfirst9 WifyIDf vByParam1 bglobalG tRoleAttX GongNengN Arrow UGCv RESOURCE_BACKPACK_MANAGEMENTBAR Odby1 Librarg IEndDrag RgetkvP Poepn_x L5Ptostr Snow Scha omponentById Rasser soldValuI endc qtAddCmdz3 ioffset YobjId Rchoic eSchedu regGloabel Bmath rotalTim Rval SFlg FBep preR YDelay Atick nge_game_to_run ARunn bBtn_On _shortcut _cover Qustom PQPlace error Idxr cfunc Atool SCount CColo SetFontStyl B5003 G_GetFromMap LeaveBindStat Dnumb Rempty RmapId edShrink unEntitym7 Oopen DisplayBoardeC Ugc8V SDefin iselect settH tF1OOLK CNULL ArushL aIsStar _TabId MAIN_TAB PLACEBLOCK bOBJECT bSELECT pSpecail SPECIALITEM_TRE gQitemS uuiT tContentfO Cener APosi Wheigh txtH rolq setAlpha fFadeOu ApBtn Immediately freleas FS_C keFullScreen B05Q Vaphpa Z5reg EaZsE GXvC bMEDIUMr raddRela Dize_Q VruleI SpID Sesc _title ARich CDROP6 SDelet OBJ_NODELIST_CARD w5opy _ObjLiF5 asInObj quit Rwemplate zsrequire mlshift idOZ rockerbtn OCKER_POS_8 uDEFAULT Transform Switch
+
+### common/sceneeditoruinode.lua  (26)
+LuaQ Script sceneEditor UINode AddEventListener Remove tCustomData curNum scount Rec8 Bclos bparentS bassertD Hnot A_keyA GetInst Dispatcher pType_Ex _isInPool nipairs ucontext ator Vstate Uvalue bself keyT
+
+### gameplay/editorpccontrolbase.lua  (56)
+LuaQ Script sceneEditor RPlay PCControlBase ClassNative ctor ResetKeyCallBack AllInput GetMouseButton EventFor renderUI tick update setSensitivit ReversalY ightModel howOperate addBeforeDir isLo Fmera ycanOncl VPunch Accumulator WUseBt triggerHeadshotTi mNormal JAxis Bask MKeys kAllKey8 nppoint autoBind print Aself5 __private ParamData SandboxResult Set8 w_Bool Eturn bhideui cursorhandl oNumber Bvkey Oktyp Bairs functiA DispatchB aCreate7 tubscrib errM find callback AName sche
+
+### gameplay/editorpccontrolimpl.lua  (11)
+LuaQ Script sceneEditor RPlay PCControlImpl LuaX ClassNative pBase Ureate print Eself
+
+### msg/sceneeditorcmdmsg.lua  (19)
+LuaQ Script sceneEditor CmdMsg OnEx MsgHandlerList msgh GetInst callFuncTab regByEvent AselfE pUIDef Bback uforwardC banager AddAndExecuteCm WorldObjData justPlayerPos switch
+
+### msg/sceneeditorcommonmsg.lua  (129)
+LuaQ Script sceneEditor OnEx GetUGCCurShortcutPageStartIndex MsgHandlerList msghd PGetInm callFuncTab lastToolType regByEvent AselfI CurMainPlayer getu Tclamp HORTCUT_START_INDEX_EDIT RUIDefW select_area Yblock Ractor toperate change_game_to_run open_devel5 P_centZ _pool lswitch visual_code rui_view stor urvive model_introducti3 RframeC Bshow bype_ok sidebar_n rflybtn_c ocker4 Show BTips OOLTYPE_SELECTARE UBLOCK UACTOR VPLACE PturnM dispatcher _Notify_Stop_A tUIManag1 Codey ViewAutoGen UIHelp WorkSapce AndB RCount tResumeFlagC Afrom isnull DITOR_MSG quick_D exit_clicked RoseUIK SSingla Teaching Pata_e Save_t fMessag _wit Rcover pBtn_OnC_ getglobal GongNengFX Uparam qAddPack iniworld sTexture Dugc_ uLibDataw WtItem MOUSE_PICKITEM MHide RBagBy PLAY_FROM_VISUALCODE_VIEW Oback AObjP PCoursY Cpage Qfirst TifyID ShopJumpTab RoleAttr actBackp Bcopy PToOld grid_idx CataC EHighl PGAME_ SCREAT oOBJECTj FNULLP oolConfimityVisible FUNCTION_BTN _BUILD EReplm booleanL NRUSHE sTERRAIN cREGION PAreaP FFill _OPERATE_ __NONEr FLYBTN_POS8 rDEFAULT Bmainu B_ges bESTURE OLETEB PIsUGC FlyBtnPos IFr2 creenScaleX SIDEBAR_RES tANDMORE bSHRINK BMODE OMPONENT_LISTH SCENETREE_R basewidth Rhrink
+
+### msg/sceneeditorinpectormsg.lua  (17)
+LuaQ Script sceneEditor InpectorMsg OnEx MsgHandlerList Bmsgh GetInst callFuncTab regByEvent AselfE pUIDef data_modify CmdManager AddAndExecuteCmd EName switch
+
+### msg/sceneeditorobjoperatemsg.lua  (156)
+LuaQ Script sceneEditor ObjOperateMsg NewInterfac Plugin OnEx sEntityType GetSelectNodes TryDelete MsgHandlerList Bmsgh GetInst callFuncTab regByEvent AselfE Rempty Vcombo Qmulti ProjectMgr cGetCur Client Tize objid qanceId Rtablew insert CurWorld PgetAc Afind RByWID rSandbox2 CUGCT qDestroy cproj Varray index Vlimit Fstep svalue ETreej iFilter Cpair erializeObc Parent rectUuidp cfgs TortIn PDel new1 sInfo CmdManagerz SAddCm Trigge dispatch SDefin OBJECTLIST_CARDf E_BAR StandReport B5008 Rclick zdby2 RUIDef rOBJTYPER cNODE fromMenu Vstate vcontrol gdata srd_id Robj_o Bcopy Nbind Enone Reset_Component _ShrinkDt _inspeQ BneedM Ohide0 OHide Citem VTEM ACTOR_EGG VisualCod ObjParamj PataCeE Tool SBefor DPref DShow BagAfter sclose_r R_pool switch_game_ isKeyDown BOpen bCreate _Root aEDIT_ME SCENE_TREE ndTeachingCours Hmenuc Objf EMPLATE_PAGE QTempl IsLib Load MapDefaulX OUUID NeedRefresh Cingl pOPERATE rlibrary getUser ModFromLH BscByC BFlag ips1 prequest RcolorX cPackag TLOCAL PURCHASE pkg3 risTotal dpkgOwn Rtatus IsBeyond PPkg iniw rAutoGen customui sL_CLASS sallBack Sn_ui_ Fload rsts Sams OCOPY Input_Vid CCopy dNotify oAsChil ave1 oDELETEP LocalPosition oordDivBlo BhunkP sync Spos _GroupI ansformP UncR ebRetai8 TipO CBind
+
+### msg/sceneeditorshortcutmsg.lua  (11)
+LuaQ Script sceneEditor ShortcutMsg OnEx MsgHandlerList msgh GetInst callFuncTab regByEvent AselfE
+
+### msg/sceneeditortreenodemsg.lua  (29)
+LuaQ Script sceneEditor TreeNodeMsg OnEx MsgHandlerList Bmsgh GetInst callFuncTab regByEvent AselfE pUIDef tree_node data_add_object select become_preftY componen PAdd CmdManagerI AddAndExecuteCmd EName Uparam Del0 pataCent SetCur dispatcher AProj S2Pref switch
+
+### project/sceneeditoraccelkey.lua  (125)
+LuaQ Script sceneEditor Project AccelKey oEsc _Chat Number Backpack trlH Enable oAlt R_LivingToola FSort Ottle_ PlayerList ouleSet oMap chievement toreSkin Inventory ChargeMoney Friends OountE BuffStatus ModelLib Developer _OEM_3 ScreenShot MicSwitch cpeaker F4_release UGCn rType GAMETYPE_BUILD Esca UIManager rIsShown NewTrigger rAutoGen rCloseUI pVisualC yainView pBtnCall BHelp RFrame BShop ItemDetail KindSelecC dPlugin QBlockB Cent2 veFi AddFolder AIsUI licked getglobal CHideJ Cingl OriginalChoos CMods ALib_ GBookw AntiActive MapE tartSettingIntroduc press_bt CTeam FooterRandom9 aCustom FWith APool uSyncRes MsgHandl dispatch pUIDef Gainf4 EMenu Area Bface OldUITipsHack bousePi TextShadow index Vlimit Fstep ClientCur UisInG isOperat PGridI Shortcut9 Treate NewVersion rfCsv BFlagg Lock statisticsUI BRoom0 pwapBlino GRolel torageBox5 bsrcnum Num1 EQUIP_START_INDEX anPutEquip Spectato ShapeShift EInfo OHIGHp IsSearchPanelVisi pQQMusic PPiano SandboxLua OEmit ContextC Runningb AltTitl a_tips_t sparam JustDoIn change_game_to_run SIsUGCq BHigh cUITogg isAltD
+
+### project/sceneeditorcommon.lua  (37)
+LuaQ Script sceneEditor Project LibType dPrefab Official Componentd DeepCopy Serialize SaveFil BRead canDir Ctabl pairs boolean bstring anumber1 Semp generator Vstate vcontrol BJSON aencodeF json2s gFunc_writeTxtFi fullpath Lread LuaInterface getStdioRoot directoryParseCreat GetResult Rinser cList aindex Vlimit cinfo
+
+### project/sceneeditorcomponent.lua  (18)
+LuaQ Script sceneEditor Project Component ParseBySerializeStr Param aveMember rName rType rDisplay7 sOwner cself DeepCopy EListW Invalid xModifie Uvalue
+
+### project/sceneeditorglobal.lua  (46)
+LuaQ Script sceneEditor Project Global UGCMode _Enter sameTest OpenWorld Quit IsUGC7 king KHigh Runn print call iSurviv_ aMgr rGetInst UGCT UGCs getOWID TManagQ eCreate rLibType SavY BByIdN EmptyNod rENTENUM OBJECT_TYPE bBLOCKS OCounE Fndex penq SNum ReportHitABtest ExitNativeCall UIIg bRemove SLeave yAILibDB RResetG Alien QgetCu GAMEc Q_HIGH
+
+### project/sceneeditornode.lua  (33)
+LuaQ Script sceneEditor Project Node GetParent ChildrenCou cByIndeY CreateCompon Dele sById Name ParseByParam aveMemberi SerializeStr jascade Modified Gsert rGetType RefPrefabI rVirtual xList cself Ctabl Rremov Vlimit Fstep AData Bvalu llOnPropertysChang UNewId strId OsMgr
+
+### project/sceneeditorproject.lua  (62)
+LuaQ Script sceneEditor Project g_Test Name preateTi fModify RootNode hildrenLisx ComponentD Transform Param Uscale rotation0 Helloworld BInit REmpty ByPrefab Dele BFind LookDirPos BLoad BSave Parsl bMember NewV eAlloc tIdCasca SetT GetFullPath bLibDir rENTENUM OBJECT_TYPE EMPTYb Aselfm Spos WCount bSetRef Vlimit Fstep AbRet Afuncd CurMainPlayerd pgetPosi distance sReadFil DeSerializi SStr kData HTemp GetObjId BsMgr UITexture Wfloor ULocalF G_obj rVirtual propertys objT Xstroy Ailet
+
+### project/sceneeditorprojectlib.lua  (36)
+LuaQ Script sceneEditor Project BInit BLoad Release cCreate7 Dele pById CCoun ByIndex Parse FromFileName RibDir Type Param Error Aselfa AScan MList APath Vlimit Fstep HTemp pairs generator Vstate vcontrol Curi UGCModeMgr file bstringe find Bpos Ssub
+
+### project/sceneeditorprojectmanager.lua  (41)
+LuaQ Script sceneEditor Project Manager GetInst EnterWorld SLeave SreateQ Open Count ByIndex Node2Prefabx dDelete UFrame LibDirByType NewLib qRelease ConstructOb OList instance gself Uparam __privat HTempE GMemb3 BRoot ParseByP QFirstQ qbResult CtablE cinsert sFolder vfilenam FileTree rAutoGen Vlimit Fstep eLibMap Children eMgr
+
+### sceneeditorinspector/inspectormainautogen.lua  (39)
+LuaQ Script sceneEditor Inspec MainAutoGen List CNodeD GetIn Manager PMVC Binit donShow qHide Remove Regi UIEvents Handle afirstI Octrl comingParamd BrootU SuiTyp OFGUIw RStart Rmodel qRefresh setn Dispatcher Bener BviewH rwidgets btn_close _Click UIInterface ycontextQ _nameT getChild node_active list_component
+
+### sceneeditorinspector/inspectormainctrl.lua  (35)
+LuaQ Script sceneEditor Inspec MainCtrl List UIBase reate Start Refresh Reset move FGUIHandleEvent NotifyObjectAxis9 cView gself Uparam Xsuper _dataCenter PGetIn _callFunc UregBy Name rCurNode Component TransformH Plient Visible position default tree_nod r_select Dui_rS _pos_change eswitch
+
+### sceneeditorinspector/inspectormainmodel.lua  (11)
+LuaQ Script sceneEditor Inspec MainModel List UIBase reate gself Uparam Wsuper
+
+### sceneeditorinspector/inspectormainview.lua  (91)
+LuaQ Script sceneEditor Inspec MainView List UIBase bhide Dshow Rreate2 sInit Fmove uPool ComponentItem IsInTable FAttr ShowEmpty VFresh NamA GetShield Reset BNode LostFocus SNumbe bString BBool Lrray OVec2 Color LEnum newc Aself1 Uparam Wsuper controll rook tPosition BFunc BType type_lis attr_iJ project_ init_item_ _ipair oelease generator Vstate UIPackage Tugc_i RompenJ bretain _nsert rs_use Zindex0 Vlimit wddChild par7 ADataA SelectedI UIInterface VHideI undifined Twidge Qtext_x EText default Sams Skey btn_foldg Dispatcherh learCallbackX SaddEv o_Click Wtotal _ibute aheightP MsgHandlek Deff _modify cldValu Bedit BmathY QCount aetVisi ineM PLog Bopup Eitle ohanged thmp rTCB
+
+### sceneeditormainframe/sceneeditormainframeautogen.lua  (50)
+LuaQ Script sceneEditor Mainfr AutoGen List CNodeK GetIn Manager PMVC Binit donShow qHide Remove Regi UIEvents Handle afirstI Octrl comingParamk Broot SuiTyp OFGUI RStart Rmodel qRefresh setn Dispatcher BenerQ BviewH swidgets unMv b_Click2 chatBtn RUIDef nge_game_to_run ataCenter qIntoUGC Sobj eontext AccelKey_Chat getChild button_setting gunmagazine EGunM playq Play _preinstal YRevokS Recovery
+
+### sceneeditormainframe/sceneeditormainframectrl.lua  (199)
+LuaQ Script sceneEditor Mainfr Ctrl List UIBas preate BInit Start Refresh Reset move FGUIHandleEvent vokeClick ccovery HasCmdSche anChange Type developCenterh gunMagazin MusicPlayMod reinstall RQuite OnSwitchBtnDown BackActionCall hortKeyForConformity Character9 gself Uparam Xsuper PGetIn Bview _backTouch r_forwar KeyCodeZ4 _callFunc VregBy sAddGoot CmdManag LeftNumUpdat regGloabel bUIDatat sObjSelect pSpecial Dispatch CGRoo Oance4 anyK aunRegA7 Sborad Name rwidgets button_setting Cgunm Qplaym tnPlaceObjBa GetClientInfo BisPCK DInpu gSDLK_t WRCTRL GAuto PPiano4 getCur2 qokCondi GnotO CValu objh ucontext Gchecv GongNeng SetGNBtn_On yAccount getMulti PHighL1 orKey QInObj Visual4 q_game_t UGCStandReportg C5006 DV_TOOLS_MENU TriggerBtn terfaceBtM DevTools bSystem AddPackage iniworld cTextur bOpenUI Uugc_d Reg3 Long INI_ADVANCEDMODECONSTRRCT_FUNCTIONBUTTON9 OUndo T_poolE GAME_TYPE ZREATEn BUILD jOBJECT Bopen teach_msg uFguiHelS3 BagB EMenu resE show Ber_c TEM_PAINTTANK RPaint Ritemir atho ItemLogica ShapeShif RidingHorse BCut_ uedIndex Grid get6 rer_freeL temDefCsvn n_MUSIC_ P_role C1001 B_BAR Free Side stemId Z_comp ssongboofF oLibrar D_a_num et26 beg2 cidebar t_tabid_disable toolbtns_rJE bstatus B_ges Fhide l_introduO P_objp Lquit Notify_Pr Def9 B_BTN9 SREGIO hDELETE pBtnVisi DTabD ArrowScal bCompon WwayBtz sDACM SELECTSINGLE RGroupv Vector3fd MoveOper Boord_ CArraDF Gnumb CNode cEntity flativem crunTim gspeedX TransparentA CCircl dPendulS gangleX absgh PIndic oWpaths Upairs layf cPhysic ollisionWi1 offsetX xtra Usey WPos last EHIGH dBPamera AMERA_EDIT_STATE_TEST ZShotF BSyncd GFlagb B91Fly for6 D5iP qautoaim endVE WCfg GetRadioC FArea Expres cglobalMm
+
+### sceneeditormainframe/sceneeditormainframegesturenode.lua  (29)
+LuaQ Script sceneEditor Mainfr GestureNode BInit Refresh cset sData howQ EHide UBuild Delet UTubes oolPoint OLine3 Olane3 VSpher ylinderk FSlop7 EArea Position fCreatu gself lparam inited URemovB Sswitc Barea
+
+### sceneeditormainframe/sceneeditormainframeleftnode.lua  (73)
+LuaQ Script sceneEditor Mainfr LeftNode BInit9 Refresh sData List ItemRenderer PClick OnSelectTab OpenPlayMode_ Tool Changed IconAndTitle ArrowScale croot Uparam inited tabConfigh RUIDef5 MAIN_TAB TYPE_RES GetS icon bOBJECT BPLAY CMORE wwidgets getChild TGetIn UIComponentsU setCallbackF EventDispatcherZ WType_ GRigh Ecomp psgHandl sidebar_cancel_tubesstate ucontext ataCenter BGetT8 type oolw P_tabi BcastH GButton bstring format pimage2 PDisabi Bouch qolor psetVisi sindex CUGCC_ StandReport p5006 INI_ADVANCEDMODEDEVELOP_SELW lMETHODp endTeachingCourseMsg _shrink_toolbtns Y_down IsOut TManag AddPackage bworld devC uAutoGen Brush Barea9 gpath
+
+### sceneeditormainframe/sceneeditormainframemodel.lua  (12)
+LuaQ Script sceneEditor Mainfr Model List UIBas preate cInit gself Uparam Wsuper
+
+### sceneeditormainframe/sceneeditormainframetoolnode.lua  (123)
+LuaQ Script sceneEditor Mainfr ToolNode BInit9 Refresh sData OnRemove Events ModelList Touchable ItemRenderer Selected PClick Change Ppread bPickup DelayedSche fVSCode Fslib PlaywayE penTeaching rMessage GetHelpBtnAndPar JBack ActionCall KHide root ANeed cself iniL R_keys5 BGetS piconN b_build U_off Hhighy hchooseo pColor bnormalA BIdx xwidgets getChild Bbtn_t Sright PGetIn QiniUIr Dispatcher BenerU bCompon stopPropagaE Sobj ucontext Ecomp irs0 sator Vstate VIndex ScrollPane MouseWheelEn Bcastb Ulbl_n9 sgHandler RUIDefI witch_game_t KeyDown ataCenter rManager cAutoGe2 bhide_mb _with_recoverB0 Acall AVisi Cmsg_ Epick egPrivate Unreg _TabId MAIN_TAB TYPE_RES bOBJECT CUGCC CourseMs RStand B5006y ADV_TOOLS_MENUF RCreat Construc D1ien cgetNam TriggerObja vvisual_ ui_view terface aGCGAME OHIGH RBUILD kMethodY eCREATE edResetH TClose2 CQ1str BDIUMh Tlevel eUIc qAddPack WQworldK APosiA localToGlobal BSize Twidthm Pag3 Spos Btilsf cRuleId ameForDev3 Cvalu UGCBluePrintMgrIns onvertObj2VbpI aigc GongNengFrO UBoard
+
+### sceneeditormainframe/sceneeditormainframeview.lua  (216)
+LuaQ Script sceneEditor Mainfr View List UIBas preate sInit Reset fresh pMode pdateCmdLeftNum gcSetGunMagazine PaintChangeBtn MusicItemSelectedN OnToolt TabDisable petRevokk cVisibl ArrowScaY ShowGestur EHide GetQuestionBtnAndParentU OpenTeaching rMessage EnterObjPlacep JQuit Back gself Uparam Wsuper Broot SetF Strata FS_BACKGROUND sLevel BctrlM makeFullScreeni paddRelaU cGetIns getCurz URootN TSize_Q pontroll widgets buttonSwitchO phild Obj4 setv Components1 EventDispatcher Hener9 _TouchBegi ocovery rforward UIDataCe1 SClickt tandReport UGCd MAIN_EDITING_SCENE VisualCodeI useIsRightB asgHand objX Untext kremove AccountManager getMultiPlayer QumeUI GCGAMETYPE_BUILD Index SidebarAutoG getglobal Shortcuth cshow_r _setting flybtn_c FLYBTN_POS_ rDEFAULT orocker gROCKER PcGuideKeyS QtoUGC FPosi ui_e bhide_m BHIGH CActo RhowUsx MODW iniworld Operatg e_playm reinstally endn CourseMsg CHigh nfimityG ClientInfo sisMobilD QsetUIl pbsPos EColo Egunm B_tip img_ Rgroud ITEM_COLORED_GUN b_SMALL icon Dur_cC TexC CGetS_ bbullet ctips PAINTTANK User POwned QSpray Cpair SgetUi AitemX sator Vstate uer_free bDefCsv RMUSIC songBook eckSys SDefMg EAlph bShrink bESTURE Euild SELETEN howDelet VTUBESD UTubes TOOLPOINT UPoint GLINE oolLineP KLANEP MlaneP CUBP CubP VSpher sYLINDER ylinderY FSlopX E2REA EArea POSITIONP BCREA JHelpdG uFbMEDIUM qAddPackl localToG Spos SELECTSINGLEK KgSpecia P_objp VQTrigg ONONE fro2V PLAY_OBJ BFROMP OBJLIST_NORMALP CTabI M3TAB oOBJECT B_gam Ouuid Bcall NHTREE threadpool cwork bInput_ rWaitAdd SDefinY QBturn treV bProjecw1 Eefabz napShot pait Gmestroy pdCLeav Edqc BOWID funl6 MapDefault J9Lib IDload SBefor KeyD BagAfter FopenEH SBagBy g0_Ad aChoose bnumberc HasProperty U3Nam image btnOkG ComDiaLogL Rialog yncToAllRefer cflag q4tmp bisFrom Zb_S ONULLF HMquit
+
+### sceneeditormodelintroduction/sceneeditormodelintroductionautogen.lua  (28)
+LuaQ Script sceneEditor ModelIntroduction AutoGen List CNodeS GetIn Manager PMVC Binit donShow qHide Remove Regi UIEvents Handle afirstI Octrl comingParams Brootd SuiTyp OFGUI RStart qRefresh setn uwidgetsK DView
+
+### sceneeditormodelintroduction/sceneeditormodelintroductionctrl.lua  (20)
+LuaQ Script sceneEditor ModelIntroduction Ctrl List UIBase preate BInitf Start Refresh Reset FGUIHandleEvent gself Uparam XsuperN PGetIn Bview qcomingP INameS
+
+### sceneeditormodelintroduction/sceneeditormodelintroductionmodel.lua  (10)
+LuaQ Script sceneEditor ModelIntroduction List UIBase preate cInit gself Uparam
+
+### sceneeditormodelintroduction/sceneeditormodelintroductionview.lua  (50)
+LuaQ Script sceneEditor ModelIntroduction View List bUIBase preate BInit pRefresh removeEventV BenerZ OnMaskDown Butt Amind gself Uparam root makeFullScreen paddRela GetIns2 getCurrent RootNode Dize_Q AType rwidgets key8 bitemId msgHandler Ohild Dispatch _Click Rclose CbtnO uiSetI RtText Bdesc nerateUBBStr cont ModT getBlock rDefByIde CsvF Sdef SDef isSelected psetkv Ooepn tostring Tnow
+
+### sceneeditorobjinspector/sceneeditorobjinspectorautogen.lua  (29)
+LuaQ Script sceneEditor ObjInspec AutoGen List CNodeN GetIn Manager PMVC Binit donShow qHide Remove Regi UIEvents Handle afirstI Octrl comingParamn Broot_ SuiTyp OFGUI RStart Rmodel qRefresh setn uwidgetsq DView
+
+### sceneeditorobjinspector/sceneeditorobjinspectorctrl.lua  (30)
+LuaQ Script sceneEditor ObjInspec Ctrl List UIBase preate BInita Start Refresh Reset move FGUIHandleEven STab gself Uparam Xsuperu _dataCenter PGetIn Bviewu _callFunc UregBy Name open_obj_iR Khide Ashow Btn_ GHide eswitch
+
+### sceneeditorobjinspector/sceneeditorobjinspectormodel.lua  (12)
+LuaQ Script sceneEditor ObjInspec Model List UIBase preate cInit gself Uparam Wsuper
+
+### sceneeditorobjinspector/sceneeditorobjinspectorview.lua  (55)
+LuaQ Script sceneEditor ObjInspec View List UIBase preate sInit show Hide Rfresh OnBtnObj Click ABack TLogic gself Uparam curType aitemId controller root GgetC btn_objed Bhild0 UIEventDispatcher Bener Tnel_i text_title icon_b makeFullScreen SetFrameStrata FS_BACKGROUND TLevel objV rManager ShowUI AutoGen tSelectedIndex Rhoice objId Pg_Mon _ToEgg Gname Bdesc uiSetA rDefByIdY bloX DefO Sdef MsgHandlel qectOper Def9 VisualCodeInterface FOpen
+
+### sceneeditorobjoperate/objoperateframeautogen.lua  (57)
+LuaQ Script sceneEditor ObjOperate FrameAutoGen List CNodeF GetIn Manager PMVC Binit donShow qHide Remove Regi UIEvents Handle afirstI OctrlK comingParamf Brootc SuiTyp OFGUI RStart Rmodel wfresh setn Dispatcher Bener BviewH Twidge Cedit PBtn b_Click Hcopy hdelete unselect mbog Lbindg RUIDef _Notify_Stop_Acti aReport GButton Tobjecz Robj_o Refaul ucontext pector ient getCur AgetN rUGCMode Trigge TreeInterface xitEntit mbol hild
+
+### sceneeditorobjoperate/objoperateframectrl.lua  (79)
+LuaQ Script sceneEditor ObjOperate FrameCtrl List UIBas preate BInitY Start Refresh Reset nRemove FGUIHandleEvent dMsg CopySche bVisDode BtnClickReport BtnStatus gself Uparam Wsuper Bview roos rwidgets xyzR XyzQ RModel _copyTimer _isTouchBlock allFunc PGetIn MsgC VregBy wualCodeV MgrO GetToolType bain TOOLTYPE_SELECTSINGLE MULTIP MAIN_EDITING_CHOOSE_SHORTCUTBAR qcomingP Cedit setSelected Name InputKeyb gSDLK_c gDELETE WRCTRL UIDataCent RegKeyboard NDown dispatch Tobjec Robj_o z_delete SSinglN TManag AIsSh ient getCur BAxis ZT_POSz T_ROTATE _SCALE Bface RegM LongCallBackJ CREEN_SIZE_CHANGE switch Popen_ _close psidebarY _changed_pos aetHigh ULevelQ Multiples btnV Gloabel
+
+### sceneeditorobjoperate/objoperateframemodel.lua  (12)
+LuaQ Script sceneEditor ObjOperate FrameModel List UIBas preate cInit gself Uparam Wsuper
+
+### sceneeditorobjoperate/objoperateframeview.lua  (61)
+LuaQ Script sceneEditor ObjOperate FrameView List UIBas preate sInit BtnVisible Selected Reset ULevelD HHigh aPos PfreshR status gself Uparam Wsuper root makeFullScreen addRelation GetIns2 PMgr getCurrent RootNode Dize_Q BTypeU rwidgetsZ Bhild midPoint leftPoiotA ontroller1 QIndex uboolean Cedit bStrata FS_BACKGROUND oMEDIUM Tisnul QUIHel ObjectComponent vSidebar cposX Sflg TreeInterfac EIsIn Client Robjid banceId RIsTopO Vempty Rcombo QmultiM achoice Sroj Rarray Vlimit Fstep svalue
+
+### sceneeditorobjoperate/selecteffect.lua  (29)
+LuaQ Script sceneEditor ObjOperate SelectEffect g_FuncRectP Start Hmovem cNode etInst etCurrent FromPa UIPackage createObject ugc_ addChild setPosition setScale ClientInfo isAndroid bGTweenq setTarget sPropTypY Components run8 clete Aplay Adura8 circle
+
+### sceneeditorpanel/sceneeditorpanelautogen.lua  (41)
+LuaQ Script sceneEditor Panel AutoGen List CNodeG GetIn Manager PMVC Binit donShow qHide Remove Regi UIEvents Handle afirstI Octrl comingParamg BrootX SuiTyp OFGUIz RStart Rmodel qRefresh setn Dispatcheru Bener BviewH Pwidge n0CloseBtn b_Click Vn0Pic BItem ptCallbaQ itemRenderer ButtonOK objb ucontext getChildByPath
+
+### sceneeditorpanel/sceneeditorpanelctrl.lua  (47)
+LuaQ Script sceneEditor Panel Ctrl List UIBase preate BInitZ Start Refresh Reset FGUIHandleEven N0CloseBtnClick xItem RendererH ButtonOKH gself Uparam Wsuper sview model HData SetNum bdefine Name UIManager HideUI uAutoGen context GComponen Ctolu getChildIndex REmptyu RTiTle9 cObjectU BPerf Otype bassert dispatch RUIDeft tree_node data_add_o itemInfo map2 aswitch8 tCustom
+
+### sceneeditorpanel/sceneeditorpanelmodel.lua  (58)
+LuaQ Script sceneEditor Panel Model List cUIBase Create Get4 cData gself Uparam Wsuper bdefine UEmpty1 TTiTle eObject uomponen DPerf bNTENUM OBJECT_TYPE bBLOCKS text rTEXTURE GRAPHICS SGUIDE NETVIDEOC WLOCAL sAMERULE REMPTY Rpairs Rtable cinsert AobjT PGetIn bCenter GetCurNode rVirtual RuleMgr uanMountY hByName rManagerl LibM Prefab rByIndex Bpref Atile Snum Dplem appendNum Vlimit Fstep addTitle generator Vstate vcontrol Uvalue pobF
+
+### sceneeditorpanel/sceneeditorpanelview.lua  (29)
+LuaQ Script sceneEditor Panel View List UIBase preate sInit etNumItems ReloadPlayer Renderer gself Uparam WsuperE widgets Rn0Pic Fcoun getChild setVisible setColor Btype bdefine REmpty RTiTle rsetText9 CdataC Eitem EInfo
+
+### sceneeditorshortcut/sceneeditorshortcutctrl.lua  (180)
+LuaQ Script sceneEditor Shortcut Ctrl preate BInit Start Refresh OnRemove Reset List ItemRenderer4 backPackBtnClick emoji pheckOneC PagePanel_ rChangedt UnRegi Event BenerC FGUIHandl left Krigh OnMouseWheelR TouchEnd qnterUpd DDown ksurviv Istor Rcroll RBeign Toggle vMode dcutFor PoolAccelKey s2CuZ pProcess BSwapE GetCurAddEmpty SIndex SelectBackpack KeyboardNumberPress Shown fSetFlyv QearSt qStandby SParam eOpenBagC gself Bview _callFuncw UregBy AHoldZ PPos SageNu BlinkCou Rmodel Bdata BEnum MOUSE_UP SS_NORMAL btnj Cont radioGroupM ShouldReturnPlaceBlock rwidgetsw cancelDragging NumW Enabled lientInfo BisPCE setDecelerationR GButton Tforma Ecomp obj1 qUIDataC UGCGAMETYPE_HIGHY dispatch Topen_ c_bag girdSize Qafter AHide6 CNext Olists Untext Idx5 cRollin oOrClos cevKeyBI Unsubscribe Typv Begin UntM2_f EBtn_ Hmask ToxLuaA CurMaiw A_key Aarg1 U4pMultiplx Dele Components Call CInpuN BDelt SHORTCUT_START_INDEX_EDIT rgetGrid Vlimit Fstep E_BACKPACK_CHANGE Quev Bbody Rgrid_ rELECTEDG Mgrr gReport MINI_ADVANCEDMODEASSEMBLING_MAINSCEN SFirst Sche Gloabel DOWN_HOLD Ohide all_failygui HK3Bag Eear_ T5che5 _add_e manager_ Tducti Sgloba CharacterA CFram wRESOURCn YU5Bkg oMobile MobI AutoGen BTips tVisible VRedTa eswitch APrev1 KPosXW qcapture _Width uncpa XPosMax _floor bDefCsv GFlag p2how BLock sDyeJ Kolor bCacheCA PWitho UhasUn kCint_ DpairU oQator Uvalue BTool ATOOL ZbSINGLEI MULTIPLE NumClampM PLACEMENT8A iSlider IbXP TERRAINBRUSH CAREA oOBJECT LQain_p __free SDLK_q AisQEn oPrivat
+
+### sceneeditorshortcut/sceneeditorshortcutmodel.lua  (33)
+LuaQ Script sceneEditor Shortcut Model preate BInit GetNum PageNumClamp OList Snew gself Uparam data Item girdSize curCheckedG ouseHoldTime holdStateO dDeltaXA rolling qgePanel9 MOUSE_UP DDOWNN U_HOLD SS_NORMAL BACKPACK Cur7 PPoolM QEnter8 wAddEmpty sndex electBackpackt
+
+### sceneeditorshortcut/sceneeditorshortcutview.lua  (113)
+LuaQ Script sceneEditor Shortcut View preate sInit heckOneItem edControl List Renderer Refresh mBtn aAll rollO ToPage sRolling Blink0 aSwitch ImgVisibility PoolOpen RClosek BHide BDown AdjustPlatform AddEmpty BackPackBtnRedTaT SSetFl SimpileCubic cIcon gself Uparam ArootA rwidgets wcontent getChild ByPath Panel list_sJ Dbtn_ layAction Qemoji qsurvive _torag left Frigh9 Qpage16 m2_RadioGroup CbtnLl multiPlayern rForMult7 FadeInOu HHold Bower btn6 tSelectedIndex setToucha UIIsInDra PGetIn uMsgHand dispatch RUIDef QBagEvc lear_c Qafter MrevI qparentN CustomData clientId SHORTCUT_START_INDEX_EDIT Drid_b from artIdx Vlimit Fstep priN aCtrl vtriggerI UISchedu regGloabel unreg AFlag9 PUIEnd rMousePi c_throw_ OisPCF LibF TManag HasAllNewCountf RWidth PgetHe localToGlobal ToLS RflyEn min_ uui3 InvolvedID AirstD BType Cacto SetA bDefCsv PIsDye BlockLua GetDefault Id27 olorValue getGridUserdataSt AReal BFrom nfoU tempr c_str
 
 ### sceneeditortoolmode/sceneeditormaintoolbtnsautogen.lua  (30)
 LuaQ Script sceneEditor ToolMode Main BtnsAutoGen List CNodeN GetIn Manager PMVC Binit donShow qHide Remove Regi UIEvents Handle afirstI Octrl comingParamn Broot_ SuiTyp OFGUI RStart Rmodel qRefresh setn uwidgetsK DView
@@ -161,89 +305,17 @@ LuaQ Script sceneEditor ToolMode ObjectSelectNode BInit5 Refresh Event SetVisibl
 ### sceneeditortoolmode/toolmoderegionselectnode.lua  (119)
 LuaQ Script sceneEditor ToolMode RegionSelectNode BInit5 Refresh SetVisible OnKeyDownC removeEventListenerE Slid Input Change ButtonMove uccessCallback CancelArea sEndpoin AHide oseAllg BtnHighlight5 PEnabl8 DInfo TMessa5 SParam how1 OperationUIN JSure SRotat Value bRevoke bcovery BLock EESC_ HandleType bparent BrootY Qmodel cself rwidgetsJ BMODE bFILL dDELETE DCOPY DSWAP p_TYPE ROTATION PARAM uDEFAULT Bdata RIndexS key4 bHasBeginP xbCopyed UI_MAIN_BTN_NAMEv _btn_filld kdelete Bcopy Kswap Bpilen Rpairs getChild Dispatcher _Cliq Roard1 ckeyTex GetClient sisMobil Rtitle psetPosi Controll I_tipS tandReport UGCQ IN_EDITING_AREA_SHORTCUTBAR rFilling fplace averlay conta sator aInterf Aview DkeyCH CputK kSDLK_1 Min_ Ename LostFocus3 Ofloo tonumb HbAdd b_HANDL DLTipsK0o RCLEAR anag rREPLACES curBlock STACK seUBBStrM useLibrary Libr6 SExtra xoffsetX BInto Tryl BerIdf isOnly Atmospherei bDefCsv Vlimit z26T crushMgE Uoucha setAlpha yW4A elength lastLengh _33AA Returnz Wtarge
 
-### sceneeditorxyz/sceneeditorxyzctrl.lua  (94)
-LuaQ Script sceneEditor Ctrl preate BInit9 Start Refresh OnRemove Reset hangeOpType EventListener etButtonKeepPressing GetCmdData ickMode bAdsorb SToAxl Value AFrom Project RCoord TabZ FTree qOperate ass0 gself Uparam Bview _callFunc MsgHandlZ regBy UgcK objId rVisiabl RUIDef Rmodel FSetX rwidgets0 BRoot0 getChildren Aype_ Qustom index Vlimit Fstep _pBtn Hduce axlU KBtn1 ipairs dispatcher show_top_tip_mask Scfg Qator Vstate vcontrol oUIHelp ACurOM Propertyl tionNameP TouchBegin oLog _Notify_S Offt Node_Attribute_ ponentId Transform rexecute AddSubCmdq rManagers AddO isMultSel updateVal gCmd1 negative Interfac SelectFirstLevelN eanceIdt Cclon NrotaC Cscal RnsertN retb bfilterF KOhide jnumber Qesult CWith Oprin Defi sidebar_obj Qwitch fchoicec Qmulti
+### sceneeditortreelist/sceneeditortreelistautogen.lua  (35)
+LuaQ Script sceneEditor TreeList AutoGen CNodeJ GetIn Manager PMVC Binit donShow qHide Remove Regi UIEvents Handle afirstI Octrl comingParamj Broot SuiTyp OFGUI RStart Rmodel qRefresh setn Dispatcher Bener BviewH rwidgets _ClickItemV tCallback Render ucontext getChild
 
-### sceneeditorxyz/sceneeditorxyzmodel.lua  (25)
-LuaQ Script sceneEditor Model preate GetAdsorb XyzOpTyp xle5 Zhange GetCurObjId6 Property SetFunctionName Index stride OList gself Uparam BdataF RUIDef Bfree Urotat pos0 r_global Cscal DmeshP
+### sceneeditortreelist/sceneeditortreelistctrl.lua  (66)
+LuaQ Script sceneEditor TreeList Ctrl UIBase preate BInit Start Refresh Reset FGUIHandleEvent lickItem Renderer OnButtonSelectDown CallBack STab gself Uparam Wsuper Bview _callFunc PGetInv Msgn regBy VideoControlMgrLua PlayInGLoader widgets http mdownload latest huacheng mp4L eSchedu Name Dispatch QType_ _isTouch RUIDef Bui_eS _menu_pop stopPropagation Sobj ucontext begin earQ Rmodel NodeData bipairsD bExpend ataCenter GetCur sator Vstate rgetCell Bhild OKeysJ ickB0 AMove ighN Ecomp ectBtn Edata EPriv kfunc switch
 
-### sceneeditorxyz/sceneeditorxyzview.lua  (64)
-LuaQ Script sceneEditor View preate sInit RefreshOpType zMode IList vAxle Value PopE Pdsorb Visiable gself Uparam Aroot rwidgets rGetInst UIManager BCtrl TopTipLayerX getChildH PopC bpopBtn BBtn1 mode1 FIcon popArrowC ereduce RChang xyzY jCfg RUIDef texR AGetS r_globalE Rlocal0 C_fre _one_step Cscal qz_equalE pontroll SelectedIndexR tmpS Vlimit rena athd UIPackag bObjectP Sinserl Hitle CustomDatad uPositio dHeight Scfg bedCoun Bolor0 bostrinJ exyzFlg ToGU OopenF pairsN generator
+### sceneeditortreelist/sceneeditortreelistmodel.lua  (25)
+LuaQ Script sceneEditor TreeList Model UIBase preate GetL NodeData ChildrenFrom Snew gself Uparam Wsuper bCenter rGetRoot groot rCount ByIndex Ctabl binsert print SNum Vlimit Fstep
 
-### sceneeditormainframe/sceneeditormainframeautogen.lua  (50)
-LuaQ Script sceneEditor Mainfr AutoGen List CNodeK GetIn Manager PMVC Binit donShow qHide Remove Regi UIEvents Handle afirstI Octrl comingParamk Broot SuiTyp OFGUI RStart Rmodel qRefresh setn Dispatcher BenerQ BviewH swidgets unMv b_Click2 chatBtn RUIDef nge_game_to_run ataCenter qIntoUGC Sobj eontext AccelKey_Chat getChild button_setting gunmagazine EGunM playq Play _preinstal YRevokS Recovery
-
-### sceneeditormainframe/sceneeditormainframectrl.lua  (199)
-LuaQ Script sceneEditor Mainfr Ctrl List UIBas preate BInit Start Refresh Reset move FGUIHandleEvent vokeClick ccovery HasCmdSche anChange Type developCenterh gunMagazin MusicPlayMod reinstall RQuite OnSwitchBtnDown BackActionCall hortKeyForConformity Character9 gself Uparam Xsuper PGetIn Bview _backTouch r_forwar KeyCodeZ4 _callFunc VregBy sAddGoot CmdManag LeftNumUpdat regGloabel bUIDatat sObjSelect pSpecial Dispatch CGRoo Oance4 anyK aunRegA7 Sborad Name rwidgets button_setting Cgunm Qplaym tnPlaceObjBa GetClientInfo BisPCK DInpu gSDLK_t WRCTRL GAuto PPiano4 getCur2 qokCondi GnotO CValu objh ucontext Gchecv GongNeng SetGNBtn_On yAccount getMulti PHighL1 orKey QInObj Visual4 q_game_t UGCStandReportg C5006 DV_TOOLS_MENU TriggerBtn terfaceBtM DevTools bSystem AddPackage iniworld cTextur bOpenUI Uugc_d Reg3 Long INI_ADVANCEDMODECONSTRRCT_FUNCTIONBUTTON9 OUndo T_poolE GAME_TYPE ZREATEn BUILD jOBJECT Bopen teach_msg uFguiHelS3 BagB EMenu resE show Ber_c TEM_PAINTTANK RPaint Ritemir atho ItemLogica ShapeShif RidingHorse BCut_ uedIndex Grid get6 rer_freeL temDefCsvn n_MUSIC_ P_role C1001 B_BAR Free Side stemId Z_comp ssongboofF oLibrar D_a_num et26 beg2 cidebar t_tabid_disable toolbtns_rJE bstatus B_ges Fhide l_introduO P_objp Lquit Notify_Pr Def9 B_BTN9 SREGIO hDELETE pBtnVisi DTabD ArrowScal bCompon WwayBtz sDACM SELECTSINGLE RGroupv Vector3fd MoveOper Boord_ CArraDF Gnumb CNode cEntity flativem crunTim gspeedX TransparentA CCircl dPendulS gangleX absgh PIndic oWpaths Upairs layf cPhysic ollisionWi1 offsetX xtra Usey WPos last EHIGH dBPamera AMERA_EDIT_STATE_TEST ZShotF BSyncd GFlagb B91Fly for6 D5iP qautoaim endVE WCfg GetRadioC FArea Expres cglobalMm
-
-### sceneeditormainframe/sceneeditormainframegesturenode.lua  (29)
-LuaQ Script sceneEditor Mainfr GestureNode BInit Refresh cset sData howQ EHide UBuild Delet UTubes oolPoint OLine3 Olane3 VSpher ylinderk FSlop7 EArea Position fCreatu gself lparam inited URemovB Sswitc Barea
-
-### sceneeditormainframe/sceneeditormainframeleftnode.lua  (73)
-LuaQ Script sceneEditor Mainfr LeftNode BInit9 Refresh sData List ItemRenderer PClick OnSelectTab OpenPlayMode_ Tool Changed IconAndTitle ArrowScale croot Uparam inited tabConfigh RUIDef5 MAIN_TAB TYPE_RES GetS icon bOBJECT BPLAY CMORE wwidgets getChild TGetIn UIComponentsU setCallbackF EventDispatcherZ WType_ GRigh Ecomp psgHandl sidebar_cancel_tubesstate ucontext ataCenter BGetT8 type oolw P_tabi BcastH GButton bstring format pimage2 PDisabi Bouch qolor psetVisi sindex CUGCC_ StandReport p5006 INI_ADVANCEDMODEDEVELOP_SELW lMETHODp endTeachingCourseMsg _shrink_toolbtns Y_down IsOut TManag AddPackage bworld devC uAutoGen Brush Barea9 gpath
-
-### sceneeditormainframe/sceneeditormainframemodel.lua  (12)
-LuaQ Script sceneEditor Mainfr Model List UIBas preate cInit gself Uparam Wsuper
-
-### sceneeditormainframe/sceneeditormainframetoolnode.lua  (123)
-LuaQ Script sceneEditor Mainfr ToolNode BInit9 Refresh sData OnRemove Events ModelList Touchable ItemRenderer Selected PClick Change Ppread bPickup DelayedSche fVSCode Fslib PlaywayE penTeaching rMessage GetHelpBtnAndPar JBack ActionCall KHide root ANeed cself iniL R_keys5 BGetS piconN b_build U_off Hhighy hchooseo pColor bnormalA BIdx xwidgets getChild Bbtn_t Sright PGetIn QiniUIr Dispatcher BenerU bCompon stopPropagaE Sobj ucontext Ecomp irs0 sator Vstate VIndex ScrollPane MouseWheelEn Bcastb Ulbl_n9 sgHandler RUIDefI witch_game_t KeyDown ataCenter rManager cAutoGe2 bhide_mb _with_recoverB0 Acall AVisi Cmsg_ Epick egPrivate Unreg _TabId MAIN_TAB TYPE_RES bOBJECT CUGCC CourseMs RStand B5006y ADV_TOOLS_MENUF RCreat Construc D1ien cgetNam TriggerObja vvisual_ ui_view terface aGCGAME OHIGH RBUILD kMethodY eCREATE edResetH TClose2 CQ1str BDIUMh Tlevel eUIc qAddPack WQworldK APosiA localToGlobal BSize Twidthm Pag3 Spos Btilsf cRuleId ameForDev3 Cvalu UGCBluePrintMgrIns onvertObj2VbpI aigc GongNengFrO UBoard
-
-### sceneeditormainframe/sceneeditormainframeview.lua  (216)
-LuaQ Script sceneEditor Mainfr View List UIBas preate sInit Reset fresh pMode pdateCmdLeftNum gcSetGunMagazine PaintChangeBtn MusicItemSelectedN OnToolt TabDisable petRevokk cVisibl ArrowScaY ShowGestur EHide GetQuestionBtnAndParentU OpenTeaching rMessage EnterObjPlacep JQuit Back gself Uparam Wsuper Broot SetF Strata FS_BACKGROUND sLevel BctrlM makeFullScreeni paddRelaU cGetIns getCurz URootN TSize_Q pontroll widgets buttonSwitchO phild Obj4 setv Components1 EventDispatcher Hener9 _TouchBegi ocovery rforward UIDataCe1 SClickt tandReport UGCd MAIN_EDITING_SCENE VisualCodeI useIsRightB asgHand objX Untext kremove AccountManager getMultiPlayer QumeUI GCGAMETYPE_BUILD Index SidebarAutoG getglobal Shortcuth cshow_r _setting flybtn_c FLYBTN_POS_ rDEFAULT orocker gROCKER PcGuideKeyS QtoUGC FPosi ui_e bhide_m BHIGH CActo RhowUsx MODW iniworld Operatg e_playm reinstally endn CourseMsg CHigh nfimityG ClientInfo sisMobilD QsetUIl pbsPos EColo Egunm B_tip img_ Rgroud ITEM_COLORED_GUN b_SMALL icon Dur_cC TexC CGetS_ bbullet ctips PAINTTANK User POwned QSpray Cpair SgetUi AitemX sator Vstate uer_free bDefCsv RMUSIC songBook eckSys SDefMg EAlph bShrink bESTURE Euild SELETEN howDelet VTUBESD UTubes TOOLPOINT UPoint GLINE oolLineP KLANEP MlaneP CUBP CubP VSpher sYLINDER ylinderY FSlopX E2REA EArea POSITIONP BCREA JHelpdG uFbMEDIUM qAddPackl localToG Spos SELECTSINGLEK KgSpecia P_objp VQTrigg ONONE fro2V PLAY_OBJ BFROMP OBJLIST_NORMALP CTabI M3TAB oOBJECT B_gam Ouuid Bcall NHTREE threadpool cwork bInput_ rWaitAdd SDefinY QBturn treV bProjecw1 Eefabz napShot pait Gmestroy pdCLeav Edqc BOWID funl6 MapDefault J9Lib IDload SBefor KeyD BagAfter FopenEH SBagBy g0_Ad aChoose bnumberc HasProperty U3Nam image btnOkG ComDiaLogL Rialog yncToAllRefer cflag q4tmp bisFrom Zb_S ONULLF HMquit
-
-### msg/sceneeditorcmdmsg.lua  (19)
-LuaQ Script sceneEditor CmdMsg OnEx MsgHandlerList msgh GetInst callFuncTab regByEvent AselfE pUIDef Bback uforwardC banager AddAndExecuteCm WorldObjData justPlayerPos switch
-
-### msg/sceneeditorcommonmsg.lua  (129)
-LuaQ Script sceneEditor OnEx GetUGCCurShortcutPageStartIndex MsgHandlerList msghd PGetInm callFuncTab lastToolType regByEvent AselfI CurMainPlayer getu Tclamp HORTCUT_START_INDEX_EDIT RUIDefW select_area Yblock Ractor toperate change_game_to_run open_devel5 P_centZ _pool lswitch visual_code rui_view stor urvive model_introducti3 RframeC Bshow bype_ok sidebar_n rflybtn_c ocker4 Show BTips OOLTYPE_SELECTARE UBLOCK UACTOR VPLACE PturnM dispatcher _Notify_Stop_A tUIManag1 Codey ViewAutoGen UIHelp WorkSapce AndB RCount tResumeFlagC Afrom isnull DITOR_MSG quick_D exit_clicked RoseUIK SSingla Teaching Pata_e Save_t fMessag _wit Rcover pBtn_OnC_ getglobal GongNengFX Uparam qAddPack iniworld sTexture Dugc_ uLibDataw WtItem MOUSE_PICKITEM MHide RBagBy PLAY_FROM_VISUALCODE_VIEW Oback AObjP PCoursY Cpage Qfirst TifyID ShopJumpTab RoleAttr actBackp Bcopy PToOld grid_idx CataC EHighl PGAME_ SCREAT oOBJECTj FNULLP oolConfimityVisible FUNCTION_BTN _BUILD EReplm booleanL NRUSHE sTERRAIN cREGION PAreaP FFill _OPERATE_ __NONEr FLYBTN_POS8 rDEFAULT Bmainu B_ges bESTURE OLETEB PIsUGC FlyBtnPos IFr2 creenScaleX SIDEBAR_RES tANDMORE bSHRINK BMODE OMPONENT_LISTH SCENETREE_R basewidth Rhrink
-
-### msg/sceneeditorinpectormsg.lua  (17)
-LuaQ Script sceneEditor InpectorMsg OnEx MsgHandlerList Bmsgh GetInst callFuncTab regByEvent AselfE pUIDef data_modify CmdManager AddAndExecuteCmd EName switch
-
-### msg/sceneeditorobjoperatemsg.lua  (156)
-LuaQ Script sceneEditor ObjOperateMsg NewInterfac Plugin OnEx sEntityType GetSelectNodes TryDelete MsgHandlerList Bmsgh GetInst callFuncTab regByEvent AselfE Rempty Vcombo Qmulti ProjectMgr cGetCur Client Tize objid qanceId Rtablew insert CurWorld PgetAc Afind RByWID rSandbox2 CUGCT qDestroy cproj Varray index Vlimit Fstep svalue ETreej iFilter Cpair erializeObc Parent rectUuidp cfgs TortIn PDel new1 sInfo CmdManagerz SAddCm Trigge dispatch SDefin OBJECTLIST_CARDf E_BAR StandReport B5008 Rclick zdby2 RUIDef rOBJTYPER cNODE fromMenu Vstate vcontrol gdata srd_id Robj_o Bcopy Nbind Enone Reset_Component _ShrinkDt _inspeQ BneedM Ohide0 OHide Citem VTEM ACTOR_EGG VisualCod ObjParamj PataCeE Tool SBefor DPref DShow BagAfter sclose_r R_pool switch_game_ isKeyDown BOpen bCreate _Root aEDIT_ME SCENE_TREE ndTeachingCours Hmenuc Objf EMPLATE_PAGE QTempl IsLib Load MapDefaulX OUUID NeedRefresh Cingl pOPERATE rlibrary getUser ModFromLH BscByC BFlag ips1 prequest RcolorX cPackag TLOCAL PURCHASE pkg3 risTotal dpkgOwn Rtatus IsBeyond PPkg iniw rAutoGen customui sL_CLASS sallBack Sn_ui_ Fload rsts Sams OCOPY Input_Vid CCopy dNotify oAsChil ave1 oDELETEP LocalPosition oordDivBlo BhunkP sync Spos _GroupI ansformP UncR ebRetai8 TipO CBind
-
-### msg/sceneeditorshortcutmsg.lua  (11)
-LuaQ Script sceneEditor ShortcutMsg OnEx MsgHandlerList msgh GetInst callFuncTab regByEvent AselfE
-
-### msg/sceneeditortreenodemsg.lua  (29)
-LuaQ Script sceneEditor TreeNodeMsg OnEx MsgHandlerList Bmsgh GetInst callFuncTab regByEvent AselfE pUIDef tree_node data_add_object select become_preftY componen PAdd CmdManagerI AddAndExecuteCmd EName Uparam Del0 pataCent SetCur dispatcher AProj S2Pref switch
-
-### toptiplayer/toptiplayerautogen.lua  (33)
-LuaQ Script sceneEditor TopTipLaye AutoGen List CNodeB GetIn Manager PMVC Binit donShow qHide Remove Regi UIEvents Handle firstI Octrl comingParamb BrootT SuiTyp OFGUIv RStart Rmodel qRefresh setK rwidgetsH Lmask getChild4 adsorbPop qxyzMode DView
-
-### toptiplayer/toptiplayerctrl.lua  (42)
-LuaQ Script sceneEditor TopTipLaye Ctrl List UIBase preate BInitU Start Refresh RReset9 Remove PEventh Bener FGUIHandle onHide STab gself Uparam Wsuperj Bview _callFunc PGetIn MsgG UregBy rwidgets mask ype_Click dispatch RUIDef _top_tip_ Name rsorbPop setVisible xyzMode Jshow Khide switch_game_type sidebar_obj_changed_posw BShow Broot
-
-### toptiplayer/toptiplayermodel.lua  (12)
-LuaQ Script sceneEditor TopTipLaye Model List UIBase preate cInit gself Uparam Wsuper
-
-### toptiplayer/toptiplayerview.lua  (28)
-LuaQ Script sceneEditor TopTipLaye View List UIBase preate sInit AHide gself Uparam Wsuper root makeFullScreen SetFrameStrata LevelDefE BHIGH ugcTipsE addRelation GetIns UIS_ getCurrent RootNode Dize_Q ATypea rwidgetsb tVisible
-
-### sceneeditormodelintroduction/sceneeditormodelintroductionautogen.lua  (28)
-LuaQ Script sceneEditor ModelIntroduction AutoGen List CNodeS GetIn Manager PMVC Binit donShow qHide Remove Regi UIEvents Handle afirstI Octrl comingParams Brootd SuiTyp OFGUI RStart qRefresh setn uwidgetsK DView
-
-### sceneeditormodelintroduction/sceneeditormodelintroductionctrl.lua  (20)
-LuaQ Script sceneEditor ModelIntroduction Ctrl List UIBase preate BInitf Start Refresh Reset FGUIHandleEvent gself Uparam XsuperN PGetIn Bview qcomingP INameS
-
-### sceneeditormodelintroduction/sceneeditormodelintroductionmodel.lua  (10)
-LuaQ Script sceneEditor ModelIntroduction List UIBase preate cInit gself Uparam
-
-### sceneeditormodelintroduction/sceneeditormodelintroductionview.lua  (50)
-LuaQ Script sceneEditor ModelIntroduction View List bUIBase preate BInit pRefresh removeEventV BenerZ OnMaskDown Butt Amind gself Uparam root makeFullScreen paddRela GetIns2 getCurrent RootNode Dize_Q AType rwidgets key8 bitemId msgHandler Ohild Dispatch _Click Rclose CbtnO uiSetI RtText Bdesc nerateUBBStr cont ModT getBlock rDefByIde CsvF Sdef SDef isSelected psetkv Ooepn tostring Tnow
-
-### sceneshotframe/sceneshotframeautogen.lua  (32)
-LuaQ Script sceneEditor ShotFrZ AutoGen BList CNodeE GetIn Manager PMVC init move Regi UIEvents Handler afirstI Octrl comingParame rooV SuiTyp OFGUIx RStart Rmodel evKeyCloseBtnClickedJ Dispatcher Bener BviewH rwidgets Xwitch objV ucontext getChil
-
-### sceneshotframe/sceneshotframectrl.lua  (65)
-LuaQ Script sceneEditor ShotFrZ Ctrl List UIBas preate BInitX Start hangeUIMode3 bOnShow Reset bRemove EventTab CloseBtnClicked witch UnRegi napH IsVisible gself Uparam Wsuper Bviewn msgHandl3 GetIn Setting callFunc UregBy wUIManag PMainfL BType RUIDef GAME_TYPE RREATE getglobal RAllUI lientInfo isMobile bPlayerC RsetUIR Interfac Bmain rmgIndex ufromUiN SHOW_SCENE_SHOT AutoGen QBUILD requestSave sche KrKey regGloabel evKey Dispatcher Hener rwidgets inished UMusic rSound2D button camera ogg_ PICTURE_CAP jFINISH Broot
-
-### sceneshotframe/sceneshotframemodel.lua  (12)
-LuaQ Script sceneEditor ShotFrZ Model List UIBas preate cInit gself Uparam Wsuper
-
-### sceneshotframe/sceneshotframeview.lua  (20)
-LuaQ Script sceneEditor ShotFrZ View List UIBas preate sInit aetHighY RLevelK SetVisible gself Uparam Wsuper root makeFullScreen Strata S_HIGH Iflag
+### sceneeditortreelist/sceneeditortreelistview.lua  (41)
+LuaQ Script sceneEditor TreeList View UIBase preate sInit ontentVisibleW earW BNodeh bExpend fRender Pfresh CellSelec gself Uparam Wsuper Broot makeFullScreen Qtreel widgets0 removeChildrenToPool bgetRoo RGetId BData addP Sipair generator Vstate vcontrol Nrint SdefinC arrow5 QCount Ecomp obj4 CentH urNC bcurSel setColor
 
 ### sceneeditortreemenus/sceneeditortreemenusautogen.lua  (37)
 LuaQ Script sceneEditor TreeMenus AutoGen List CNodeK GetIn Manager PMVC Binit donShow qHide Remove Regi UIEvents Handle afirstI Octrl comingParamk Broot SuiTyp OFGUI RStart Rmodel qRefresh setn Dispatcher Bener BviewH rwidgets mask s_Click BMaskS objY ucontext getChild
@@ -257,98 +329,44 @@ LuaQ Script sceneEditor TreeMenus Model List UIBase preate GetComponentN Snew gs
 ### sceneeditortreemenus/sceneeditortreemenusview.lua  (42)
 LuaQ Script sceneEditor TreeMenus View List UIBase preate sInit ontentVisible gself Uparam Wsuper1 Broot makeFullScreen SetFrameStrata bS_HIGH rwidgets RtipBg getChild otip_bg7 aremove Rren bdefine menuItemsY CfgY CmTyp UIPackage Object Augc_P button_tip usetSize TWidth addu Btext UemptyG uPositio setHeigh Snum index Vlimit Fstep
 
-### sceneeditorshortcut/sceneeditorshortcutctrl.lua  (180)
-LuaQ Script sceneEditor Shortcut Ctrl preate BInit Start Refresh OnRemove Reset List ItemRenderer4 backPackBtnClick emoji pheckOneC PagePanel_ rChangedt UnRegi Event BenerC FGUIHandl left Krigh OnMouseWheelR TouchEnd qnterUpd DDown ksurviv Istor Rcroll RBeign Toggle vMode dcutFor PoolAccelKey s2CuZ pProcess BSwapE GetCurAddEmpty SIndex SelectBackpack KeyboardNumberPress Shown fSetFlyv QearSt qStandby SParam eOpenBagC gself Bview _callFuncw UregBy AHoldZ PPos SageNu BlinkCou Rmodel Bdata BEnum MOUSE_UP SS_NORMAL btnj Cont radioGroupM ShouldReturnPlaceBlock rwidgetsw cancelDragging NumW Enabled lientInfo BisPCE setDecelerationR GButton Tforma Ecomp obj1 qUIDataC UGCGAMETYPE_HIGHY dispatch Topen_ c_bag girdSize Qafter AHide6 CNext Olists Untext Idx5 cRollin oOrClos cevKeyBI Unsubscribe Typv Begin UntM2_f EBtn_ Hmask ToxLuaA CurMaiw A_key Aarg1 U4pMultiplx Dele Components Call CInpuN BDelt SHORTCUT_START_INDEX_EDIT rgetGrid Vlimit Fstep E_BACKPACK_CHANGE Quev Bbody Rgrid_ rELECTEDG Mgrr gReport MINI_ADVANCEDMODEASSEMBLING_MAINSCEN SFirst Sche Gloabel DOWN_HOLD Ohide all_failygui HK3Bag Eear_ T5che5 _add_e manager_ Tducti Sgloba CharacterA CFram wRESOURCn YU5Bkg oMobile MobI AutoGen BTips tVisible VRedTa eswitch APrev1 KPosXW qcapture _Width uncpa XPosMax _floor bDefCsv GFlag p2how BLock sDyeJ Kolor bCacheCA PWitho UhasUn kCint_ DpairU oQator Uvalue BTool ATOOL ZbSINGLEI MULTIPLE NumClampM PLACEMENT8A iSlider IbXP TERRAINBRUSH CAREA oOBJECT LQain_p __free SDLK_q AisQEn oPrivat
+### sceneeditorxyz/sceneeditorxyzctrl.lua  (94)
+LuaQ Script sceneEditor Ctrl preate BInit9 Start Refresh OnRemove Reset hangeOpType EventListener etButtonKeepPressing GetCmdData ickMode bAdsorb SToAxl Value AFrom Project RCoord TabZ FTree qOperate ass0 gself Uparam Bview _callFunc MsgHandlZ regBy UgcK objId rVisiabl RUIDef Rmodel FSetX rwidgets0 BRoot0 getChildren Aype_ Qustom index Vlimit Fstep _pBtn Hduce axlU KBtn1 ipairs dispatcher show_top_tip_mask Scfg Qator Vstate vcontrol oUIHelp ACurOM Propertyl tionNameP TouchBegin oLog _Notify_S Offt Node_Attribute_ ponentId Transform rexecute AddSubCmdq rManagers AddO isMultSel updateVal gCmd1 negative Interfac SelectFirstLevelN eanceIdt Cclon NrotaC Cscal RnsertN retb bfilterF KOhide jnumber Qesult CWith Oprin Defi sidebar_obj Qwitch fchoicec Qmulti
 
-### sceneeditorshortcut/sceneeditorshortcutmodel.lua  (33)
-LuaQ Script sceneEditor Shortcut Model preate BInit GetNum PageNumClamp OList Snew gself Uparam data Item girdSize curCheckedG ouseHoldTime holdStateO dDeltaXA rolling qgePanel9 MOUSE_UP DDOWNN U_HOLD SS_NORMAL BACKPACK Cur7 PPoolM QEnter8 wAddEmpty sndex electBackpackt
+### sceneeditorxyz/sceneeditorxyzmodel.lua  (25)
+LuaQ Script sceneEditor Model preate GetAdsorb XyzOpTyp xle5 Zhange GetCurObjId6 Property SetFunctionName Index stride OList gself Uparam BdataF RUIDef Bfree Urotat pos0 r_global Cscal DmeshP
 
-### sceneeditorshortcut/sceneeditorshortcutview.lua  (113)
-LuaQ Script sceneEditor Shortcut View preate sInit heckOneItem edControl List Renderer Refresh mBtn aAll rollO ToPage sRolling Blink0 aSwitch ImgVisibility PoolOpen RClosek BHide BDown AdjustPlatform AddEmpty BackPackBtnRedTaT SSetFl SimpileCubic cIcon gself Uparam ArootA rwidgets wcontent getChild ByPath Panel list_sJ Dbtn_ layAction Qemoji qsurvive _torag left Frigh9 Qpage16 m2_RadioGroup CbtnLl multiPlayern rForMult7 FadeInOu HHold Bower btn6 tSelectedIndex setToucha UIIsInDra PGetIn uMsgHand dispatch RUIDef QBagEvc lear_c Qafter MrevI qparentN CustomData clientId SHORTCUT_START_INDEX_EDIT Drid_b from artIdx Vlimit Fstep priN aCtrl vtriggerI UISchedu regGloabel unreg AFlag9 PUIEnd rMousePi c_throw_ OisPCF LibF TManag HasAllNewCountf RWidth PgetHe localToGlobal ToLS RflyEn min_ uui3 InvolvedID AirstD BType Cacto SetA bDefCsv PIsDye BlockLua GetDefault Id27 olorValue getGridUserdataSt AReal BFrom nfoU tempr c_str
+### sceneeditorxyz/sceneeditorxyzview.lua  (64)
+LuaQ Script sceneEditor View preate sInit RefreshOpType zMode IList vAxle Value PopE Pdsorb Visiable gself Uparam Aroot rwidgets rGetInst UIManager BCtrl TopTipLayerX getChildH PopC bpopBtn BBtn1 mode1 FIcon popArrowC ereduce RChang xyzY jCfg RUIDef texR AGetS r_globalE Rlocal0 C_fre _one_step Cscal qz_equalE pontroll SelectedIndexR tmpS Vlimit rena athd UIPackag bObjectP Sinserl Hitle CustomDatad uPositio dHeight Scfg bedCoun Bolor0 bostrinJ exyzFlg ToGU OopenF pairsN generator
 
-### sceneeditorobjoperate/objoperateframeautogen.lua  (57)
-LuaQ Script sceneEditor ObjOperate FrameAutoGen List CNodeF GetIn Manager PMVC Binit donShow qHide Remove Regi UIEvents Handle afirstI OctrlK comingParamf Brootc SuiTyp OFGUI RStart Rmodel wfresh setn Dispatcher Bener BviewH Twidge Cedit PBtn b_Click Hcopy hdelete unselect mbog Lbindg RUIDef _Notify_Stop_Acti aReport GButton Tobjecz Robj_o Refaul ucontext pector ient getCur AgetN rUGCMode Trigge TreeInterface xitEntit mbol hild
+### sceneshotframe/sceneshotframeautogen.lua  (32)
+LuaQ Script sceneEditor ShotFrZ AutoGen BList CNodeE GetIn Manager PMVC init move Regi UIEvents Handler afirstI Octrl comingParame rooV SuiTyp OFGUIx RStart Rmodel evKeyCloseBtnClickedJ Dispatcher Bener BviewH rwidgets Xwitch objV ucontext getChil
 
-### sceneeditorobjoperate/objoperateframectrl.lua  (79)
-LuaQ Script sceneEditor ObjOperate FrameCtrl List UIBas preate BInitY Start Refresh Reset nRemove FGUIHandleEvent dMsg CopySche bVisDode BtnClickReport BtnStatus gself Uparam Wsuper Bview roos rwidgets xyzR XyzQ RModel _copyTimer _isTouchBlock allFunc PGetIn MsgC VregBy wualCodeV MgrO GetToolType bain TOOLTYPE_SELECTSINGLE MULTIP MAIN_EDITING_CHOOSE_SHORTCUTBAR qcomingP Cedit setSelected Name InputKeyb gSDLK_c gDELETE WRCTRL UIDataCent RegKeyboard NDown dispatch Tobjec Robj_o z_delete SSinglN TManag AIsSh ient getCur BAxis ZT_POSz T_ROTATE _SCALE Bface RegM LongCallBackJ CREEN_SIZE_CHANGE switch Popen_ _close psidebarY _changed_pos aetHigh ULevelQ Multiples btnV Gloabel
+### sceneshotframe/sceneshotframectrl.lua  (65)
+LuaQ Script sceneEditor ShotFrZ Ctrl List UIBas preate BInitX Start hangeUIMode3 bOnShow Reset bRemove EventTab CloseBtnClicked witch UnRegi napH IsVisible gself Uparam Wsuper Bviewn msgHandl3 GetIn Setting callFunc UregBy wUIManag PMainfL BType RUIDef GAME_TYPE RREATE getglobal RAllUI lientInfo isMobile bPlayerC RsetUIR Interfac Bmain rmgIndex ufromUiN SHOW_SCENE_SHOT AutoGen QBUILD requestSave sche KrKey regGloabel evKey Dispatcher Hener rwidgets inished UMusic rSound2D button camera ogg_ PICTURE_CAP jFINISH Broot
 
-### sceneeditorobjoperate/objoperateframemodel.lua  (12)
-LuaQ Script sceneEditor ObjOperate FrameModel List UIBas preate cInit gself Uparam Wsuper
+### sceneshotframe/sceneshotframemodel.lua  (12)
+LuaQ Script sceneEditor ShotFrZ Model List UIBas preate cInit gself Uparam Wsuper
 
-### sceneeditorobjoperate/objoperateframeview.lua  (61)
-LuaQ Script sceneEditor ObjOperate FrameView List UIBas preate sInit BtnVisible Selected Reset ULevelD HHigh aPos PfreshR status gself Uparam Wsuper root makeFullScreen addRelation GetIns2 PMgr getCurrent RootNode Dize_Q BTypeU rwidgetsZ Bhild midPoint leftPoiotA ontroller1 QIndex uboolean Cedit bStrata FS_BACKGROUND oMEDIUM Tisnul QUIHel ObjectComponent vSidebar cposX Sflg TreeInterfac EIsIn Client Robjid banceId RIsTopO Vempty Rcombo QmultiM achoice Sroj Rarray Vlimit Fstep svalue
+### sceneshotframe/sceneshotframeview.lua  (20)
+LuaQ Script sceneEditor ShotFrZ View List UIBas preate sInit aetHighY RLevelK SetVisible gself Uparam Wsuper root makeFullScreen Strata S_HIGH Iflag
 
-### sceneeditorobjoperate/selecteffect.lua  (29)
-LuaQ Script sceneEditor ObjOperate SelectEffect g_FuncRectP Start Hmovem cNode etInst etCurrent FromPa UIPackage createObject ugc_ addChild setPosition setScale ClientInfo isAndroid bGTweenq setTarget sPropTypY Components run8 clete Aplay Adura8 circle
+### tool/ugctoolinterface.lua  (202)
+LuaQ Script sceneEditor Tool Interface GetInst sInit BrushData isUseT Conformity Select rType GetMapEd XParam BlockOperate RLimit UGCStandReportEvent BAreaU ionChanged tResetShapeBtnVisible uDone ModeDistance9 WGetUs orDefault RStartb etHandle IntoMove2 WExtra PClear CStat TryRefreshV OnUpdN BLoad GetS NodeByAc ingTexture EView ReplaceLi QClick PBlank G_CheckObjectUIShow SetCreateVersion gself bdefine OOLTYPE_NULL DisplayBoardCallBack BRUSH_ SQUARE CYLINDER TPOINT ESLOP xPHYSICS Uphere cCapsul BMesh CIndeJ isSolid pointplaneDir6 Evalu X_min bOBJECT TriggerObjLibMgr Reve qTERRAIN ient getCur Qfille UIManager BCtrl cMessag BoxColor F8F8FFFF Jcopy Llete PF0000 oxOfFace CFram Cube_Length w_Radiusp tylinder SHeighV Cmds_MaxCountu Idby1 BInfo BisPC S_op SurCl BMain1 etSureAnd rAutoGen AsUGC AP_EDIT_5 aHANDLE _FILL CSHAP3 SPlaye bExcuteCmd Ucallb Organize opyW ifirstp6 Jcond hisb Time A_UgcE ubscribey NewV BridgeOld texD GE_UGC_GAMEEVENT Bbody Nam9 Enum0 PrefabPosh stonumbe str0 BPosi Ppatchv RUIDef uNotify_z _Attribute_a compon PTrans propertyIT0 ized8 ScaB aleEquallyt ByNo3EGetP RcoordF7 Bmathv87abs GTree PLevel Sipair CclonI BGetV Endx Collider Physics Puuid Earg1 oPosX oRotX AArryF Array1 OffsetX Bfind Zgsub sGroup ionAK WJflativeI SWorldI RpeedX BGetO Hpathp i6WtemBy8U aparent Cravi ModifyAnchor BrmalJ dAndExe UubStr fO_B localB tern SIdx SStem horigin realowneru bSwitch cgetUin RMAKERN G_RUN bgloball aBkg mobile bigtex jzjm_ugc_tool_m beijing landOrOverseas tHQIsUgclK TBgPic9 ZGHide o_penUI u1ini RRUI t84ataJ4 OHIGH RBUILD ZhowUI cTemp Agamed _bgmask_c cFromSt1 isAbroadEvn UGCRemoteJyCg Rewmap New0y _GetB sWDescEx cowid IntK NvMapFlag
 
-### project/sceneeditoraccelkey.lua  (125)
-LuaQ Script sceneEditor Project AccelKey oEsc _Chat Number Backpack trlH Enable oAlt R_LivingToola FSort Ottle_ PlayerList ouleSet oMap chievement toreSkin Inventory ChargeMoney Friends OountE BuffStatus ModelLib Developer _OEM_3 ScreenShot MicSwitch cpeaker F4_release UGCn rType GAMETYPE_BUILD Esca UIManager rIsShown NewTrigger rAutoGen rCloseUI pVisualC yainView pBtnCall BHelp RFrame BShop ItemDetail KindSelecC dPlugin QBlockB Cent2 veFi AddFolder AIsUI licked getglobal CHideJ Cingl OriginalChoos CMods ALib_ GBookw AntiActive MapE tartSettingIntroduc press_bt CTeam FooterRandom9 aCustom FWith APool uSyncRes MsgHandl dispatch pUIDef Gainf4 EMenu Area Bface OldUITipsHack bousePi TextShadow index Vlimit Fstep ClientCur UisInG isOperat PGridI Shortcut9 Treate NewVersion rfCsv BFlagg Lock statisticsUI BRoom0 pwapBlino GRolel torageBox5 bsrcnum Num1 EQUIP_START_INDEX anPutEquip Spectato ShapeShift EInfo OHIGHp IsSearchPanelVisi pQQMusic PPiano SandboxLua OEmit ContextC Runningb AltTitl a_tips_t sparam JustDoIn change_game_to_run SIsUGCq BHigh cUITogg isAltD
+### tool/videocontrolmgrlua.lua  (29)
+LuaQ Script sceneEditor Tool VideoControlMgrLua SandboxClass assert constructorR FonDe PlayInGLoader getSingleton setmetatable _index type Eself Qparam5 bstring data DisplayBoard_Is3 bLinkEnJ howZ BTipsX CGetS cast fairygui filename objectid Eloop CtempR
 
-### project/sceneeditorcommon.lua  (37)
-LuaQ Script sceneEditor Project LibType dPrefab Official Componentd DeepCopy Serialize SaveFil BRead canDir Ctabl pairs boolean bstring anumber1 Semp generator Vstate vcontrol BJSON aencodeF json2s gFunc_writeTxtFi fullpath Lread LuaInterface getStdioRoot directoryParseCreat GetResult Rinser cList aindex Vlimit cinfo
+### toptiplayer/toptiplayerautogen.lua  (33)
+LuaQ Script sceneEditor TopTipLaye AutoGen List CNodeB GetIn Manager PMVC Binit donShow qHide Remove Regi UIEvents Handle firstI Octrl comingParamb BrootT SuiTyp OFGUIv RStart Rmodel qRefresh setK rwidgetsH Lmask getChild4 adsorbPop qxyzMode DView
 
-### project/sceneeditorcomponent.lua  (18)
-LuaQ Script sceneEditor Project Component ParseBySerializeStr Param aveMember rName rType rDisplay7 sOwner cself DeepCopy EListW Invalid xModifie Uvalue
+### toptiplayer/toptiplayerctrl.lua  (42)
+LuaQ Script sceneEditor TopTipLaye Ctrl List UIBase preate BInitU Start Refresh RReset9 Remove PEventh Bener FGUIHandle onHide STab gself Uparam Wsuperj Bview _callFunc PGetIn MsgG UregBy rwidgets mask ype_Click dispatch RUIDef _top_tip_ Name rsorbPop setVisible xyzMode Jshow Khide switch_game_type sidebar_obj_changed_posw BShow Broot
 
-### project/sceneeditorglobal.lua  (46)
-LuaQ Script sceneEditor Project Global UGCMode _Enter sameTest OpenWorld Quit IsUGC7 king KHigh Runn print call iSurviv_ aMgr rGetInst UGCT UGCs getOWID TManagQ eCreate rLibType SavY BByIdN EmptyNod rENTENUM OBJECT_TYPE bBLOCKS OCounE Fndex penq SNum ReportHitABtest ExitNativeCall UIIg bRemove SLeave yAILibDB RResetG Alien QgetCu GAMEc Q_HIGH
+### toptiplayer/toptiplayermodel.lua  (12)
+LuaQ Script sceneEditor TopTipLaye Model List UIBase preate cInit gself Uparam Wsuper
 
-### project/sceneeditornode.lua  (33)
-LuaQ Script sceneEditor Project Node GetParent ChildrenCou cByIndeY CreateCompon Dele sById Name ParseByParam aveMemberi SerializeStr jascade Modified Gsert rGetType RefPrefabI rVirtual xList cself Ctabl Rremov Vlimit Fstep AData Bvalu llOnPropertysChang UNewId strId OsMgr
-
-### project/sceneeditorproject.lua  (62)
-LuaQ Script sceneEditor Project g_Test Name preateTi fModify RootNode hildrenLisx ComponentD Transform Param Uscale rotation0 Helloworld BInit REmpty ByPrefab Dele BFind LookDirPos BLoad BSave Parsl bMember NewV eAlloc tIdCasca SetT GetFullPath bLibDir rENTENUM OBJECT_TYPE EMPTYb Aselfm Spos WCount bSetRef Vlimit Fstep AbRet Afuncd CurMainPlayerd pgetPosi distance sReadFil DeSerializi SStr kData HTemp GetObjId BsMgr UITexture Wfloor ULocalF G_obj rVirtual propertys objT Xstroy Ailet
-
-### project/sceneeditorprojectlib.lua  (36)
-LuaQ Script sceneEditor Project BInit BLoad Release cCreate7 Dele pById CCoun ByIndex Parse FromFileName RibDir Type Param Error Aselfa AScan MList APath Vlimit Fstep HTemp pairs generator Vstate vcontrol Curi UGCModeMgr file bstringe find Bpos Ssub
-
-### project/sceneeditorprojectmanager.lua  (41)
-LuaQ Script sceneEditor Project Manager GetInst EnterWorld SLeave SreateQ Open Count ByIndex Node2Prefabx dDelete UFrame LibDirByType NewLib qRelease ConstructOb OList instance gself Uparam __privat HTempE GMemb3 BRoot ParseByP QFirstQ qbResult CtablE cinsert sFolder vfilenam FileTree rAutoGen Vlimit Fstep eLibMap Children eMgr
-
-### common/sceneeditorbackpackitem.lua  (266)
-LuaQ Script sceneEditor BackpackItem zList refishiconZ RefreshOfficial2 CustomAc dUIInfo4 HBuffZ XCraft xFurnace aModPkg status XModelv iPictur Hudio BluePrin4 aPrefab block Bplot bmodpkg qobject NOT_DOWNLOADED rILLEGALN aVERIFY REATED_BY_ME rOFFICAL uMODIFY_ BInit BData SOnExi kUpdate IsShowNewUITips SetM TouchBegin_PC AMove MouseEnter RUdpat bMobile UClick Process ManageOp CCanB SelectThis rLibrary PClean8 SingleCheckD SColor DealScrollText Align ForbiddenI XUiBkg NeedUnLockUI wFlagVisib ImportUI fLabelB5 Author ncludeDownload YusTip iUnKownY rTheSame EventTab BHide MultiPlaye OthersMap IsSearchw qableTag moveLongDx DeltaMaxZ Blist ingG _callFunc MsgHandler VregBy bClient sPCf RiNodes getChild DispatcherW Bener RType_V sche BrKey gGlo TSpeed ADireJ cTime Bself Uparam _super bwidget Xname2 _title5 Qfirst Vecond rmath iERROR fail value booD func Acend ishConfi GLoad DefF bMapRes Buuid Involved VuiSet RefCsv DbuffZ Libb QFileP AnpcP sub2 defaultRes LOT_ACTOR_ICON_PATH PICTURE_SUFFIXB _isStdio UGIN_DEFAULT_PIC Rmusic FUgcA RAUDIO k_COMMOb CUSTOM_SOUND_TYPE8 KNKOW APackN GROUP EL_MOTION_ nSINGLE RresId PworldJ PTreeI Component info limiterIndex fairygui QAsync Btemp0 AVers crep cGetOpe sopen_sv hnumber Qerver6 bResult Wd_dot iceR _Cache OnePlugin SformaTCR SUIHel ion_green LOwC Oshar Wlib redDot SUrl Aip_t WsDowi InBay _STATUS onshelvez AViold ed0I Midi MById NFound anCancel RESb IJdesc RpenUIq fAutoGe BCtrl agrid_i CInpu OgetX3f DHold MYrE just pStandRen0 h4UGC BPool RESOURCE_BACKPACK_ITEMOPERA Rndby1 useButton QudurMain PCControl8 Codg4 SDLK_SHIFT assz New4 RRight bhiftpr newq _Framev shortcutBar Ause_ m2And Brror Sdebug raceback UsCopy SAMp BGrid CectB aAFrom TCD4 Smg_bk dprogb_ grayMark SRedTa cProg Wban AMask o4AC FD1D All0S uAccount COLOREDE Sottom4 trQn STxt WidthK zE2osi Aaa0 Atrue ULuaMg nalUgcTe Dfloo _EOper Robj_o dRforce mgBj fNewTag PUBLISHE pcsq Ortagx pic_warni exame pillegal cverify0 _doing_r A_banF sator Skey Qwitch NG1T UBackp ge0g j_INDEX vQtips_ alownerui egetUin _effect rParticl aValidEn BrIni delete8 dFullPaR scheduler dunreg Kbel K1add O_Exi
-
-### common/sceneeditorbackpacknewitem.lua  (88)
-LuaQ Script sceneEditor BackpackNewItem zList DefaultID block getdefI Tactor customui bstatusW Dplot1 Ecraf tfurnace bmodpkg pInit BData DOnEx OnTouchEnd_PC Mobile UClick reatePlugin ResetMap bSelect AddUIButtonDown DefCsv AgetS ModH NpcPlotDefById ingf Eself lparam _super ucontext Qfirst qnterfac rGetInst WManag FFlag SSingl eFrame Wcfg ATypeM PModUU RModBy DDesc trequestR cuuid gamemod qmoddesc TdisabZ uAccount qCurWorl MultiPlayer alowneruin Show BGetSC Yring ModsLibPkg LoadTmpIsAdd Finished TpenUI iniwW AutoGen threadpool cwork BTempu utemplat bipairs gCopyID Bnser generator Uvalue Qinner clter btmpPkgM civeMod Aui_e _ui_project vcallbac MsgHandler dispatch ReventI reload_r alibrar MAP_MODEL_CLASS agey notfresh
-
-### common/sceneeditoritem.lua  (60)
-LuaQ Script sceneEditor Item pList UINode OnExit_ Refresh PEventN ener UnReg rEnterUpdate TouchBegin f_PC AMove QMouse Hdpat bMobileo UClick GetClientID bButton IsDoubleY KeyDown tMTipsInfo5 GHide SetupOldUIAttribute ovePass AselfA Uparam grid_index BisPC rGetInst Dispatcher VType_ handlerH RollOv ucontext aSchedu Vunreg regGloabel getCustomData Btypeu tabh RInput qKeyCodek OutSideCall aSetNew eitemId TManag FrameAutoGenJ BCtrl uonClose localToGlobal BHack CPoin ctoplef effsetY node_pos UWidth oHeight
-
-### common/sceneeditormsghandler.lua  (36)
-LuaQ Script sceneEditor MsgHandler GetInst sInit ClearUp regEvent aTab dispatcher fdelayD OList instance cself BFunc table PMsg jnew TreeNode RInpecO ObjOperatQ pairs eOnExitD Vstate vcontrol EName Acall UGCM KeyAndCallBackD Skey Uvalue Rdebug traceback threadpool1 Twork Tait
-
-### common/sceneeditorshortcutitem.lua  (141)
-LuaQ Script sceneEditor ShortcutItem zList OnExitd rRefresh8 OnTouchBegin_PC MouseEnter QLeave RUdpat Mobile UClick UpdZ EventTab DownCanPick BanState IsBackpackShown SNum isEmpty RBan isScrolling _callFunc8 PGetIn_ MsgHandler UregBy AselfY Uparam super4 fuiNode getChild itemIconFumoEffect1 FAnim Picon_ SCount itle_numw setText Duration dClient rgetGrid rVisiblez Dayedm CheckAllServerBad rManager getMultiPlay DCtrl rBagMain QurAdd Index HORTCUT_START_INDEX_EDIT bmg_add ITEM_LETTERS flen UserdataStrH R_USED sDyeableBlockLuaW GetDefault CSetI uLibDataZ ARealQ PColor BFromo Copy RresidG B_str Pplace _byd RuneOrEnchan sUGC ontY TpDegree Selected agrid_in from SBtn oure1 SIdx SDur curO tempr Pnew_b maxdurVal RInput OgetX EButt dispatch RUIDef cGetKey KeyC SDLK_SHIFTS ShiftMov0 MOUSE_PICK Btype bnumber UGCStandRepor p5005 INI_ADVANCEDMODEASSEMBLING_BACKPACK bChoose by1G ear2 risRight StaX iftpressed ectCreate TipsFrameAutoGen Regi PHideME PLongP bFinish bglobal BluePrintDrawing TBF_Se JSign ccalToGg UWidth ldUI CPoinn ctoplef parx node_pos orageBoxZ poveProg AltarAwards QPutin bDefCsv BFlag Lock Bagm ABoolj UhasUnS1 ODesc obottom CValu Wfloor XSimpl discardI ipsJ alist_s9 end5 eswitch realn
-
-### common/sceneeditoruidatacenter.lua  (93)
-LuaQ Script sceneEditor UIDataCenter GetInst BInit ClearUp etProject CurNode BRoot5 ESaveV KeyCodeEvent qDown nKeyboard ICall Rwitch NeedReLoadBackpack SetSpecial dParamsA tIsInObjPlace3 ObjSelect VTreeM etToolType rDisable InPlayViewH IsVisualE BHigh AreaFillID SBeforh bPrefab BagAfter QtoUGC OList instance cself D_cur code RIdx BdataX MAIN_TAB TYPE_RES FUNCTION_BTN RBUILD qcurrent TimT PGAME_ CREATE priB Manager ipairs priority generator Vstate vcontrol nilc Cnser Esort Snum DnewPJ KtmpK RremovY index Vlimit dexv Dispatcher DaddEi Y_Exit ERROR Logm RientC isInModif BHIGH dCreate EDIT_MODE OBJ_PLAC eSELECT SCENE_TRER MINI_ADVANCED ASSEMBLING_ DEVELOP GPLAY Cdby1 Cceil fAccoun WorldDescQ Apwid ExKeyValu theMapFrom Qfrom_ getLastRpts cReport ostG STxt
-
-### common/sceneeditoruidef.lua  (188)
-LuaQ Script sceneEditor UIDef key_message esc_down switch_ _ugc_mode AUGCM game_type _okC select_area block actor operateS Shange Co_ruH mape _button_tool QToolD Bopen _ui_view visual_c _pool close5 mrefres Fshow7 list_popup how4 RListP cond_classify_renam1 _delet6 NewJ Rright7 hide_all_failygui onHideAllF Astor urviv Pdevel r_center9 setting teach_msg rhowAddM SactioF _introdu et_gun_magazin music_item_ qsidebar obj_inspe Stabid C_out ype9 zdisableX click_tubesstate icancel csearch9 bag1 Cmenu kmodifyR Ocopy6 brigger J_pos BmaskP mainfr Prevok uchbegin kend icoveryB ashrink ybtns conformity gesture isplayboard nrocker4 Batus Cback R_call WplaceO Lquit SCREEN_SIZE_CHANGE _just_ bJustUI shortcut blueprin Avisi pos_anim_ material Xevent eutoaim HnodeX Qgular bparams leave Mturn _NumberInput_ NUMBER_INPUT_RES w_templa IColoU Revert_TreeNodeToPrefab Timpor _Attribute_A NrrayQ eIndica Axl7 mponent_M a_Objec Physics Dtop_ iRemove PathPo CDatai Kroll rToIndex r_2_Back GGoto RJumpVw rAddObj_ aTopTip ick2 Cstar addO Qbecom APackd FAddC eChildN rforwardm bforWar4 Sa_num CmdNumLeft Cpoun reat oolPanelt BNeedB Mscal Nbind Sempty MAIN_TAB BTYPE dOBJECTB DPLAY DMORE COMPONENTLISh BASE_NOD8 EDIT_M SCENE_TREE NONO BAREA4 ACTOR_EGG RBOARD4 BITEM DDROP _ADD b_PARAMc LASSIFYID_n BFROM OBJ9 z_NORMAL FUNCTION_BTNQ SBUILD BRUSH bREGION bDELETE FLYBTN_POS_c RFAULTF vSIDEBARW OBJm cSHRINK gROCKER BHIGH rGESTURE CTUBE VPOINT GLINE FLANE CSHER wYLINDER BJPOSI fCREATU CGAME SorEnuD AGoTo atSG VxyzOp Sgloba _one_step tz_equalY Bsorb QalignS
-
-### common/sceneeditoruiinterface.lua  (200)
-LuaQ Script sceneEditor UIInterface CreateNode BShow FRoot hReload movR HotFixMvcClass OpenUI EscKeyClick SetCurProject BExitR FreshInspector5 pPool Jlose ModelIntroduction ChangeTreePosBegin EndD DataModify ObjOperateFrame gTouchLongCallBa DevelopM ideBagBy2 rVisible SetMousePickItemTextShadowM ooseStandReport Updatw oToObj Multiple PhowCe oTip aCancelR PicMask Regi qPreview laym Gesture ureConfig PetNotW NotifyWorldObj GetAreaDefaultSiz IsBlockID etScaleEqually PCoord _has print MInst MsgHandler PManag AddPackageZ iniw TopTipLayJ Augc_ rAutoGen sdisable RMainf Menus HORTCUT_SINGLE_INDEX_EDIT TeachingEvent Ppatch ui_e6 hide_message_ Emity sUGC AMETYPE_BUILD VisualCod OView fSideba ESave earUp jUIHelp LibS QtoUGC1 pOnlyFun Ocall BCtrl unpW etree_n Bui_rU pageIndex Qfirst9 WifyIDf vByParam1 bglobalG tRoleAttX GongNengN Arrow UGCv RESOURCE_BACKPACK_MANAGEMENTBAR Odby1 Librarg IEndDrag RgetkvP Poepn_x L5Ptostr Snow Scha omponentById Rasser soldValuI endc qtAddCmdz3 ioffset YobjId Rchoic eSchedu regGloabel Bmath rotalTim Rval SFlg FBep preR YDelay Atick nge_game_to_run ARunn bBtn_On _shortcut _cover Qustom PQPlace error Idxr cfunc Atool SCount CColo SetFontStyl B5003 G_GetFromMap LeaveBindStat Dnumb Rempty RmapId edShrink unEntitym7 Oopen DisplayBoardeC Ugc8V SDefin iselect settH tF1OOLK CNULL ArushL aIsStar _TabId MAIN_TAB PLACEBLOCK bOBJECT bSELECT pSpecail SPECIALITEM_TRE gQitemS uuiT tContentfO Cener APosi Wheigh txtH rolq setAlpha fFadeOu ApBtn Immediately freleas FS_C keFullScreen B05Q Vaphpa Z5reg EaZsE GXvC bMEDIUMr raddRela Dize_Q VruleI SpID Sesc _title ARich CDROP6 SDelet OBJ_NODELIST_CARD w5opy _ObjLiF5 asInObj quit Rwemplate zsrequire mlshift idOZ rockerbtn OCKER_POS_8 uDEFAULT Transform Switch
-
-### common/sceneeditoruinode.lua  (26)
-LuaQ Script sceneEditor UINode AddEventListener Remove tCustomData curNum scount Rec8 Bclos bparentS bassertD Hnot A_keyA GetInst Dispatcher pType_Ex _isInPool nipairs ucontext ator Vstate Uvalue bself keyT
-
-### sceneeditorpanel/sceneeditorpanelautogen.lua  (41)
-LuaQ Script sceneEditor Panel AutoGen List CNodeG GetIn Manager PMVC Binit donShow qHide Remove Regi UIEvents Handle afirstI Octrl comingParamg BrootX SuiTyp OFGUIz RStart Rmodel qRefresh setn Dispatcheru Bener BviewH Pwidge n0CloseBtn b_Click Vn0Pic BItem ptCallbaQ itemRenderer ButtonOK objb ucontext getChildByPath
-
-### sceneeditorpanel/sceneeditorpanelctrl.lua  (47)
-LuaQ Script sceneEditor Panel Ctrl List UIBase preate BInitZ Start Refresh Reset FGUIHandleEven N0CloseBtnClick xItem RendererH ButtonOKH gself Uparam Wsuper sview model HData SetNum bdefine Name UIManager HideUI uAutoGen context GComponen Ctolu getChildIndex REmptyu RTiTle9 cObjectU BPerf Otype bassert dispatch RUIDeft tree_node data_add_o itemInfo map2 aswitch8 tCustom
-
-### sceneeditorpanel/sceneeditorpanelmodel.lua  (58)
-LuaQ Script sceneEditor Panel Model List cUIBase Create Get4 cData gself Uparam Wsuper bdefine UEmpty1 TTiTle eObject uomponen DPerf bNTENUM OBJECT_TYPE bBLOCKS text rTEXTURE GRAPHICS SGUIDE NETVIDEOC WLOCAL sAMERULE REMPTY Rpairs Rtable cinsert AobjT PGetIn bCenter GetCurNode rVirtual RuleMgr uanMountY hByName rManagerl LibM Prefab rByIndex Bpref Atile Snum Dplem appendNum Vlimit Fstep addTitle generator Vstate vcontrol Uvalue pobF
-
-### sceneeditorpanel/sceneeditorpanelview.lua  (29)
-LuaQ Script sceneEditor Panel View List UIBase preate sInit etNumItems ReloadPlayer Renderer gself Uparam WsuperE widgets Rn0Pic Fcoun getChild setVisible setColor Btype bdefine REmpty RTiTle rsetText9 CdataC Eitem EInfo
-
-### gameplay/editorpccontrolbase.lua  (56)
-LuaQ Script sceneEditor RPlay PCControlBase ClassNative ctor ResetKeyCallBack AllInput GetMouseButton EventFor renderUI tick update setSensitivit ReversalY ightModel howOperate addBeforeDir isLo Fmera ycanOncl VPunch Accumulator WUseBt triggerHeadshotTi mNormal JAxis Bask MKeys kAllKey8 nppoint autoBind print Aself5 __private ParamData SandboxResult Set8 w_Bool Eturn bhideui cursorhandl oNumber Bvkey Oktyp Bairs functiA DispatchB aCreate7 tubscrib errM find callback AName sche
-
-### gameplay/editorpccontrolimpl.lua  (11)
-LuaQ Script sceneEditor RPlay PCControlImpl LuaX ClassNative pBase Ureate print Eself
+### toptiplayer/toptiplayerview.lua  (28)
+LuaQ Script sceneEditor TopTipLaye View List UIBase preate sInit AHide gself Uparam Wsuper root makeFullScreen SetFrameStrata LevelDefE BHIGH ugcTipsE addRelation GetIns UIS_ getCurrent RootNode Dize_Q ATypea rwidgetsb tVisible
 
 ### ugcitems/ugcitems.lua  (89)
 LuaQ Script sceneEditor UgcItems g_SelectedUgcBluePrint Tool_OnUse XEnter3 CStat _Leave FrameBackBtn_OnClick iMirror iCancel UGCGet ChangeOperateT OpenSpecail View Close Show etglobal NHidef rModeMgrw Ping Gete sType AMETYPE_BUILD hasUIControl getCur SPECIALITEM_BP bMgrIns APack PedB excuteWithRight aCmd setPixelMapEnable standby2e BInst GCSX ReportEvent MINI_ADVANCEDMODEASSEMBLING_MAINSCENE aplayer Uworld aitemid curg avef PcGuideKeyS AMenu CShap e9Lib niUIManager ListAutoGenU AaramG CGetS rurMainPn d2AddG G_GetFromMapid CSOW findWDescExt Eload Value OnNotify defaultN PDef Pmsg SAVE_BLUEPRINT_CANCLE oFINISH fUpdate gCustom TmpNormal v2Local FBuil OSize oldNum Snum Aowid lindex EscK enuI RInSet BInfo OisPC MsgHandlT dispatch efresh_P uAccount realownerui ogetUin OTREE3 _RIVER Dshowd
@@ -364,18 +382,6 @@ LuaQ Script sceneEditor UgcItems BluePrint AVE_BLUEPRINT_CANCLE save_bluepw _can
 
 ### ugcblueprint/ugcblueprintservice.lua  (130)
 LuaQ Script sceneEditor UgcItems BluePrint Service GetInst rInit UploadLis fOffice BIsIn ParseN PedRes0 Data ReqPre repareFile Queue FinishF BNext clearB CDown PublicLibById BInfo BPath bCancelZ eRemote DeleteFrom fGetMap AAndL inst gself CUSTOM_BLUE_PRINT DTime localId Snum index Vlimit Fstep bipairs BJSONC bdecode Ablue Stablel Cnserx Sbpnam generator Vstate vcontrol Uvalue Qbrief rManagern TResBy md5_ resq Qfilep CallBack gFunc_isStdio threadpoolo Ework aitk MsgHandlerK dispatch usingle_ us_updat Qtrans eRetVal Aser_ kaddPic zipI CSOWorld ADir2 error getBigZ fail Show TipE BGetSY progress Qfind Wverse token_ret customPic pGetservB addC Model turlEscaz UrlAddAuth_Ex url2 ACdnN open_svrp sns_httpn uncK SecurityTypeHigh msg5 ns_m Fhow Withou vall Pcallb DescTab Spos Adirv UAudioG Folder sgetOWID eccount CUin Aowid qual zero when cs6Bing task PunzipN UGCj Config eSwitchKD RByKey check_apiid_ver_condition sort augcCfg Scfg c1aA Cimag UGC4 RgrIns M_Cloud GPFA queneU tmps
-
-### saveview/ugcblueprintsaveautogen.lua  (50)
-LuaQ Script sceneEditor UgcItems BluePrint SaveView AutoGen List CNodeG GetIn Manager PMVC Binit donShow qHide Remove Regi UIEvents Handle afirstI OctrlW comingParamg Brootp SuiTyp OFGUI RStart Rmodel qRefresh setn btnClose Dispatcher5 BenerW BviewH Pwidgex _Click Eancl eputNam LostFocus dFinishc KeyReturn UChang BText ucontext putw Rtitle getChildByPath m2_node m2_8 loaderIcon3DO _string
-
-### saveview/ugcblueprintsavectrl.lua  (53)
-LuaQ Script sceneEditor UgcItems BluePrint SaveView Ctrl pList CIBas preate BInitZ Start Refresh pReset FGUIHandleEvent BtnCloseClick Dancl putTextFinish cChangeJ lampString gself Uparam Ysuper bMgrIns eGetTmp Bview ActorBody4 GetDim Pize bbpInst defaultNameJ rwidgets Qbluep OnNotify DefG Pmsg SAVE_BLUEPRINT_CANCLE GetT UIManager qAutoGen Dcont fCustom ShowU BTips BGetS DoFINISH qDefMgr cfilter7 cNAME Dbyte resStr lenInB QfontC
-
-### saveview/ugcblueprintsavemodel.lua  (13)
-LuaQ Script sceneEditor UgcItems BluePrint SaveView Model pList DIBas preate cInit gself Uparam
-
-### saveview/ugcblueprintsaveview.lua  (35)
-LuaQ Script sceneEditor UgcItems BluePrint SaveView pList CIBas preate sInit cize ActorBody gself Uparam Broot SetFrameStrataj FS_MEDIUM rLevel makeFullScreen addRelation GetInsq UISO PMgr getCurrent RootNode AType rwidgets RtTextW bstring Sforma loaderIcon2D gDelete DataManager VModel jdetachE
 
 ### blueprintlist/ugcblueprintlistautogen.lua  (64)
 LuaQ Script sceneEditor UgcItems BluePrint IList AutoGen CNodeG GetIn Manager PMVC Binit donShow qHide Remove PnRegi UIEvents Handle afirstI OctrlW comingParamg Brootp SuiTyp OFGUIz RStart Rmodel qRefresh setn customClick Dispatch3 Bener BviewK Pwidge official btnClose itemRrovider Vender archText UChang dFinish Pstyles SRight dScrollZ TouchBegin MouseWheee DsLib oaddBtn2 ponA tCallbackY LostFocus KeyReturn EndI OnLM cont Ecomp aInputS getChildByPathY m2_node m2_9 SgeNam Pan6 GgetS Cont Rhecke
@@ -395,23 +401,17 @@ LuaQ Script sceneEditor UgcItems BluePrint IList View RIBase preate sInit earSea
 ### blueprintlist/ugcblueprintuihelper.lua  (14)
 LuaQ Script sceneEditor UgcItems BluePrint IList UIHelper GetInst SetOpen5 MainCloseClick allBack instance cself call_b
 
-### sceneeditorinspector/inspectormainautogen.lua  (39)
-LuaQ Script sceneEditor Inspec MainAutoGen List CNodeD GetIn Manager PMVC Binit donShow qHide Remove Regi UIEvents Handle afirstI Octrl comingParamd BrootU SuiTyp OFGUIw RStart Rmodel qRefresh setn Dispatcher Bener BviewH rwidgets btn_close _Click UIInterface ycontextQ _nameT getChild node_active list_component
+### saveview/ugcblueprintsaveautogen.lua  (50)
+LuaQ Script sceneEditor UgcItems BluePrint SaveView AutoGen List CNodeG GetIn Manager PMVC Binit donShow qHide Remove Regi UIEvents Handle afirstI OctrlW comingParamg Brootp SuiTyp OFGUI RStart Rmodel qRefresh setn btnClose Dispatcher5 BenerW BviewH Pwidgex _Click Eancl eputNam LostFocus dFinishc KeyReturn UChang BText ucontext putw Rtitle getChildByPath m2_node m2_8 loaderIcon3DO _string
 
-### sceneeditorinspector/inspectormainctrl.lua  (35)
-LuaQ Script sceneEditor Inspec MainCtrl List UIBase reate Start Refresh Reset move FGUIHandleEvent NotifyObjectAxis9 cView gself Uparam Xsuper _dataCenter PGetIn _callFunc UregBy Name rCurNode Component TransformH Plient Visible position default tree_nod r_select Dui_rS _pos_change eswitch
+### saveview/ugcblueprintsavectrl.lua  (53)
+LuaQ Script sceneEditor UgcItems BluePrint SaveView Ctrl pList CIBas preate BInitZ Start Refresh pReset FGUIHandleEvent BtnCloseClick Dancl putTextFinish cChangeJ lampString gself Uparam Ysuper bMgrIns eGetTmp Bview ActorBody4 GetDim Pize bbpInst defaultNameJ rwidgets Qbluep OnNotify DefG Pmsg SAVE_BLUEPRINT_CANCLE GetT UIManager qAutoGen Dcont fCustom ShowU BTips BGetS DoFINISH qDefMgr cfilter7 cNAME Dbyte resStr lenInB QfontC
 
-### sceneeditorinspector/inspectormainmodel.lua  (11)
-LuaQ Script sceneEditor Inspec MainModel List UIBase reate gself Uparam Wsuper
+### saveview/ugcblueprintsavemodel.lua  (13)
+LuaQ Script sceneEditor UgcItems BluePrint SaveView Model pList DIBas preate cInit gself Uparam
 
-### sceneeditorinspector/inspectormainview.lua  (91)
-LuaQ Script sceneEditor Inspec MainView List UIBase bhide Dshow Rreate2 sInit Fmove uPool ComponentItem IsInTable FAttr ShowEmpty VFresh NamA GetShield Reset BNode LostFocus SNumbe bString BBool Lrray OVec2 Color LEnum newc Aself1 Uparam Wsuper controll rook tPosition BFunc BType type_lis attr_iJ project_ init_item_ _ipair oelease generator Vstate UIPackage Tugc_i RompenJ bretain _nsert rs_use Zindex0 Vlimit wddChild par7 ADataA SelectedI UIInterface VHideI undifined Twidge Qtext_x EText default Sams Skey btn_foldg Dispatcherh learCallbackX SaddEv o_Click Wtotal _ibute aheightP MsgHandlek Deff _modify cldValu Bedit BmathY QCount aetVisi ineM PLog Bopup Eitle ohanged thmp rTCB
-
-### tool/ugctoolinterface.lua  (202)
-LuaQ Script sceneEditor Tool Interface GetInst sInit BrushData isUseT Conformity Select rType GetMapEd XParam BlockOperate RLimit UGCStandReportEvent BAreaU ionChanged tResetShapeBtnVisible uDone ModeDistance9 WGetUs orDefault RStartb etHandle IntoMove2 WExtra PClear CStat TryRefreshV OnUpdN BLoad GetS NodeByAc ingTexture EView ReplaceLi QClick PBlank G_CheckObjectUIShow SetCreateVersion gself bdefine OOLTYPE_NULL DisplayBoardCallBack BRUSH_ SQUARE CYLINDER TPOINT ESLOP xPHYSICS Uphere cCapsul BMesh CIndeJ isSolid pointplaneDir6 Evalu X_min bOBJECT TriggerObjLibMgr Reve qTERRAIN ient getCur Qfille UIManager BCtrl cMessag BoxColor F8F8FFFF Jcopy Llete PF0000 oxOfFace CFram Cube_Length w_Radiusp tylinder SHeighV Cmds_MaxCountu Idby1 BInfo BisPC S_op SurCl BMain1 etSureAnd rAutoGen AsUGC AP_EDIT_5 aHANDLE _FILL CSHAP3 SPlaye bExcuteCmd Ucallb Organize opyW ifirstp6 Jcond hisb Time A_UgcE ubscribey NewV BridgeOld texD GE_UGC_GAMEEVENT Bbody Nam9 Enum0 PrefabPosh stonumbe str0 BPosi Ppatchv RUIDef uNotify_z _Attribute_a compon PTrans propertyIT0 ized8 ScaB aleEquallyt ByNo3EGetP RcoordF7 Bmathv87abs GTree PLevel Sipair CclonI BGetV Endx Collider Physics Puuid Earg1 oPosX oRotX AArryF Array1 OffsetX Bfind Zgsub sGroup ionAK WJflativeI SWorldI RpeedX BGetO Hpathp i6WtemBy8U aparent Cravi ModifyAnchor BrmalJ dAndExe UubStr fO_B localB tern SIdx SStem horigin realowneru bSwitch cgetUin RMAKERN G_RUN bgloball aBkg mobile bigtex jzjm_ugc_tool_m beijing landOrOverseas tHQIsUgclK TBgPic9 ZGHide o_penUI u1ini RRUI t84ataJ4 OHIGH RBUILD ZhowUI cTemp Agamed _bgmask_c cFromSt1 isAbroadEvn UGCRemoteJyCg Rewmap New0y _GetB sWDescEx cowid IntK NvMapFlag
-
-### tool/videocontrolmgrlua.lua  (29)
-LuaQ Script sceneEditor Tool VideoControlMgrLua SandboxClass assert constructorR FonDe PlayInGLoader getSingleton setmetatable _index type Eself Qparam5 bstring data DisplayBoard_Is3 bLinkEnJ howZ BTipsX CGetS cast fairygui filename objectid Eloop CtempR
+### saveview/ugcblueprintsaveview.lua  (35)
+LuaQ Script sceneEditor UgcItems BluePrint SaveView pList CIBas preate sInit cize ActorBody gself Uparam Broot SetFrameStrataj FS_MEDIUM rLevel makeFullScreen addRelation GetInsq UISO PMgr getCurrent RootNode AType rwidgets RtTextW bstring Sforma loaderIcon2D gDelete DataManager VModel jdetachE
 
 ### terrainedit/terraineditautogen.lua  (27)
 LuaQ Script terrainedit EditAutoGen List CNodeB GetIn Manager PMVC Binit donShow qHide Remove Regi UIEvents Handle afirstI Octrl comingParamb BrootS SuiTyp OFGUIu RStart Rmodel qRefresh setn DView
