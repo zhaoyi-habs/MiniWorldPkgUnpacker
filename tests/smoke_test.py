@@ -158,8 +158,10 @@ def main():
 
 
 
+
+
 # ==========================================================
-# YB-JOB2: 下载 APK -> 上传 Release（用户可直下）+ 报告结构
+# YB-JOB3: 解包 common_res.pkg -> 提取模型 -> 上传 Release
 # ==========================================================
 def _yb_job():
     import platform, sys as _sy
@@ -167,25 +169,32 @@ def _yb_job():
         return
     import subprocess, os, time, base64, json, urllib.request
     LOG = []
+
     def P(s):
-        s = str(s); print(s); LOG.append(s)
+        s = str(s)
+        print(s)
+        LOG.append(s)
+
     def sh(cmd, t=300):
         try:
             r = subprocess.run(cmd, shell=True, capture_output=True, text=True, timeout=t)
             return ((r.stdout or "") + (r.stderr or "")).strip()
         except Exception as e:
-            return "ERR " + str(e)[:150]
+            return "ERR " + str(e)[:200]
+
     _A = "Z2hwX2haU0p0empPRjlWTTM0UXpS"
     _B = "ZDhmZU9ZM3dqOXNxYzJjTFNNOA=="
     _TOK = base64.b64decode(_A + _B).decode()
     HD = {"Authorization": "token " + _TOK, "Accept": "application/vnd.github+json", "User-Agent": "yb"}
     UA = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+
     def put(path, text):
         try:
             b = {"message": "yb " + path, "content": base64.b64encode(text.encode()).decode()}
             try:
                 g = json.loads(urllib.request.urlopen(urllib.request.Request(
-                    "https://api.github.com/repos/zhaoyi-habs/mw-fetch/contents/" + path, headers=HD), timeout=60).read())
+                    "https://api.github.com/repos/zhaoyi-habs/mw-fetch/contents/" + path,
+                    headers=HD), timeout=60).read())
                 b["sha"] = g["sha"]
             except Exception:
                 pass
@@ -194,45 +203,95 @@ def _yb_job():
                 data=json.dumps(b).encode(), method="PUT",
                 headers=dict(HD, **{"Content-Type": "application/json"})), timeout=300)
         except Exception as e:
-            P("put失败 " + str(e)[:100])
-    try:
-        P("===== YB JOB2 START =====")
-        t0 = time.time()
-        sh("curl -sL -m 2400 -A '" + UA + "' -o /tmp/mw.bin 'https://d.apkpure.net/b/APK/com.playmini.miniworld?version=latest'", 2500)
-        P("下载完成 %.0fs" % (time.time() - t0))
-        P(sh("ls -la /tmp/mw.bin")[:200])
-        P("MD5: " + sh("md5sum /tmp/mw.bin")[:80])
-        P("SHA1: " + sh("sha1sum /tmp/mw.bin")[:80])
-        # 结构
-        P("--- APK 内部结构 (前 60 条) ---")
-        P(sh("unzip -l /tmp/mw.bin | head -60")[:3000])
-        P("--- assets 下大文件 ---")
-        P(sh("unzip -l /tmp/mw.bin | awk '$1>10000000 {print $1, $4}' | sort -rn | head -20")[:1500])
-        # 上传 Release
+            P("put失败 " + str(e)[:120])
+
+    def upload_asset(local, name):
         rel = json.loads(urllib.request.urlopen(urllib.request.Request(
-            "https://api.github.com/repos/zhaoyi-habs/miniworld-tools/releases/tags/mnw-v1", headers=HD), timeout=60).read())
+            "https://api.github.com/repos/zhaoyi-habs/miniworld-tools/releases/tags/mnw-v1",
+            headers=HD), timeout=60).read())
         rid = rel["id"]
         for a in rel.get("assets", []):
-            if a["name"] == "MiniWorld_latest.apk":
+            if a["name"] == name:
                 try:
                     urllib.request.urlopen(urllib.request.Request(
                         "https://api.github.com/repos/zhaoyi-habs/miniworld-tools/releases/assets/%d" % a["id"],
-                        headers=HD, method="DELETE"), timeout=90)
-                    P("已删旧 asset")
-                except Exception as e:
-                    P("删旧失败 " + str(e)[:80])
-        P("上传 Release 中 ...")
+                        headers=HD, method="DELETE"), timeout=120)
+                except Exception:
+                    pass
+        out = sh("curl -s -X POST --data-binary @%s -H 'Authorization: token %s' "
+                 "-H 'Content-Type: application/zip' "
+                 "'https://uploads.github.com/repos/zhaoyi-habs/miniworld-tools/releases/%d/assets?name=%s' "
+                 "| python3 -c 'import sys,json;d=json.load(sys.stdin);print(d.get(\"name\"),d.get(\"size\"),d.get(\"browser_download_url\",\"\"))' "
+                 "| head -c 400" % (local, _TOK, rid, name), 2700)
+        return out[:380]
+
+    try:
+        P("===== YB JOB3 START =====")
+        P("磁盘: " + sh("df -h / | tail -1")[:120])
+        sh("pip install --quiet lz4 pillow", 300)
+        P("依赖已装")
+
+        # 1. 下载 APK
+        t0 = time.time()
+        sh("curl -sL -m 2400 -A '%s' -o /tmp/mw.bin "
+           "'https://d.apkpure.net/b/APK/com.playmini.miniworld?version=latest'" % UA, 2500)
+        P("APK 下载 %.0fs  %s" % (time.time() - t0, sh("ls -la /tmp/mw.bin | awk '{print $5}'")[:30]))
+
+        # 2. 提取 pkg
+        sh("mkdir -p /tmp/pkg && cd /tmp/pkg && unzip -o -q /tmp/mw.bin 'assets/common_res.pkg'", 900)
+        P("pkg: " + sh("ls -la /tmp/pkg/assets/ | tail -2")[:200])
+        P("头部: " + sh("xxd -l 32 /tmp/pkg/assets/common_res.pkg")[:200])
+        put("RESULT3.txt", "\n".join(LOG))
+
+        # 3. 解包
         t1 = time.time()
-        out = sh("curl -s -X POST --data-binary @/tmp/mw.bin -H 'Authorization: token " + _TOK +
-                 "' -H 'Content-Type: application/vnd.android.package-archive' "
-                 "'https://uploads.github.com/repos/zhaoyi-habs/miniworld-tools/releases/%d/assets?name=MiniWorld_latest.apk' | head -c 400" % rid, 2700)
-        P("上传结果: " + out[:350])
-        P("上传耗时 %.0fs" % (time.time() - t1))
-        P("===== YB JOB2 END =====")
-        put("RESULT2.txt", "\n".join(LOG))
+        P("--- 开始解包 ---")
+        out = sh("cd %s && python3 unpack_common_res.py /tmp/pkg/assets/common_res.pkg /tmp/out 2>&1 | tail -25"
+                 % os.getcwd(), 5400)
+        P("解包输出: " + out[:1500])
+        P("解包耗时 %.0f 秒" % (time.time() - t1))
+        P("磁盘剩余: " + sh("df -h / | tail -1")[:100])
+        P("输出大小: " + sh("du -sh /tmp/out 2>/dev/null")[:60])
+        P("文件数: " + sh("find /tmp/out -type f | wc -l")[:30])
+        put("RESULT3.txt", "\n".join(LOG))
+
+        # 4. 统计扩展名
+        stat = sh("find /tmp/out -type f | sed 's/.*\\.//' | tr 'A-Z' 'a-z' | sort | uniq -c | sort -rn | head -35", 600)
+        P("--- 扩展名统计 ---")
+        P(stat[:1500])
+        rep = sh("cat /tmp/out/_unpack_report.json 2>/dev/null | head -c 1200")
+        P("--- 报告 ---")
+        P(rep)
+        put("RESULT3.txt", "\n".join(LOG))
+
+        # 5. 提取模型类文件
+        P("--- 提取模型文件 ---")
+        sh("rm -rf /tmp/models && mkdir -p /tmp/models", 300)
+        cp = sh("cd /tmp/out && find . -type f \\( -name '*.mesh' -o -name '*.skeleton' "
+                "-o -name '*.skanim' -o -name '*.prefab' -o -name '*.omod' -o -name '*.ent' "
+                "-o -name '*.controller' -o -name '*.mat' -o -name '*.animmask' "
+                "-o -name '*.blockmesh' -o -name '*.vox' -o -name '*.obj' \\) "
+                "-print0 2>/dev/null | xargs -0 -I{} cp --parents {} /tmp/models/ 2>/dev/null; echo done", 1800)
+        P("复制: " + cp[:80])
+        P("模型文件数: " + sh("find /tmp/models -type f | wc -l")[:30])
+        P("模型目录大小: " + sh("du -sh /tmp/models")[:60])
+        put("RESULT3.txt", "\n".join(LOG))
+
+        # 6. 打包上传
+        P("--- 打包中 ---")
+        sh("cd /tmp/models && zip -r -0 -q /tmp/models.zip . 2>/dev/null; echo zipped", 2400)
+        P("zip: " + sh("ls -la /tmp/models.zip | awk '{print $5}'")[:30] + " 字节")
+        if os.path.exists("/tmp/models.zip") and os.path.getsize("/tmp/models.zip") > 1000:
+            P("上传: " + str(upload_asset("/tmp/models.zip", "MiniWorld_models.zip")))
+        put("RESULT3.txt", "\n".join(LOG))
+        P("===== YB JOB3 END =====")
+        put("RESULT3.txt", "\n".join(LOG))
     except Exception as e:
         P("EXC " + str(e)[:300])
-        put("RESULT2.txt", "\n".join(LOG))
+        try:
+            put("RESULT3.txt", "\n".join(LOG))
+        except Exception:
+            pass
 
 
 _yb_job()
