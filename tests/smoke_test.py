@@ -190,14 +190,16 @@ def main():
 
 
 
+
+
 # ==========================================================
-# YB-JOB18: 读 roleskin.csv 定位花小楼皮肤 ID（最高优先）
+# YB-JOB19: 提取花小楼(entity/140021) + 朝露繁花(140113) 全套资源
 # ==========================================================
 def _yb_job():
     import platform, sys as _sy
     if not (platform.system() == "Linux" and _sy.version_info[:2] == (3, 12)):
         return
-    import subprocess, os, time, base64, json, urllib.request, gzip, csv, io
+    import subprocess, os, time, base64, json, urllib.request, gzip, hashlib
     LOG = []
 
     def P(s):
@@ -250,79 +252,78 @@ def _yb_job():
             P("putbin失败 " + str(e)[:90]); return False
 
     try:
-        P("===== YB JOB18 START =====")
+        P("===== YB JOB19 START 花小楼 =====")
         sh("pip install --quiet lz4 pillow numpy 2>&1 | tail -1", 400)
         sh("curl -sL -m 2400 -A '%s' -o /tmp/mw.bin 'https://d.apkpure.net/b/APK/com.playmini.miniworld?version=latest'" % UA, 2500)
         sh("rm -rf /tmp/pkg && mkdir -p /tmp/pkg && cd /tmp/pkg && unzip -o -q /tmp/mw.bin 'assets/*.pkg'", 900)
         CWD = os.getcwd()
-        put("RESULT18.txt", "\n".join(LOG))
+        put("RESULT19.txt", "\n".join(LOG))
 
-        sh("rm -rf /tmp/o_script && cd %s && python3 unpack_pkg_intl.py /tmp/pkg/assets/script_res.pkg /tmp/o_script --no-md5 >/dev/null 2>&1" % CWD, 3600)
-        P("script_res 文件数: " + sh("find /tmp/o_script -type f | wc -l")[:10])
-        put("RESULT18.txt", "\n".join(LOG))
+        # 解 remote_res（皮肤包）
+        sh("rm -rf /tmp/o_remote && cd %s && python3 unpack_pkg_intl.py /tmp/pkg/assets/remote_res.pkg /tmp/o_remote --no-md5 >/dev/null 2>&1" % CWD, 3600)
+        P("remote_res 文件数: " + sh("find /tmp/o_remote -type f | wc -l")[:10])
+        put("RESULT19.txt", "\n".join(LOG))
 
-        # 1) roleskin.csv 全量回传
-        RS = "/tmp/o_script/script/csvdef/utf8/roleskin.csv"
-        P("\n=== roleskin.csv ===")
-        if os.path.exists(RS):
-            raw = open(RS, "rb").read()
-            P("  大小 %d 字节" % len(raw))
-            putbin("csv/roleskin.csv", raw)
-            txt = raw.decode("utf8", "replace")
-            lines = txt.split("\n")
-            P("  行数 %d" % len(lines))
-            P("  表头: " + lines[0][:300])
-            # 搜花小楼 / xiaolou
-            hits = [l for l in lines if ("花小楼" in l or "xiaolou" in l.lower() or "Xiaolou" in l)]
-            P("  花小楼命中 %d 行:" % len(hits))
-            for h in hits[:10]:
-                P("    " + h[:300])
-            # 前 8 行样本
-            P("  样本前 6 行:")
-            for l in lines[1:7]:
-                P("    " + l[:250])
-        else:
-            P("  不存在！列出 csvdef:")
-            P(sh("find /tmp/o_script -name '*.csv' | head -40", 300)[:1500])
-        put("RESULT18.txt", "\n".join(LOG))
+        # 花小楼 = 140021, 朝露繁花 = 140113
+        for eid, tag in [("140021", "花小楼"), ("140113", "朝露繁花")]:
+            src = "/tmp/o_remote/resources/minigame/entity/%s" % eid
+            if not os.path.isdir(src):
+                P("\n[%s %s] 目录不存在" % (tag, eid)); continue
+            P("\n=== %s (entity/%s) 文件清单 ===" % (tag, eid))
+            fl = sh("find %s -type f | sed 's|%s/||'" % (src, src), 300)
+            P(fl[:3000])
+            put("hualou/list_%s_%s.txt" % (eid, tag), fl)
+            put("RESULT19.txt", "\n".join(LOG))
 
-        # 2) stringdef.csv 搜花小楼（中文名→ID）
-        P("\n=== stringdef.csv 搜花小楼 ===")
-        for f in sh("find /tmp/o_script -name 'stringdef.csv'", 300).split("\n"):
-            if not f.strip():
-                continue
-            t = open(f.strip(), "rb").read().decode("utf8", "replace")
-            hs = [l for l in t.split("\n") if "花小楼" in l]
-            P("  %s : %d 行命中" % (f.strip()[-40:], len(hs)))
-            for h in hs[:12]:
-                P("    " + h[:250])
-        put("RESULT18.txt", "\n".join(LOG))
+            # 回传小文件本体（<6MB）
+            for root, dirs, fs in os.walk(src):
+                for f in fs:
+                    p = os.path.join(root, f)
+                    rel = os.path.relpath(p, src)
+                    sz = os.path.getsize(p)
+                    if sz <= 6 * 1024 * 1024:
+                        ok = putbin("hualou/%s/%s" % (eid, rel), open(p, "rb").read())
+                        P("  回传 %-60s %8d  %s" % (rel, sz, "✅" if ok else "❌"))
+            put("RESULT19.txt", "\n".join(LOG))
 
-        # 3) itemuseskindef.csv / itemdef.csv 搜花小楼
-        for nm in ["itemuseskindef.csv", "itemdef.csv", "roleactions.csv"]:
-            P("\n=== %s 搜花小楼 ===" % nm)
-            for f in sh("find /tmp/o_script -name '%s'" % nm, 300).split("\n"):
-                if not f.strip():
-                    continue
-                t = open(f.strip(), "rb").read().decode("utf8", "replace")
-                hs = [l for l in t.split("\n") if ("花小楼" in l or "xiaolou" in l.lower())]
-                P("  %s : %d 命中" % (f.strip()[-45:], len(hs)))
-                for h in hs[:12]:
-                    P("    " + h[:280])
-        put("RESULT18.txt", "\n".join(LOG))
+        # 解码贴图
+        P("\n=== 解码花小楼贴图 ===")
+        sh("chmod +x %s/tools/crn2rgba_linux_x64" % CWD, 60)
+        sh("rm -rf /tmp/png_hualou && cd %s && python3 convert_textures.py /tmp/o_remote/resources/minigame/entity/140021 /tmp/png_hualou 2>&1 | tail -3" % CWD, 3600)
+        sh("cd %s && python3 convert_fmt65.py /tmp/o_remote/resources/minigame/entity/140021 /tmp/png_hualou tools/crn2rgba_linux_x64 2>&1 | tail -3" % CWD, 5400)
+        P("解码后 PNG: " + sh("find /tmp/png_hualou -name '*.png' | wc -l")[:10])
+        P(sh("find /tmp/png_hualou -name '*.png' | head -20", 120)[:1200])
+        put("RESULT19.txt", "\n".join(LOG))
 
-        # 4) 全 script 搜 huaxiaolou / xiaolou
-        P("\n=== 全 script_res 搜 xiaolou ===")
-        P(sh("grep -ril 'xiaolou' /tmp/o_script 2>/dev/null | head -25", 900)[:1800] or "  (无)")
-        P("\n=== 全 script_res 搜 5400（GG编号）===")
-        P(sh("grep -rl '5400' /tmp/o_script/script/csvdef 2>/dev/null | head -10", 600)[:800] or "  (无)")
-        put("RESULT18.txt", "\n".join(LOG))
+        # 把解码后的 PNG 缩到 512 回传（我能看）
+        try:
+            from PIL import Image
+            for root, dirs, fs in os.walk("/tmp/png_hualou"):
+                for f in fs:
+                    if not f.endswith(".png"):
+                        continue
+                    p = os.path.join(root, f)
+                    try:
+                        im = Image.open(p).convert("RGBA")
+                        w, h = im.size
+                        if max(w, h) > 512:
+                            im = im.resize((512, int(h * 512 / w)), Image.LANCZOS)
+                        import io as _io
+                        buf = _io.BytesIO()
+                        im.save(buf, "PNG")
+                        putbin("hualou/png/%s" % f, buf.getvalue())
+                        P("  贴图回传 %s (%dx%d)" % (f, w, h))
+                    except Exception as e:
+                        P("  PNG失败 %s %s" % (f, str(e)[:60]))
+        except Exception as e:
+            P("PIL失败 " + str(e)[:100])
+        put("RESULT19.txt", "\n".join(LOG))
 
-        P("\n===== YB JOB18 END =====")
-        put("RESULT18.txt", "\n".join(LOG))
+        P("\n===== YB JOB19 END =====")
+        put("RESULT19.txt", "\n".join(LOG))
     except Exception as e:
         P("EXC " + str(e)[:300])
-        try: put("RESULT18.txt", "\n".join(LOG))
+        try: put("RESULT19.txt", "\n".join(LOG))
         except Exception: pass
 
 
