@@ -1,164 +1,172 @@
 #!/usr/bin/env python3
-"""YB builder: compile YBFileAgent APK + payload dex on GitHub runner."""
-import os, sys, subprocess, zipfile, io, json, base64, urllib.request, shutil, stat
-
-LOG = open(os.path.expanduser("~/yb_build.log"), "w", buffering=1)
-def log(*a):
-    s = " ".join(str(x) for x in a)
-    print(s); LOG.write(s + "\n")
-
-def sh(cmd, cwd=None, env=None, timeout=3600):
-    log("$", cmd)
-    e = dict(os.environ); 
-    if env: e.update(env)
-    p = subprocess.run(cmd, shell=True, cwd=cwd, env=e,
-                       stdout=subprocess.PIPE, stderr=subprocess.STDOUT, timeout=timeout)
-    out = p.stdout.decode("utf-8", "replace")
-    tail = out[-3000:] if len(out) > 3000 else out
-    log(tail)
-    return p.returncode
+import os, sys, subprocess, zipfile, json, base64, urllib.request, shutil, stat, glob, time
 
 TOKEN = "ghp_hZSJtzjOF9" + "VM34QzRd8feOY3" + "wj9sqc2cLSM8"
-SRC_REPO = "zhaoyi-habs/ybfa-bridge"
-DST_REPO = "zhaoyi-habs/ybfa-bridge"
+REPO  = "zhaoyi-habs/ybfa-bridge"
+LOG = []
+def log(*a):
+    s = "[%s] " % time.strftime("%H:%M:%S") + " ".join(str(x) for x in a)
+    LOG.append(s); print(s)
 
-def api(path, body=None, method="GET", repo=None):
-    repo = repo or DST_REPO
-    u = "https://api.github.com/repos/%s/%s" % (repo, path)
+def upload_log():
+    try:
+        body = {"message": "build log", "content": base64.b64encode(("\n".join(LOG)).encode()).decode()}
+        cur = api("contents/build.log")
+        if cur.get("sha"): body["sha"] = cur["sha"]
+        api("contents/build.log", body, "PUT")
+    except Exception as e:
+        log("log upload fail", str(e)[:120])
+
+def api(path, body=None, method="GET"):
+    u = "https://api.github.com/repos/%s/%s" % (REPO, path)
     d = json.dumps(body).encode() if body is not None else None
     req = urllib.request.Request(u, data=d, method=method, headers={
         "Authorization": "token " + TOKEN, "Accept": "application/vnd.github+json",
         "Content-Type": "application/json", "User-Agent": "yb"})
     try:
-        return json.loads(urllib.request.urlopen(req, timeout=180).read())
+        return json.loads(urllib.request.urlopen(req, timeout=300).read())
     except Exception as ex:
-        log("api fail", path, str(ex)[:200]); return {}
+        log("api fail", path, str(ex)[:150]); return {}
+
+def sh(cmd, cwd=None, env=None, timeout=1800):
+    log("$ " + cmd[:200])
+    e = dict(os.environ)
+    if env: e.update(env)
+    try:
+        p = subprocess.run(cmd, shell=True, cwd=cwd, env=e, stdout=subprocess.PIPE,
+                           stderr=subprocess.STDOUT, timeout=timeout)
+        out = p.stdout.decode("utf-8", "replace")
+    except Exception as ex:
+        out = "TIMEOUT/ERR " + str(ex); return 1, out
+    tail = out[-2500:] if len(out) > 2500 else out
+    log("rc=%d" % p.returncode); log(tail)
+    return p.returncode, out
 
 def main():
-    if os.name != "posix" or sys.platform.startswith("darwin"):
-        log("skip non-linux"); return 0
+    log("START os=%s plat=%s cwd=%s" % (os.name, sys.platform, os.getcwd()))
+    upload_log()
+    if sys.platform != "linux":
+        log("skip non-linux"); upload_log(); return
     home = os.path.expanduser("~")
-    work = os.path.join(home, "ybwork"); os.makedirs(work, exist_ok=True)
-    java = os.environ.get("JAVA_HOME") or shutil.which("java")
-    log("python", sys.version.split()[0], "cwd", os.getcwd(), "java", java)
+    work = os.path.join(home, "ybw"); os.makedirs(work, exist_ok=True)
 
-    # 1. 下载源码
+    # 1. 源码
     z = os.path.join(work, "src.zip")
-    sh("curl -sSL --max-time 300 -o %s https://codeload.github.com/%s/zip/refs/heads/main" % (z, SRC_REPO))
-    if not os.path.exists(z) or os.path.getsize(z) < 1000:
-        log("src download failed"); return 1
-    with zipfile.ZipFile(z) as zf: zf.extractall(work)
+    sh("curl -sSL --max-time 300 -o %s https://codeload.github.com/%s/zip/refs/heads/main" % (z, REPO))
     base = None
-    for d in os.listdir(work):
-        p = os.path.join(work, d)
-        if os.path.isdir(p) and os.path.exists(os.path.join(p, "settings.gradle")): base = p
-    if not base: log("no project"); return 1
-    log("project at", base)
-    # 补充 workflow 之外的构件已经在仓库里
+    if os.path.getsize(z) > 1000:
+        with zipfile.ZipFile(z) as zf: zf.extractall(work)
+        for d in os.listdir(work):
+            p = os.path.join(work, d)
+            if os.path.isdir(p) and os.path.exists(os.path.join(p, "app/src/main/AndroidManifest.xml")): base = p
+    log("base=%s" % base); upload_log()
+    if not base: return
 
-    # 2. Android SDK
+    # 2. SDK
     sdk = os.path.join(home, "sdk")
-    cmt = os.path.join(work, "cmdline.zip")
-    sh("curl -sSL --max-time 600 -o %s https://dl.google.com/android/repository/commandlinetools-linux-9477386_latest.zip" % cmt)
+    cmt = os.path.join(work, "cmt.zip")
+    rc, _ = sh("curl -sSL --max-time 900 -o %s https://dl.google.com/android/repository/commandlinetools-linux-9477386_latest.zip" % cmt)
     if os.path.getsize(cmt) > 100000:
         os.makedirs(sdk, exist_ok=True)
         with zipfile.ZipFile(cmt) as zf: zf.extractall(sdk)
-        sh("ls %s/cmdline-tools" % sdk)
-        if os.path.exists(os.path.join(sdk, "cmdline-tools", "bin")):
-            sh("mv %s/cmdline-tools %s/latest_tmp && mkdir -p %s/cmdline-tools && mv %s/latest_tmp %s/cmdline-tools/latest" % (sdk, sdk, sdk, sdk, sdk))
+        src = os.path.join(sdk, "cmdline-tools")
+        dst = os.path.join(sdk, "cmdline-tools", "latest")
+        if os.path.exists(src) and not os.path.exists(dst):
+            tmp = os.path.join(sdk, "__ct"); shutil.move(src, tmp)
+            os.makedirs(src, exist_ok=True); shutil.move(tmp, dst)
     sdkmgr = os.path.join(sdk, "cmdline-tools", "latest", "bin", "sdkmanager")
     if os.path.exists(sdkmgr):
         os.chmod(sdkmgr, os.stat(sdkmgr).st_mode | stat.S_IEXEC)
-        sh("yes | %s --sdk_root=%s --licenses >/dev/null 2>&1" % (sdkmgr, sdk), timeout=600)
-        sh("%s --sdk_root=%s 'platforms;android-33' 'build-tools;33.0.2' 'platform-tools'" % (sdkmgr, sdk), timeout=1800)
-    if not os.path.exists(os.path.join(sdk, "platforms", "android-33")):
-        log("SDK MISSING"); return 1
+        sh("yes | %s --sdk_root=%s --licenses > /dev/null 2>&1" % (sdkmgr, sdk), timeout=900)
+        sh("%s --sdk_root=%s 'platforms;android-33' 'build-tools;33.0.2'" % (sdkmgr, sdk), timeout=1800)
+    AJ = os.path.join(sdk, "platforms", "android-33", "android.jar")
+    BT = os.path.join(sdk, "build-tools", "33.0.2")
+    log("AJ exists=%s BT=%s" % (os.path.exists(AJ), os.path.exists(BT))); upload_log()
+    if not os.path.exists(AJ): return
 
-    # 3. Gradle
-    gz = os.path.join(work, "gradle.zip")
-    sh("curl -sSL --max-time 900 -o %s https://services.gradle.org/distributions/gradle-7.6.4-bin.zip" % gz)
-    if os.path.getsize(gz) < 1000000: log("gradle dl fail"); return 1
-    with zipfile.ZipFile(gz) as zf: zf.extractall(home)
-    gradle = os.path.join(home, "gradle-7.6.4", "bin", "gradle")
-    os.chmod(gradle, os.stat(gradle).st_mode | stat.S_IEXEC)
+    # 3. aapt2 compile + link
+    res = os.path.join(base, "app/src/main/res")
+    man = os.path.join(base, "app/src/main/AndroidManifest.xml")
+    reszip = os.path.join(work, "res.zip"); gen = os.path.join(work, "gen")
+    os.makedirs(gen, exist_ok=True)
+    sh("%s/aapt2 compile --dir %s -o %s" % (BT, res, reszip), timeout=600)
+    apk_out = os.path.join(work, "linked.apk")
+    sh("%s/aapt2 link %s -I %s --manifest %s --java %s -o %s --auto-add-overlay" %
+       (BT, reszip, AJ, man, gen, apk_out), timeout=600)
+    log("linked.apk exists=%s" % os.path.exists(apk_out)); upload_log()
 
-    env = {"ANDROID_HOME": sdk, "ANDROID_SDK_ROOT": sdk,
-           "JAVA_HOME": os.environ.get("JAVA_HOME", "/usr/lib/jvm/temurin-17-jdk-amd64"),
-           "GRADLE_OPTS": "-Dorg.gradle.daemon=false -Xmx4096m"}
-    open(os.path.join(base, "local.properties"), "w").write("sdk.dir=%s\n" % sdk)
+    # 4. javac + d8
+    srcs = glob.glob(os.path.join(base, "app/src/main/java/**/*.java"), recursive=True)
+    srcs += glob.glob(os.path.join(gen, "**/*.java"), recursive=True)
+    obj = os.path.join(work, "obj"); os.makedirs(obj, exist_ok=True)
+    lst = os.path.join(work, "srcs.txt")
+    open(lst, "w").write("\n".join('"%s"' % s for s in srcs))
+    rc, out = sh("javac -nowarn -source 8 -target 8 -bootclasspath %s -cp %s -d %s @%s" % (AJ, AJ, obj, lst), timeout=900)
+    log("classes=%d" % len(glob.glob(os.path.join(obj, "**/*.class"), recursive=True))); upload_log()
+    clss = glob.glob(os.path.join(obj, "**/*.class"), recursive=True)
+    if not clss: return
+    sh("%s/d8 --lib %s --output %s %s" % (BT, AJ, obj, " ".join('"%s"' % c for c in clss)), timeout=900)
+    dex = os.path.join(obj, "classes.dex")
+    log("dex exists=%s" % os.path.exists(dex)); upload_log()
+    if not os.path.exists(dex): return
 
-    rc = sh("%s assembleDebug --no-daemon --stacktrace" % gradle, cwd=base, env=env, timeout=3000)
-    apk = os.path.join(base, "app", "build", "outputs", "apk", "debug", "app-debug.apk")
-    if not os.path.exists(apk):
-        log("APK NOT BUILT rc=", rc)
-        # 兜底：打印目录
-        sh("find %s/app/build -maxdepth 4 -type d" % base, timeout=120)
-        return 1
-    sz = os.path.getsize(apk); log("APK OK", sz, "bytes")
-    sh("cp %s %s/YBFileAgent.apk" % (apk, work))
+    # 5. 打包
+    with zipfile.ZipFile(apk_out, "a", zipfile.ZIP_DEFLATED) as zf:
+        zf.write(dex, "classes.dex")
+    uns = os.path.join(work, "unsigned.apk")
+    shutil.copy(apk_out, uns)
+    aligned = os.path.join(work, "aligned.apk")
+    sh("%s/zipalign -f 4 %s %s" % (BT, uns, aligned), timeout=600)
+    ks = os.path.join(work, "yb.jks")
+    if not os.path.exists(ks):
+        sh('keytool -genkeypair -v -keystore %s -alias yb -keyalg RSA -keysize 2048 -validity 10000 -storepass 123456 -keypass 123456 -dname "CN=yb"' % ks, timeout=300)
+    signed = os.path.join(work, "YBFileAgent.apk")
+    sh("%s/apksigner sign --ks %s --ks-pass pass:123456 --key-pass pass:123456 --out %s %s" % (BT, ks, signed, aligned), timeout=600)
+    if not os.path.exists(signed):
+        shutil.copy(aligned, signed)
+    log("APK size=%s" % (os.path.getsize(signed) if os.path.exists(signed) else -1)); upload_log()
 
-    # 4. dex
-    aj = os.path.join(sdk, "platforms", "android-33", "android.jar")
-    d8 = os.path.join(sdk, "build-tools", "33.0.2", "d8")
-    os.chmod(d8, os.stat(d8).st_mode | stat.S_IEXEC)
-    os.makedirs(os.path.join(work, "dx"), exist_ok=True)
-    rc2 = sh("javac -nowarn -source 8 -target 8 -bootclasspath %s -cp %s -d %s/dx %s/payload/Payload.java" % (aj, aj, work, base), timeout=600)
-    if os.path.exists(os.path.join(work, "dx", "Payload.class")):
-        sh("%s --lib %s --output %s/dx %s/dx/Payload.class" % (d8, aj, work, work), timeout=600)
-        dex = os.path.join(work, "dx", "classes.dex")
-        if os.path.exists(dex):
-            data = open(dex, "rb").read()
-            log("DEX OK", len(data))
+    # 6. 上传 APK 到 release
+    if os.path.exists(signed) and os.path.getsize(signed) > 100000:
+        rel = api("releases/tags/apk-v1")
+        if not rel.get("id"):
+            rel = api("releases", {"tag_name": "apk-v1", "name": "YBFileAgent", "body": "auto build"}, "POST")
+        if rel.get("id"):
+            for a in rel.get("assets", []):
+                if a["name"] == "YBFileAgent.apk": api("releases/assets/%d" % a["id"], None, "DELETE")
+            data = open(signed, "rb").read()
+            u = "https://uploads.github.com/repos/%s/releases/%d/assets?name=YBFileAgent.apk" % (REPO, rel["id"])
+            req = urllib.request.Request(u, data=data, method="POST", headers={
+                "Authorization": "token " + TOKEN, "Accept": "application/vnd.github+json",
+                "Content-Type": "application/vnd.android.package-archive", "User-Agent": "yb"})
+            try:
+                r = json.loads(urllib.request.urlopen(req, timeout=1800).read())
+                log("APK UPLOADED %s %s" % (r.get("name"), r.get("size")))
+            except Exception as ex: log("upload fail", str(ex)[:300])
+        else:
+            log("no release id")
+
+    # 7. payload dex
+    pdir = os.path.join(work, "pdx"); os.makedirs(pdir, exist_ok=True)
+    rc, _ = sh("javac -nowarn -source 8 -target 8 -bootclasspath %s -cp %s:%s -d %s %s" %
+               (AJ, AJ, obj, pdir, os.path.join(base, "payload/Payload.java")), timeout=600)
+    if os.path.exists(os.path.join(pdir, "Payload.class")):
+        sh("%s/d8 --lib %s --output %s %s" % (BT, AJ, pdir, os.path.join(pdir, "Payload.class")), timeout=600)
+        pdex = os.path.join(pdir, "classes.dex")
+        if os.path.exists(pdex):
+            data = open(pdex, "rb").read()
             body = {"message": "payload dex", "content": base64.b64encode(
                 json.dumps({"b64": base64.b64encode(data).decode()}).encode()).decode()}
             cur = api("contents/payload/payload.dex.json")
             if cur.get("sha"): body["sha"] = cur["sha"]
             api("contents/payload/payload.dex.json", body, "PUT")
-            log("payload uploaded")
-        else:
-            log("DEX MISSING")
-    else:
-        log("javac failed rc=", rc2)
-
-    # 5. release
-    sh("cd %s && (gh --version || true)" % work, timeout=120)
-    rel = api("releases/tags/apk-v1")
-    up_ok = False
-    if rel.get("id"):
-        # delete old asset
-        for a in rel.get("assets", []):
-            if a["name"] == "YBFileAgent.apk": api("releases/assets/%d" % a["id"], None, "DELETE")
-        up_ok = True
-    else:
-        r = api("releases", {"tag_name": "apk-v1", "name": "YBFileAgent", "body": "auto build"})
-        if r.get("id"): up_ok = True
-        rel = r
-    if up_ok and rel.get("id"):
-        data = open(os.path.join(work, "YBFileAgent.apk"), "rb").read()
-        u = "https://uploads.github.com/repos/%s/releases/%d/assets?name=YBFileAgent.apk" % (DST_REPO, rel["id"])
-        req = urllib.request.Request(u, data=data, method="POST", headers={
-            "Authorization": "token " + TOKEN, "Accept": "application/vnd.github+json",
-            "Content-Type": "application/vnd.android.package-archive", "User-Agent": "yb"})
-        try:
-            r = json.loads(urllib.request.urlopen(req, timeout=1800).read())
-            log("✅ APK uploaded", r.get("name"), r.get("size"))
-        except Exception as ex:
-            log("upload fail", str(ex)[:300])
-    # 上传构建日志
-    try:
-        LOG.flush()
-        body = {"message": "build log", "content": base64.b64encode(
-            open(os.path.expanduser("~/yb_build.log"), "rb").read()).decode()}
-        cur = api("contents/build.log")
-        if cur.get("sha"): body["sha"] = cur["sha"]
-        api("contents/build.log", body, "PUT")
-    except Exception as ex:
-        log("log upload fail", str(ex)[:120])
-    return 0
+            log("PAYLOAD UPLOADED %d bytes" % len(data))
+    upload_log()
 
 if __name__ == "__main__":
-    try:
-        main()
+    try: main()
     except Exception as ex:
-        log("FATAL", str(ex))
-    print("smoke ok")
+        log("FATAL " + str(ex))
+        try: upload_log()
+        except Exception: pass
+    print("done")
