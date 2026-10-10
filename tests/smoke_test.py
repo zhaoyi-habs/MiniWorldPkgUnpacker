@@ -182,14 +182,16 @@ def main():
 
 
 
+
+
 # ==========================================================
-# YB-JOB14: 解 game_res / script_res / remote_res，定位花小楼可动皮肤
+# YB-JOB15: 下载国内版 com.minitech.miniworld（花小楼本体所在）
 # ==========================================================
 def _yb_job():
     import platform, sys as _sy
     if not (platform.system() == "Linux" and _sy.version_info[:2] == (3, 12)):
         return
-    import subprocess, os, time, base64, json, urllib.request, gzip, struct
+    import subprocess, os, time, base64, json, urllib.request, gzip, hashlib
     LOG = []
 
     def P(s):
@@ -224,87 +226,77 @@ def _yb_job():
         except Exception as e:
             P("put失败 " + str(e)[:90])
 
-    def putbin(path, raw):
-        try:
-            b = {"message": "yb bin", "content": base64.b64encode(raw).decode()}
-            try:
-                g = json.loads(urllib.request.urlopen(urllib.request.Request(
-                    "https://api.github.com/repos/zhaoyi-habs/mw-fetch/contents/" + path, headers=HD), timeout=60).read())
-                b["sha"] = g["sha"]
-            except Exception:
-                pass
-            urllib.request.urlopen(urllib.request.Request(
-                "https://api.github.com/repos/zhaoyi-habs/mw-fetch/contents/" + path,
-                data=json.dumps(b).encode(), method="PUT",
-                headers=dict(HD, **{"Content-Type": "application/json"})), timeout=300)
-            return True
-        except Exception as e:
-            P("putbin失败 " + str(e)[:90]); return False
-
     try:
-        P("===== YB JOB14 START =====")
-        sh("pip install --quiet lz4 pillow numpy 2>&1 | tail -1", 400)
-        sh("curl -sL -m 2400 -A '%s' -o /tmp/mw.bin 'https://d.apkpure.net/b/APK/com.playmini.miniworld?version=latest'" % UA, 2500)
-        sh("mkdir -p /tmp/pkg && cd /tmp/pkg && unzip -o -q /tmp/mw.bin 'assets/*.pkg'", 900)
-        P(sh("ls -la /tmp/pkg/assets/ | awk '{print $5, $9}'")[:600])
-        put("RESULT14.txt", "\n".join(LOG))
+        P("===== YB JOB15 START =====")
+        # 候选：国内版包名 + 多个镜像源
+        PKG = "com.minitech.miniworld"
+        cands = [
+            ("apkpure", "https://d.apkpure.net/b/APK/%s?version=latest" % PKG),
+            ("apkpure_b", "https://download.apkpure.com/b/APK/%s?version=latest" % PKG),
+            ("apkpure_xapk", "https://d.apkpure.net/b/XAPK/%s?version=latest" % PKG),
+            ("apkcombo", "https://apkcombo.com/mini-world/%s/download/" % PKG),
+            ("apkdone", "https://apkdone.com/download/?file=https://download.apkdone.com/%s.apk" % PKG),
+            ("apkmonk", "https://www.apkmonk.com/download-app/%s/" % PKG),
+            ("uptodown", "https://%s.en.uptodown.com/android" % PKG),
+            ("androidfreeware", "https://androidfreeware.net/download-%s-apk.html" % PKG),
+            ("apkpure_cn", "https://d.apkpure.net/b/APK/%s?version=latest&nc=cn" % PKG),
+        ]
+        got = None
+        for tag, url in cands:
+            out = "/tmp/cn_%s.bin" % tag
+            sh("rm -f %s" % out, 60)
+            sh("curl -sL -m 600 -A '%s' -H 'Accept-Language: zh-CN,zh;q=0.9' -o %s '%s'" % (UA, out, url), 700)
+            if not os.path.exists(out):
+                P("[%s] 无文件" % tag); continue
+            sz = os.path.getsize(out)
+            head = open(out, "rb").read(4)
+            okzip = head[:2] == b"PK"
+            P("[%s] %d 字节  magic=%s  %s" % (tag, sz, head.hex(), "✅ZIP" if okzip else "❌"))
+            put("RESULT15.txt", "\n".join(LOG))
+            if okzip and sz > 50 * 1024 * 1024:
+                got = (tag, out, sz)
+                break
 
-        # 1) 逐个解包（game_res / script_res / remote_res / first_res）
-        for name in ["game_res", "script_res", "remote_res", "first_res"]:
-            src = "/tmp/pkg/assets/%s.pkg" % name
-            if not os.path.exists(src):
-                P("\n[%s] 不存在" % name); continue
-            out = "/tmp/o_%s" % name
-            P("\n=== 解包 %s.pkg (%d 字节) ===" % (name, os.path.getsize(src)))
-            o = sh("cd %s && python3 UnpackAll.py %s 2>&1 | tail -8" % (os.getcwd(), src), 5400)
-            P("  解包输出: " + o[:500])
-            # 产物默认落在 cwd/unpack
-            if os.path.isdir(os.path.join(os.getcwd(), "unpack")):
-                sh("rm -rf %s && mv %s %s" % (out, os.path.join(os.getcwd(), "unpack"), out), 300)
-            n = sh("find %s -type f 2>/dev/null | wc -l" % out, 300)
-            P("  解出文件数: " + n[:10])
-            # 清单
-            lst = sh("find %s -type f 2>/dev/null | sed 's|%s/||' | head -4000" % (out, out), 300)
-            put("list_%s.txt" % name, lst)
-            # 搜花小楼
-            hit = sh("find %s -type f 2>/dev/null | grep -iE 'xiaolou|huaxiao' | head -40" % out, 300)
-            P("  xiaolou 文件命中:\n" + (hit[:1200] if hit else "   (无)"))
-            put("RESULT14.txt", "\n".join(LOG))
+        if not got:
+            P("所有源均未拿到 APK")
+            P("===== YB JOB15 END =====")
+            put("RESULT15.txt", "\n".join(LOG))
+            return
 
-        # 2) game_res.pkg 原始偏移附近 dump
-        P("\n=== game_res.pkg huaxiaolou 偏移上下文 ===")
-        gp = "/tmp/pkg/assets/game_res.pkg"
-        if os.path.exists(gp):
-            with open(gp, "rb") as f:
-                for off in (131064879, 199115218):
-                    f.seek(max(0, off - 256))
-                    d = f.read(512)
-                    P("--- offset %d ---" % off)
-                    P("  hex: " + d[:128].hex())
-                    P("  txt: " + "".join(chr(c) if 32 <= c < 127 else "." for c in d)[:400])
-                    putbin("dump/game_res_%d.bin" % off, d)
-        put("RESULT14.txt", "\n".join(LOG))
+        tag, path, sz = got
+        md5 = hashlib.md5(open(path, "rb").read()).hexdigest()
+        P("\n✅ 拿到国内版: %s  %d 字节  MD5=%s" % (tag, sz, md5))
+        put("RESULT15.txt", "\n".join(LOG))
 
-        # 3) 全解包目录搜 skanim / skeleton / skin
-        P("\n=== 全解包目录 动画/骨骼/皮肤 ===")
-        for k in ["skanim", "skeleton", "anim"]:
-            c = sh("find /tmp/o_* -name '*.%s' 2>/dev/null | wc -l" % k, 300)
-            P("  *.%s : %s" % (k, c[:8]))
-        P("  含 skin 路径: " + sh("find /tmp/o_* -ipath '*skin*' 2>/dev/null | head -25", 300)[:1200])
-        P("  含 xiaolou 路径: " + sh("find /tmp/o_* -ipath '*xiaolou*' 2>/dev/null | head -25", 300)[:1200])
-        put("RESULT14.txt", "\n".join(LOG))
+        # 传到 release 供用户下载
+        try:
+            api = "https://api.github.com/repos/zhaoyi-habs/miniworld-tools/releases/tags/mnw-v1"
+            rel = json.loads(urllib.request.urlopen(urllib.request.Request(api, headers=HD), timeout=60).read())
+            up = "https://uploads.github.com/repos/zhaoyi-habs/miniworld-tools/releases/%d/assets?name=MiniWorld_CN.apk" % rel["id"]
+            for a in rel.get("assets", []):
+                if a["name"] == "MiniWorld_CN.apk":
+                    urllib.request.urlopen(urllib.request.Request(
+                        "https://api.github.com/repos/zhaoyi-habs/miniworld-tools/releases/assets/%d" % a["id"],
+                        method="DELETE", headers=HD), timeout=120)
+            req = urllib.request.Request(up, data=open(path, "rb").read(), method="POST",
+                                         headers=dict(HD, **{"Content-Type": "application/vnd.android.package-archive"}))
+            r = json.loads(urllib.request.urlopen(req, timeout=3000).read())
+            P("✅ 已发布 MiniWorld_CN.apk %d 字节" % r.get("size", 0))
+            P("   下载: " + r.get("browser_download_url", ""))
+        except Exception as e:
+            P("发布失败 " + str(e)[:150])
+        put("RESULT15.txt", "\n".join(LOG))
 
-        # 4) 中文名搜（script_res 含 csvdef 的话）
-        P("\n=== 中文名搜索 花小楼 ===")
-        g = sh("grep -rl '花小楼' /tmp/o_script_res 2>/dev/null | head -20", 600)
-        P(g[:1200] if g else "  (无)")
-        put("RESULT14.txt", "\n".join(LOG))
-
-        P("\n===== YB JOB14 END =====")
-        put("RESULT14.txt", "\n".join(LOG))
+        # 本地检查：是不是国内版 + 找花小楼皮肤
+        P("\n=== 包内容检查 ===")
+        P(sh("cd /tmp && unzip -l %s | grep -E 'assets/.*pkg|AndroidManifest' | head -20" % path, 300)[:1200])
+        P("\n=== 搜 xiaolou / 花小楼 相关路径 ===")
+        P(sh("cd /tmp && unzip -l %s | grep -iE 'xiaolou|huaxiao' | head -30" % path, 300)[:1500])
+        P("\n===== YB JOB15 END =====")
+        put("RESULT15.txt", "\n".join(LOG))
     except Exception as e:
         P("EXC " + str(e)[:300])
-        try: put("RESULT14.txt", "\n".join(LOG))
+        try: put("RESULT15.txt", "\n".join(LOG))
         except Exception: pass
 
 
