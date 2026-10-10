@@ -168,8 +168,10 @@ def main():
 
 
 
+
+
 # ==========================================================
-# YB-JOB7: 找国内版 + manifest 关键字段
+# YB-JOB8: 回传实体文件样本（我能读的通道）
 # ==========================================================
 def _yb_job():
     import platform, sys as _sy
@@ -195,7 +197,6 @@ def _yb_job():
     _TOK = base64.b64decode(_A + _B).decode()
     HD = {"Authorization": "token " + _TOK, "Accept": "application/vnd.github+json", "User-Agent": "yb"}
     UA = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
-    UAM = "Mozilla/5.0 (Linux; Android 12; HarmonyOS; CTR-AL20) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Mobile Safari/537.36"
 
     def put(path, text):
         try:
@@ -211,123 +212,98 @@ def _yb_job():
                 "https://api.github.com/repos/zhaoyi-habs/mw-fetch/contents/" + path,
                 data=json.dumps(b).encode(), method="PUT",
                 headers=dict(HD, **{"Content-Type": "application/json"})), timeout=300)
+            return True
         except Exception as e:
-            P("put失败 " + str(e)[:120])
+            P("put失败 " + path + " " + str(e)[:100])
+            return False
 
-    def upload_asset(local, name):
-        rel = json.loads(urllib.request.urlopen(urllib.request.Request(
-            "https://api.github.com/repos/zhaoyi-habs/miniworld-tools/releases/tags/mnw-v1",
-            headers=HD), timeout=60).read())
-        rid = rel["id"]
-        for a in rel.get("assets", []):
-            if a["name"] == name:
-                try:
-                    urllib.request.urlopen(urllib.request.Request(
-                        "https://api.github.com/repos/zhaoyi-habs/miniworld-tools/releases/assets/%d" % a["id"],
-                        headers=HD, method="DELETE"), timeout=120)
-                except Exception:
-                    pass
-        return sh("curl -s -X POST --data-binary @%s -H 'Authorization: token %s' "
-                  "-H 'Content-Type: application/vnd.android.package-archive' "
-                  "'https://uploads.github.com/repos/zhaoyi-habs/miniworld-tools/releases/%d/assets?name=%s' "
-                  "| python3 -c 'import sys,json;d=json.load(sys.stdin);print(d.get(\"name\"),d.get(\"size\"))' "
-                  "| head -c 300" % (local, _TOK, rid, name), 2700)[:280]
+    def putbin(path, raw):
+        try:
+            b = {"message": "yb bin " + path, "content": base64.b64encode(raw).decode()}
+            try:
+                g = json.loads(urllib.request.urlopen(urllib.request.Request(
+                    "https://api.github.com/repos/zhaoyi-habs/mw-fetch/contents/" + path,
+                    headers=HD), timeout=60).read())
+                b["sha"] = g["sha"]
+            except Exception:
+                pass
+            urllib.request.urlopen(urllib.request.Request(
+                "https://api.github.com/repos/zhaoyi-habs/mw-fetch/contents/" + path,
+                data=json.dumps(b).encode(), method="PUT",
+                headers=dict(HD, **{"Content-Type": "application/json"})), timeout=300)
+            return True
+        except Exception as e:
+            P("putbin失败 " + path + " " + str(e)[:100])
+            return False
 
     try:
-        P("===== YB JOB7 START =====")
-        sh("pip install --quiet androguard 2>&1 | tail -1", 400)
+        P("===== YB JOB8 START =====")
+        sh("pip install --quiet lz4 pillow 2>&1 | tail -1", 300)
 
-        # 写 manifest 解析脚本到文件（避免 shell 语法问题）
-        mpy = '''
-import zipfile, sys, re
-from androguard.core.axml import AXMLPrinter
-p = sys.argv[1]
-z = zipfile.ZipFile(p)
-x = AXMLPrinter(z.read("AndroidManifest.xml")).get_xml().decode("utf8", "replace")
-def g(pat):
-    m = re.search(pat, x)
-    return m.group(1) if m else "?"
-print("package=", g(r'package="([^"]+)"'))
-print("versionName=", g(r'versionName="([^"]+)"'))
-print("versionCode=", g(r'versionCode="([^"]+)"'))
-for m in re.findall(r'minSdkVersion="([^"]+)"', x)[:3]:
-    print("minSdk=", m)
-for m in re.findall(r'targetSdkVersion="([^"]+)"', x)[:3]:
-    print("targetSdk=", m)
-print("uses-feature glEsVersion:", re.findall(r'glEsVersion="([^"]+)"', x)[:3])
-print("abi-in-manifest:", re.findall(r'android:abi="([^"]+)"', x)[:5])
-'''
-        open("/tmp/m.py", "w").write(mpy)
-
-        # 已知国际版
-        t0 = time.time()
         sh("curl -sL -m 2400 -A '%s' -o /tmp/mw.bin "
            "'https://d.apkpure.net/b/APK/com.playmini.miniworld?version=latest'" % UA, 2500)
-        P("国际版下载 %.0fs  %s 字节" % (time.time() - t0, sh("stat -c%s /tmp/mw.bin")[:20]))
-        P("--- 国际版 manifest ---")
-        P(sh("python3 /tmp/m.py /tmp/mw.bin 2>&1 | grep -v DEBUG | head -20", 400)[:900])
-        P("国际版 ABI: " + sh("unzip -l /tmp/mw.bin | grep -oE 'lib/[a-z0-9_-]+/' | sort -u | tr '\\n' ' '")[:200])
-        put("RESULT7.txt", "\n".join(LOG))
+        sh("mkdir -p /tmp/pkg && cd /tmp/pkg && unzip -o -q /tmp/mw.bin 'assets/common_res.pkg'", 900)
+        sh("cd %s && python3 unpack_common_res.py /tmp/pkg/assets/common_res.pkg /tmp/out >/dev/null 2>&1"
+           % os.getcwd(), 5400)
+        P("解包完成 文件数: " + sh("find /tmp/out -type f | wc -l")[:20])
+        put("RESULT8.txt", "\n".join(LOG))
 
-        # 搜索国内版包名
-        P("--- apkpure 搜索 ---")
-        s = sh("curl -s -m 40 -A '%s' 'https://apkpure.com/search?q=mini%%20world' "
-               "| grep -oE '/[a-z]{2}/(com\\.[a-z0-9._]+)' | sort -u | head -25" % UA, 70)
-        P("搜索结果(apkpure.com):\n" + s[:900])
-        s2 = sh("curl -s -m 40 -A '%s' 'https://apkpure.net/search?q=mini%%20world' "
-                "| grep -oE 'com\\.[a-z0-9._]+' | sort -u | head -25" % UA, 70)
-        P("搜索结果(apkpure.net):\n" + s2[:900])
-        put("RESULT7.txt", "\n".join(LOG))
+        # 1) 完整文件清单
+        listing = sh("cd /tmp/out && find . -type f | sed 's|^\\./||' | sort", 600)
+        put("filelist.txt", listing)
+        P("清单已上传: %d 行" % len(listing.split("\n")))
 
-        # 逐个试国内版候选（含华为/小米渠道）
-        cands = ["com.minitech.miniworld", "com.minitech.miniworld.huawei",
-                 "com.minitech.miniworld.mi", "com.minitech.miniworld.oppo",
-                 "com.minitech.miniworld.vivo", "com.minitech.miniworld.anzhi",
-                 "com.minitech.miniworld.baidu", "com.minitech.miniworld.lenovo",
-                 "com.minitech.miniworld.meizu", "com.minitech.miniworld.samsung",
-                 "com.minitech.miniworld.google", "com.minitech.miniworld.nearme.gamecenter",
-                 "com.playmini.miniworld", "com.miniworld.game.cn"]
-        P("--- 候选包名探测 ---")
-        found = None
-        for p in cands:
-            h = sh("curl -sIL -m 25 -A '%s' 'https://d.apkpure.net/b/APK/%s?version=latest' "
-                   "| grep -iE '^HTTP/|^content-type' | tail -4" % (UAM, p), 50)
-            ct = "application/octet-stream" in h or "vnd.android" in h
-            P("  %-40s %s  %s" % (p[:40], "★命中" if ct else "否", h.replace("\n", " ")[:90]))
-            if ct and p != "com.playmini.miniworld":
-                found = p
-                break
-        P("选定国内版包名: " + str(found))
-        put("RESULT7.txt", "\n".join(LOG))
+        # 2) 找角色相关的 skanim / skeleton / mesh
+        P("--- 角色相关文件搜索 ---")
+        role = sh("find /tmp/out -type f \\( -name '*.skanim' -o -name '*.skeleton' -o -name '*.mesh' \\) "
+                  "| grep -iE 'role|player|actor|npc|hero|char|body|human' | head -40", 600)
+        P("角色相关:\n" + role[:1500])
+        put("RESULT8.txt", "\n".join(LOG))
 
-        if found:
-            t1 = time.time()
-            sh("rm -f /tmp/cn.bin; curl -sL -m 2400 -A '%s' -H 'Accept-Language: zh-CN,zh' "
-               "-o /tmp/cn.bin 'https://d.apkpure.net/b/APK/%s?version=latest'" % (UAM, found), 2500)
-            sz = 0
-            if os.path.exists("/tmp/cn.bin"):
-                sz = os.path.getsize("/tmp/cn.bin")
-            P("国内版下载 %.0fs  %d 字节" % (time.time() - t1, sz))
-            if sz > 50 * 1024 * 1024:
-                P("MD5: " + sh("md5sum /tmp/cn.bin")[:50])
-                P("文件类型: " + sh("file /tmp/cn.bin | head -1")[:120])
-                P("ABI: " + sh("unzip -l /tmp/cn.bin | grep -oE 'lib/[a-z0-9_-]+/' | sort -u | tr '\\n' ' '")[:250])
-                P("--- 国内版 manifest ---")
-                P(sh("python3 /tmp/m.py /tmp/cn.bin 2>&1 | grep -v DEBUG | head -20", 400)[:900])
-                P("pkg 版本头: " + sh("unzip -o -q -p /tmp/cn.bin 'assets/common_res.pkg' 2>/dev/null "
-                                     "| head -c 16 | xxd | head -1")[:150])
-                P("上传: " + str(upload_asset("/tmp/cn.bin", "MiniWorld_cn.apk")))
-                P("✅ 国内版已发布")
-            else:
-                P("❌ 国内版下载失败，大小 " + str(sz))
-                P("响应: " + sh("head -c 300 /tmp/cn.bin")[:300])
-        put("RESULT7.txt", "\n".join(LOG))
-        P("===== YB JOB7 END =====")
-        put("RESULT7.txt", "\n".join(LOG))
+        # 3) 传实体文件样本（每个 < 3MB）
+        P("--- 上传实体样本 ---")
+        samples = sh("find /tmp/out -type f \\( -name '*.skeleton' -o -name '*.mesh' \\) "
+                     "-size -3M | head -12", 300).split("\n")
+        n = 0
+        for f in samples:
+            f = f.strip()
+            if not f or not os.path.exists(f):
+                continue
+            raw = open(f, "rb").read()
+            rel = os.path.relpath(f, "/tmp/out").replace("/", "__")
+            if putbin("samples/" + rel, raw):
+                P("  ✓ %s  (%d 字节)" % (rel[:60], len(raw)))
+                P("    hex头: " + raw[:24].hex())
+                n += 1
+        P("已传样本数: %d" % n)
+        put("RESULT8.txt", "\n".join(LOG))
+
+        # 4) 各类型 hex 头汇总（用于我这边写解析器）
+        P("--- 各格式 hex 头 ---")
+        for ext in ["skanim", "skeleton", "mesh", "omod", "ent", "mat", "prefab", "emo"]:
+            f = sh("find /tmp/out -type f -name '*.%s' | head -1" % ext, 120).strip()
+            if f and os.path.exists(f):
+                raw = open(f, "rb").read()
+                P("%-10s 大小=%-10d 头32字节=%s" % (ext, len(raw), raw[:32].hex()))
+                P("   路径: " + os.path.relpath(f, "/tmp/out")[:80])
+                P("   可打印片段: " + "".join(chr(c) if 32 <= c < 127 else "." for c in raw[:80]))
+        put("RESULT8.txt", "\n".join(LOG))
+
+        # 5) 一张 PNG 样本（验证图片通道）
+        png = sh("find /tmp/out -name '*.png' -size -800k | head -3", 120).split("\n")
+        for f in png:
+            f = f.strip()
+            if f and os.path.exists(f):
+                raw = open(f, "rb").read()
+                rel = os.path.relpath(f, "/tmp/out").replace("/", "__")
+                if putbin("samples_png/" + rel, raw):
+                    P("  ✓ PNG %s (%d 字节)" % (rel[:60], len(raw)))
+        P("===== YB JOB8 END =====")
+        put("RESULT8.txt", "\n".join(LOG))
     except Exception as e:
         P("EXC " + str(e)[:300])
         try:
-            put("RESULT7.txt", "\n".join(LOG))
+            put("RESULT8.txt", "\n".join(LOG))
         except Exception:
             pass
 
