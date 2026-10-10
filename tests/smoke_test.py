@@ -178,14 +178,16 @@ def main():
 
 
 
+
+
 # ==========================================================
-# YB-JOB12: 花小楼「可动角色」全库检索
+# YB-JOB13: 生成方块/物品「颜色指纹库」→ 供截图识别
 # ==========================================================
 def _yb_job():
     import platform, sys as _sy
     if not (platform.system() == "Linux" and _sy.version_info[:2] == (3, 12)):
         return
-    import subprocess, os, time, base64, json, urllib.request, re, gzip
+    import subprocess, os, time, base64, json, urllib.request, gzip, io
     LOG = []
 
     def P(s):
@@ -238,80 +240,94 @@ def _yb_job():
             P("putbin失败 " + str(e)[:90]); return False
 
     try:
-        P("===== YB JOB12 START =====")
+        P("===== YB JOB13 START =====")
         sh("pip install --quiet lz4 pillow numpy 2>&1 | tail -1", 400)
         sh("curl -sL -m 2400 -A '%s' -o /tmp/mw.bin 'https://d.apkpure.net/b/APK/com.playmini.miniworld?version=latest'" % UA, 2500)
-        sh("mkdir -p /tmp/pkg && cd /tmp/pkg && unzip -o -q /tmp/mw.bin 'assets/*.pkg'", 900)
-        P("pkg 列表: " + sh("ls -la /tmp/pkg/assets/ | awk '{print $5, $9}' | tail -12")[:500])
-        put("RESULT12.txt", "\n".join(LOG))
+        sh("mkdir -p /tmp/pkg && cd /tmp/pkg && unzip -o -q /tmp/mw.bin 'assets/common_res.pkg'", 900)
+        sh("cd %s && python3 unpack_common_res.py /tmp/pkg/assets/common_res.pkg /tmp/out >/dev/null 2>&1" % os.getcwd(), 5400)
+        sh("chmod +x %s/tools/crn2rgba_linux_x64" % os.getcwd(), 60)
+        sh("cd %s && python3 convert_textures.py /tmp/out /tmp/png 2>&1 | tail -1" % os.getcwd(), 5400)
+        sh("cd %s && python3 convert_fmt65.py /tmp/out /tmp/png tools/crn2rgba_linux_x64 2>&1 | tail -1" % os.getcwd(), 7200)
+        P("解码 PNG: " + sh("find /tmp/png -name '*.png' | wc -l")[:10])
+        put("RESULT13.txt", "\n".join(LOG))
 
-        # 1) 解 game_script.pkg（含中文定义表）
-        P("\n=== game_script.pkg ===")
-        o = sh("cd %s && python3 extract_game_script.py 2>&1 | tail -5" % os.getcwd(), 1800)
-        P(o[:600])
-        P("csvdef 文件: " + sh("find %s/game_script_out -name '*.csv' 2>/dev/null | head -40 "
-                               "-printf '%%f ' " % os.getcwd(), 300)[:900])
-        put("RESULT12.txt", "\n".join(LOG))
+        from PIL import Image
+        import numpy as np
 
-        # 2) 在所有解出的 csv / json / lua 里搜「花小楼」
-        P("\n=== 搜索 花小楼 (中文) ===")
-        for root in ["/tmp/out", os.getcwd() + "/game_script_out"]:
-            if not os.path.isdir(root):
-                continue
-            hits = sh("grep -rl '花小楼' %s 2>/dev/null | head -30" % root, 900)
-            P("[%s] 含'花小楼'的文件:" % root)
-            P(hits[:1500] if hits else "  (无)")
-        put("RESULT12.txt", "\n".join(LOG))
+        def fingerprint(path, n=4):
+            """返回 (主色 rgb, n×n 缩略 rgb 列表)"""
+            try:
+                im = Image.open(path)
+                im = im.convert("RGBA")
+                # 用 alpha 合成到黑底，避免透明干扰
+                bg = Image.new("RGBA", im.size, (0, 0, 0, 255))
+                im = Image.alpha_composite(bg, im).convert("RGB")
+                a = np.asarray(im, dtype=np.float32)
+                small = Image.fromarray(a.astype(np.uint8)).resize((n, n), Image.BOX)
+                s = np.asarray(small).reshape(-1, 3)
+                # 主色：k=2 简易聚类（取均值 + 最亮簇）
+                mean = a.reshape(-1, 3).mean(axis=0)
+                # 取像素最多的量化颜色
+                q = (a.reshape(-1, 3) // 32 * 32).astype(np.int32)
+                keys, cnts = np.unique(q, axis=0, return_counts=True)
+                dom = keys[cnts.argmax()]
+                return [int(dom[0]), int(dom[1]), int(dom[2])], s.astype(int).tolist()
+            except Exception:
+                return None
 
-        # 3) 找实体/角色中文名定义表，列名带中文名的 csv
-        P("\n=== 角色/生物 定义表 ===")
-        cand = sh("find %s/game_script_out -iname '*def*.csv' -o -iname '*entity*.csv' "
-                  "-o -iname '*actor*.csv' -o -iname '*role*.csv' -o -iname '*npc*.csv' "
-                  "-o -iname '*monster*.csv' -o -iname '*skin*.csv' 2>/dev/null | head -30" % os.getcwd(), 300)
-        P(cand[:1200])
-        put("RESULT12.txt", "\n".join(LOG))
+        out = {"blocks": {}, "items": {}}
+        for cat, sub in [("blocks", "blocks"), ("items", "items")]:
+            d = "/tmp/png/resources/minigame/" + sub
+            if not os.path.isdir(d):
+                P("无目录 " + d); continue
+            files = sorted(f for f in os.listdir(d) if f.endswith(".png"))
+            P("%s: %d 张" % (sub, len(files)))
+            ok = 0
+            for f in files:
+                r = fingerprint(os.path.join(d, f))
+                if r:
+                    out[cat][f[:-4]] = {"c": r[0], "t": r[1]}
+                    ok += 1
+            P("  %s 指纹生成 %d" % (sub, ok))
+            put("RESULT13.txt", "\n".join(LOG))
 
-        # 4) 在这些表里找花小楼，并输出对应 ID
-        P("\n=== 花小楼 对应 ID ===")
-        for f in [x.strip() for x in cand.split("\n") if x.strip()][:12]:
-            g = sh("grep -n '花小楼' '%s' 2>/dev/null | head -5 | cut -c1-300" % f, 300)
-            if g:
-                P("  文件: " + os.path.basename(f))
-                P("    " + g.replace("\n", "\n    ")[:800])
-        put("RESULT12.txt", "\n".join(LOG))
+        # 也做 entity（生物/角色）的指纹，便于识别截图里的生物
+        out["entity"] = {}
+        ed = "/tmp/png/resources/minigame/entity"
+        if os.path.isdir(ed):
+            cnt = 0
+            for root, dirs, fs in os.walk(ed):
+                for f in fs:
+                    if not f.endswith(".png") or cnt > 3000:
+                        continue
+                    p = os.path.join(root, f)
+                    r = fingerprint(p)
+                    if r:
+                        key = os.path.relpath(p, ed).replace("/", "__")[:-4]
+                        out["entity"][key] = {"c": r[0], "t": r[1]}
+                        cnt += 1
+            P("entity 指纹: %d" % cnt)
+        put("RESULT13.txt", "\n".join(LOG))
 
-        # 5) game_res.pkg 里搜花小楼（209MB 游戏资源）
-        P("\n=== game_res.pkg 检索 ===")
-        if os.path.exists("/tmp/pkg/assets/game_res.pkg"):
-            P("  存在，大小 " + sh("stat -c%s /tmp/pkg/assets/game_res.pkg")[:15])
-            # 直接在整个二进制里搜 huaxiaolou 字符串
-            g = sh("grep -a -o -b 'huaxiaolou[a-z0-9_.]*' /tmp/pkg/assets/game_res.pkg 2>/dev/null "
-                   "| head -20", 600)
-            P("  game_res.pkg 内 huaxiaolou 字符串命中:\n" + (g[:800] if g else "  (无)"))
-        put("RESULT12.txt", "\n".join(LOG))
-
-        # 6) 全 APK 内所有 pkg 搜 huaxiaolou 字符串（未经解压，粗筛）
-        P("\n=== 全包粗筛 huaxiaolou ===")
-        for p in sh("ls /tmp/pkg/assets/*.pkg", 120).split("\n"):
-            p = p.strip()
-            if not p:
-                continue
-            n = sh("grep -a -c 'huaxiaolou' '%s' 2>/dev/null" % p, 300)
-            P("  %-34s 命中 %s" % (os.path.basename(p), n[:8]))
-        put("RESULT12.txt", "\n".join(LOG))
-
-        # 7) 列出所有"可动"角色实体（有 skanim 动画的 entity）
-        P("\n=== 带骨骼动画的角色实体（可动候选）===")
-        sk = sh("find /tmp/out -name '*.skanim' | head -40", 300)
-        P("skanim 总数: " + sh("find /tmp/out -name '*.skanim' | wc -l")[:8])
-        P(sk[:1500])
-        P("\n带 skeleton 的 entity 目录:")
-        P(sh("find /tmp/out -name '*.skeleton' | sed 's|/[^/]*$||' | sort -u | head -30", 300)[:1200])
-        P("\n===== YB JOB12 END =====")
-        put("RESULT12.txt", "\n".join(LOG))
+        raw = json.dumps(out, separators=(",", ":")).encode()
+        gz = gzip.compress(raw, 9)
+        P("指纹库 JSON %d 字节 → gzip %d 字节" % (len(raw), len(gz)))
+        P("条目: blocks=%d items=%d entity=%d" % (
+            len(out["blocks"]), len(out["items"]), len(out["entity"])))
+        # 分片回传（每片 3MB）
+        n = (len(gz) + 3 * 1024 * 1024 - 1) // (3 * 1024 * 1024)
+        for i in range(n):
+            putbin("fp/fp_part%d.gz" % i, gz[i * 3 * 1024 * 1024:(i + 1) * 3 * 1024 * 1024])
+        put("fp_meta.json", json.dumps({
+            "parts": n, "raw": len(raw), "gz": len(gz),
+            "blocks": len(out["blocks"]), "items": len(out["items"]),
+            "entity": len(out["entity"])}))
+        P("✅ 指纹库已回传 %d 片" % n)
+        P("===== YB JOB13 END =====")
+        put("RESULT13.txt", "\n".join(LOG))
     except Exception as e:
         P("EXC " + str(e)[:300])
-        try: put("RESULT12.txt", "\n".join(LOG))
+        try: put("RESULT13.txt", "\n".join(LOG))
         except Exception: pass
 
 
