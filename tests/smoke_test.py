@@ -188,14 +188,16 @@ def main():
 
 
 
+
+
 # ==========================================================
-# YB-JOB17: 定位花小楼皮肤 ID（remote_res 皮肤包 + 名称表）
+# YB-JOB18: 读 roleskin.csv 定位花小楼皮肤 ID（最高优先）
 # ==========================================================
 def _yb_job():
     import platform, sys as _sy
     if not (platform.system() == "Linux" and _sy.version_info[:2] == (3, 12)):
         return
-    import subprocess, os, time, base64, json, urllib.request, gzip, hashlib, re
+    import subprocess, os, time, base64, json, urllib.request, gzip, csv, io
     LOG = []
 
     def P(s):
@@ -248,82 +250,79 @@ def _yb_job():
             P("putbin失败 " + str(e)[:90]); return False
 
     try:
-        P("===== YB JOB17 START =====")
+        P("===== YB JOB18 START =====")
         sh("pip install --quiet lz4 pillow numpy 2>&1 | tail -1", 400)
         sh("curl -sL -m 2400 -A '%s' -o /tmp/mw.bin 'https://d.apkpure.net/b/APK/com.playmini.miniworld?version=latest'" % UA, 2500)
         sh("rm -rf /tmp/pkg && mkdir -p /tmp/pkg && cd /tmp/pkg && unzip -o -q /tmp/mw.bin 'assets/*.pkg'", 900)
         CWD = os.getcwd()
-        put("RESULT17.txt", "\n".join(LOG))
+        put("RESULT18.txt", "\n".join(LOG))
 
-        # 解 remote_res（皮肤包）
-        sh("rm -rf /tmp/o_remote && cd %s && python3 unpack_pkg_intl.py /tmp/pkg/assets/remote_res.pkg /tmp/o_remote --no-md5 >/dev/null 2>&1" % CWD, 3600)
-        P("remote_res 文件数: " + sh("find /tmp/o_remote -type f | wc -l")[:10])
-        put("RESULT17.txt", "\n".join(LOG))
-
-        # 完整清单
-        full = sh("find /tmp/o_remote -type f | sed 's|/tmp/o_remote/||'", 600)
-        put("remote_full.txt", full)
-
-        # 列出所有 entity ID 及其文件数
-        P("\n=== remote_res 内 entity 列表（按文件数排序）===")
-        P(sh("find /tmp/o_remote -type f | grep -oE 'entity/[0-9a-zA-Z_]+' | sort | uniq -c | sort -rn | head -60", 600)[:2500])
-        put("RESULT17.txt", "\n".join(LOG))
-
-        # 解 script_res 找名称表
         sh("rm -rf /tmp/o_script && cd %s && python3 unpack_pkg_intl.py /tmp/pkg/assets/script_res.pkg /tmp/o_script --no-md5 >/dev/null 2>&1" % CWD, 3600)
-        P("\n=== script_res json 中搜 skin/装扮/花小楼 ===")
-        P(sh("grep -rl '花小楼' /tmp/o_script 2>/dev/null | head -20", 900)[:1200] or "  (无中文)")
-        P(sh("grep -rliE '\"skin\"|skinname|skins' /tmp/o_script 2>/dev/null | head -20", 900)[:1200] or "  (无 skin 表)")
-        P("\n=== script_res json 文件名列表 ===")
-        P(sh("find /tmp/o_script -name '*.json' | head -40", 300)[:1500])
-        put("RESULT17.txt", "\n".join(LOG))
+        P("script_res 文件数: " + sh("find /tmp/o_script -type f | wc -l")[:10])
+        put("RESULT18.txt", "\n".join(LOG))
 
-        # 关键：解码所有 entity 的 body.png，做颜色指纹，找红色汉服
-        P("\n=== 解码 remote_res 皮肤贴图 ===")
-        sh("chmod +x %s/tools/crn2rgba_linux_x64" % CWD, 60)
-        sh("cd %s && python3 convert_textures.py /tmp/o_remote /tmp/png_remote 2>&1 | tail -3" % CWD, 5400)
-        sh("cd %s && python3 convert_fmt65.py /tmp/o_remote /tmp/png_remote tools/crn2rgba_linux_x64 2>&1 | tail -3" % CWD, 7200)
-        n = sh("find /tmp/png_remote -name '*.png' | wc -l")[:10]
-        P("解码 PNG: " + n)
-        put("RESULT17.txt", "\n".join(LOG))
+        # 1) roleskin.csv 全量回传
+        RS = "/tmp/o_script/script/csvdef/utf8/roleskin.csv"
+        P("\n=== roleskin.csv ===")
+        if os.path.exists(RS):
+            raw = open(RS, "rb").read()
+            P("  大小 %d 字节" % len(raw))
+            putbin("csv/roleskin.csv", raw)
+            txt = raw.decode("utf8", "replace")
+            lines = txt.split("\n")
+            P("  行数 %d" % len(lines))
+            P("  表头: " + lines[0][:300])
+            # 搜花小楼 / xiaolou
+            hits = [l for l in lines if ("花小楼" in l or "xiaolou" in l.lower() or "Xiaolou" in l)]
+            P("  花小楼命中 %d 行:" % len(hits))
+            for h in hits[:10]:
+                P("    " + h[:300])
+            # 前 8 行样本
+            P("  样本前 6 行:")
+            for l in lines[1:7]:
+                P("    " + l[:250])
+        else:
+            P("  不存在！列出 csvdef:")
+            P(sh("find /tmp/o_script -name '*.csv' | head -40", 300)[:1500])
+        put("RESULT18.txt", "\n".join(LOG))
 
-        # 颜色分析：找红色占比高的身体贴图（花小楼=红衣白裙）
-        try:
-            from PIL import Image
-            import numpy as np
-            res = []
-            for root, dirs, fs in os.walk("/tmp/png_remote"):
-                for f in fs:
-                    if not f.endswith(".png"):
-                        continue
-                    p = os.path.join(root, f)
-                    try:
-                        im = Image.open(p).convert("RGBA")
-                        bg = Image.new("RGBA", im.size, (0, 0, 0, 255))
-                        im = Image.alpha_composite(bg, im).convert("RGB")
-                        a = np.asarray(im.resize((32, 32)), dtype=np.int32)
-                        r, g, b = a[:, :, 0], a[:, :, 1], a[:, :, 2]
-                        # 红色像素：R 明显大于 G 和 B
-                        red = ((r > 100) & (r > g + 40) & (r > b + 40)).mean()
-                        # 桃花粉
-                        pink = ((r > 180) & (g > 100) & (g < 200) & (b > 120) & (b < 210)).mean()
-                        res.append((float(red), float(pink), os.path.relpath(p, "/tmp/png_remote")))
-                    except Exception:
-                        pass
-            res.sort(reverse=True)
-            P("\n=== 红色占比 TOP30（花小楼=红衣白裙+桃花）===")
-            for red, pink, path in res[:30]:
-                P("  red=%.2f pink=%.2f  %s" % (red, pink, path))
-            put("skin_red_rank.txt", "\n".join("%.3f\t%.3f\t%s" % x for x in res[:200]))
-        except Exception as e:
-            P("颜色分析失败 " + str(e)[:150])
-        put("RESULT17.txt", "\n".join(LOG))
+        # 2) stringdef.csv 搜花小楼（中文名→ID）
+        P("\n=== stringdef.csv 搜花小楼 ===")
+        for f in sh("find /tmp/o_script -name 'stringdef.csv'", 300).split("\n"):
+            if not f.strip():
+                continue
+            t = open(f.strip(), "rb").read().decode("utf8", "replace")
+            hs = [l for l in t.split("\n") if "花小楼" in l]
+            P("  %s : %d 行命中" % (f.strip()[-40:], len(hs)))
+            for h in hs[:12]:
+                P("    " + h[:250])
+        put("RESULT18.txt", "\n".join(LOG))
 
-        P("\n===== YB JOB17 END =====")
-        put("RESULT17.txt", "\n".join(LOG))
+        # 3) itemuseskindef.csv / itemdef.csv 搜花小楼
+        for nm in ["itemuseskindef.csv", "itemdef.csv", "roleactions.csv"]:
+            P("\n=== %s 搜花小楼 ===" % nm)
+            for f in sh("find /tmp/o_script -name '%s'" % nm, 300).split("\n"):
+                if not f.strip():
+                    continue
+                t = open(f.strip(), "rb").read().decode("utf8", "replace")
+                hs = [l for l in t.split("\n") if ("花小楼" in l or "xiaolou" in l.lower())]
+                P("  %s : %d 命中" % (f.strip()[-45:], len(hs)))
+                for h in hs[:12]:
+                    P("    " + h[:280])
+        put("RESULT18.txt", "\n".join(LOG))
+
+        # 4) 全 script 搜 huaxiaolou / xiaolou
+        P("\n=== 全 script_res 搜 xiaolou ===")
+        P(sh("grep -ril 'xiaolou' /tmp/o_script 2>/dev/null | head -25", 900)[:1800] or "  (无)")
+        P("\n=== 全 script_res 搜 5400（GG编号）===")
+        P(sh("grep -rl '5400' /tmp/o_script/script/csvdef 2>/dev/null | head -10", 600)[:800] or "  (无)")
+        put("RESULT18.txt", "\n".join(LOG))
+
+        P("\n===== YB JOB18 END =====")
+        put("RESULT18.txt", "\n".join(LOG))
     except Exception as e:
         P("EXC " + str(e)[:300])
-        try: put("RESULT17.txt", "\n".join(LOG))
+        try: put("RESULT18.txt", "\n".join(LOG))
         except Exception: pass
 
 
