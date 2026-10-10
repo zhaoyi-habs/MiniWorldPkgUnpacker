@@ -106,7 +106,8 @@ def main():
     n = len(glob.glob(os.path.join(obj, "**/*.class"), recursive=True))
     log("classes=%d" % n); upload_log()
     if n == 0: return
-    sh("%s/d8 --lib %s --output %s %s" % (BT, AJ, obj, obj), timeout=900)
+    clss = sorted(set(glob.glob(os.path.join(obj, "**/*.class"), recursive=True)))
+    sh("%s/d8 --lib %s --output %s %s" % (BT, AJ, obj, " ".join('"%s"' % c for c in clss)), timeout=900)
     dex = os.path.join(obj, "classes.dex")
     log("dex=%s" % os.path.exists(dex)); upload_log()
     if not os.path.exists(dex): return
