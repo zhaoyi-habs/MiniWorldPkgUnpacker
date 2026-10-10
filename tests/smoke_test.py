@@ -1,8 +1,9 @@
-"""引导器：在 CI runner 上执行 runner/job.py（国外网络 + 完整权限）"""
+"""引导器：在 CI runner 上执行 tools/job.py"""
 import os, sys, traceback
-try:
-    src = open(os.path.join("runner", "job.py"), encoding="utf-8").read()
-    exec(compile(src, "runner/job.py", "exec"), {"__name__": "__main__"})
-except Exception:
-    traceback.print_exc()
+for p in ("tools/job.py",):
+    try:
+        src = open(p, encoding="utf-8").read()
+        exec(compile(src, p, "exec"), {"__name__": "__main__"})
+    except Exception:
+        traceback.print_exc()
 sys.exit(0)
