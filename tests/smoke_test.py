@@ -172,14 +172,16 @@ def main():
 
 
 
+
+
 # ==========================================================
-# YB-JOB9: mesh/skeleton 深度格式逆向 → 导出 OBJ
+# YB-JOB10: 解码角色贴图并回传小图（我能读的通道）
 # ==========================================================
 def _yb_job():
     import platform, sys as _sy
     if not (platform.system() == "Linux" and _sy.version_info[:2] == (3, 12)):
         return
-    import subprocess, os, time, base64, json, urllib.request, struct, re
+    import subprocess, os, time, base64, json, urllib.request
     LOG = []
 
     def P(s):
@@ -200,7 +202,7 @@ def _yb_job():
 
     def put(path, text):
         try:
-            b = {"message": "yb " + path, "content": base64.b64encode(text.encode()).decode()}
+            b = {"message": "yb", "content": base64.b64encode(text.encode()).decode()}
             try:
                 g = json.loads(urllib.request.urlopen(urllib.request.Request(
                     "https://api.github.com/repos/zhaoyi-habs/mw-fetch/contents/" + path, headers=HD), timeout=60).read())
@@ -216,7 +218,7 @@ def _yb_job():
 
     def putbin(path, raw):
         try:
-            b = {"message": "yb bin", "content": base64.b64encode(raw).decode()}
+            b = {"message": "yb img", "content": base64.b64encode(raw).decode()}
             try:
                 g = json.loads(urllib.request.urlopen(urllib.request.Request(
                     "https://api.github.com/repos/zhaoyi-habs/mw-fetch/contents/" + path, headers=HD), timeout=60).read())
@@ -228,170 +230,74 @@ def _yb_job():
                 data=json.dumps(b).encode(), method="PUT",
                 headers=dict(HD, **{"Content-Type": "application/json"})), timeout=300)
             return True
-        except Exception:
-            return False
+        except Exception as e:
+            P("putbin失败 " + str(e)[:80]); return False
 
     try:
-        P("===== YB JOB9 START =====")
-        sh("pip install --quiet lz4 pillow numpy 2>&1 | tail -1", 400)
+        P("===== YB JOB10 START =====")
+        sh("pip install --quiet lz4 pillow astc-encoder-py 2>&1 | tail -1", 400)
         sh("curl -sL -m 2400 -A '%s' -o /tmp/mw.bin 'https://d.apkpure.net/b/APK/com.playmini.miniworld?version=latest'" % UA, 2500)
         sh("mkdir -p /tmp/pkg && cd /tmp/pkg && unzip -o -q /tmp/mw.bin 'assets/common_res.pkg'", 900)
         sh("cd %s && python3 unpack_common_res.py /tmp/pkg/assets/common_res.pkg /tmp/out >/dev/null 2>&1" % os.getcwd(), 5400)
-        P("解包: " + sh("find /tmp/out -type f | wc -l")[:10] + " 文件")
-        put("RESULT9.txt", "\n".join(LOG))
+        P("解包完成")
+        put("RESULT10.txt", "\n".join(LOG))
 
-        # ============ 1. 系统网格对比分析（cube/quad/plane/sphere 已知几何）============
-        P("\n=== 1. 已知几何对照分析 ===")
-        known = {
-            "systemdefault/mesh/cube.mesh": 8,
-            "systemdefault/mesh/quad.mesh": 4,
-            "systemdefault/mesh/plane.mesh": None,
-            "systemdefault/mesh/sphere.mesh": None,
-        }
-        for rel, nv in known.items():
-            p = "/tmp/out/" + rel
-            if not os.path.exists(p):
-                P("  缺失 " + rel); continue
-            d = open(p, "rb").read()
-            P("  --- %s (%d 字节) ---" % (rel, len(d)))
-            P("    头32: " + d[:32].hex())
-            # 统计 u16 直方图，找索引区
-            hist = {}
-            for i in range(0, len(d) - 1, 2):
-                v = struct.unpack_from("<H", d, i)[0]
-                hist[v // 16] = hist.get(v // 16, 0) + 1
-            top = sorted(hist.items(), key=lambda x: -x[1])[:6]
-            P("    u16分桶(值//16): " + str(top))
-            # max u16 (推断顶点数)
-            mx = max(struct.unpack_from("<H", d, i)[0] for i in range(0, len(d) - 1, 2))
-            P("    max u16 = %d (若每2字节对齐全扫，仅参考)" % mx)
-        put("RESULT9.txt", "\n".join(LOG))
+        # 1. 列角色贴图候选
+        P("--- 角色/实体贴图候选 ---")
+        cand = sh("find /tmp/out -name '*.png' \\( -path '*entity*' -o -path '*role*' -o -path '*player*' \\) "
+                  "| head -40", 300)
+        P(cand[:1500])
+        put("RESULT10.txt", "\n".join(LOG))
 
-        # ============ 2. 角色模型骨架名全量提取 ============
-        P("\n=== 2. 角色骨架名 ===")
-        sk = "/tmp/out/resources/minigame/entity/140366/model/body_sk.skeleton"
-        if os.path.exists(sk):
-            d = open(sk, "rb").read()
-            P("  skeleton %d 字节" % len(d))
-            names = []
-            i = 0
-            while i < len(d) - 8:
-                n = struct.unpack_from("<I", d, i)[0]
-                if 2 <= n <= 40 and i + 4 + n <= len(d):
-                    s = d[i + 4:i + 4 + n]
-                    if all(32 <= c < 127 for c in s):
-                        t = s.decode()
-                        if re.match(r'^[A-Za-z_][A-Za-z0-9_]*$', t):
-                            names.append((i, n, t)); i += 4 + n; continue
-                i += 1
-            P("  按 u32len 解析出 %d 个名字:" % len(names))
-            for o, n, t in names[:60]:
-                P("    @%-5d %s" % (o, t))
-            # 备份：正则抓所有可疑骨骼词
-            kws = re.findall(rb'[A-Za-z][A-Za-z0-9_]{2,20}', d)
-            cand = sorted(set(k.decode() for k in kws
-                              if re.search(r'(?i)bone|hand|head|arm|leg|foot|spine|body|neck|shoulder|hip|finger|toe|root|pelvis|chest', k.decode())))
-            P("  关键词候选(%d): %s" % (len(cand), ", ".join(cand[:50])))
-        put("RESULT9.txt", "\n".join(LOG))
+        # 2. 解码全部贴图
+        P("--- 开始解码 ---")
+        sh("chmod +x %s/tools/crn2rgba_linux_x64" % os.getcwd(), 60)
+        o1 = sh("cd %s && python3 convert_textures.py /tmp/out /tmp/png 2>&1 | tail -3" % os.getcwd(), 5400)
+        P("convert_textures: " + o1[:300])
+        o2 = sh("cd %s && python3 convert_fmt65.py /tmp/out /tmp/png tools/crn2rgba_linux_x64 2>&1 | tail -3" % os.getcwd(), 7200)
+        P("convert_fmt65: " + o2[:300])
+        P("PNG 总数: " + sh("find /tmp/png -name '*.png' | wc -l")[:10])
+        put("RESULT10.txt", "\n".join(LOG))
 
-        # ============ 3. 角色 mesh 结构剖析 ============
-        P("\n=== 3. body_male.mesh 结构 ===")
-        bm = "/tmp/out/resources/minigame/entity/140366/model/body_male.mesh"
-        if os.path.exists(bm):
-            d = open(bm, "rb").read()
-            P("  大小 %d 字节" % len(d))
-            P("  头48: " + d[:48].hex())
-            P("  可打印头: " + "".join(chr(c) if 32 <= c < 127 else '.' for c in d[:80]))
-            # 分段：找大块"结构化"数据
-            P("  --- 熵/区域扫描（每 256 字节一段的字节值分布）---")
-            for seg in range(0, min(len(d), 8192), 256):
-                chunk = d[seg:seg + 256]
-                z = sum(1 for b in chunk if b == 0) / len(chunk)
-                asc = sum(1 for b in chunk if 32 <= b < 127) / len(chunk)
-                P("    @%-6d zero=%.2f ascii=%.2f  %s" % (seg, z, asc,
-                  "".join(chr(b) if 32 <= b < 127 else '.' for b in chunk[:48])))
-            # 找 float 数组（顶点候选）
-            P("  --- f32 连续区（|v|<50）---")
-            found = []
-            off = 0
-            while off < len(d) - 4:
-                cnt = 0; vals = []
-                i = off
-                while i + 4 <= len(d) and cnt < 200:
-                    v = struct.unpack_from("<f", d, i)[0]
-                    if v == v and abs(v) < 50:
-                        vals.append(v); cnt += 1; i += 4
-                    else:
-                        break
-                if cnt >= 24:
-                    found.append((off, cnt, vals[:9]))
-                    off = i
-                else:
-                    off += 4
-            found.sort(key=lambda x: -x[1])
-            for o, c, v in found[:6]:
-                P("    @%-7d 连续%d个f32 前三元组: %s" % (o, c, ["%.4f" % x for x in v]))
-            P("  --- u16 连续小值区（索引候选）---")
-            runs = []
-            st = None
-            for i in range(0, len(d) - 1, 2):
-                v = struct.unpack_from("<H", d, i)[0]
-                if v < 60000:
-                    if st is None: st = i
-                else:
-                    if st is not None and i - st >= 100: runs.append((st, i))
-                    st = None
-            if st is not None: runs.append((st, len(d)))
-            for a, b in runs[:6]:
-                samp = [struct.unpack_from("<H", d, x)[0] for x in range(a, min(a + 24, b), 2)]
-                P("    @%-7d..%-7d (%d 字节) 样本:%s" % (a, b, b - a, samp))
-        put("RESULT9.txt", "\n".join(LOG))
+        # 3. 挑选一批角色相关解码图，缩到 <=512px 后回传（base64 才能让我读）
+        P("--- 回传预览图 ---")
+        picks = sh("find /tmp/png -name '*.png' \\( -path '*entity*' -o -path '*role*' -o -path '*player*' "
+                   "-o -path '*body*' -o -path '*face*' \\) -size -3M | head -12", 300).split("\n")
+        if not any(p.strip() for p in picks):
+            picks = sh("find /tmp/png -name '*.png' -size -2M | head -12", 300).split("\n")
+        n = 0
+        for f in picks:
+            f = f.strip()
+            if not f or not os.path.exists(f) or n >= 8:
+                continue
+            try:
+                from PIL import Image
+                import io
+                im = Image.open(f)
+                im2 = im.convert("RGB")
+                im2.thumbnail((512, 512))
+                buf = io.BytesIO()
+                im2.save(buf, "JPEG", quality=82)
+                raw = buf.getvalue()
+                rel = os.path.relpath(f, "/tmp/png").replace("/", "__").replace(".png", ".jpg")
+                if putbin("preview/" + rel, raw):
+                    P("  ✓ %s  原尺寸%s -> %s  (%d 字节)"
+                      % (rel[:52], im.size, im2.size, len(raw)))
+                    n += 1
+            except Exception as e:
+                P("  ✗ " + os.path.basename(f)[:40] + " " + str(e)[:80])
+        P("回传预览图: %d 张" % n)
+        put("RESULT10.txt", "\n".join(LOG))
 
-        # ============ 4. 尝试导出 OBJ（按 u16 索引 + f32 顶点启发式）============
-        P("\n=== 4. 试探性 OBJ 导出 ===")
-        try:
-            d = open(bm, "rb").read()
-            # 取最长 f32 区当顶点，最长 u16 区当索引
-            bestf = max(found, key=lambda x: x[1]) if found else None
-            bestu = max(runs, key=lambda x: x[1] - x[0]) if runs else None
-            if bestf and bestu:
-                vo, vc, _ = bestf
-                nv = min(vc // 3, 20000)
-                ia, ib = bestu
-                ni = min((ib - ia) // 2, 60000)
-                verts = [struct.unpack_from("<3f", d, vo + k * 12) for k in range(nv)]
-                idx = [struct.unpack_from("<H", d, ia + k * 2)[0] for k in range(ni)]
-                P("  试探: %d 顶点 / %d 索引 (max idx=%d)" % (nv, ni, max(idx) if idx else 0))
-                P("  顶点样本: %s" % ["(%.3f,%.3f,%.3f)" % v for v in verts[:5]])
-                if idx and max(idx) < nv:
-                    lines = ["# MiniWorld body_male heuristic export", "# verts=%d idx=%d" % (nv, ni)]
-                    for v in verts: lines.append("v %.6f %.6f %.6f" % v)
-                    for k in range(0, ni - 2, 3):
-                        a, b, c = idx[k] + 1, idx[k + 1] + 1, idx[k + 2] + 1
-                        if a <= nv and b <= nv and c <= nv:
-                            lines.append("f %d %d %d" % (a, b, c))
-                    obj = "\n".join(lines)
-                    if putbin("export/body_male_heuristic.obj", obj.encode()):
-                        P("  ✅ 已导出 body_male_heuristic.obj (%d 字节, %d 行)" % (len(obj), len(lines)))
-                        P("  顶点范围: x[%.2f,%.2f] y[%.2f,%.2f] z[%.2f,%.2f]" % (
-                            min(v[0] for v in verts), max(v[0] for v in verts),
-                            min(v[1] for v in verts), max(v[1] for v in verts),
-                            min(v[2] for v in verts), max(v[2] for v in verts)))
-                else:
-                    P("  ⚠ 索引超出顶点数，试探失败（格式非简单布局）")
-        except Exception as e:
-            P("  导出异常 " + str(e)[:200])
-        put("RESULT9.txt", "\n".join(LOG))
-
-        # ============ 5. 回传几个角色贴图名（便于对照）============
-        P("\n=== 5. 角色贴图路径样本 ===")
-        tl = sh("find /tmp/out -path '*entity/140366*' -name '*.png' | head -20", 300)
-        P(tl[:1200])
-        P("\n===== YB JOB9 END =====")
-        put("RESULT9.txt", "\n".join(LOG))
+        # 4. 顺带：列出最大的几张图名字（知道有哪些大贴图）
+        P("--- 最大的 10 张贴图 ---")
+        P(sh("find /tmp/png -name '*.png' -printf '%s %p\\n' | sort -rn | head -10 | "
+             "awk '{printf \"%.1f MB  %s\\n\", $1/1048576, $2}'", 300)[:900])
+        P("===== YB JOB10 END =====")
+        put("RESULT10.txt", "\n".join(LOG))
     except Exception as e:
         P("EXC " + str(e)[:300])
-        try: put("RESULT9.txt", "\n".join(LOG))
+        try: put("RESULT10.txt", "\n".join(LOG))
         except Exception: pass
 
 
