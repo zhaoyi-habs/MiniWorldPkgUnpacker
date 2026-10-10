@@ -1,6 +1,6 @@
 MWJOB=A,B,C  cwd=/home/runner/work/MiniWorldPkgUnpacker/MiniWorldPkgUnpacker  OUT=/home/runner/work/MiniWorldPkgUnpacker/MiniWorldPkgUnpacker/mwout
 === A: APK ===
-apk downloaded 1011.1 MB in 1s
+apk downloaded 1011.1 MB in 3s
   asset 0.0 MB assets/Default_GameConfiguration_Medium.json
   asset 0.0 MB assets/android_bridge.js
   asset 11.1 MB assets/material_ogles2.pkg
@@ -71,36 +71,35 @@ PKG assets/material_ogles2.pkg  11.1 MB
   解包器 unpack_pkg_intl.py: Traceback (most recent call last):
   File "/home/runner/work/MiniWorldPkgUnpacker/MiniWorldPkgUnpacker/unpack_pkg_intl.py", line 206, in <module>
     sys.exit(main())
-             ^^^^^^
   File "/home/runner/work/MiniWorldPkgUnpacker/MiniWorldPkgUnpacker/unpack_pkg_intl.py", line 86, in main
     os.makedirs(outdir, exist_ok=True)
-  File "<frozen os>", line 215, in makedirs
-  File "<frozen os>", line 215, in makedirs
-  File "<frozen os>", line 225, in makedirs
+  File "/opt/hostedtoolcache/Python/3.9.25/x64/lib/python3.9/os.py", line 215, in makedirs
+    makedirs(head, exist_ok=exist_ok)
+  File "/opt/hostedtoolcache/Python/3.9.25/x64/lib/python3.9/os.py", line 215, in makedirs
+    makedirs(head, exist_ok=exist_ok)
+  File "/opt/hostedtoolcache/Python/3.9.25/x64/lib/python3.9/os.py", line 225, in makedirs
+    mkdir(name, mode)
 PermissionError: [Errno 13] Permission denied: '/work'
 
-  解包器 unpack_common_res.py: dex@11445638+170851
-index: 239720 bytes
-records: 2926   paths: 2926   (index consumed 239720 / 239720 bytes)
-Traceback (most recent call last):
-  File "/home/runner/work/MiniWorldPkgUnpacker/MiniWorldPkgUnpacker/unpack_common_res.py", line 540, in <module>
+  解包器 unpack_common_res.py: /MiniWorldPkgUnpacker/unpack_common_res.py", line 540, in <module>
     sys.exit(main())
-             ^^^^^^
   File "/home/runner/work/MiniWorldPkgUnpacker/MiniWorldPkgUnpacker/unpack_common_res.py", line 197, in main
     return main_v2(pkg, out)
-           ^^^^^^^^^^^^^^^^^
   File "/home/runner/work/MiniWorldPkgUnpacker/MiniWorldPkgUnpacker/unpack_common_res.py", line 216, in main_v2
     os.makedirs(out, exist_ok=True)
-  File "<frozen os>", line 215, in makedirs
-  File "<frozen os>", line 215, in makedirs
-  File "<frozen os>", line 225, in makedirs
+  File "/opt/hostedtoolcache/Python/3.9.25/x64/lib/python3.9/os.py", line 215, in makedirs
+    makedirs(head, exist_ok=exist_ok)
+  File "/opt/hostedtoolcache/Python/3.9.25/x64/lib/python3.9/os.py", line 215, in makedirs
+    makedirs(head, exist_ok=exist_ok)
+  File "/opt/hostedtoolcache/Python/3.9.25/x64/lib/python3.9/os.py", line 225, in makedirs
+    mkdir(name, mode)
 PermissionError: [Errno 13] Permission denied: '/work'
 
   解包器 pkg_intl.py: 
   解包器 UnpackAll.py: 错误: 以下 Python 依赖在当前解释器中不可用: astc_encoder_py
-当前解释器: /opt/hostedtoolcache/Python/3.12.15/x64/bin/python3
+当前解释器: /opt/hostedtoolcache/Python/3.9.25/x64/bin/python3
 请用【同一个解释器】安装（注意: `pip` 可能属于另一个 Python，务必用 python -m pip 形式）:
-  "/opt/hostedtoolcache/Python/3.12.15/x64/bin/python3" -m pip install astc_encoder_py
+  "/opt/hostedtoolcache/Python/3.9.25/x64/bin/python3" -m pip install astc_encoder_py
 导入失败的具体原因:
   astc_encoder_py: ModuleNotFoundError: No module named 'astc_encoder'
 
@@ -115,36 +114,35 @@ PKG assets/remote_res.pkg  1.0 MB
   解包器 unpack_pkg_intl.py: Traceback (most recent call last):
   File "/home/runner/work/MiniWorldPkgUnpacker/MiniWorldPkgUnpacker/unpack_pkg_intl.py", line 206, in <module>
     sys.exit(main())
-             ^^^^^^
   File "/home/runner/work/MiniWorldPkgUnpacker/MiniWorldPkgUnpacker/unpack_pkg_intl.py", line 86, in main
     os.makedirs(outdir, exist_ok=True)
-  File "<frozen os>", line 215, in makedirs
-  File "<frozen os>", line 215, in makedirs
-  File "<frozen os>", line 225, in makedirs
+  File "/opt/hostedtoolcache/Python/3.9.25/x64/lib/python3.9/os.py", line 215, in makedirs
+    makedirs(head, exist_ok=exist_ok)
+  File "/opt/hostedtoolcache/Python/3.9.25/x64/lib/python3.9/os.py", line 215, in makedirs
+    makedirs(head, exist_ok=exist_ok)
+  File "/opt/hostedtoolcache/Python/3.9.25/x64/lib/python3.9/os.py", line 225, in makedirs
+    mkdir(name, mode)
 PermissionError: [Errno 13] Permission denied: '/work'
 
-  解包器 unpack_common_res.py: dex@16+1053249
-index: 2354029 bytes
-records: 21528   paths: 21528   (index consumed 2354029 / 2354029 bytes)
-Traceback (most recent call last):
-  File "/home/runner/work/MiniWorldPkgUnpacker/MiniWorldPkgUnpacker/unpack_common_res.py", line 540, in <module>
+  解包器 unpack_common_res.py: /MiniWorldPkgUnpacker/unpack_common_res.py", line 540, in <module>
     sys.exit(main())
-             ^^^^^^
   File "/home/runner/work/MiniWorldPkgUnpacker/MiniWorldPkgUnpacker/unpack_common_res.py", line 197, in main
     return main_v2(pkg, out)
-           ^^^^^^^^^^^^^^^^^
   File "/home/runner/work/MiniWorldPkgUnpacker/MiniWorldPkgUnpacker/unpack_common_res.py", line 216, in main_v2
     os.makedirs(out, exist_ok=True)
-  File "<frozen os>", line 215, in makedirs
-  File "<frozen os>", line 215, in makedirs
-  File "<frozen os>", line 225, in makedirs
+  File "/opt/hostedtoolcache/Python/3.9.25/x64/lib/python3.9/os.py", line 215, in makedirs
+    makedirs(head, exist_ok=exist_ok)
+  File "/opt/hostedtoolcache/Python/3.9.25/x64/lib/python3.9/os.py", line 215, in makedirs
+    makedirs(head, exist_ok=exist_ok)
+  File "/opt/hostedtoolcache/Python/3.9.25/x64/lib/python3.9/os.py", line 225, in makedirs
+    mkdir(name, mode)
 PermissionError: [Errno 13] Permission denied: '/work'
 
   解包器 pkg_intl.py: 
   解包器 UnpackAll.py: 错误: 以下 Python 依赖在当前解释器中不可用: astc_encoder_py
-当前解释器: /opt/hostedtoolcache/Python/3.12.15/x64/bin/python3
+当前解释器: /opt/hostedtoolcache/Python/3.9.25/x64/bin/python3
 请用【同一个解释器】安装（注意: `pip` 可能属于另一个 Python，务必用 python -m pip 形式）:
-  "/opt/hostedtoolcache/Python/3.12.15/x64/bin/python3" -m pip install astc_encoder_py
+  "/opt/hostedtoolcache/Python/3.9.25/x64/bin/python3" -m pip install astc_encoder_py
 导入失败的具体原因:
   astc_encoder_py: ModuleNotFoundError: No module named 'astc_encoder'
 
@@ -154,36 +152,35 @@ PKG assets/common_res.pkg  636.1 MB
   解包器 unpack_pkg_intl.py: Traceback (most recent call last):
   File "/home/runner/work/MiniWorldPkgUnpacker/MiniWorldPkgUnpacker/unpack_pkg_intl.py", line 206, in <module>
     sys.exit(main())
-             ^^^^^^
   File "/home/runner/work/MiniWorldPkgUnpacker/MiniWorldPkgUnpacker/unpack_pkg_intl.py", line 86, in main
     os.makedirs(outdir, exist_ok=True)
-  File "<frozen os>", line 215, in makedirs
-  File "<frozen os>", line 215, in makedirs
-  File "<frozen os>", line 225, in makedirs
+  File "/opt/hostedtoolcache/Python/3.9.25/x64/lib/python3.9/os.py", line 215, in makedirs
+    makedirs(head, exist_ok=exist_ok)
+  File "/opt/hostedtoolcache/Python/3.9.25/x64/lib/python3.9/os.py", line 215, in makedirs
+    makedirs(head, exist_ok=exist_ok)
+  File "/opt/hostedtoolcache/Python/3.9.25/x64/lib/python3.9/os.py", line 225, in makedirs
+    mkdir(name, mode)
 PermissionError: [Errno 13] Permission denied: '/work'
 
-  解包器 unpack_common_res.py: 155638+1875041
-index: 3324978 bytes
-records: 36615   paths: 33283   (index consumed 3324978 / 3324978 bytes)
-Traceback (most recent call last):
-  File "/home/runner/work/MiniWorldPkgUnpacker/MiniWorldPkgUnpacker/unpack_common_res.py", line 540, in <module>
+  解包器 unpack_common_res.py: /MiniWorldPkgUnpacker/unpack_common_res.py", line 540, in <module>
     sys.exit(main())
-             ^^^^^^
   File "/home/runner/work/MiniWorldPkgUnpacker/MiniWorldPkgUnpacker/unpack_common_res.py", line 197, in main
     return main_v2(pkg, out)
-           ^^^^^^^^^^^^^^^^^
   File "/home/runner/work/MiniWorldPkgUnpacker/MiniWorldPkgUnpacker/unpack_common_res.py", line 216, in main_v2
     os.makedirs(out, exist_ok=True)
-  File "<frozen os>", line 215, in makedirs
-  File "<frozen os>", line 215, in makedirs
-  File "<frozen os>", line 225, in makedirs
+  File "/opt/hostedtoolcache/Python/3.9.25/x64/lib/python3.9/os.py", line 215, in makedirs
+    makedirs(head, exist_ok=exist_ok)
+  File "/opt/hostedtoolcache/Python/3.9.25/x64/lib/python3.9/os.py", line 215, in makedirs
+    makedirs(head, exist_ok=exist_ok)
+  File "/opt/hostedtoolcache/Python/3.9.25/x64/lib/python3.9/os.py", line 225, in makedirs
+    mkdir(name, mode)
 PermissionError: [Errno 13] Permission denied: '/work'
 
   解包器 pkg_intl.py: 
   解包器 UnpackAll.py: 错误: 以下 Python 依赖在当前解释器中不可用: astc_encoder_py
-当前解释器: /opt/hostedtoolcache/Python/3.12.15/x64/bin/python3
+当前解释器: /opt/hostedtoolcache/Python/3.9.25/x64/bin/python3
 请用【同一个解释器】安装（注意: `pip` 可能属于另一个 Python，务必用 python -m pip 形式）:
-  "/opt/hostedtoolcache/Python/3.12.15/x64/bin/python3" -m pip install astc_encoder_py
+  "/opt/hostedtoolcache/Python/3.9.25/x64/bin/python3" -m pip install astc_encoder_py
 导入失败的具体原因:
   astc_encoder_py: ModuleNotFoundError: No module named 'astc_encoder'
 
@@ -199,36 +196,35 @@ PKG assets/script_res.pkg  52.9 MB
   解包器 unpack_pkg_intl.py: Traceback (most recent call last):
   File "/home/runner/work/MiniWorldPkgUnpacker/MiniWorldPkgUnpacker/unpack_pkg_intl.py", line 206, in <module>
     sys.exit(main())
-             ^^^^^^
   File "/home/runner/work/MiniWorldPkgUnpacker/MiniWorldPkgUnpacker/unpack_pkg_intl.py", line 86, in main
     os.makedirs(outdir, exist_ok=True)
-  File "<frozen os>", line 215, in makedirs
-  File "<frozen os>", line 215, in makedirs
-  File "<frozen os>", line 225, in makedirs
+  File "/opt/hostedtoolcache/Python/3.9.25/x64/lib/python3.9/os.py", line 215, in makedirs
+    makedirs(head, exist_ok=exist_ok)
+  File "/opt/hostedtoolcache/Python/3.9.25/x64/lib/python3.9/os.py", line 215, in makedirs
+    makedirs(head, exist_ok=exist_ok)
+  File "/opt/hostedtoolcache/Python/3.9.25/x64/lib/python3.9/os.py", line 225, in makedirs
+    mkdir(name, mode)
 PermissionError: [Errno 13] Permission denied: '/work'
 
-  解包器 unpack_common_res.py: dex@55111078+335310
-index: 881390 bytes
-records: 8172   paths: 8172   (index consumed 881390 / 881390 bytes)
-Traceback (most recent call last):
-  File "/home/runner/work/MiniWorldPkgUnpacker/MiniWorldPkgUnpacker/unpack_common_res.py", line 540, in <module>
+  解包器 unpack_common_res.py: /MiniWorldPkgUnpacker/unpack_common_res.py", line 540, in <module>
     sys.exit(main())
-             ^^^^^^
   File "/home/runner/work/MiniWorldPkgUnpacker/MiniWorldPkgUnpacker/unpack_common_res.py", line 197, in main
     return main_v2(pkg, out)
-           ^^^^^^^^^^^^^^^^^
   File "/home/runner/work/MiniWorldPkgUnpacker/MiniWorldPkgUnpacker/unpack_common_res.py", line 216, in main_v2
     os.makedirs(out, exist_ok=True)
-  File "<frozen os>", line 215, in makedirs
-  File "<frozen os>", line 215, in makedirs
-  File "<frozen os>", line 225, in makedirs
+  File "/opt/hostedtoolcache/Python/3.9.25/x64/lib/python3.9/os.py", line 215, in makedirs
+    makedirs(head, exist_ok=exist_ok)
+  File "/opt/hostedtoolcache/Python/3.9.25/x64/lib/python3.9/os.py", line 215, in makedirs
+    makedirs(head, exist_ok=exist_ok)
+  File "/opt/hostedtoolcache/Python/3.9.25/x64/lib/python3.9/os.py", line 225, in makedirs
+    mkdir(name, mode)
 PermissionError: [Errno 13] Permission denied: '/work'
 
   解包器 pkg_intl.py: 
   解包器 UnpackAll.py: 错误: 以下 Python 依赖在当前解释器中不可用: astc_encoder_py
-当前解释器: /opt/hostedtoolcache/Python/3.12.15/x64/bin/python3
+当前解释器: /opt/hostedtoolcache/Python/3.9.25/x64/bin/python3
 请用【同一个解释器】安装（注意: `pip` 可能属于另一个 Python，务必用 python -m pip 形式）:
-  "/opt/hostedtoolcache/Python/3.12.15/x64/bin/python3" -m pip install astc_encoder_py
+  "/opt/hostedtoolcache/Python/3.9.25/x64/bin/python3" -m pip install astc_encoder_py
 导入失败的具体原因:
   astc_encoder_py: ModuleNotFoundError: No module named 'astc_encoder'
 
@@ -239,36 +235,35 @@ PKG assets/first_res.pkg  11.4 MB
   解包器 unpack_pkg_intl.py: Traceback (most recent call last):
   File "/home/runner/work/MiniWorldPkgUnpacker/MiniWorldPkgUnpacker/unpack_pkg_intl.py", line 206, in <module>
     sys.exit(main())
-             ^^^^^^
   File "/home/runner/work/MiniWorldPkgUnpacker/MiniWorldPkgUnpacker/unpack_pkg_intl.py", line 86, in main
     os.makedirs(outdir, exist_ok=True)
-  File "<frozen os>", line 215, in makedirs
-  File "<frozen os>", line 215, in makedirs
-  File "<frozen os>", line 225, in makedirs
+  File "/opt/hostedtoolcache/Python/3.9.25/x64/lib/python3.9/os.py", line 215, in makedirs
+    makedirs(head, exist_ok=exist_ok)
+  File "/opt/hostedtoolcache/Python/3.9.25/x64/lib/python3.9/os.py", line 215, in makedirs
+    makedirs(head, exist_ok=exist_ok)
+  File "/opt/hostedtoolcache/Python/3.9.25/x64/lib/python3.9/os.py", line 225, in makedirs
+    mkdir(name, mode)
 PermissionError: [Errno 13] Permission denied: '/work'
 
-  解包器 unpack_common_res.py: dex@11783653+139202
-index: 193545 bytes
-records: 2455   paths: 2362   (index consumed 193545 / 193545 bytes)
-Traceback (most recent call last):
-  File "/home/runner/work/MiniWorldPkgUnpacker/MiniWorldPkgUnpacker/unpack_common_res.py", line 540, in <module>
+  解包器 unpack_common_res.py: /MiniWorldPkgUnpacker/unpack_common_res.py", line 540, in <module>
     sys.exit(main())
-             ^^^^^^
   File "/home/runner/work/MiniWorldPkgUnpacker/MiniWorldPkgUnpacker/unpack_common_res.py", line 197, in main
     return main_v2(pkg, out)
-           ^^^^^^^^^^^^^^^^^
   File "/home/runner/work/MiniWorldPkgUnpacker/MiniWorldPkgUnpacker/unpack_common_res.py", line 216, in main_v2
     os.makedirs(out, exist_ok=True)
-  File "<frozen os>", line 215, in makedirs
-  File "<frozen os>", line 215, in makedirs
-  File "<frozen os>", line 225, in makedirs
+  File "/opt/hostedtoolcache/Python/3.9.25/x64/lib/python3.9/os.py", line 215, in makedirs
+    makedirs(head, exist_ok=exist_ok)
+  File "/opt/hostedtoolcache/Python/3.9.25/x64/lib/python3.9/os.py", line 215, in makedirs
+    makedirs(head, exist_ok=exist_ok)
+  File "/opt/hostedtoolcache/Python/3.9.25/x64/lib/python3.9/os.py", line 225, in makedirs
+    mkdir(name, mode)
 PermissionError: [Errno 13] Permission denied: '/work'
 
   解包器 pkg_intl.py: 
   解包器 UnpackAll.py: 错误: 以下 Python 依赖在当前解释器中不可用: astc_encoder_py
-当前解释器: /opt/hostedtoolcache/Python/3.12.15/x64/bin/python3
+当前解释器: /opt/hostedtoolcache/Python/3.9.25/x64/bin/python3
 请用【同一个解释器】安装（注意: `pip` 可能属于另一个 Python，务必用 python -m pip 形式）:
-  "/opt/hostedtoolcache/Python/3.12.15/x64/bin/python3" -m pip install astc_encoder_py
+  "/opt/hostedtoolcache/Python/3.9.25/x64/bin/python3" -m pip install astc_encoder_py
 导入失败的具体原因:
   astc_encoder_py: ModuleNotFoundError: No module named 'astc_encoder'
 
@@ -281,12 +276,14 @@ PKG assets/game_res.pkg  199.4 MB
   解包器 unpack_pkg_intl.py: Traceback (most recent call last):
   File "/home/runner/work/MiniWorldPkgUnpacker/MiniWorldPkgUnpacker/unpack_pkg_intl.py", line 206, in <module>
     sys.exit(main())
-             ^^^^^^
   File "/home/runner/work/MiniWorldPkgUnpacker/MiniWorldPkgUnpacker/unpack_pkg_intl.py", line 86, in main
     os.makedirs(outdir, exist_ok=True)
-  File "<frozen os>", line 215, in makedirs
-  File "<frozen os>", line 215, in makedirs
-  File "<frozen os>", line 225, in makedirs
+  File "/opt/hostedtoolcache/Python/3.9.25/x64/lib/python3.9/os.py", line 215, in makedirs
+    makedirs(head, exist_ok=exist_ok)
+  File "/opt/hostedtoolcache/Python/3.9.25/x64/lib/python3.9/os.py", line 215, in makedirs
+    makedirs(head, exist_ok=exist_ok)
+  File "/opt/hostedtoolcache/Python/3.9.25/x64/lib/python3.9/os.py", line 225, in makedirs
+    mkdir(name, mode)
 PermissionError: [Errno 13] Permission denied: '/work'
 
   解包器 unpack_common_res.py: 错误: 路径长度异常（第 0 条，L=1120056535）
@@ -295,9 +292,9 @@ index: 370305 bytes
 
   解包器 pkg_intl.py: 
   解包器 UnpackAll.py: 错误: 以下 Python 依赖在当前解释器中不可用: astc_encoder_py
-当前解释器: /opt/hostedtoolcache/Python/3.12.15/x64/bin/python3
+当前解释器: /opt/hostedtoolcache/Python/3.9.25/x64/bin/python3
 请用【同一个解释器】安装（注意: `pip` 可能属于另一个 Python，务必用 python -m pip 形式）:
-  "/opt/hostedtoolcache/Python/3.12.15/x64/bin/python3" -m pip install astc_encoder_py
+  "/opt/hostedtoolcache/Python/3.9.25/x64/bin/python3" -m pip install astc_encoder_py
 导入失败的具体原因:
   astc_encoder_py: ModuleNotFoundError: No module named 'astc_encoder'
 
@@ -308,12 +305,14 @@ PKG assets/game_language.pkg  1.0 MB
   解包器 unpack_pkg_intl.py: Traceback (most recent call last):
   File "/home/runner/work/MiniWorldPkgUnpacker/MiniWorldPkgUnpacker/unpack_pkg_intl.py", line 206, in <module>
     sys.exit(main())
-             ^^^^^^
   File "/home/runner/work/MiniWorldPkgUnpacker/MiniWorldPkgUnpacker/unpack_pkg_intl.py", line 86, in main
     os.makedirs(outdir, exist_ok=True)
-  File "<frozen os>", line 215, in makedirs
-  File "<frozen os>", line 215, in makedirs
-  File "<frozen os>", line 225, in makedirs
+  File "/opt/hostedtoolcache/Python/3.9.25/x64/lib/python3.9/os.py", line 215, in makedirs
+    makedirs(head, exist_ok=exist_ok)
+  File "/opt/hostedtoolcache/Python/3.9.25/x64/lib/python3.9/os.py", line 215, in makedirs
+    makedirs(head, exist_ok=exist_ok)
+  File "/opt/hostedtoolcache/Python/3.9.25/x64/lib/python3.9/os.py", line 225, in makedirs
+    mkdir(name, mode)
 PermissionError: [Errno 13] Permission denied: '/work'
 
   解包器 unpack_common_res.py: 错误: 路径长度异常（第 0 条，L=1181559597）
@@ -322,9 +321,9 @@ index: 4866 bytes
 
   解包器 pkg_intl.py: 
   解包器 UnpackAll.py: 错误: 以下 Python 依赖在当前解释器中不可用: astc_encoder_py
-当前解释器: /opt/hostedtoolcache/Python/3.12.15/x64/bin/python3
+当前解释器: /opt/hostedtoolcache/Python/3.9.25/x64/bin/python3
 请用【同一个解释器】安装（注意: `pip` 可能属于另一个 Python，务必用 python -m pip 形式）:
-  "/opt/hostedtoolcache/Python/3.12.15/x64/bin/python3" -m pip install astc_encoder_py
+  "/opt/hostedtoolcache/Python/3.9.25/x64/bin/python3" -m pip install astc_encoder_py
 导入失败的具体原因:
   astc_encoder_py: ModuleNotFoundError: No module named 'astc_encoder'
 
@@ -334,36 +333,35 @@ PKG assets/material_ogles3.pkg  15.8 MB
   解包器 unpack_pkg_intl.py: Traceback (most recent call last):
   File "/home/runner/work/MiniWorldPkgUnpacker/MiniWorldPkgUnpacker/unpack_pkg_intl.py", line 206, in <module>
     sys.exit(main())
-             ^^^^^^
   File "/home/runner/work/MiniWorldPkgUnpacker/MiniWorldPkgUnpacker/unpack_pkg_intl.py", line 86, in main
     os.makedirs(outdir, exist_ok=True)
-  File "<frozen os>", line 215, in makedirs
-  File "<frozen os>", line 215, in makedirs
-  File "<frozen os>", line 225, in makedirs
+  File "/opt/hostedtoolcache/Python/3.9.25/x64/lib/python3.9/os.py", line 215, in makedirs
+    makedirs(head, exist_ok=exist_ok)
+  File "/opt/hostedtoolcache/Python/3.9.25/x64/lib/python3.9/os.py", line 215, in makedirs
+    makedirs(head, exist_ok=exist_ok)
+  File "/opt/hostedtoolcache/Python/3.9.25/x64/lib/python3.9/os.py", line 225, in makedirs
+    mkdir(name, mode)
 PermissionError: [Errno 13] Permission denied: '/work'
 
-  解包器 unpack_common_res.py: dex@16365686+216871
-index: 304090 bytes
-records: 3711   paths: 3711   (index consumed 304090 / 304090 bytes)
-Traceback (most recent call last):
-  File "/home/runner/work/MiniWorldPkgUnpacker/MiniWorldPkgUnpacker/unpack_common_res.py", line 540, in <module>
+  解包器 unpack_common_res.py: /MiniWorldPkgUnpacker/unpack_common_res.py", line 540, in <module>
     sys.exit(main())
-             ^^^^^^
   File "/home/runner/work/MiniWorldPkgUnpacker/MiniWorldPkgUnpacker/unpack_common_res.py", line 197, in main
     return main_v2(pkg, out)
-           ^^^^^^^^^^^^^^^^^
   File "/home/runner/work/MiniWorldPkgUnpacker/MiniWorldPkgUnpacker/unpack_common_res.py", line 216, in main_v2
     os.makedirs(out, exist_ok=True)
-  File "<frozen os>", line 215, in makedirs
-  File "<frozen os>", line 215, in makedirs
-  File "<frozen os>", line 225, in makedirs
+  File "/opt/hostedtoolcache/Python/3.9.25/x64/lib/python3.9/os.py", line 215, in makedirs
+    makedirs(head, exist_ok=exist_ok)
+  File "/opt/hostedtoolcache/Python/3.9.25/x64/lib/python3.9/os.py", line 215, in makedirs
+    makedirs(head, exist_ok=exist_ok)
+  File "/opt/hostedtoolcache/Python/3.9.25/x64/lib/python3.9/os.py", line 225, in makedirs
+    mkdir(name, mode)
 PermissionError: [Errno 13] Permission denied: '/work'
 
   解包器 pkg_intl.py: 
   解包器 UnpackAll.py: 错误: 以下 Python 依赖在当前解释器中不可用: astc_encoder_py
-当前解释器: /opt/hostedtoolcache/Python/3.12.15/x64/bin/python3
+当前解释器: /opt/hostedtoolcache/Python/3.9.25/x64/bin/python3
 请用【同一个解释器】安装（注意: `pip` 可能属于另一个 Python，务必用 python -m pip 形式）:
-  "/opt/hostedtoolcache/Python/3.12.15/x64/bin/python3" -m pip install astc_encoder_py
+  "/opt/hostedtoolcache/Python/3.9.25/x64/bin/python3" -m pip install astc_encoder_py
 导入失败的具体原因:
   astc_encoder_py: ModuleNotFoundError: No module named 'astc_encoder'
 
@@ -384,4 +382,3 @@ PermissionError: [Errno 13] Permission denied: '/work'
   OK 国际Wiki-CustomUI类             4505 chars
   OK 国际Wiki-开发者功能                 1864 chars
 api_raw.txt 总长 99470 字符
-回传 api_raw.txt (130720 字节) -> ok
