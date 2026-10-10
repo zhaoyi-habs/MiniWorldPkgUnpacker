@@ -1,0 +1,1 @@
+lua=6092 raw=394127 dec=4711 final=366135 dropped=30570 ok=610
