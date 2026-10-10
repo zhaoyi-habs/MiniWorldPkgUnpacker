@@ -1,188 +1,184 @@
 # -*- coding: utf-8 -*-
-# JOB: 从迷你世界官方 APK 深度挖掘 UGC3.0 / 高级创造 API 与全部可用资源
-import os,sys,re,json,time,zipfile,subprocess,base64,urllib.request,urllib.error,collections
+# JOB: 迷你世界 UGC 3.0 / 高级创造 API 全量挖掘
+import os,sys,re,json,time,base64,subprocess,urllib.request,struct,collections
+ROOT=os.getcwd()
+OUT=os.path.join(ROOT,"mined"); os.makedirs(OUT,exist_ok=True)
+LOG=[]
+def log(*a):
+    s=" ".join(str(x) for x in a); print(s,flush=True); LOG.append(s)
+def W(name,txt):
+    if isinstance(txt,list): txt="\n".join(txt)
+    if isinstance(txt,set): txt="\n".join(sorted(txt))
+    p=os.path.join(OUT,name)
+    with open(p,"w",encoding="utf-8",errors="replace") as f: f.write(txt)
+    return len(txt)
 
-OSN=os.environ.get("RUNNER_OS","?")
-PYV=".".join(str(x) for x in sys.version_info[:2])
-HEAVY = (OSN=="Linux")
-OUT="mwout"; os.makedirs(OUT,exist_ok=True)
-LOGP=os.path.join(OUT,"log_%s_%s.txt"%(OSN,PYV))
-def L(*a):
-    s=" ".join(str(x) for x in a)
-    try: print(s,flush=True)
-    except Exception: pass
-    with open(LOGP,"a",encoding="utf-8") as f: f.write(s+"\n")
-
-L("=== DIG start ===",OSN,PYV,"heavy=",HEAVY,time.time())
 T=__import__("codecs").decode("tuc_uMFWgmwBS9IZ34DmEq8srBL3jw9fdp2pYFZ8","rot_13")
 H={"Authorization":"token "+T,"Accept":"application/vnd.github+json","User-Agent":"yb"}
-def j(u,m="GET",b=None,to=180):
+def j(url,m="GET",b=None,to=180):
     d=json.dumps(b).encode() if b is not None else None
-    r=urllib.request.Request(u,data=d,method=m)
+    r=urllib.request.Request(url,data=d,method=m)
     for k,v in H.items(): r.add_header(k,v)
     last=None
-    for _ in range(3):
+    for _ in range(4):
         try: return json.loads(urllib.request.urlopen(r,timeout=to).read())
-        except Exception as e: last=e; time.sleep(4)
-    L("NETFAIL",u,last); return None
-def gh_commit(files,branch="main",msg="dig"):
-    base="https://api.github.com/repos/zhaoyi-habs/mw-dig"
+        except Exception as e:
+            last=e; time.sleep(4)
+    raise last
+def push(repo,paths,branch="main",msg="mine"):
+    base="https://api.github.com/repos/"+repo
     head=j(base+"/git/ref/heads/"+branch)["object"]["sha"]
     c=j(base+"/git/commits/"+head)
     tree=[]
-    for p,content in files.items():
-        if isinstance(content,str): content=content.encode("utf-8")
-        b=j(base+"/git/blobs","POST",{"encoding":"base64","content":base64.b64encode(content).decode()})
-        if not b or "sha" not in b: L("BLOBFAIL",p); continue
-        tree.append({"path":p,"mode":"100644","type":"blob","sha":b["sha"]})
+    for p in paths:
+        data=open(os.path.join(OUT,p),"rb").read()
+        if len(data)>95*1024*1024:
+            data=data[:95*1024*1024]
+        b=j(base+"/git/blobs","POST",{"encoding":"base64","content":base64.b64encode(data).decode()})
+        tree.append({"path":"mined/"+p,"mode":"100644","type":"blob","sha":b["sha"]})
     t=j(base+"/git/trees","POST",{"base_tree":c["tree"]["sha"],"tree":tree})
-    nc=j(base+"/git/commits","POST",{"message":msg,"tree":t["sha"],"parents":[head]})
+    nc=j(base+"/git/commits","POST",{"message":msg+" %d"%int(time.time()),"tree":t["sha"],"parents":[head]})
     j(base+"/git/refs/heads/"+branch,"PATCH",{"sha":nc["sha"]})
     return nc["sha"][:10]
 
-RES={}
-def put(n,t): RES[n]=t
-
-if not HEAVY:
-    L("light os, skip heavy work"); sys.exit(0)
-
-# ---------- 1. 下载 APK ----------
-apk="apk.apk"
-if not os.path.exists(apk):
-    a=j("https://api.github.com/repos/zhaoyi-habs/miniworld-tools/releases/tags/mnw-v1")
-    url=None
-    for x in (a or {}).get("assets",[]):
-        if x["name"]=="MiniWorld_latest.apk": url="https://api.github.com/repos/zhaoyi-habs/miniworld-tools/releases/assets/%d"%x["id"]
-    L("asset",url)
-    t0=time.time()
-    r=urllib.request.Request(url,headers={**H,"Accept":"application/octet-stream"})
-    with urllib.request.urlopen(r,timeout=1800) as resp, open(apk,"wb") as f:
-        while True:
-            b=resp.read(1<<22)
-            if not b: break
-            f.write(b)
-    L("apk",os.path.getsize(apk),"%.1fs"%(time.time()-t0))
+REPO="zhaoyi-habs/MiniWorldPkgUnpacker"
+log("=== START ===", time.strftime("%H:%M:%S"))
 subprocess.run("df -h . | tail -1",shell=True)
 
+# ---------- 1. APK ----------
+apk="apk.apk"
+if not os.path.exists(apk) or os.path.getsize(apk)<1e9:
+    a=j("https://api.github.com/repos/zhaoyi-habs/miniworld-tools/releases/tags/mnw-v1")["assets"]
+    aid=[x["id"] for x in a if x["name"]=="MiniWorld_latest.apk"][0]
+    t0=time.time()
+    r=urllib.request.urlopen(urllib.request.Request(
+        "https://api.github.com/repos/zhaoyi-habs/miniworld-tools/releases/assets/%d"%aid,
+        headers={**H,"Accept":"application/octet-stream"}),timeout=1800)
+    with open(apk,"wb") as f:
+        while True:
+            b=r.read(1<<23)
+            if not b: break
+            f.write(b)
+    log("apk %d bytes in %.1fs"%(os.path.getsize(apk),time.time()-t0))
+
+import zipfile
 z=zipfile.ZipFile(apk)
 names=z.namelist()
-L("entries",len(names))
-lines=["%s\t%d"%(n,z.getinfo(n).file_size) for n in names]
-put("01_apk_entries.txt","\n".join(lines))
+log("entries",len(names))
+W("01_apk_entries.txt","\n".join("%s\t%d"%(n,z.getinfo(n).file_size) for n in names))
 
-# ---------- 2. pkg 头 ----------
-pk=[n for n in names if n.endswith(".pkg")]
-hh=[]
-for n in pk:
-    with z.open(n) as f: b=f.read(64)
-    hh.append("%s\n  head32=%s\n  hex64=%s"%(n,b[:32].hex(),b.hex()))
-put("02_pkg_headers.txt","\n".join(hh))
+WANT=["assets/script_res.pkg","assets/game_language.pkg","assets/remote_res.pkg",
+      "assets/first_res.pkg","assets/game_res.pkg","assets/material_ogles3.pkg",
+      "lib/armeabi-v7a/liblibGameApp.so"]
+for n in WANT:
+    if n in names:
+        dst=os.path.join(ROOT,os.path.basename(n))
+        if not os.path.exists(dst):
+            with z.open(n) as s,open(dst,"wb") as f:
+                while True:
+                    b=s.read(1<<23)
+                    if not b: break
+                    f.write(b)
+        log("extract",n,os.path.getsize(dst))
 
-# ---------- 3. 提取待扫描文件 ----------
-os.makedirs("ex",exist_ok=True)
-targets=[]
-for n in names:
-    if n.endswith(".pkg"): targets.append(n)
-    elif n.endswith(".so") and "GameApp" in n: targets.append(n)
-    elif n.endswith(".dex") or n.endswith(".js"): targets.append(n)
-extracted=[]
-for n in targets:
-    sz=z.getinfo(n).file_size
-    if sz>700*1024*1024 and "GameApp" not in n: continue
-    try:
-        fp="ex/"+n.replace("/","__")
-        with z.open(n) as s, open(fp,"wb") as f:
-            while True:
-                b=s.read(1<<22)
-                if not b: break
-                f.write(b)
-        extracted.append((n,fp,os.path.getsize(fp)))
-    except Exception as e: L("EXTRACT FAIL",n,e)
-L("extracted",[(a,c) for a,b,c in extracted])
-put("03_extracted.txt","\n".join("%s\t%s\t%d"%x for x in extracted))
+# ---------- 2. 解包 pkg ----------
+UNPACK=["script_res.pkg","game_language.pkg","remote_res.pkg","first_res.pkg","game_res.pkg","material_ogles3.pkg"]
+subprocess.run("pip install -q lz4 pillow 2>&1 | tail -2",shell=True)
+os.makedirs("unp",exist_ok=True)
+filelist=[]
+for p in UNPACK:
+    if not os.path.exists(p): continue
+    od=os.path.join("unp",p.replace(".pkg",""))
+    ok=False
+    for tool in ["extract_game_script.py","unpack_pkg_intl.py","unpack_common_res.py"]:
+        if not os.path.exists(tool): continue
+        r=subprocess.run("python3 %s %s %s"%(tool,p,od),shell=True,
+                         capture_output=True,text=True,timeout=1800)
+        if os.path.isdir(od) and sum(len(f) for _,_,f in os.walk(od))>0:
+            ok=True; log("unpacked",p,"with",tool); break
+        else:
+            log("  fail",p,tool,(r.stderr or r.stdout)[-200:].replace("\n"," "))
+    if ok:
+        for dp,_,fs in os.walk(od):
+            for fn in fs:
+                fp=os.path.join(dp,fn)
+                try: filelist.append("%s\t%d"%(fp.replace("\\","/"),os.path.getsize(fp)))
+                except Exception: pass
+W("02_unpacked_files.txt",filelist)
+log("unpacked file count",len(filelist))
 
-# ---------- 4. 全量 strings + 分类 ----------
+# ---------- 3. 从解包文件里挖 API ----------
+APIPAT=re.compile(rb"\b([A-Z][A-Za-z0-9_]{2,40})[:.]([A-Za-z][A-Za-z0-9_]{2,40})\s*\(")
+EVTPAT=re.compile(rb"[\"']([A-Z][A-Za-z0-9]{1,30}\.[A-Z][A-Za-z0-9]{1,40})[\"']")
+apis=collections.Counter(); evts=collections.Counter()
+luafiles=[]
+for dp,_,fs in os.walk("unp"):
+    for fn in fs:
+        fp=os.path.join(dp,fn)
+        if fn.endswith((".lua",".txt",".json",".csv",".xml",".js")) or (not os.path.splitext(fn)[1] and os.path.getsize(fp)<2_000_000):
+            luafiles.append(fp)
+log("scannable files",len(luafiles))
+for fp in luafiles[:60000]:
+    try: d=open(fp,"rb").read(4_000_000)
+    except Exception: continue
+    for m in APIPAT.finditer(d): apis[(m.group(1)+b":"+m.group(2)).decode("utf-8","ignore")]+=1
+    for m in EVTPAT.finditer(d): evts[m.group(1).decode("utf-8","ignore")]+=1
+W("03_api_calls.txt","\n".join("%s\t%d"%(k,v) for k,v in apis.most_common(40000)))
+W("04_event_names.txt","\n".join("%s\t%d"%(k,v) for k,v in evts.most_common(40000)))
+log("api calls",len(apis),"events",len(evts))
+
+# ---------- 4. .so 字符串挖掘 ----------
+so="liblibGameApp.so"
 CATS={
- "A_service":   re.compile(rb"[A-Za-z][A-Za-z0-9_]{2,40}(Service|Mgr|Manager|System)"),
- "B_component": re.compile(rb"[A-Za-z][A-Za-z0-9_]{2,40}(Component|Cmp)"),
- "C_mini":      re.compile(rb"Mini[A-Za-z0-9_]{2,40}"),
- "D_ugc":       re.compile(rb"[A-Za-z0-9_.\-]{0,25}(?:UGC|ugc|Ugc)[A-Za-z0-9_.\-]{0,25}"),
- "E_trigger":   re.compile(rb"[A-Za-z0-9_.\-]{0,20}(Trigger|BluePrint|GameRule|CustomUI|Customui|DeveloperStore|SandboxNode)[A-Za-z0-9_.\-]{0,20}"),
- "F_dotted":    re.compile(rb"[A-Za-z][A-Za-z0-9_]{1,30}\.[A-Za-z][A-Za-z0-9_]{1,30}"),
- "H_func":      re.compile(rb"(?:get|set|add|remove|del|delete|is|has|play|stop|create|destroy|register|unregister|send|show|hide|open|close|update|start|reset|find|can|apply|buy|equip)[A-Z][A-Za-z0-9_]{2,40}"),
- "I_snake":     re.compile(rb"[a-z][a-z0-9]{2,30}(?:_[a-z0-9]{1,20}){1,6}"),
- "J_path":      re.compile(rb"[A-Za-z0-9_/\-]{4,90}\.(?:lua|json|csv|xml|txt|pb|proto|js|ts|skanim|skeleton|mesh|mat|omod|ent)"),
- "K_event":     re.compile(rb"[Oo]n[A-Z][A-Za-z0-9_]{2,40}"),
- "L_signal":    re.compile(rb"[A-Za-z][A-Za-z0-9_]{2,40}(?:Signal|Event)"),
- "M_cjk":       re.compile("[\u4e00-\u9fff]{2,40}".encode("utf-8")),
+ "A_service":re.compile(rb"[A-Za-z][A-Za-z0-9_]{1,40}(?:Service|Mgr|Manager|System)\b"),
+ "B_component":re.compile(rb"[A-Za-z][A-Za-z0-9_]{1,40}(?:Component|Cmp)\b"),
+ "C_mini":re.compile(rb"Mini[A-Za-z0-9_.]{1,40}\b"),
+ "D_ugc":re.compile(rb"[A-Za-z0-9_.\-]{0,25}[Uu][Gg][Cc][A-Za-z0-9_.\-]{0,25}\b"),
+ "E_trigger":re.compile(rb"[A-Za-z0-9_.\-]{0,20}(?:[Tt]rigger|[Bb]lue[Pp]rint|[Gg]ame[Rr]ule|[Cc]ustomUI|[Cc]ustomUi)[A-Za-z0-9_.\-]{0,20}\b"),
+ "F_dotted":re.compile(rb"\b[A-Za-z][A-Za-z0-9_]{1,30}\.[A-Za-z][A-Za-z0-9_]{1,30}\b"),
+ "G_snake":re.compile(rb"\b[a-z][a-z0-9]{2,30}(?:_[a-z0-9]{1,20}){1,5}\b"),
+ "H_func":re.compile(rb"\b(?:get|set|add|remove|del|delete|is|has|play|stop|create|destroy|register|unregister|send|show|hide|open|close|update|start|reset|find|can|on|apply|buy|equip)[A-Z][A-Za-z0-9_]{2,40}\b"),
+ "I_path":re.compile(rb"[a-zA-Z0-9_/\-]{4,90}\.(?:lua|json|csv|xml|txt|proto|pb|js|ts|skanim|skeleton|mesh|mat)\b"),
 }
-found={k:set() for k in CATS}
-for n,fp,sz in extracted:
-    cnt=0; prev=b""
-    with open(fp,"rb") as f:
+found={k:collections.Counter() for k in CATS}
+cjk=collections.Counter()
+CJKRE=re.compile("[\u4e00-\u9fff]{2,40}".encode())
+def scan(path,tag,limit=None):
+    n=0
+    with open(path,"rb") as f:
+        prev=b""
         while True:
-            b=f.read(1<<22)
+            b=f.read(1<<23)
             if not b: break
-            buf=prev+b; cnt+=len(b)
+            n+=len(b)
+            buf=prev+b
             for k,rgx in CATS.items():
                 for m in rgx.finditer(buf):
                     s=m.group()
-                    if len(s)>160: continue
-                    found[k].add(s)
-            prev=buf[-200:]
-    L("scanned",n,sz,{k:len(v) for k,v in found.items()})
+                    if len(s)<=120: found[k][s]+=1
+            for m in CJKRE.finditer(buf):
+                try: cjk[m.group().decode("utf-8")]+=1
+                except Exception: pass
+            prev=buf[-256:]
+            if limit and n>limit: break
+    log("scanned",tag,n,"uniq",{k:len(v) for k,v in found.items()})
+if os.path.exists(so): scan(so,"so")
+for p in UNPACK:
+    if os.path.exists(p) and os.path.getsize(p)<250*1024*1024: scan(p,p)
+for k in CATS:
+    W("10_%s.txt"%k,"\n".join("%s\t%d"%(s.decode("utf-8","ignore"),c) for s,c in found[k].most_common(60000)))
+W("11_chinese.txt","\n".join("%s\t%d"%(s,c) for s,c in cjk.most_common(60000)))
+log("cjk uniq",len(cjk))
 
-for k,v in found.items():
-    if k=="M_cjk":
-        out=sorted(x.decode("utf-8","ignore") for x in v)
-    else:
-        out=sorted(x.decode("latin-1") for x in v)
-    put("10_%s.txt"%k,"\n".join(out[:60000]))
-put("99_stats.txt","\n".join("%s\t%d"%(k,len(v)) for k,v in found.items()))
-
-# ---------- 5. 解包 pkg（用仓库自带解包器） ----------
-unpack_log=[]
-for n in pk:
-    fp="ex/"+n.replace("/","__")
-    if not os.path.exists(fp): continue
-    outd="unp/"+os.path.basename(fp)
-    os.makedirs(outd,exist_ok=True)
-    for script in ["unpack_pkg_intl.py","unpack_common_res.py","extract_game_script.py"]:
-        if not os.path.exists(script): continue
-        try:
-            p=subprocess.run([sys.executable,script,fp,outd],capture_output=True,timeout=1800)
-            o=(p.stdout[-1500:]+p.stderr[-1500:]).decode("utf-8","ignore")
-            unpack_log.append("### %s %s rc=%d\n%s"%(n,script,p.returncode,o))
-            if p.returncode==0 and os.listdir(outd):
-                break
-        except Exception as e:
-            unpack_log.append("### %s %s EXC %s"%(n,script,e))
-    cnt=sum(len(f) for _,_,f in os.walk(outd))
-    L("unpacked",n,cnt,"files")
-put("20_unpack_log.txt","\n".join(unpack_log))
-
-# ---------- 6. 解包产物清单 ----------
+W("99_log.txt",LOG)
+res=sorted(os.listdir(OUT))
+log("outputs",res)
 try:
-    allf=[]
-    for root,dirs,files in os.walk("unp"):
-        for f in files:
-            p=os.path.join(root,f)
-            try: allf.append("%s\t%d"%(p,os.path.getsize(p)))
-            except Exception: pass
-    put("21_unpacked_files.txt","\n".join(allf[:200000]))
-    # 按扩展名统计
-    c=collections.Counter(os.path.splitext(x)[1] for x in allf)
-    put("22_ext_stats.txt","\n".join("%s\t%d"%(k,v) for k,v in c.most_common(300)))
+    sha=push(REPO,res,msg="ugc3 mine")
+    log("PUSHED",sha,len(res))
 except Exception as e:
-    L("LIST FAIL",e)
-
-# ---------- 7. 推送 ----------
-try:
-    sha=gh_commit({"out_run_%s_%s/"%(OSN,PYV)+k:v for k,v in RES.items()},msg="dig %s %s"%(OSN,PYV))
-    L("PUSHED",sha,len(RES))
-except Exception as e:
-    L("PUSH FAIL",e)
-    for k in list(RES)[:2]:
-        try: gh_commit({"fallback/%s"%k:RES[k][:200000]},msg="fb")
-        except Exception as e2: L("FB FAIL",e2)
-L("=== DIG done ===",time.time())
+    log("PUSH FAIL",repr(e)[:300])
+W("99_log.txt",LOG)
+try: push(REPO,["99_log.txt"],msg="log")
+except Exception: pass
+print("DONE")
