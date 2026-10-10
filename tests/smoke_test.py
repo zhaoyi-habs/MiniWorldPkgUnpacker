@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 import os,sys,time,subprocess,base64,json,urllib.request,traceback,re,collections
-TAG="s6"
+TAG="s7"
 if sys.platform!="linux": sys.exit(0)
 if sys.version_info[:2]!=(3,12): sys.exit(0)
 B="https://api.github.com/repos/zhaoyi-habs/MiniWorldPkgUnpacker"
@@ -134,8 +134,12 @@ def main():
     put("hex/%s_all.txt"%TAG,"\n".join(sorted(Cnt)))
     put("hex/%s_freq.txt"%TAG,"\n".join("%s\t%d"%(w,c) for w,c in Cnt.most_common()))
     groups=collections.defaultdict(list)
+    KEY=('ugc','sandboxengine','visualcode','aieditor','sceneeditor','sidebar',
+         'gamebasesetting','uieditor','scenetree','trigger','scriptsupport','miniui')
     for rel in Dir:
-        g="/".join(rel.split("/")[:4])
+        low=rel.lower()
+        if not any(k in low for k in KEY): continue
+        g=rel.rsplit("/",1)[0]
         groups[g].append(rel)
     out=[]
     for g in sorted(groups):
@@ -143,8 +147,15 @@ def main():
         for rel in groups[g]:
             for w,c in Dir[rel].items(): cc[w]+=1
         out.append("\n##### %s  (%d files, %d ids)"%(g,len(groups[g]),len(cc)))
-        out+=["%s\t%d"%(w,c) for w,c in cc.most_common(4000)]
+        out+=["%s\t%d"%(w,c) for w,c in cc.most_common(3000)]
     put("hex/%s_dir.txt"%TAG,"\n".join(out))
+    pf=[]
+    for rel in sorted(Dir):
+        if ('ugc/logic/' in rel or 'sandboxengine' in rel):
+            cc=Dir[rel]
+            pf.append("\n### %s  (%d)"%(rel,len(cc)))
+            pf+=["%s\t%d"%(w,c) for w,c in cc.most_common(1500)]
+    put("hex/%s_file.txt"%TAG,"\n".join(pf))
     put("hex/%s_done.txt"%TAG,"ok")
 try: main()
 except Exception: put("hex/%s_err.txt"%TAG,traceback.format_exc())
