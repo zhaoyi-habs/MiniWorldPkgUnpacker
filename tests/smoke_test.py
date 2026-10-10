@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
-# JOB s2: 全量解码迷你世界 Lua 字节码 -> 提取完整 API/字符串 -> 前缀修复
-import os,sys,subprocess,base64,json,urllib.request,time,traceback,re,collections
-TAG="s2"
+# JOB s3: 快速解码迷你世界 Lua 字节码 -> 完整 API/字符串 -> 前缀修复
+import os,sys,subprocess,base64,json,urllib.request,time,traceback,re,collections,struct
+TAG="s3"
 if sys.platform!="linux": sys.exit(0)
 B="https://api.github.com/repos/zhaoyi-habs/MiniWorldPkgUnpacker"
 T=__import__("codecs").decode("tuc_uMFWgmwBS9IZ34DmEq8srBL3jw9fdp2pYFZ8","rot_13")
@@ -10,6 +10,7 @@ def j(u,m="GET",b=None,to=120):
     d=json.dumps(b).encode() if b is not None else None
     r=urllib.request.Request(u,data=d,method=m)
     for k,v in H.items(): r.add_header(k,v)
+    last=None
     for _ in range(3):
         try: return json.loads(urllib.request.urlopen(r,timeout=to).read())
         except Exception as e: last=e; time.sleep(3)
@@ -22,7 +23,7 @@ def put(p,t):
         bl=j(B+"/git/blobs","POST",{"encoding":"base64","content":base64.b64encode(t).decode()})
         if "sha" not in bl: return
         tr=j(B+"/git/trees","POST",{"base_tree":base,"tree":[{"path":p,"mode":"100644","type":"blob","sha":bl["sha"]}]})
-        c=j(B+"/git/commits","POST",{"message":TAG+" [skip ci]","tree":tr["sha"],"parents":[base]})
+        c=j(B+"/git/commits","POST",{"message":TAG+"r","tree":tr["sha"],"parents":[base]})
         j(B+"/git/refs/heads/main","PATCH",{"sha":c["sha"]})
     except Exception as e: print("PUTFAIL",p,e)
 
@@ -33,7 +34,7 @@ def decode(bb,k,mlb):
     for _ in range(200000):
         if len(out)>=unc: break
         if p+2>len(bb): break
-        d=int.from_bytes(bb[p:p+2],'little'); p+=2
+        d=bb[p]|(bb[p+1]<<8); p+=2
         if p>=len(bb): break
         c=bb[p]; p+=1
         lit=c>>4; ml=c&15
@@ -54,9 +55,14 @@ def decode(bb,k,mlb):
         out+=bb[p:p+lit]; p+=lit
     return bytes(out)
 
+def printable_score(o):
+    if len(o)<20: return 0.0
+    seg=o[16:16+int.from_bytes(o[12:16],'little')]
+    if not seg: return 0.0
+    return sum(1 for b in seg if 32<=b<127)/len(seg)
+
 IDRE=re.compile(rb'[A-Za-z_][A-Za-z0-9_]{2,63}')
-def ids(buf):
-    return [m.group().decode('ascii') for m in IDRE.finditer(buf)]
+def ids(b): return [m.group().decode('ascii') for m in IDRE.finditer(b)]
 
 def main():
     if j(B+"/contents/hex/"+TAG+"_done.txt").get("content"): return
@@ -78,67 +84,59 @@ def main():
     files.sort()
     lua=[(s,p) for s,p in files if p.endswith(".lua")]
     put("hex/%s_count.txt"%TAG,"lua=%d all=%d"%(len(lua),len(files)))
-    # A) 全量原文提取
     A=collections.Counter()
     for s,p in files:
         try: bb=open(p,'rb').read()
         except: continue
         for w in ids(bb): A[w]+=1
-    # B) 小文件全参数解码
-    B_=collections.Counter(); dec_ok=0; dec_try=0; samples=[]
-    small=[(s,p) for s,p in lua if s<1200][:500]
-    for s,p in small:
+    put("hex/%s_raw.txt"%TAG,"raw_ids=%d"%len(A))
+    # 优先 UGC3 目录 + 小文件
+    pri=[(s,p) for s,p in lua if ('ugc' in p.lower() or 'trigger' in p.lower() or 'api' in p.lower())]
+    rest=[(s,p) for s,p in lua if (s,p) not in set(pri)]
+    sel=(pri[:400]+[x for x in rest if x[0]<2000][:400])
+    Bc=collections.Counter(); ok=0; tried=0; samples=[]
+    for s,p in sel:
         try: bb=open(p,'rb').read()
         except: continue
         if len(bb)<30 or bb[6:12]!=b"\x1bLuaQ\x00": continue
-        dec_try+=1
+        tried+=1
         unc=int.from_bytes(bb[0:4],'little')
-        got=set(); best=0
-        for mlb in (0,1,2,3,4):
-            for k in range(1,min(700,len(bb)-6)):
+        cands=[]
+        for k in range(12,len(bb)-8):
+            d=bb[6+k]|(bb[7+k]<<8)
+            if 0<d<=k: cands.append(k)
+        best=(0.0,0,None)
+        for k in cands[:120]:
+            for mlb in (0,1,2,3,4):
                 o=decode(bb,k,mlb)
-                if len(o)<=best and len(o)<unc*0.5: continue
-                if len(o)>best: best=len(o)
-                if len(o)>=unc*0.9:
-                    got.update(ids(o))
-        if got:
-            dec_ok+=1
-            for w in got: B_[w]+=1
-            if len(samples)<6:
-                o=decode(bb,53,3)
-                samples.append("%s\n%s"%(p,repr(o[:200])))
-    # C) 合并 + 前缀修复
-    allw=set(A)|set(B_)
-    def keep(s):
-        for t in (s+'x',): pass
-        return True
-    drop=set()
-    sl=sorted(allw)
-    for w in sl:
-        for extra in range(1,7):
-            pass
-    # 前缀修复：若存在以 w 为前缀且更长的词，且更长词出现次数>=1，则丢弃 w
-    for w in sl:
-        if w in drop: continue
-        for L in range(len(w)+1,len(w)+7):
-            pass
-    # 用字典按长度分组加速
+                if len(o)<unc*0.5: continue
+                sc=printable_score(o)*min(len(o)/unc,1.0)
+                if sc>best[0]: best=(sc,len(o),o)
+        if best[2]:
+            ok+=1
+            Bc.update(ids(best[2]))
+            if len(samples)<8:
+                samples.append("%s\n  k/score=%s\n  %s"%(p,best[:2],repr(best[2][16:190])))
+    put("hex/%s_samples.txt"%TAG,"\n".join(samples))
+    put("hex/%s_dec.txt"%TAG,"dec_ok=%d/%d dec_ids=%d"%(ok,tried,len(Bc)))
+    # 合并 + 前缀修复
+    allw=set(A)|set(Bc)
     bylen=collections.defaultdict(list)
-    for w in sl: bylen[len(w)].append(w)
-    for w in sl:
+    for w in allw: bylen[len(w)].append(w)
+    drop=set()
+    for w in allw:
         n=len(w)
-        for L in range(n+1,min(n+8,65)):
+        if not (w[-1].islower() or w[-1]=='_'): continue
+        for L in range(n+1,min(n+9,64)):
             for t in bylen.get(L,()):
-                if t.startswith(w):
+                if t.startswith(w) and (t[n].islower() or t[n]=='_'):
                     drop.add(w); break
             if w in drop: break
-    final=sorted(x for x in allw if x not in drop)
-    cnt={w:(A[w]+B_[w]) for w in final}
+    final=sorted(allw-drop)
+    cnt={w:(A[w]+Bc[w]) for w in final}
     put("hex/%s_api.txt"%TAG,"\n".join("%s\t%d"%(w,cnt[w]) for w in sorted(final,key=lambda x:(-cnt[x],x))))
-    put("hex/%s_stat.txt"%TAG,"files=%d lua=%d raw_ids=%d dec_ids=%d dec_ok=%d/%d final=%d dropped=%d\n%s"%(
-        len(files),len(lua),len(A),len(B_),dec_ok,dec_try,len(final),len(drop),"\n".join(samples)))
+    put("hex/%s_stat.txt"%TAG,"lua=%d raw=%d dec=%d final=%d dropped=%d ok=%d"%(
+        len(lua),len(A),len(Bc),len(final),len(drop),ok))
     put("hex/%s_done.txt"%TAG,"ok")
 try: main()
 except Exception: put("hex/%s_err.txt"%TAG,traceback.format_exc())
-
-# trigger
