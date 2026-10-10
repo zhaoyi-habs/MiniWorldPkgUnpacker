@@ -174,11 +174,11 @@ W("99_log.txt",LOG)
 res=sorted(os.listdir(OUT))
 log("outputs",res)
 try:
-    sha=push(REPO,res,msg="ugc3 mine")
+    sha=push(REPO,res,msg="ugc3 mine [skip ci]")
     log("PUSHED",sha,len(res))
 except Exception as e:
     log("PUSH FAIL",repr(e)[:300])
 W("99_log.txt",LOG)
-try: push(REPO,["99_log.txt"],msg="log")
+try: push(REPO,["99_log.txt"],msg="log [skip ci]")
 except Exception: pass
 print("DONE")
