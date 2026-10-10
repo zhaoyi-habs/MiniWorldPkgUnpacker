@@ -1,10 +1,8 @@
 # -*- coding: utf-8 -*-
-"""JOB15: 从 script_res.pkg / game_res.pkg 中提取 Lua 5.1 字节码的完整常量字符串。
-之前的名字被截断（ApiA / isPlayerD / ClassEx），原因是走了 UTF-8 文本转储而非二进制解析。
-这次直接按 Lua 5.1 undump 格式解析常量表，拿到完整字符串。"""
-import os, sys, subprocess, base64, json, urllib.request, traceback, re, struct, time
+"""JOB16: 取回 script_res.pkg 中原始 .lua 文件样本（base64），供本地分析封装格式"""
+import os, sys, subprocess, base64, json, urllib.request, traceback, time
 
-TAG = "s15"
+TAG = "s16"
 if sys.platform != "linux":
     sys.exit(0)
 if sys.version_info[:2] != (3, 12):
@@ -56,206 +54,50 @@ def put(p, t):
     return False
 
 
-# ---------------- Lua 5.1 undump ----------------
-class R:
-    def __init__(self, d):
-        self.d = d
-        self.p = 0
-
-    def u8(self):
-        v = self.d[self.p]; self.p += 1; return v
-
-    def i32(self):
-        v = struct.unpack_from("<i", self.d, self.p)[0]; self.p += 4; return v
-
-    def u32(self):
-        v = struct.unpack_from("<I", self.d, self.p)[0]; self.p += 4; return v
-
-    def num(self):
-        self.p += 8; return 0.0
-
-    def s(self):
-        n = self.u32()
-        if n == 0:
-            return b""
-        v = self.d[self.p:self.p + n]; self.p += n
-        if v.endswith(b"\x00"):
-            v = v[:-1]
-        return v
-
-
-def parse_lua51(data):
-    """返回 (source_path, [strings])；失败抛异常"""
-    if data[:4] != b"\x1bLua":
-        raise ValueError("not lua")
-    ver = data[4]
-    if ver != 0x51:
-        raise ValueError("ver %x" % ver)
-    r = R(data)
-    r.p = 12
-    strs = []
-
-    def rd_str():
-        v = r.s()
-        strs.append(v)
-        return v
-
-    def proto(depth):
-        if depth > 24:
-            raise ValueError("deep")
-        src = rd_str()
-        r.i32(); r.i32()
-        r.u8(); r.u8(); r.u8(); r.u8()
-        sc = r.i32(); r.p += sc * 4
-        sk = r.i32()
-        for _ in range(sk):
-            t = r.u8()
-            if t == 0:
-                pass
-            elif t == 1:
-                r.u8()
-            elif t == 3:
-                r.num()
-            elif t == 4:
-                rd_str()
-            else:
-                raise ValueError("ktype %d" % t)
-        sp = r.i32()
-        sons = []
-        for _ in range(sp):
-            sons.append(proto(depth + 1))
-        sli = r.i32(); r.p += sli * 4
-        slv = r.i32()
-        for _ in range(slv):
-            rd_str(); r.i32(); r.i32()
-        sup = r.i32()
-        for _ in range(sup):
-            rd_str()
-        return src
-
-    src = proto(0)
-    return src, strs
-
-
-def scan_ascii(data):
-    """兜底：二进制里直接扫可打印串"""
-    out = []
-    for m in re.finditer(rb"[A-Za-z_][A-Za-z0-9_\.]{3,63}", data):
-        out.append(m.group())
-    return out
-
-
-ID_OK = re.compile(rb"^[A-Za-z_][A-Za-z0-9_\.:]*$")
-
-
 def main():
     if j(B + "/contents/hex/" + TAG + "_done.txt").get("content"):
         return
     log = []
     os.makedirs("w", exist_ok=True)
     os.chdir("w")
-    t0 = time.time()
     subprocess.run("curl -sL -o apk.apk https://github.com/zhaoyi-habs/miniworld-tools/"
                    "releases/download/mnw-v1/MiniWorld_latest.apk", shell=True)
-    log.append("apk %d bytes %.0fs" % (os.path.getsize("apk.apk") if os.path.exists("apk.apk") else -1, time.time() - t0))
-    subprocess.run("unzip -o -q apk.apk 'assets/*.pkg'", shell=True)
+    subprocess.run("unzip -o -q apk.apk 'assets/script_res.pkg'", shell=True)
+    os.makedirs("unp/script_res", exist_ok=True)
+    for sc in ("python3 ../unpack_common_res.py assets/script_res.pkg unp/script_res",
+               "python3 ../UnpackAll.py assets/script_res.pkg unp/script_res"):
+        subprocess.run(sc + " >/dev/null 2>&1", shell=True)
+        if os.path.isdir("unp/script_res") and os.listdir("unp/script_res"):
+            break
 
-    per_file = {}     # relpath -> [strings]
-    nlua = nbin = ntxt = 0
-    fails = []
-    for pkg in ("script_res", "game_res"):
-        fp = "assets/%s.pkg" % pkg
-        if not os.path.exists(fp):
-            continue
-        out = "unp/%s" % pkg
-        os.makedirs(out, exist_ok=True)
-        for sc in ("python3 ../unpack_common_res.py %s %s" % (fp, out),
-                   "python3 ../UnpackAll.py %s %s" % (fp, out)):
-            subprocess.run(sc + " >/dev/null 2>&1", shell=True)
-            if os.path.isdir(out) and os.listdir(out):
-                break
-        cnt = 0
-        for root, ds, fs in os.walk(out):
-            for x in fs:
-                p = os.path.join(root, x)
-                try:
-                    data = open(p, "rb").read()
-                except Exception:
-                    continue
-                rel = os.path.relpath(p, out)
-                strs = None
-                src = None
-                if data[:4] == b"\x1bLua":
-                    try:
-                        src, strs = parse_lua51(data)
-                        nbin += 1
-                    except Exception as e:
-                        fails.append(rel + " :: " + str(e)[:60])
-                        strs = None
-                if strs is None:
-                    if data[:4] == b"\x1bLua":
-                        strs = scan_ascii(data)
-                    else:
-                        ntxt += 1
-                        strs = scan_ascii(data)
-                # 过滤：只保留像标识符的 + 短的中文/文本
-                keep = []
-                seen = set()
-                for s in strs:
-                    if not s or len(s) > 96:
-                        continue
-                    if s in seen:
-                        continue
-                    seen.add(s)
-                    if ID_OK.match(s) or (b" " not in s and len(s) <= 40):
-                        keep.append(s)
-                real = src.decode("utf-8", "replace") if src else rel
-                per_file[real] = keep
-                cnt += 1
-        log.append("%s: %d files" % (pkg, cnt))
-    log.append("lua_bin=%d plain=%d fails=%d" % (nbin, ntxt, len(fails)))
+    allf = []
+    for root, ds, fs in os.walk("unp/script_res"):
+        for x in fs:
+            p = os.path.join(root, x)
+            allf.append((os.path.relpath(p, "unp/script_res"), p, os.path.getsize(p)))
+    log.append("files=%d" % len(allf))
+    allf.sort(key=lambda t: t[2])
 
-    # ---------- 输出 1：按文件列出完整字符串 ----------
-    paths = sorted(per_file)
-    buf = []
-    for p in paths:
-        ss = per_file[p]
-        if not ss:
-            continue
-        buf.append("#### %s" % p)
-        for s in ss:
-            buf.append(s.decode("utf-8", "replace"))
-    big = "\n".join(buf)
-    log.append("api_text %d bytes" % len(big))
-    CH = 700000
-    n = 0
-    i = 0
-    while i < len(big):
-        chunk = big[i:i + CH]
-        put("hex/%s_api_%02d.txt" % (TAG, n), chunk)
-        n += 1
-        i += CH
-    # ---------- 输出 2：全局唯一串 + 词频 ----------
-    freq = {}
-    for p in paths:
-        for s in per_file[p]:
-            freq[s] = freq.get(s, 0) + 1
-    items = sorted(freq.items(), key=lambda kv: (-kv[1], kv[0]))
-    lines = []
-    for s, c in items:
-        try:
-            t = s.decode("utf-8")
-        except Exception:
-            continue
-        if "\n" in t or "\r" in t:
-            continue
-        lines.append("%d\t%s" % (c, t))
-    put("hex/%s_freq.txt" % TAG, "\n".join(lines))
-    # ---------- 输出 3：文件清单 ----------
-    put("hex/%s_files.txt" % TAG, "\n".join(paths))
-    log.append("unique=%d chunks=%d" % (len(items), n))
-    put("hex/%s_log.txt" % TAG, "\n".join(log) + "\nfails:\n" + "\n".join(fails[:80]))
-    put("hex/%s_done.txt" % TAG, "ok %d chunks" % n)
+    # 挑样本：ugc/logic/api 下的 + 最小的几个
+    picks = [t for t in allf if "ugc/logic/api" in t[0]][:4]
+    picks += allf[:3]
+    out = []
+    for rel, p, sz in picks:
+        data = open(p, "rb").read()
+        out.append("@@@ %s %d" % (rel, sz))
+        out.append(data[:256].hex())
+        out.append(base64.b64encode(data).decode())
+    put("hex/%s_samples.txt" % TAG, "\n".join(out))
+
+    # 统计：前 4 字节分布
+    from collections import Counter
+    c = Counter()
+    for rel, p, sz in allf[:2000]:
+        d = open(p, "rb").read(4)
+        c[d.hex()] += 1
+    log.append("magic4: " + str(c.most_common(10)))
+    put("hex/%s_log.txt" % TAG, "\n".join(log))
+    put("hex/%s_done.txt" % TAG, "ok")
 
 
 try:
