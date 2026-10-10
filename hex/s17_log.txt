@@ -1,0 +1,9 @@
+apk 1060171073 5s
+script_res: lua=6089
+game_res: lua=0
+remote_res: lua=0
+parsed=6089 fail=0
+api_text=9361429
+unique_idents=171691 chunks=14
+cjk_chunks=1
+FAILS:
