@@ -1,0 +1,81 @@
+
+### trigger/trigger.lua  (134)
+LuaQ @F:/RainbowMaster/MiniGame/AssetRunti s/../CommonResource/Script/luas ugc/logic/trigger/T V.lua class _insid_ event_name_ World vTeam YActor8 Player GroupIns Creature IArea :Ite YQuest JTime JSounc YBlock :ool IBuff VarLib2l iObjLib Graphicss ListenPr VUI "UI) 0Dis Board FDisp CloudSever "VCz pVCMathLh YDebug :Cod bdefine{ rconstru `getApi% 3wai Bstop defaultMethodv 4new BnsID :del _check Nlear spliceModpacketID2 3get, BFunc SActiv 2AndI 5exei PeNewE BName fregOncA Uunreg OriginIdInMap "_b bstatus!  tid ALast eEffectId sSplitStc  ge ingInJson Sase bToggle YpairsH qmakeObj "Ex InstanceID QCache Aself vloadMod (for generator)d vcontrol apiKey uthreadp( esecond 8ype function `rint C== <` > error!!! can not f\ a the mD 2 == eassertM %rg $_m aid__ Utmpid 3abl2 !tv9 W@B /me, peatExeCount 0art Qreqent Edata Igidx$ 1disL Ibegv 6end index) Vlimit &ep 1tosN )!"VM !qSupport+ regDynamic +!ST I\@ Begin 1cur& Scopy_ 5orky 1ins  SC MainMana sPlugini %id 1R# 4@@ TAA &0get /OKC Cok ebuffid 5lvl Emark 9dex3 Wret 9key
+
+### trigger/triggeractor.lua  (61)
+LuaQ @F:/RainbowMaster/MiniGame/AssetRunti s/../CommonResource/Script/luas ugc/logic/trigger/T Actor.lua class define fonstru getPosition FaceDirec 5alc 'By Angle 7Yaw; appendSpeed OrthogonalJ Facade hangeCustomModel recoverinitial brandomB playerHurt xArea QCheck BTypek findNearestBlockk pGetProj leShootPc 2MobO `Skin cBase \self "VM pErrorCo Uobjid Lposx *vx 5dir 9yaw" Ypitch"  is_ Rtable onumber Udecay FACE_DIRECTION DIR_NEG_X ZPOS_X< AfaceY modleNameC %id %hp aattack oareaidW %bj 5ect /Y@ "Z@ "_G CurEventParam QHelpO 2dat 5uin
+
+### trigger/triggerarea.lua  (96)
+LuaQ @F:/RainbowMaster/MiniGame/AssetRunti s/../CommonResource/Script/luas ugc/logic/trigger/T Area.lua class define constructor. hasxyz Preate- BRect1 rdestroyB offset BReal$ fexpand$ getCenterPos hRandom( BbjIns 4pos Tblock$ Players #ll uures pfillByB cearAll 6one replace4 SToNew> Objs bSpecif BType cBase \self  is RError Rtable number Bmath= Ofloo1 "VM6 rForTemp7 `Code !OKv lengthx Hbx Hex posbeg Wend Gok eareaid _Range lposBeg 5End 3py_m FA@ FBA TAA PositionV2.  Q@ 2 * 5val :min %ax !fr /id @p# H#1W@ \#  U K RGroupu %*L \.Y VSf 0BA B8! &!0 Eface C0% 3 5 }#FT  BA 5"! zFA *;Xstart -fB lbidsrc 5dst W$C ?$A "]inairS(S =5T }?@ eFAILED SAA TABB 6End
+
+### trigger/triggerblock.lua  (96)
+LuaQ @F:/RainbowMaster/MiniGame/AssetRunti s/../CommonResource/Script/luas ugc/logic/trigger/T Block.lua class define attrGet BLOCKATTR EXPLODE_RESISTANCE4 onstructord 1get` 3Att sDistance Compare Wid ByPos Aheck SwitchStatus /VC !If InBoxArea gDir SettingAttJ SreateH Sstroy BDrop( dreplac: "us Lfill ^learA 0opy %To brandom8 getLastC mefName BDesc bFacadeC rPlayAct* uePrint cBase Aself Munpa ErrorCode !OK Etype arvicen Ifunc Uvalue FA@ Bmath Esqrt& Lpos1 "VM$ /ID 9pos %id Xstart Zinx Zaxx OData4 Tfloors [dir 5att isactive tonumberr 5ace Eolor PTA uBA 4abs* jdimx jposx (for index) Vlimit Fstep HAB w$!ll. %%' 1tmp Ainfo@! f(*} 1%id (8@ (%A 80. eanimid  ym f2o AType cFAILEDg boolean ostringO 5uep Uangle 6Mod)
+
+### trigger/triggerbuff.lua  (42)
+LuaQ @F:/RainbowMaster/MiniGame/AssetRunti s/../CommonResource/Script/luas ugc/logic/trigger/T Buff.lua class define add remove 2has vcompare creplac Get |DefName qDesc bearAll: &ad `LeftTiP cBase #VM `Data ErrorCode tonumber )4@ 2sel objid 6buf# yforever useconds Cok Gid 5lvl 5id1 bNumByB. $4@ =src 9dst num (for index) Vlimit Fstep 5sec
+
+### trigger/triggercloudsever.lua  (57)
+LuaQ @F:/RainbowMaster/MiniGame/AssetRunti s/../CommonResource/Script/luas ugc/logic/trigger/T CloudSever.lua class define onstructor playerid2string getN Value jNumber RIndex :Key8 etDataListv 7Any kremove2 !Byr Clear[ automaticT ansmitToMap> DRoom ROther 0Get YID Category+ *ID! cBase \self $tot AF@@ CurEventParam Edata 5key 'VM ErrorCodeE %OK elibvar 3typ Ctabl ?valA 6any= uEA @TA createNew2 3NamR uregOnce, TunregO %id eglobalA 1ins Asort" ]mapid Oroom UGroup 2All NnextR
+
+### trigger/triggercreature.lua  (84)
+LuaQ @F:/RainbowMaster/MiniGame/AssetRunti s/../CommonResource/Script/luas ugc/logic/trigger/T Creature.lua class define onstructor getAttribute fackTyp [ID anstanc 3Nam getPosition3 FaceYaw fheckIfb rBoxArea ETeamT GroupIdx "eA kill Tremov  sWithId hImmune SettingAttStatus 0ion playBodyEffectA irandom tryMoveToPos $By Ostop &et CScal XSound1 2Las 4ObjJ Dplac GetM# RerDef `Desc BBase Var rData p@@ Bself "VM0 ErrorCode !OKB Uobjid Pattrt 5val Fvalu 5ackr -idX %id =yawR dFAILEDb startpos 9dim jminx Zaxx Oteam =idx^  EA DWorl Fpawn 5num "ea# Ubopen {oggle -Id qparticl\ oPlayer ivolume9 Ypitch% eisLoop onumber 7act "5F -hp _block d'Q aI% FA@
+
+### trigger/triggercreaturegroup.lua  (66)
+LuaQ @F:/RainbowMaster/MiniGame/AssetRunti s/../CommonResource/Script/luas ugc/logic/trigger/T CreatureGroup.lua class define onstructor makeObj# PEx SeTemp: addP #To remove GFrom5 Lclea Cexec CWith 4get0 =Num jIdx %By Is? 4All drandom BBase` Var NO0 Sset \self metatable __index "VM SIns 5arg Pfunc @objg 1ins% Bpair arrobjs (for generator) Vstate vcontrol Uobjid Smgr 5key 0For ErrorCode COK Sret ESF Scopy_ curparam( &ByL etoggle Edata 1new- Vlimit &ep !dxL Cid 5num aresult #F@ FA@ 9val
+
+### trigger/triggerdebug.lua  (73)
+LuaQ @F:/RainbowMaster/MiniGame/AssetRunti s/../CommonResource/Script/luas ugc/logic/trigger/T Debug.lua class define onstructor set getLogData logQ Begin `End Check LogValid 3set Event lParams TOther qConditiU iult (Ac `Report+ "un9 )Ac EInfo Se[ CustomFunc cBase Toggle tartTime logIdx Aselfa eenable %dx F@@ 6exe( GindeE Arund /id 0new= 1cur] 1log @W@@ "VM@ 0mmi  ri O-- < > error! not found log! Elog 4 3 is pBA Acellb ZB$ Q(for A Vlimit Fstep "EA #yp tnumber 1idx /cs 9gid 3temJ oinsert! QBreakZ FB@ FA+ 0$@ 3Poi5 3arg ~func :/ 
+
+### trigger/triggerdisplayboard.lua  (23)
+LuaQ @F:/RainbowMaster/MiniGame/AssetRunti s/../CommonResource/Script/luas ugc/logic/trigger/T DisplayBoard.lua class define constructor show  Chide !et Picture VideoUrl CustomUI ViedoPlayMode CsetN cBase \self DisPT aErrorC Eerid =url5 /uik
+
+### trigger/triggergraphics.lua  (78)
+LuaQ @F:/RainbowMaster/MiniGame/AssetRunti s/../CommonResource/Script/luas ugc/logic/trigger/T Graphics.lua class define onstructor make# BText< zflotage kPro ArrowToPos Surface ELine Image getRandomColF Ereat- !ByD 3Txtm ~ProGres _remov ObjID 3PosJ cBase \self @VM Utitle Ifont Iapha4 Fityp4 autoWrap *v1 5pos 5ize %id O_' 3obj Q_7 OW< Yimgid 3sca Bmathx bstring* bformatK H%02X tonumberN $0@( &AB4 FAD$ /AEp ptable ErrorCode fFAILED rRAPHICS} _PROGRESS SUSPENDBOOK BHORN2 ARROW_POS vACTOR BLINE CRFACy _IMAGE EInfo &BB< AD, /AE 5dir eoffest IAA 'BC DFA  &bF AAz- h&3 ?.se P'@ Po!
+
+### trigger/triggergroup.lua  (97)
+LuaQ @F:/RainbowMaster/MiniGame/AssetRunti s/../CommonResource/Script/luas ugc/logic/trigger/T Group.lua class define onstructor ID2Type get, ValueByNo insertIn_ remove( _Index $ea jlength RandomPosS }Area oNumber oStringL ~Bool Olock1 OItem1 ?Tim bEffect $An0 Glete #No add aplaceVR 7has wCountBy' UgetNo 1NumX ?Max 'inB getAllObjs BBaseZ gPrivat; slibID r@B SCOPE_RATE gVARCFG CFGTOVARTYP PLAYERGROUP' CREATURE 9SIT HAREA JNUMBf hSTRING xBOOLEAN PBLOCK LITEM :TIM fEFFECT7 7TMP2 Aself Bmath _floor "VM aRunLib libvarid tmpconfg avarcfg ErrorCode COK Wuin Wret 5obj Ctabl oFAILED| AA  [num %no #O\ ABr TBA kuin2 BAq TCA 4old 8new pb9 bSpcialX ?RD A 1 E&  'WE Tplaye Gid @P*c A@D) b4/] FA@ FAA UTempV -id]
+
+### trigger/triggeritem.lua  (89)
+LuaQ @F:/RainbowMaster/MiniGame/AssetRunti s/../CommonResource/Script/luas ugc/logic/trigger/T Item.lua class define constructor heckDrop$ dNum  If InBoxArea Compare Pid Areat ToStorageBox Pspawn HFrom 8ear ProjectileJ ForPlayer HtroyT setCD enterCDO getPosition FEven fame playBodyEffectById Ostop &et _Scale% ByObjDir randomx GLast 9Act BDesc rGetAttr 3Bas `Var Sset Aself Onum1) pos 8art 5dim jminx Zaxx 1FA "VM? WorldContainer 2add 9num eremove AByID O\A 8dir& 6pee% ErrorCode !OK 3obj Sure @@a Sret %id uSkillCD AAx 8Tarf !ur UParam MdataB )IdO epartic ACB FDB vyeHeigh OSize Bmath GsqrtF !By Qratio @W@ Ganim [str _AA {value &*^ &WC   3@  9val
+
+### trigger/triggerlistenpram.lua  (14)
+LuaQ @F:/RainbowMaster/MiniGame/AssetRunti s/../CommonResource/Script/luas ugc/logic/trigger/T ListenPram.lua class define onstructor AddGraphics, cBase \self "VM Yobjid Yfuncs
+
+### trigger/triggerminicode.lua  (32)
+LuaQ @F:/RainbowMaster/MiniGame/AssetRunti s/../CommonResource/Script/luas ugc/logic/trigger/T Code.lua class define onstructor mpareCourseAnswer WithEventBlock getSimilarityUgcVC AArea* Types rotalNum ASpec emptyAction `Condit cBase \self @VM udeObjId workspace gmethod 8mod= eareaid Epos3 EEnum NumInfo Btype\ ptable SGroup atabRet
+
+### trigger/triggerobjlib.lua  (21)
+LuaQ @F:/RainbowMaster/MiniGame/AssetRunti s/../CommonResource/Script/luas ugc/logic/trigger/T ObjLib.lua class define getObjWithKey cBase Object, AreaData  ErrorCode Position, bLiving Bmath `floor AItem8 Aself Euuid ret [val
+
+### trigger/triggerplayer.lua  (275)
+LuaQ @F:/RainbowMaster/MiniGame/AssetRunti s/../CommonResource/Script/luas ugc/logic/trigger/T Player.lua class define onstructor stop getHost; bgetAll: BAttr killq rosition reviveToPos RPoint rsetTeam2 yFaceDir Yaw addItemToBackpack ,VC adiscar4 3Gri Fmove  By QID AearPa Fswap calcSpaceNumFor kNum 2ame bmountA 2Winh playAct $By `notify= Info2Self SystemMsg 6use cDefeat etJoinJudge GQuit rotateCamera changeViewMode  Ac  chrowAt$ GDrop tryNaviga =eck isEquipByResID 3get[ UObjidp 3AimK BodyEffectById4 ?top &et RScale XSound1 RMusic CDire} dvertising 2New openDevStore? 2Tab GoodsBuyDialog tetailed# VideoUrl  UI Dhide ropsType !ct QOffBy actCreate RactDe BMovet BNickB mmuneAttack* 5hak #QQ grateQQ OpenAppraise- BColl InviteBull  Is StandReportEvent SendFriendApply: 2Has ShortCutIx 8tem ActInHan} aenough 2hase 2BarF UBoxBy bforceO "UI= uiltinRank IHide MobileVib 2Pos. ?Rot 6Fvom 2Set_ BAnim/ 2Rot& 8Res^ GSkin: GetFirst eGroupS 7New MapIntera/ 1Rel rData 2set  cBase teamBeforeC 2tmp Cpair "VM (for gen Sor) vcontrol 5tmp Fvalu 3UinY QrrorC 5num Uerarr )id Aattr% 5val Lposx 5pos 2Sq SAA FACE_DIRECTIONM DIR_POS_X TNEG_Z ufacedir Qt_yaw` 3Las 4ite -`A BACKPACK_TYPE SHORTCUT NVENTORY Bt_ba1 index) Vlimit &ep gridtable l"Cde QA@ durabilit OILED =src 5dst 5AA @AA 0!pr+ $z- .d:111:  2 =  !, J$ !os`  !b tonumber 1Cur -CPara i(S  DChat *%ndD4 4R- getCurToolID!5 3cur[ uResults )/7 b/E Upitch Tviewmc ]slock u80ion %sw @%./ PLAYERATTR: ITEM_DISABLE_THROW EDROP1 HR{ FBA 3can G#" G#S CG# Ptotal =sid3 aRiding _ObjId &:X s$:". $:dW F.Id< particleI evolume MLoop hB  5,rx QB@ 1New c2UgOnce, &!ID HA+ Tunregm !ad\ Sins B*. )!_I "oO #/Q 9age 4SW customDesc JRf Z=b F9X] ^F* +uit #ti YSz f-S EQUIP_START_INDEX -id ]power X0. #tr =str Cnisfrinu+ <ani bTE Y/W rME /a! %ix !oE 4&P #/G 'ti$& amplitud:&RI ""in* 2SO |bR K.3 Y)O  &@ PosTransformTo >Fov ?By /ByW (_^ Einfo Isadd |!ec> Pov !enDJ y.L f._v y_y 95L 3Fobjs $ @ +"@ :2extY) ForTempc %id FAui_ ^Id
+
+### trigger/triggerplayergroup.lua  (66)
+LuaQ @F:/RainbowMaster/MiniGame/AssetRunti s/../CommonResource/Script/luas ugc/logic/trigger/T PlayerGroup.lua class define onstructor makeObj# PEx reateTemp: addN #To bremove GFrom1 Jclea exec CWith get. ;Num 2Idx %By #Is9 2All brandom BBase Var NO. Sset \self setmetatable __index "VM SIns 5arg Pfunc @objg 1ins% Bpair~ arrobjs (for generator) Vstate vcontrol Uobjid Smgr 5key 0For ErrorCode COK Sret GSF 3py_ curparam( $By: etoggle Edata 1new+ Vlimit &ep !dx< 5num aresult Cno #F@ FA@ 9val
+
+### trigger/triggerquest.lua  (14)
+LuaQ @F:/RainbowMaster/MiniGame/AssetRunti s/../CommonResource/Script/luas ugc/logic/trigger/T Quest.lua class define onstructor Sreate" Sstroy cBase \self Einfo playeridl
+
+### trigger/triggersound.lua  (13)
+LuaQ @F:/RainbowMaster/MiniGame/AssetRunti s/../CommonResource/Script/luas ugc/logic/trigger/T Sound.lua class define onstructor play  Cstop cBase \self -idU
+
+### trigger/triggerteam.lua  (40)
+LuaQ @F:/RainbowMaster/MiniGame/AssetRunti s/../CommonResource/Script/luas ugc/logic/trigger/T Team.lua class define attrGet EAMATTR PLAYER_NUM get PlayerNums SCORE VScoreh 2Set constructor 3Att rgetRank Creatures BBase4 2Var rData Sset \self kunpack ErrorCode eteamid Etype rvicename Ifunc Sret Uvalue FA@ }ranking pGroup ReTemp 9num 5arr #F@ 9val
+
+### trigger/triggertimer.lua  (40)
+LuaQ @F:/RainbowMaster/MiniGame/AssetRunti s/../CommonResource/Script/luas ugc/logic/trigger/T Timer.lua class define onstructo Wreate" Edele startBackward 7For pausP Tresum #op Rchang  7get 3how "ps Ghide cBase \self "VM Iname Eowid isprivat' intervalsec !_( !_/ !_6 !P= ErrorCode !OK Sret Uvalue PlayerGroup bgetAll  pg ucontent Carrp
+
+### trigger/triggertool.lua  (21)
+LuaQ @F:/RainbowMaster/MiniGame/AssetRunti s/../CommonResource/Script/luas ugc/logic/trigger/T Tool.lua class define constructor getByteCount substring cBase \self Ebyte W@@ Btype ,en ucontent eartIdx 8end Xcur harArr
+
+### trigger/triggerui.lua  (77)
+LuaQ @F:/RainbowMaster/MiniGame/AssetRunti s/../CommonResource/Script/luas ugc/logic/trigger/T vUI.lua class define CustomAnim+ MOVETO $BY SCAL+ ROTAT- onstructor getElementID akeUIText 0set 5ure rSize 3Fon SColor 3howp Ehide rotat UAlpha Position getItemIc RerObj "us wBlockIca IRole# RShuct SmoothMoveTo "By AScal- /To BPlay BStop cBase \self StringSplit EuiID )id' cdata banimid 6mod  ZA "VM *ui playerid Einfo 5url Uwidth eheight Xeffec pageIndex PrrorC %OK+ Gitem Sret Kid ?obj Obuff FA@ ?ype "[A F[B /BY 5dir Yisadd" 5len Engle W@A "AE< _print +By ,By fD!
+
+### trigger/triggervarlib.lua  (27)
+LuaQ @F:/RainbowMaster/MiniGame/AssetRunti s/../CommonResource/Script/luas ugc/logic/trigger/T VarLib.lua class define `Var onstructor Data get 2set- rPrivate# cBase 2key 1uin6 BselfF VVM GlobalVarWithKeym Btype table Cmeta __index 2new 2dat 5val QFA@
+
+### trigger/triggervarlib2.lua  (43)
+LuaQ @F:/RainbowMaster/MiniGame/AssetRunti s/../CommonResource/Script/luas ugc/logic/trigger/T VarLib2.lua class define onstructor getGlobalVarWithKey |Private |Base BVar2! rData 2set r@B SCOPE_RATE gVARCFG CFGTOVARTYP sOSITION$ sAREAINS cNUMBER cSTRING dBOOLEAV EPLAY@ SGROUP WBLOCK GITEM tCREATUR cCTORID 5TIM aEFFECTv Aself 2VM ErrorCode COK libvarid Wret 5val oPlayer 9uin @W@ Arlib FA@
+
+### trigger/triggerworld.lua  (142)
+LuaQ @F:/RainbowMaster/MiniGame/AssetRunti s/../CommonResource/Script/luas ugc/logic/trigger/T World.lua class define onstructor/ hasxyz CurHour get 2set< getDefSpawn xyzToPos offset 2Val/ 0getp 1get sTime eather PlayerTotD 2All rGravity rMidJoin RayLength RayBlock# calcDistance HorizontalAngle eVertic playEffectOnPosition Nstop XScale randomPak "le) &IDn WSoundY 0recc eByPos26 _Coord normalizeDirW rdirToVe EventAdna "ID getBuildingb bSetTxt1 5oup1 2ate" BFrom6 dString9 VanishingSpeed SetSkyBoxTempl\ 3Map [Color' BAttr Param fFilters ;LUT- VSwitc 3Bas# RValue1 \self isTypeErr bnumber $to 5pos =val{ IAB "VMK Eport 2int" `Code /OK- 5ret eFAILED Gx2 Gy2 Cz2 ERule `create 9num 5arr !Fac Bmath1 pmax $in /$@ AllowMidwayJo: FBA lposSrc 5Dst Gok -idS 5qrt 2deg. #acH J_h wDst_h PosMul v_degree costheta= QLastCD "al% %Id evolume p.& eisLoop B S& Lpos1 #0.2 #6R8 3rad /"in 5yaw [+b@ 5dir Slta @A( AA( +BA@ *37DNa /&i "90aul _local @serv 5key 5str )8@ -,@ $yp< =url% 1Q@ Z!/ SKYBOXFILTER TEMPLATEf L5S UCOLOR E%Sw $m_)5 )9b 99T WEf @%C
