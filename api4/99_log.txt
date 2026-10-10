@@ -1,4 +1,4 @@
-=== JOB4 START === 14:54:00
+=== JOB4 START === 14:53:56
 pkg 55446388
 unpack rc 0 index: 881390 bytes
 records: 8172   paths: 8172   (index consumed 881390 / 881390 bytes)
@@ -7,4 +7,4 @@ extracted: 8172  md5 ok: 8172 bad: 0
 pathless (orphan) records: 0 -> _orphans/
 
 files 8174
-sample: ['unp/script_res/_unpack_report.json', 'unp/script_res/_containers/manifest.json', 'unp/script_res/commonresource/script/json/skillscfg/skill/skill_pro_sword1.json']
+sample: ['unp/script_res\\_unpack_report.json', 'unp/script_res\\commonresource\\script\\csvdef\\utf8\\achievement.csv', 'unp/script_res\\commonresource\\script\\csvdef\\utf8\\aiabilityconfig.csv']
