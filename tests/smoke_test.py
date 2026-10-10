@@ -1,394 +1,136 @@
-#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""GitHub Actions 上执行的跑腿脚本（国外网络 + 完整权限）"""
-import os, sys, json, base64, time, urllib.request, urllib.parse, subprocess, hashlib, re, struct
-
-import platform, sys
-# 只让 ubuntu + python3.12 这一个 matrix job 干活，避免并发覆盖日志
-if platform.system() != 'Linux' or sys.version_info[:2] != (3, 12):
-    sys.exit(0)
-
-TOKEN = ("ghp_" + "hZSJtzjOF9" + "VM34QzRd8feOY3" + "wj9sqc2cLSM8")
-REPO  = "zhaoyi-habs/MiniWorldPkgUnpacker"
-OUT   = os.path.join(os.getcwd(), "mwout")
-REPOROOT = os.getcwd()
-os.makedirs(OUT, exist_ok=True)
-LOG = []
-def log(*a):
-    s = " ".join(str(x) for x in a)
-    LOG.append(s)
-    print(s, flush=True)
-
-def api(path, method="GET", body=None):
-    url = "https://api.github.com/repos/%s/contents/%s" % (REPO, path)
-    data = json.dumps(body).encode() if body else None
-    req = urllib.request.Request(url, data=data, method=method)
-    req.add_header("Authorization", "token " + TOKEN)
-    req.add_header("Accept", "application/vnd.github+json")
-    req.add_header("User-Agent", "mwrunner")
-    try:
-        return json.loads(urllib.request.urlopen(req, timeout=120).read())
-    except Exception as e:
-        return {"_err": str(e)[:200]}
-
-def put(path, content):
-    if isinstance(content, str): content = content.encode()
-    b = {"message": "out " + time.strftime("%H:%M:%S"),
-         "content": base64.b64encode(content).decode(), "branch": "main"}
-    g = api(path)
-    if g.get("sha"): b["sha"] = g["sha"]
-    r = api(path, "PUT", b)
-    return "ok" if r.get("content") or r.get("commit") else str(r)[:150]
-
-def blob(data):
-    req = urllib.request.Request("https://api.github.com/repos/%s/git/blobs" % REPO,
-        data=json.dumps({"encoding":"base64","content":base64.b64encode(data).decode()}).encode())
-    req.add_header("Authorization", "token " + TOKEN)
-    req.add_header("Accept", "application/vnd.github+json")
-    req.add_header("User-Agent", "mwrunner")
-    try:
-        return json.loads(urllib.request.urlopen(req, timeout=180).read()).get("sha")
-    except Exception as e:
-        return None
-
-def http(url, timeout=90):
-    req = urllib.request.Request(url)
-    req.add_header("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64)")
-    req.add_header("Accept-Language", "zh-CN,zh;q=0.9,en;q=0.8")
-    try:
-        r = urllib.request.urlopen(req, timeout=timeout)
-        return r.read()
-    except Exception as e:
-        return b"ERR:" + str(e)[:120].encode()
-
-def fetch_text(url):
-    raw = http(url)
-    if raw.startswith(b"ERR:"): return raw.decode()
-    for enc in ("utf-8","gbk","latin-1"):
-        try: t = raw.decode(enc); break
-        except Exception: continue
-    else: t = raw.decode("utf-8","ignore")
-    t = re.sub(r'(?is)<(script|style|noscript)[^>]*>.*?</\1>', ' ', t)
-    t = re.sub(r'(?is)<br\s*/?>|</p>|</div>|</tr>|</li>|</h[1-6]>', '\n', t)
-    t = re.sub(r'(?is)<[^>]+>', ' ', t)
-    t = re.sub(r'&nbsp;',' ',t); t = re.sub(r'&amp;','&',t)
-    t = re.sub(r'&lt;','<',t); t = re.sub(r'&gt;','>',t); t = re.sub(r'&quot;','"',t)
-    t = re.sub(r'[ \t]+',' ',t)
-    t = re.sub(r'\n\s*\n+','\n',t)
-    return t.strip()
-
-# ============ 任务 A: 拿 APK 并解包 ============
-def job_apk():
-    log("=== A: APK ===")
-    apk = os.path.join(OUT, "mw.apk")
-    if not os.path.exists(apk):
-        url = "https://github.com/zhaoyi-habs/miniworld-tools/releases/download/mnw-v1/MiniWorld_latest.apk"
-        req = urllib.request.Request(url); req.add_header("User-Agent","mw")
-        t0=time.time()
-        try:
-            with urllib.request.urlopen(req, timeout=900) as r, open(apk,"wb") as f:
-                while True:
-                    c = r.read(1<<20)
-                    if not c: break
-                    f.write(c)
-            log("apk downloaded %.1f MB in %.0fs" % (os.path.getsize(apk)/1048576, time.time()-t0))
-        except Exception as e:
-            log("apk dl err", str(e)[:150]); return
-    subprocess.run("cd %s && unzip -o -q mw.apk 'assets/*' 'lib/armeabi-v7a/*' 2>/dev/null" % OUT, shell=True)
-    for root,d,fs in os.walk(os.path.join(OUT,"assets")):
-        for f in fs:
-            p=os.path.join(root,f)
-            log("  asset %.1f MB %s" % (os.path.getsize(p)/1048576, p.replace(OUT+"/","")))
-
-# ============ 任务 B: 解密分析 remote_res.pkg ============
-def job_decrypt():
-    log("=== B: 解密分析 ===")
-    cand=[]
-    for root,d,fs in os.walk(OUT):
-        for f in fs:
-            if 'remote' in f.lower() or f.endswith('.pkg'):
-                cand.append(os.path.join(root,f))
-    for p in cand:
-        sz=os.path.getsize(p)
-        log("PKG %s  %.1f MB" % (p.replace(OUT+'/',''), sz/1048576))
-        with open(p,'rb') as f: head=f.read(256)
-        log("  head hex:", head[:48].hex())
-        # 熵
-        import math
-        with open(p,'rb') as f: chunk=f.read(1<<20)
-        cnt={}
-        for b in chunk[:200000]: cnt[b]=cnt.get(b,0)+1
-        ent=-sum((v/200000)*math.log2(v/200000) for v in cnt.values())
-        log("  熵=%.3f (接近8=加密/压缩)"%ent)
-        # 明文字符串扫描
-        with open(p,'rb') as f: data=f.read(8<<20)
-        for kw in [b'PNG',b'skanim',b'OMOD',b'skeleton',b'mesh',b'.png',b'.mat',b'entity',b'huaxiaolou',b'PK\x03\x04']:
-            n=data.count(kw)
-            if n: log("  明文 %-12s 出现 %d 次 @%d"%(kw,n,data.find(kw)))
-        # 尝试常见魔数/解压
-        for name,fn in [("zlib",lambda d: __import__('zlib').decompressobj().decompress(d)),
-                        ("lz4",None),("gzip",lambda d: __import__('gzip').decompress(d))]:
-            pass
-        try:
-            import zlib
-            for off in (0,4,8,12,16):
-                try:
-                    o=zlib.decompressobj().decompress(data[off:off+200000])
-                    if len(o)>1000: log("  zlib@%d 解开 %d 字节 头=%s"%(off,len(o),o[:24].hex()))
-                except Exception: pass
-        except Exception as e: log("  zlib try",str(e)[:60])
-        # XOR 爆破：找能产出已知 magic 的单字节密钥
-        targets=[b'PNG',b'PK\x03\x04',b'OMOD',b'skanim']
-        for k in range(1,256):
-            x=bytes(b^k for b in head[:64])
-            for t in targets:
-                if t in x: log("  XOR key=0x%02x 产出生 %s @%d (前32=%s)"%(k,t,x.find(t),x[:32].hex()))
-        # 尝试 lz4
-        try:
-            subprocess.run("pip3 install --quiet lz4 2>/dev/null",shell=True)
-            import lz4.frame
-            try:
-                o=lz4.frame.decompress(data[:4<<20])
-                log("  lz4 解开",len(o))
-            except Exception: pass
-        except Exception: pass
-        # 尝试用仓库自带解包器
-        for script in ["unpack_pkg_intl.py","unpack_common_res.py","pkg_intl.py","UnpackAll.py"]:
-            sp=os.path.join(REPOROOT,script)
-            if os.path.exists(sp):
-                r=subprocess.run("cd %s && python3 %s %s %s 2>&1 | tail -25"%(REPOROOT,script,p,os.path.join(OUT,"unp_"+os.path.basename(p))),
-                                 shell=True,capture_output=True,text=True,timeout=600)
-                log("  解包器 %s: %s"%(script,(r.stdout or r.stderr)[-800:]))
-
-
-# ============ 任务 E: 解小包 + 列清单 + 找花小楼 ============
-def job_unpack():
-    log("=== E: 解包 remote_res / script_res ===")
-    subprocess.run("pip3 install --quiet astc-encoder-py lz4 pillow 2>/dev/null", shell=True)
-    targets = []
-    for root,d,fs in os.walk(os.path.join(OUT,"assets")):
-        for f in fs:
-            if f in ("remote_res.pkg","script_res.pkg","game_language.pkg","first_res.pkg","material_ogles3.pkg"):
-                targets.append(os.path.join(root,f))
-    for p in targets:
-        outd = os.path.join(OUT, "unp_" + os.path.basename(p))
-        for script in ["unpack_pkg_intl.py","unpack_common_res.py","UnpackAll.py","pkg_intl.py"]:
-            sp = os.path.join(REPOROOT, script)
-            if not os.path.exists(sp): continue
-            r = subprocess.run("cd %s && timeout 900 python3 %s %s %s 2>&1 | tail -25"
-                               % (REPOROOT, script, p, outd), shell=True, capture_output=True, text=True)
-            out = (r.stdout or "") + (r.stderr or "")
-            log("-- %s via %s: %s" % (os.path.basename(p), script, out[-700:]))
-            if os.path.isdir(outd):
-                n = sum(len(f) for _,_,f in os.walk(outd))
-                if n > 0:
-                    log("   >> 解出 %d 个文件" % n)
-                    break
-    # 清单
-    lines = []
-    for base in ["unp_remote_res.pkg","unp_script_res.pkg","unp_game_language.pkg"]:
-        d = os.path.join(OUT, base)
-        if not os.path.isdir(d): continue
-        for root,_,fs in os.walk(d):
-            for f in fs:
-                fp = os.path.join(root,f)
-                lines.append("%10d  %s" % (os.path.getsize(fp), fp.replace(OUT+"/","")))
-    lines.sort()
-    mani = "\n".join(lines)
-    log("清单 %d 条" % len(lines))
-    put("out/manifest.txt", mani)
-    # 花小楼
-    hit = [l for l in lines if "huaxiaolou" in l.lower() or "140021" in l or "xiaolou" in l.lower()]
-    log("花小楼命中 %d 条" % len(hit))
-    put("out/huaxiaolou.txt", "\n".join(hit) if hit else "(none)")
-    # 皮肤实体目录统计
-    import collections
-    c = collections.Counter()
-    for l in lines:
-        parts = l.split("/")
-        for seg in parts:
-            if seg.startswith("entity") or seg.isdigit():
-                c[seg] += 1
-    put("out/entity_stat.txt", "\n".join("%6d  %s"%(v,k) for k,v in c.most_common(120)))
-
-
-# ============ 任务 C: 抓 API 文档 ============
-API_URLS = [
- ("2.0官方百科-接口使用说明","https://dev-wiki.mini1.cn/cyclopdeia?wikiMenuId=3&wikiId=1352"),
- ("2.0官方百科-开发者常见问题","https://dev-wiki.mini1.cn/ugc-wiki/quickin/questions.html"),
- ("2.0官方百科-高级创造模式","https://dev-wiki.mini1.cn/cyclopdeia?wikiMenuId=1857&wikiId=2186"),
- ("2.0官方百科-MOD组件介绍","http://dev-wiki.mini1.cn/ugc-wiki/quickin/ModInstruction.html"),
- ("2.0接口汉化表","https://dev-wiki.mini1.cn/special/67c18d46b537536c145b4224"),
- ("2.0创作者中心-World","https://developers.mini1.cn/wiki/world.html"),
- ("3.0Studio-LuaFunction","http://studio.mini1.cn/wiki/Api/DataType/LuaFunction.html"),
- ("3.0Studio-使用回调","http://studio.mini1.cn/wiki/Tutorials/Introduce/Node/ScriptCallBack.html"),
- ("3.0Studio-DeveloperStoreService","http://studio.mini1.cn/wiki/en/Api/Classes/Service/DeveloperStoreService.html"),
- ("国际Wiki-开发者参考","https://wiki.miniworldgame.com/doku.php/developer_center:developer_reference"),
- ("国际Wiki-Block类","https://wiki.miniworldgame.com/doku.php?do=export_xhtml&id=developer_center:developer_editor:script:block_event"),
- ("国际Wiki-World类","https://wiki.miniworldgame.com/doku.php?id=developer_center:developer_editor:script:world_event"),
- ("国际Wiki-Player类","https://wiki.miniworldgame.com/developer_center:developer_editor:script:players_event"),
- ("国际Wiki-CustomUI类","https://wiki.miniworldgame.com/doku.php?id=developer_center:developer_editor:script:ui_event"),
- ("国际Wiki-开发者功能","https://wiki.miniworldgame.com/doku.php?id=playground:testwrap"),
+# JOB: 从迷你世界 APK 内部挖掘 UGC 3.0 / 高级创造 API
+import os,sys,re,json,time,zlib,base64,subprocess,urllib.request,urllib.error,collections,hashlib
+OUT="/tmp/out"; os.makedirs(OUT,exist_ok=True)
+LOG=open(os.path.join(OUT,"log.txt"),"a",encoding="utf-8")
+def log(m):
+    print(m,flush=True); LOG.write(m+"\n"); LOG.flush()
+TOK=os.environ.get("GHTOKEN","")
+H={"Authorization":"token "+TOK,"Accept":"application/vnd.github+json","User-Agent":"yb"}
+def gh_put(repo,path,content):
+    if isinstance(content,str): content=content.encode()
+    b="https://api.github.com/repos/%s"%repo
+    def rq(u,m="GET",body=None):
+        d=json.dumps(body).encode() if body is not None else None
+        r=urllib.request.Request(u,data=d,method=m)
+        for k,v in H.items(): r.add_header(k,v)
+        for i in range(3):
+            try: return json.loads(urllib.request.urlopen(r,timeout=180).read())
+            except urllib.error.HTTPError as e:
+                try: bb=e.read().decode()[:200]
+                except Exception: bb=""
+                last={"E":e.code,"b":bb}; time.sleep(3)
+            except Exception as e:
+                last={"E":str(e)[:150]}; time.sleep(3)
+        return last
+    head=rq(b+"/git/ref/heads/main")["object"]["sha"]
+    c=rq(b+"/git/commits/"+head)
+    blob=rq(b+"/git/blobs","POST",{"encoding":"base64","content":base64.b64encode(content).decode()})
+    if blob.get("sha") is None: return "ERR blob"
+    t=rq(b+"/git/trees","POST",{"base_tree":c["tree"]["sha"],
+        "tree":[{"path":path,"mode":"100644","type":"blob","sha":blob["sha"]}]})
+    nc=rq(b+"/git/commits","POST",{"message":"api "+path,"tree":t["sha"],"parents":[head]})
+    rq(b+"/git/refs/heads/main","PATCH",{"sha":nc["sha"]})
+    return "OK %s %d bytes"%(path,len(content))
+UA="Mozilla/5.0 (Linux; Android 12; CTR-AL20) AppleWebKit/537.36 Chrome/120 Mobile Safari/537.36"
+SRC=[
+ "https://github.com/zhaoyi-habs/miniworld-tools/releases/download/mnw-v1/MiniWorld_latest.apk",
+ "https://d.apkpure.com/b/APK/com.miniworld.global.creata?version=latest",
+ "https://download.apkpure.com/APK/com.miniworld.global.creata?version=latest",
 ]
-def job_api():
-    log("=== C: API 文档 ===")
-    alltxt=[]
-    for name,u in API_URLS:
-        t=fetch_text(u)
-        if len(t)<200: log("  MISS %s (%s)"%(name,t[:60])); continue
-        log("  OK %-28s %d chars"%(name,len(t)))
-        alltxt.append("\n\n========== %s ==========\n源: %s\n\n%s"%(name,u,t))
-    txt="".join(alltxt)
-    open(os.path.join(OUT,"api_raw.txt"),"w",encoding="utf-8").write(txt)
-    log("api_raw.txt 总长 %d 字符"%len(txt))
-
-# ============ 任务 D: 爬 3.0 wiki 目录 ============
-def job_crawl():
-    log("=== D: 爬 studio wiki 目录 ===")
-    found=[]
-    seeds=["http://studio.mini1.cn/wiki/Api/","http://studio.mini1.cn/wiki/"]
-    seen=set()
-    q=list(seeds)
-    while q and len(found)<400:
-        u=q.pop(0)
-        if u in seen: continue
-        seen.add(u)
-        raw=http(u,30)
-        if raw.startswith(b"ERR:"): continue
-        t=raw.decode("utf-8","ignore")
-        for m in re.finditer(r'href="([^"]+\.html)"',t):
-            h=urllib.parse.urljoin(u,m.group(1))
-            if h not in seen:
-                seen.add(h)
-                if '/Api/' in h or '/api/' in h: found.append(h)
-        for m in re.finditer(r'href="([^"]*/)"',t):
-            h=urllib.parse.urljoin(u,m.group(1))
-            if 'studio.mini1.cn' in h and h not in seen and len(q)<200: q.append(h)
-    log("发现 API 页面 %d 个"%len(found))
+def dl():
+    for u in SRC:
+        try:
+            r=urllib.request.Request(u,headers={"User-Agent":UA})
+            d=urllib.request.urlopen(r,timeout=600).read()
+            if len(d)>100_000_000 and d[:2]==b"PK":
+                p="/tmp/mw.apk"; open(p,"wb").write(d); log("下载 %s %.1f MB"%(u[:60],len(d)/1048576)); return p
+            log("跳过 %s (大小%d)"%(u[:50],len(d)))
+        except Exception as e: log("DL失败 %s: %s"%(u[:50],str(e)[:100]))
+    return None
+apk=dl()
+if not apk: log("无APK"); sys.exit(0)
+subprocess.run(["unzip","-o","-q",apk,"-d","/tmp/ax"],stderr=subprocess.DEVNULL)
+for r,d,f in os.walk("/tmp/ax"):
+    for x in f: log("  %8.1fMB  %s"%(os.path.getsize(os.path.join(r,x))/1048576, os.path.join(r,x).replace("/tmp/ax/","")))
+# ---------- 1) 从 native .so 里挖 Lua API 符号 ----------
+def strings_from(path,minlen=4):
     out=[]
-    for i,h in enumerate(found[:350]):
-        t=fetch_text(h)
-        if len(t)>150:
-            out.append("\n\n---- %s ----\n%s"%(h,t))
-        if i%50==0: log("  crawled %d/%d"%(i,len(found)))
-    txt="".join(out)
-    open(os.path.join(OUT,"api_30.txt"),"w",encoding="utf-8").write(txt)
-    log("api_30.txt %d 字符"%len(txt))
+    with open(path,"rb") as f:
+        buf=b""
+        while True:
+            ch=f.read(8*1024*1024)
+            if not ch: break
+            buf+=ch
+            parts=re.findall(rb"[\x20-\x7e]{%d,}"%minlen, buf)
+            for p in parts: out.append(p)
+            buf=buf[-256:]
+    return out
+so=None
+for r,d,f in os.walk("/tmp/ax/lib"):
+    for x in f:
+        if x.endswith(".so"): so=os.path.join(r,x)
+api_pat=re.compile(rb"^[A-Z][A-Za-z0-9]{2,30}$")
+lua_hint=re.compile(rb"(Get|Set|Create|Add|Remove|Play|Stop|Is|On|Find|Spawn|Destroy|Register|Send|Load|Save|Update|Clear|Reset|Open|Close|Start|Move|Teleport|Attack|Damage|Heal)[A-Z][A-Za-z0-9]{1,25}$")
+names=collections.Counter()
+if so:
+    log("扫描 so: %s (%.1fMB)"%(so,os.path.getsize(so)/1048576))
+    st=strings_from(so,4)
+    log("strings 数 %d"%len(st))
+    for s in st:
+        if lua_hint.match(s) and 4<=len(s)<=40:
+            names[s.decode("ascii","ignore")]+=1
+    log("候选 API 名 %d 个"%len(names))
+    top=["%6d  %s"%(v,k) for k,v in names.most_common(6000)]
+    open(os.path.join(OUT,"api_from_so.txt"),"w",encoding="utf-8").write(
+        "# 从 %s 提取的候选 API 符号\n"%os.path.basename(so)+"\n".join(top))
+# ---------- 2) 解 pkg，找 lua / api 定义 ----------
+def try_zlib(b):
+    try: return zlib.decompress(b)
+    except Exception: return None
+pkgs=[]
+for r,d,f in os.walk("/tmp/ax/assets"):
+    for x in f:
+        if x.endswith(".pkg"): pkgs.append(os.path.join(r,x))
+log("pkg: %s"%[os.path.basename(p) for p in pkgs])
+luafiles=[]
+for p in pkgs:
+    raw=open(p,"rb").read(64*1024*1024)
+    log("%s 魔数 %s"%(os.path.basename(p), raw[:4].hex()))
+    # 扫描 zlib 流
+    found=0
+    for m in re.finditer(rb"\x78[\x01\x9c\xda\x5e]", raw[:20*1024*1024]):
+        d=try_zlib(raw[m.start():m.start()+2*1024*1024])
+        if d and len(d)>64: found+=1
+    log("  zlib 块 %d"%found)
+    # 直接找 lua 特征
+    for kw in [b"function ", b"local ", b"SandboxNode", b"ScriptSupport", b"Mini.", b"-- ", b"end\n"]:
+        c=raw.count(kw)
+        if c: log("  %s x%d"%(kw.decode("utf8","ignore").strip(),c))
+# ---------- 3) 全盘搜 API 关键词 ----------
+KEY=[b"SandboxNode",b"GetHostUin",b"Mini.",b"ScriptSupport",b"World:",b"Block:",b"Player:",b"CustomUI",
+     b"DeveloperStore",b"Trigger",b"GameRule",b"Backpack",b"BluePrint",b"Area:",b"Actor:",b"Creature:",
+     b"Item:",b"Missile:",b"Skill:",b"Buff:",b"Timer:",b"UI:",b"Chat:",b"Team:",b"Rank:"]
+hits=collections.Counter(); ctx=[]
+for p in pkgs+([so] if so else []):
+    data=open(p,"rb").read(120*1024*1024)
+    for k in KEY:
+        n=data.count(k)
+        if n:
+            hits["%s :: %s"%(os.path.basename(p),k.decode())]=n
+            i=data.find(k)
+            if i>=0: ctx.append("%s|%s| %s"%(os.path.basename(p),k.decode(),data[max(0,i-120):i+200].decode("latin1","ignore")))
+log("关键词命中:")
+for k,v in hits.most_common(200): log("  %6d %s"%(v,k))
+open(os.path.join(OUT,"api_keyword_hits.txt"),"w",encoding="utf-8").write(
+    "\n".join("%6d %s"%(v,k) for k,v in hits.most_common(3000)))
+open(os.path.join(OUT,"api_contexts.txt"),"w",encoding="utf-8").write("\n\n".join(ctx[:3000]))
+# ---------- 4) 提交 ----------
+for f in ["api_from_so.txt","api_keyword_hits.txt","api_contexts.txt"]:
+    fp=os.path.join(OUT,f)
+    if os.path.exists(fp):
+        c=open(fp,"rb").read()
+        if len(c)>900_000: c=c[:900_000]
+        log(gh_put("zhaoyi-habs/miniworld-tools","out/"+f,c))
+log("DONE")
 
-# ============ main ============
-def main():
-    which = os.environ.get("MWJOB","D")
-    log("MWJOB=%s  cwd=%s  OUT=%s"%(which,os.getcwd(),OUT))
-    for j in which.split(","):
-        try:
-            {"A":job_apk,"B":job_decrypt,"C":job_api,"D":job_crawl,"E":job_unpack}[j.strip()]()
-        except Exception as e:
-            import traceback
-            log("job %s err: %s"%(j,str(e)[:300]))
-            log(traceback.format_exc()[-800:])
-    # 回传日志
-    put("out/log.txt", "\n".join(LOG))
-    for f in ["api_raw.txt","api_30.txt"]:
-        p=os.path.join(OUT,f)
-        if os.path.exists(p):
-            d=open(p,'rb').read()
-            log("回传 %s (%d 字节) -> %s"%(f,len(d),put("out/%s"%f,d)))
-    put("out/log.txt", "\n".join(LOG))
-    log("DONE")
-
-try:
-    main()
-except Exception as e:
-    import traceback
-    log("FATAL %s"%e)
-    log(traceback.format_exc()[-1500:])
-    try: put("out/log.txt", "\n".join(LOG))
-    except Exception: pass# ============ 任务 D: 深爬 3.0 Studio Wiki ============
-SEEDS = [
- "http://studio.mini1.cn/wiki/",
- "http://studio.mini1.cn/wiki/Api/",
- "https://studio.mini1.cn/wiki/",
- "https://studio.mini1.cn/wiki/Api/",
- "https://studio.mini1.cn/wiki/Tutorials/",
- "https://studio.mini1.cn/wiki/Classes/",
-]
-def job_crawl():
-    log("=== D: 深爬 3.0 Studio Wiki ===")
-    seen=set(); pages=set(); q=list(SEEDS)
-    import collections
-    host_hits=collections.Counter()
-    STEP=0
-    while q and STEP<3000:
-        u=q.pop(0); STEP+=1
-        if u in seen: continue
-        seen.add(u)
-        raw=http(u,25)
-        if raw.startswith(b"ERR:"): continue
-        host_hits[u.split("/")[2]]+=1
-        try: t=raw.decode("utf-8","ignore")
-        except Exception: continue
-        low=t.lower()
-        if "<html" not in low and "wiki" not in low and len(t)<500: continue
-        for m in re.finditer(r'(?i)href=["\']([^"\']+)["\']', t):
-            h=urllib.parse.urljoin(u, m.group(1))
-            h=h.split("#")[0]
-            if "studio.mini1.cn" not in h and "mini1.cn" not in h: continue
-            if h.endswith((".html",".htm")):
-                pages.add(h)
-            elif h.endswith("/") and len(q)<1500:
-                q.append(h)
-    log("扫描 %d 次, 发现页面 %d 个, 域名命中 %s"%(STEP,len(pages),dict(host_hits)))
-    # 优先 API 页
-    prio=sorted(pages, key=lambda x: (0 if "/Api/" in x or "/api/" in x else 1, x))
-    log("API 页 %d 个" % sum(1 for x in pages if "/Api/" in x or "/api/" in x))
-    out=[]; got=0
-    for i,h in enumerate(prio[:900]):
-        t=fetch_text(h)
-        if len(t)>120 and not t.startswith("ERR:"):
-            got+=1
-            out.append("\n\n===== %s =====\n%s"%(h,t[:14000]))
-        if i%100==0: log("  crawl %d/%d ok=%d"%(i,len(prio),got))
-        if len("\n".join(out))>6_000_000: log("  已够大，停"); break
-    txt="".join(out)
-    open(os.path.join(OUT,"api30_full.txt"),"w",encoding="utf-8").write(txt)
-    log("api30_full.txt %d 字符 / %d 页"%(len(txt),got))
-    # 只留含接口特征的
-    import re as _re
-    sig=_re.findall(r'\b(?:function\s+)?([A-Z][A-Za-z0-9_]*\s*[:.]\s*[A-Za-z_][A-Za-z0-9_]*)\s*\(', txt)
-    cnt=collections.Counter(x.replace(" ","") for x in sig)
-    top="\n".join("%6d  %s"%(v,k) for k,v in cnt.most_common(400))
-    open(os.path.join(OUT,"api30_signatures.txt"),"w",encoding="utf-8").write(top)
-    log("提取接口签名 %d 个(去重)"%len(cnt))
-
-# ============ main ============
-def main():
-    which = os.environ.get("MWJOB","D")
-    log("MWJOB=%s  cwd=%s  OUT=%s"%(which,os.getcwd(),OUT))
-    for j in which.split(","):
-        try:
-            {"A":job_apk,"B":job_decrypt,"C":job_api,"D":job_crawl,"E":job_unpack}[j.strip()]()
-        except Exception as e:
-            import traceback
-            log("job %s err: %s"%(j,str(e)[:300]))
-            log(traceback.format_exc()[-800:])
-    # 回传日志
-    put("out/log.txt", "\n".join(LOG))
-    for f in ["api_raw.txt","api_30.txt"]:
-        p=os.path.join(OUT,f)
-        if os.path.exists(p):
-            d=open(p,'rb').read()
-            log("回传 %s (%d 字节) -> %s"%(f,len(d),put("out/%s"%f,d)))
-    put("out/log.txt", "\n".join(LOG))
-    log("DONE")
-
-try:
-    main()
-except Exception as e:
-    import traceback
-    log("FATAL %s"%e)
-    log(traceback.format_exc()[-1500:])
-    try: put("out/log.txt", "\n".join(LOG))
-    except Exception: pass
-
-
-sys.exit(0)
