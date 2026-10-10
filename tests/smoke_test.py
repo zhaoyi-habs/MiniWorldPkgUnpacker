@@ -162,8 +162,10 @@ def main():
 
 
 
+
+
 # ==========================================================
-# YB-JOB4: obj 明文检查 + 纹理转 PNG + 分别上传
+# YB-JOB5: 校验 APK 可安装性
 # ==========================================================
 def _yb_job():
     import platform, sys as _sy
@@ -207,90 +209,49 @@ def _yb_job():
         except Exception as e:
             P("put失败 " + str(e)[:120])
 
-    def upload_asset(local, name):
-        rel = json.loads(urllib.request.urlopen(urllib.request.Request(
-            "https://api.github.com/repos/zhaoyi-habs/miniworld-tools/releases/tags/mnw-v1",
-            headers=HD), timeout=60).read())
-        rid = rel["id"]
-        for a in rel.get("assets", []):
-            if a["name"] == name:
-                try:
-                    urllib.request.urlopen(urllib.request.Request(
-                        "https://api.github.com/repos/zhaoyi-habs/miniworld-tools/releases/assets/%d" % a["id"],
-                        headers=HD, method="DELETE"), timeout=120)
-                except Exception:
-                    pass
-        return sh("curl -s -X POST --data-binary @%s -H 'Authorization: token %s' "
-                  "-H 'Content-Type: application/zip' "
-                  "'https://uploads.github.com/repos/zhaoyi-habs/miniworld-tools/releases/%d/assets?name=%s' "
-                  "| python3 -c 'import sys,json;d=json.load(sys.stdin);print(d.get(\"name\"),d.get(\"size\"))' "
-                  "| head -c 300" % (local, _TOK, rid, name), 2700)[:280]
-
     try:
-        P("===== YB JOB4 START =====")
-        sh("pip install --quiet lz4 pillow astc-encoder-py 2>&1 | tail -3", 400)
-        P("依赖: " + sh("python3 -c 'import lz4,pillow' 2>&1 | head -2")[:100])
-
-        # 下载 + 提取 + 解包
+        P("===== YB JOB5 START =====")
+        t0 = time.time()
         sh("curl -sL -m 2400 -A '%s' -o /tmp/mw.bin "
            "'https://d.apkpure.net/b/APK/com.playmini.miniworld?version=latest'" % UA, 2500)
-        sh("mkdir -p /tmp/pkg && cd /tmp/pkg && unzip -o -q /tmp/mw.bin 'assets/common_res.pkg'", 900)
-        t1 = time.time()
-        o = sh("cd %s && python3 unpack_common_res.py /tmp/pkg/assets/common_res.pkg /tmp/out 2>&1 | tail -6"
-               % os.getcwd(), 5400)
-        P("解包 %.0fs: %s" % (time.time() - t1, o[:400]))
+        P("下载 %.0fs  %s 字节" % (time.time() - t0, sh("stat -c%%s /tmp/mw.bin")[:20]))
+        P("MD5: " + sh("md5sum /tmp/mw.bin")[:60])
+        P("SHA1: " + sh("sha1sum /tmp/mw.bin")[:60])
 
-        # ---- OBJ 检查 ----
-        P("--- OBJ 文件检查 ---")
-        P("obj 数量: " + sh("find /tmp/out -name '*.obj' | wc -l")[:20])
-        P("大小合计: " + sh("find /tmp/out -name '*.obj' -printf '%s\\n' | awk '{s+=$1} END {print s/1048576\" MB\"}'")[:40])
-        P("前 5 个 obj 路径:")
-        P(sh("find /tmp/out -name '*.obj' | head -5")[:600])
-        P("第 1 个 obj 内容预览:")
-        P(sh("f=$(find /tmp/out -name '*.obj' | head -1); head -c 400 \"$f\"")[:700])
-        P("第 2 个 obj 内容预览:")
-        P(sh("f=$(find /tmp/out -name '*.obj' | sed -n 2p); head -c 300 \"$f\"")[:500])
-        P("第 3 个 obj 内容预览:")
-        P(sh("f=$(find /tmp/out -name '*.obj' | sed -n 3p); head -c 300 \"$f\"")[:500])
-        put("RESULT4.txt", "\n".join(LOG))
+        # 签名
+        P("--- 签名 ---")
+        P(sh("unzip -l /tmp/mw.bin | grep -i 'META-INF' | head -10")[:600])
+        P(sh("unzip -o -q /tmp/mw.bin 'META-INF/*.SF' -d /tmp/sig 2>/dev/null; "
+             "grep -a 'SHA1-Digest-Manifest\\|Created-By\\|Android' /tmp/sig/META-INF/*.SF 2>/dev/null | head -6")[:600])
 
-        # 打包 obj
-        sh("rm -rf /tmp/objdir && mkdir -p /tmp/objdir && cd /tmp/out && "
-           "find . -name '*.obj' -print0 | xargs -0 -I{} cp --parents {} /tmp/objdir/ 2>/dev/null; echo ok", 900)
-        sh("cd /tmp/objdir && zip -r -0 -q /tmp/obj.zip . 2>/dev/null; echo zipped", 900)
-        if os.path.exists("/tmp/obj.zip") and os.path.getsize("/tmp/obj.zip") > 500:
-            P("obj.zip: " + sh("ls -la /tmp/obj.zip | awk '{print $5}'")[:20] + " 字节")
-            P("上传 obj: " + str(upload_asset("/tmp/obj.zip", "MiniWorld_obj.zip")))
-        put("RESULT4.txt", "\n".join(LOG))
+        # ABI
+        P("--- ABI (lib 目录) ---")
+        P(sh("unzip -l /tmp/mw.bin | grep -oE 'lib/[a-z0-9_-]+/' | sort -u")[:400])
+        P("so 文件数: " + sh("unzip -l /tmp/mw.bin | grep -c '\\.so'")[:20])
+        P(sh("unzip -l /tmp/mw.bin | grep '\\.so' | awk '{print $1, $4}' | sort -rn | head -8")[:600])
 
-        # ---- 纹理转换 ----
-        P("--- 纹理转换 ---")
-        sh("chmod +x %s/tools/crn2rgba_linux_x64" % os.getcwd(), 60)
-        t2 = time.time()
-        o1 = sh("cd %s && python3 convert_textures.py /tmp/out /tmp/png 2>&1 | tail -12" % os.getcwd(), 5400)
-        P("convert_textures %.0fs:\n%s" % (time.time() - t2, o1[:800]))
-        P("PNG 累计: " + sh("find /tmp/png -name '*.png' 2>/dev/null | wc -l")[:20])
-        put("RESULT4.txt", "\n".join(LOG))
-
-        t3 = time.time()
-        o2 = sh("cd %s && python3 convert_fmt65.py /tmp/out /tmp/png tools/crn2rgba_linux_x64 2>&1 | tail -12"
-                % os.getcwd(), 7200)
-        P("convert_fmt65 %.0fs:\n%s" % (time.time() - t3, o2[:800]))
-        P("PNG 总计: " + sh("find /tmp/png -name '*.png' 2>/dev/null | wc -l")[:20])
-        P("PNG 目录大小: " + sh("du -sh /tmp/png 2>/dev/null")[:40])
-        put("RESULT4.txt", "\n".join(LOG))
-
-        # 打包 PNG
-        sh("cd /tmp/png && zip -r -0 -q /tmp/tex.zip . 2>/dev/null; echo zipped", 3600)
-        if os.path.exists("/tmp/tex.zip") and os.path.getsize("/tmp/tex.zip") > 1000:
-            P("tex.zip: " + sh("ls -la /tmp/tex.zip | awk '{print $5}'")[:20] + " 字节")
-            P("上传 tex: " + str(upload_asset("/tmp/tex.zip", "MiniWorld_textures.zip")))
-        P("===== YB JOB4 END =====")
-        put("RESULT4.txt", "\n".join(LOG))
+        # aapt
+        P("--- aapt badging ---")
+        sh("apt-get install -y aapt >/dev/null 2>&1 || true", 300)
+        a = sh("aapt dump badging /tmp/mw.bin 2>&1 | head -30", 300)
+        if a.startswith("ERR") or "not found" in a:
+            P("aapt 不可用，用 python 解析 manifest")
+            sh("pip install --quiet androguard 2>&1 | tail -2", 400)
+            code = ("from androguard.core.axml import ARSCParser, AXMLPrinter;"
+                    "import zipfile;"
+                    "z=zipfile.ZipFile('/tmp/mw.bin');"
+                    "d=z.read('AndroidManifest.xml');"
+                    "print(AXMLPrinter(d).get_xml().decode('utf8','replace')[:4000])")
+            P(sh("python3 -c \"%s\" 2>&1 | head -60" % code, 400)[:3000])
+        else:
+            P(a[:2000])
+        put("RESULT5.txt", "\n".join(LOG))
+        P("===== YB JOB5 END =====")
+        put("RESULT5.txt", "\n".join(LOG))
     except Exception as e:
         P("EXC " + str(e)[:300])
         try:
-            put("RESULT4.txt", "\n".join(LOG))
+            put("RESULT5.txt", "\n".join(LOG))
         except Exception:
             pass
 
