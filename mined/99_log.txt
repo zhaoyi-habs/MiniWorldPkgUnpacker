@@ -1,0 +1,39 @@
+=== START === 14:28:23
+apk 1060171073 bytes in 9.4s
+entries 3414
+extract assets/script_res.pkg 55446388
+extract assets/game_language.pkg 1097274
+extract assets/remote_res.pkg 1053265
+extract assets/first_res.pkg 11922855
+extract assets/game_res.pkg 209041340
+extract assets/material_ogles3.pkg 16582557
+extract lib/armeabi-v7a/liblibGameApp.so 109139024
+  fail script_res.pkg extract_game_script.py er/work/MiniWorldPkgUnpacker/MiniWorldPkgUnpacker/extract_game_script.py", line 23, in parse_index     assert N == 0, f"expected N=0, got {N}"            ^^^^^^ AssertionError: expected N=0, got 8172 
+  fail script_res.pkg unpack_pkg_intl.py <module>     from pkg_intl import open_pkg, PkgFormatError, is_pkg ImportError: cannot import name 'open_pkg' from 'pkg_intl' (/home/runner/work/MiniWorldPkgUnpacker/MiniWorldPkgUnpacker/pkg_intl.py) 
+unpacked script_res.pkg with unpack_common_res.py
+  fail game_language.pkg extract_game_script.py nner/work/MiniWorldPkgUnpacker/MiniWorldPkgUnpacker/extract_game_script.py", line 23, in parse_index     assert N == 0, f"expected N=0, got {N}"            ^^^^^^ AssertionError: expected N=0, got 39 
+  fail game_language.pkg unpack_pkg_intl.py <module>     from pkg_intl import open_pkg, PkgFormatError, is_pkg ImportError: cannot import name 'open_pkg' from 'pkg_intl' (/home/runner/work/MiniWorldPkgUnpacker/MiniWorldPkgUnpacker/pkg_intl.py) 
+  fail game_language.pkg unpack_common_res.py 错误: 路径长度异常（第 0 条，L=1181559597） 
+  fail remote_res.pkg extract_game_script.py r/work/MiniWorldPkgUnpacker/MiniWorldPkgUnpacker/extract_game_script.py", line 23, in parse_index     assert N == 0, f"expected N=0, got {N}"            ^^^^^^ AssertionError: expected N=0, got 21528 
+  fail remote_res.pkg unpack_pkg_intl.py <module>     from pkg_intl import open_pkg, PkgFormatError, is_pkg ImportError: cannot import name 'open_pkg' from 'pkg_intl' (/home/runner/work/MiniWorldPkgUnpacker/MiniWorldPkgUnpacker/pkg_intl.py) 
+unpacked remote_res.pkg with unpack_common_res.py
+  fail first_res.pkg extract_game_script.py er/work/MiniWorldPkgUnpacker/MiniWorldPkgUnpacker/extract_game_script.py", line 23, in parse_index     assert N == 0, f"expected N=0, got {N}"            ^^^^^^ AssertionError: expected N=0, got 2455 
+  fail first_res.pkg unpack_pkg_intl.py <module>     from pkg_intl import open_pkg, PkgFormatError, is_pkg ImportError: cannot import name 'open_pkg' from 'pkg_intl' (/home/runner/work/MiniWorldPkgUnpacker/MiniWorldPkgUnpacker/pkg_intl.py) 
+unpacked first_res.pkg with unpack_common_res.py
+  fail game_res.pkg extract_game_script.py er/work/MiniWorldPkgUnpacker/MiniWorldPkgUnpacker/extract_game_script.py", line 23, in parse_index     assert N == 0, f"expected N=0, got {N}"            ^^^^^^ AssertionError: expected N=0, got 3521 
+  fail game_res.pkg unpack_pkg_intl.py <module>     from pkg_intl import open_pkg, PkgFormatError, is_pkg ImportError: cannot import name 'open_pkg' from 'pkg_intl' (/home/runner/work/MiniWorldPkgUnpacker/MiniWorldPkgUnpacker/pkg_intl.py) 
+  fail game_res.pkg unpack_common_res.py 错误: 路径长度异常（第 0 条，L=1120056535） 
+  fail material_ogles3.pkg extract_game_script.py er/work/MiniWorldPkgUnpacker/MiniWorldPkgUnpacker/extract_game_script.py", line 23, in parse_index     assert N == 0, f"expected N=0, got {N}"            ^^^^^^ AssertionError: expected N=0, got 3711 
+  fail material_ogles3.pkg unpack_pkg_intl.py <module>     from pkg_intl import open_pkg, PkgFormatError, is_pkg ImportError: cannot import name 'open_pkg' from 'pkg_intl' (/home/runner/work/MiniWorldPkgUnpacker/MiniWorldPkgUnpacker/pkg_intl.py) 
+unpacked material_ogles3.pkg with unpack_common_res.py
+unpacked file count 35874
+scannable files 14185
+api calls 5 events 0
+scanned so 109139024 uniq {'A_service': 714, 'B_component': 189, 'C_mini': 201, 'D_ugc': 259, 'E_trigger': 506, 'F_dotted': 2054, 'G_snake': 4740, 'H_func': 9505, 'I_path': 227}
+scanned script_res.pkg 55446388 uniq {'A_service': 1137, 'B_component': 212, 'C_mini': 287, 'D_ugc': 806, 'E_trigger': 786, 'F_dotted': 5370, 'G_snake': 10201, 'H_func': 12350, 'I_path': 2512}
+scanned game_language.pkg 1097274 uniq {'A_service': 1137, 'B_component': 212, 'C_mini': 287, 'D_ugc': 806, 'E_trigger': 786, 'F_dotted': 5382, 'G_snake': 10210, 'H_func': 12350, 'I_path': 2512}
+scanned remote_res.pkg 1053265 uniq {'A_service': 1137, 'B_component': 212, 'C_mini': 287, 'D_ugc': 806, 'E_trigger': 786, 'F_dotted': 5400, 'G_snake': 10323, 'H_func': 12350, 'I_path': 2514}
+scanned first_res.pkg 11922855 uniq {'A_service': 1137, 'B_component': 212, 'C_mini': 287, 'D_ugc': 806, 'E_trigger': 786, 'F_dotted': 5492, 'G_snake': 10339, 'H_func': 12351, 'I_path': 2517}
+scanned game_res.pkg 209041340 uniq {'A_service': 1139, 'B_component': 213, 'C_mini': 292, 'D_ugc': 845, 'E_trigger': 789, 'F_dotted': 7361, 'G_snake': 11802, 'H_func': 12418, 'I_path': 2519}
+scanned material_ogles3.pkg 16582557 uniq {'A_service': 1139, 'B_component': 213, 'C_mini': 292, 'D_ugc': 847, 'E_trigger': 789, 'F_dotted': 7436, 'G_snake': 11846, 'H_func': 12418, 'I_path': 2520}
+cjk uniq 119068
