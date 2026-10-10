@@ -1,0 +1,7 @@
+apk 1060171073 bytes 9s
+script_res: 8174 files
+game_res: 0 files
+lua_bin=0 plain=8174 fails=0
+api_text 6566408 bytes
+unique=343325 chunks=10
+fails:
