@@ -1,0 +1,180 @@
+
+### scriptsupport/scriptgamelogic.lua  (139)
+LuaQ Script Bugc ssupport Logic require cjson tMsgPack Tale2String Hble2I init SnycAllDisplayBoardToClient PlayerVarLib BlockAnimInfo TriggerAttr GetCloudVarPlainTx RunDataTab Recover0 fEncode qCategory BRoomS PCallB EnterWorld m_curCodeTypew oRROR Fail01 Heive2 ForToHostJ ObjLibMgr Bsert Avisi tartPosX Buuid Rwidth bheightb rotationX Sdirec Rvideoc pathOrLink alphaPlate Qcolor UcaleTq Ralign Property BTask send rSTASKID PLAYER_OP_DIS _BOARD garam Vlimit Fstep Sdef bns_SRR W_mode rManagerL getUin Bairs eSSMain XLibva qArchive USER_VARLIB bvarlib Auserf aListen CCachG AErro cowid generator Vstate vcontrol key7 SingletonPt GetGlobal _anims PITEM_ _ANI Qlattr RIGGERSTATEATTRk SSMgrV0 QOgrin bformat tch7 umber Evmap epae Stry barray fieldName Dload Rturn ssetfenvH Ocall fboolea Styp Ccopyh cfunc Pvarva Func_SLOG GetF64Ins LibClassVar RSCOPE RLOCAL TVARTY WTIMERI RTimery ref5 rAREAINS BArea RGROUPu RGroupJ CREATURE Creature gNUMBER cSTRING sBOOLEAN PBLOCK gEFFECT Wope pFBA ORecti bFAILED4 m_transd Xeamma BFrom Mroom Tapp_i Vscene HLpsession ToSO1 Tele TRANSMIT_J notify _ips Q6ear CSOo VWdesc UGCGetIns RankingMg
+
+### scriptsupport/scriptsupport_init.lua  (41)
+LuaQ Script Bugc zsupport _init require Config Setting Variable otrl TriggerFactor _Debug OLoad3 OFunc3 Task Logic Content SSIO AutoSave DataBase oNumber1 Str5 noolean ObjGroup lockTypeg BItem3 Playe Creatu8 OAreaa reaIns bEffect DValu_ List VarPool MgrC PluginAllocate Shop lMgr qainMana visualcode CodeApiProxy
+
+### scriptsupport/scriptsupportconfig.lua  (41)
+LuaQ Script Bugc ssupport Config definfo bugToggle Bload Csave writeFile read path ToContent table aetmeta QFunc_ AselfA trlC Ocrypy Eowid ppairs clist generator Vstate bstring find LuaInterface getStdioRoot Bopen Bclos cdata CurO Acode ESett SafeRead Anext QFAD xunction AddSync_ Bnser gbegi
+
+### scriptsupport/scriptsupportctrl.lua  (136)
+LuaQ Script Bugc ssupport Ctrl version localTypeMin main Cgame block Tactor coustomui Hitem Xcraft xfurnace status ploM requireKey Bedit rtriggeri descLength _bconvertmode Qnstru adToolInfoUin getEncryptionFlag getDebug isModeMap getCurOwG heckDesc ToNumb RByVer tableToJson ataToCod codeToData makeNewID Direa cyExist Ureate CFile brename findFromDi Bcopy printError RGroup wapD sByIndex1 add2 xdestroy Bnfig lonh saveVari allServicen GetModPacketPath CpcStL BSetC bheader Amodp Bself AccountManat Uink AWorl3 alowneru RUtilsU string lenR xxtea b64j ucontent gbegi jbegn Sver IsUinInHis U2plus Vlimit Fstep BJSON Bairs eboolea Uvalue sffset cNext generator Snum Iurn aridbaseL Wmax lrandom ASettU gFunc_isStdioDir Zdelet Efile LuaInterfaceu2 BRoot80 aParseC GetResult dirl outlG UChild Rclose Bwrit src9 ERROR Einfo Vlobal ugin AGetP TransfomCurrent2Origin toggle bevent Pcondi Qfoundk Cpara hudioid pOnSaveAC ochange bhasadvj oEscape CompareExclude mLpA Ecell AhasC DRFillT AddByMov FAB0 CSpli sChannel999 learLoadedT oremovek libva same __dev_to_ qHimethodEH from ayer play abfnrtv
+
+### scriptsupport/scriptsupportdebug.lua  (99)
+LuaQ Script Bugc ssupport Debug numPerFile bufferNum LogTrigger Base LogIdxList clear FgetT lnfo CountById append nfoByGroup Filt enable RArrayA isEQ Fsync RTotalz DReal rPoolBeg BData uLogLoad read QgidxT eirpath ToString TToTab ckeysTo bToKeys Einfo Vmerge xculling1 UOnOff CloudClien6 bConfig Norm Ycheck allback_newl Qerror bToggle Cfillf cSettin QBlockj Bself csize Btype pairs cnfos generator Vstate vcontrol EFlag BFunc oCompar Onext Osert aindex Vlimit Brint LuaInterface StdioRoot BopenI Rwrite4 Sent CCtrl _lines log_cur_y bogOn m_K7 AddSy Cur9 createDire0A CJsonE Djson Dort qcalcMax onoff LA1B SSMainMana isDevelopmentModg onumber py_3 Sdex WTmp YD1T _vcgid rzmqMgr_U CRoom yncServer found Ctemi condition creal PGetIn TransProject
+
+### scriptsupport/scriptsupportfunc.lua  (117)
+LuaQ Script Bugc ssupport Func require cjson CSVLIMIT heckIsDeveloper Channel999 DUin4 tomestic dAbroad qCONFIG TriggerItem Param Ition8 BEnum ritemdef Abuff actH particle Qsound coustomUI elementID ttexture pageIndex qqMusicIdY CsvLimit GetCsvConfig Buff2Csvid playAdvertisingForSelf ETask RealOwner Callbackx DataCompa uExclude ModelName clete urWorld ccountManager aIsRoom2 getMultiPlay rgetOWIDI Afind BDesc3 PrealoL uin6 owid bDefMgr ModEditorMg KByIdU TBlock9 dStatus Rinall GtryG4 tringI3 UIProjectLib FindNode Btype BInstf PicSelec ByInternalv HasControll RSplit RidStr Bvalu Wmax Luaz uisdebug Afunc BInfov ErrorCod bFAILED EApiI apiid itonumbG table isCe Bmath dADPush rventToF ExeResultv encq dServic VxcuteH bToHost SSTASKIDT OST_TRIGGEREVENT Adata Tmake_M bsucces afailed pRECEIVE Etask hreadpool1 Eworki Pure irsn6 Lval1 Sval generator Vstate ZLocal GGlob utils Erole JRole TSkinD GapAc einsert UGCV4 MAP_MODEL_CLASS afullycT cOneLin Wtab Plugins
+
+### scriptsupport/scriptsupportload.lua  (144)
+LuaQ Script Bugc ssupport Load loadSSSystem _ModPacket releaseL TriggerDir Info anslateConfig oString WorldEnter varlib updateVa getPosition ObjType TLibVa SDebug_CheckLogIgnore CEven BMode ssvar1 DLockN Coun ByIndex SSGM and_Ex Cfg3 oHotfix pText Eself ASett sDirPathe Bfind homegarden_map BCtrl JFromI ool2 Regi sPrimary bipairs Risdir Oname fullpath SSMainManagF dALLMap Eowid clist generator Vstate vcontrol modp u_origin Tquire ustomuiidF pERROR data failed OnOff error agroups cgidx Dtogg Bedit bAndCre btentBy Tlen dEscape oSpcStrn push_ss_ reqkey getMD57 Owin file IsJustUsem Bface stdioRoom http open Bread Rail json2table ogrstr SDefMgt filterS Cutil Rsplit6 GetVarLibIn dglobal Snumbe Karam rKeyFlg Svid Smps Yix1 Spos Wtxt Klear rzmqMgr_N IsDevelopRoomD Mgc1 isAdB12ure SClien sPCi getApiIdZ staU endR Osave UClean Brvics emethod Mothed QList_9 er_e o_parse Onser Buffe Rsrc sdst Zsrc Sdst Dire E0yEx SSCMD getCurOwiKOE RapMod EDesc Buuid userdefault Bpool Bwork Caigcc Tame_s SRuleI rForDev3e V6qbuild begin OFunc BTask endq ptestfor Vlimit cdesc qplugins
+
+### scriptsupport/scriptsupportreport.lua  (51)
+LuaQ Script Bugc ssupport SSClassTriggerContent assert Clean BData cString yncLibvarSe FindAll eVer stance AselfA type BCtrl HInfo1 Kedit Rprint LIBVAR qkeyrealF ldata find_all_dirs childList Ctabl ipaX ESett bnameToo aconfig QloadC OFile Release ailed found owid f_callback Sdir generator Vstate fgpath groups cgidx ASVar LPool CLoadl ASLib ategorys4 rVARTYPE jSTRING Rlen varp
+
+### scriptsupport/scriptsupportsetting.lua  (154)
+LuaQ Script Bugc ssupport Setting Desc config code Qgroup name string Qfield BType BfileJ triggerid Tevent7 PcondiM Ftoggg hasadv start once template init hello mini world msgBox regi param playU CurE Bthen Sret getNick ErrorCode Chat sendSystemMsg Ftick Pblood EAttr PLAYERATTR CUR_HP bample1 Rtable concat bToName heckLoaded Hlear etMapDirPath EFile Bmake andomNew DsetT InAll vInfoByTP QloadC ByContw Ksave adFH Rwrite Ptrans AndCreate OList LDataa Eswap dexK Callback_ PSetRee Flag dSafeRe Uowid modpacketiI crequir RprintE ERROR dfailed DCtrl Yvalue nnumber ustomuiid gbegi strFeild eModMgr cByUUID found AccountManagQ zpecialT data homegarden b_map userdefault EuiID amapdir dirp Dire pysR Vlimit Fstep generator Vstate vcontrol VersionV2H Aver2 vjsonToT Acell i5Dtroy oLength Xmmand6 Ledit py_E4 idxx8 geth IsServerBu LuaInterface tdioRootH Bopen Oclos Wcrypt Bgic2 GenR Head Oidx2 BDIS oinsert f2no AA8S healthTip ZArb FAB_ MgrAd AAxj VisMov ldirsrc q2TA IparsB Uflage TKMH CterS tabA orgStr Wflg iIWos1 Epos2 replaceT Cfenv Ocall AFrom msgO eLuaErr AddErrToCache booK orii Evtyp Wunc
+
+### scriptsupport/scriptsupporttask.lua  (237)
+LuaQ Script Bugc ssupport Task STASKID HOST_TRIGGEREVENT pRECEIVE8 MERGEMSGID USGPAC9 BordCast PLAYER_USER_VARLIB ADVERTISING PPENDSPEE e_CALLB SHOW_TIMERWNk CACTO CNAMEA QWORLD DLIGH TEAM_RESULTS9 sDEVGOOD DHOUR VIDEO_URL t_DETAIL CUSTOMUI SIZ6 SCOLORC vHOWELEM jROTATE SALPHAo POSITIONQ MOOTHANIML DEFFE CAMERA_SHAK S_STOPI CHANGE_MOVE_TYPM sQQMUSICH DBOAR CITEM FRANK SKYBOX9 tTRANSMIb dDEVSKI DYNAMIC_AP MOBILEVIBR REPORTTO caskReg ost_TriggerEvent rReceive MergeMsg Player_VarLib AppendSpeed _Callback ShowTimerWnda BActo NickName World_setLightByPosH Team Result DevGoodsBuyDialog Detailed yiceoUrlA bshowUI CustomUI Size Color1 qhowElem erotate Aplha Position SmoothAnim iEffectg shakeCamerag XstopS changeMoveTypeO playQQMusic Dis1 YBoard AItem yRanking6 MobileVibrc bSkyBoxT Transmit3 OpenDevSkin BAttrg Dynamic_Api pconstru bgetAllf BsUin P_tojs bOnTick batchTableHasAny ClearSyncData FInit pushOneUin Bsend checkDevFunPermits All0 PackMessage v_ignore f_Reset Um_Pkg Wm_las TUinLi PtaskB SendCoun uiitemingroe pientCur requireArrayOf index Vlimit Fstep CtrK RToJsof Mpairm Xinser SstrinQ lenh jsyncSS3 generator vcontrol uinV maxIdx QparamO remove Requal oldP WTab old5 knumber Pfuncnl VmSevers Wsev vatefrieJ Robjid MsgE Rs_SRR cloud_mode tCurMain RmsgSt Runu3 _apiide Q_cond Cutil RsplitA FaI1 nagt Bfindo RtUser vArchive DVarD latN ByMultiplekeyd8 AdvertisingForSg ErrorCod RFAILE ByWaL E3ForV Bitleg awndrun QSetSS Filt QBlock dteamid ODesc Bmath WfloorD _Hours khour OrintkT cvideo_ subm Bhttp Popen_ U_link threadpool Bworko UIEditorDef _close_ui _Alpha powCZ3dur PisNew RsSwitchO i8FlauN FLY_ RFlyinI Dvolu cisLoop rGetInst SIQiYi pservice notify neObjLib E8get Interfac AppraiseView bhumbup QColle FollowAuthor getv NewD WStore AVipL1 oinivip uiNiVip_ CInfo sPureServer BuyH Sapply howe BTips BattleEnd Btand INFO_HOMEPAGE2 RequestButtonT InviteBullet room cAutoGe _0TB Proj ingletonPt GetGlobalT pait ShortcutIx topA Ceffs Fscal ugc_ With MPAndAm ssvConfi GetOneLineByI PDevUI PUILIB B_MAP wFindNod
+
+### scriptsupport/scriptsupporttrigger.lua  (176)
+LuaQ Script Bugc ssupport Trigger funcName index jsonStr tion name pcall JSON decode Cfidx Znot TLoadL _mod_ packetid_ fnormal Header bion Poggle runCount Aprin _console mainBeg param reqdisable logidx check CurEventP copy_t R_ins_ aInsID PstatuD bexeObj listen wexecuteA PCondi Orese delN Debug BEnd FFuncd PveAnd hdata Bend OtherA threadpool work nilC Cell _NoError arrA Rval evalue type Darr _false cellresul Warnning msgBox Bexitb O1003 numFactorID devgoods bToMath keCodeForLogicOpt OneV ParseAny cnumberd XGroup cRandomK bMaxMin sPosAxis1 PPowerT uExtract Absolute onometricF FixedBaseLogarith sRoundIn DegreeConvertToRadia cCurTim rGravity sTeamAtt layek Rethod riva EItem BlockFac sAdFinis ExeobjDir DIR_POS_Y2 CSelf CCust SAssig R_Area Dserv BType sTRIGGER TGROUP Bappe Flear stru ALeft ForWorld Vari QQMusicID SObjec Bcalcf RunData Sidx ainsertq Acat AcurSF BgsubV Einfo Vlimit Fstep Bnext j_id tDefault cboolea Jflag itemid strF Cass Spawn VarLibVar2 Wuin luea libIDW Creature CurHour SRule unqW getOrthogonalDire SpairsR generator efCB LuaInterfac isJ0 Pram AddGraphics BP5ice umathopt kopt2 CSpli nB1T OriginIdInMap_b bjWithKey oObjLib Wequal bFailedpp CEhl BZ1_D posh RCabs CFloo Uceil uVoS jxor1 Yix1 Pseq pA_gidx G0AA tY2F ddpTBD TCEfEP _beg Send VW5A cAAA varf dlogidxV T_idx_
+
+### scriptsupport/scriptsupporttriggercontent.lua  (40)
+LuaQ Script Bugc ssupport TriggerContent jSClass _index pool callback_set Instance tRelease0 BInfo AnalyzeData Sync sable SetString setmet Aself5 Btype Scopy_ idxtcur Skey sdatas Vlimit Fstep lipairs bfactor param generator Vstate Sold TRIGGER qkeyrealX Oinse5 Mfind Ybx1 Stmp Wex1 FindStr oSCRIPT
+
+### scriptsupport/scriptsupporttriggerfactor.lua  (314)
+LuaQ Script Bugc ssupport TriggerFactor EventKeys Default ExCustomParams ex_c objid ItemID item num2 TBlock PosX sTimerID BName rContent rffectID BBuff SLevel Sufflv rWeather SSecon Bicks PlayerAttr bMotion CreatureF DArea Inpu Bvkey Bsing aExeRes0 bHurtlv TCraft tFurance Uargetp dVarlib Qlibva Drop BType Rvalue PGroup8 Changed StarZ sfunc math floor rreturn SDefeaB PEnter VLeave Amini nowiki apservice notif BluePrint BuildBegin SReviv bAttack Wamage DBeHu qMoveOne gConsum Glick HMouny gStateCF cCollid fPickUp CreaI XEquip xackPack Shortcut Telect gDiscar cKeyDow rOnPress fRemove ModelUpgra string find Ppack ETake sestroyBs Proj Miss Disappea UseGiftP article Furnace Button BShow WToucha LostFocuN qQQMusicV MiNiVip_1 AWith SMetho foffset gexpand xyzToPos CWorl PgetCe fRandom6 syLengthI qalcDire UByYaw CAngl getD has2 CByNo2 sub3 AFrom AGetS CDescL xNearest Grid Cut4 Spli DInJs Horizontal knkTeam1 dAimPoiz getFaceYas FbjIn hasa QProps CloudSev7 XShoot Tot9 BPosi Get_ Switch EPos2 CCoorK akeGraphicsText qflotage4 wArrowTo ySurfaceN LinM DNumb lementWidK SHeighM Monkd6Obj FRole VShuct ESoun TIndex TByResL enoughSpaceFor fHasFri SettingAttm h5Cod cGravit SMidJo GList hreplac6 XfillB clearAll Uclone WToNew bSpecifk Hkill Camer TViewM tryNaviga Info2Sel SystemMsg9 ThrowAtt SndSpe QOffBy qrecover FNick GQuit Rmmuneo stopS BSend BAppl earu Jswapl wopenBox bforceO uiltin Cexec YtryMo adde Se2CgeBo pawn UByObj sActInHae Gward Gause9 Jhide ScaleZ DevJ GoodsBuyDialo sVideoUrq wetailed iinsert Jlete oupb DUIVi CAlphz aardPic howV PViedo Datap automaticBy pStandRe Appraise WEATHERSTATUS SHINE_AND_RAIN sTHUNDER ANDDUSTSTORM eEMPEST eLIZZAR FACE_DIRECTION DIR_POS_X SNEG_Z VIEWPORTTYPE MAIN ABACK VFRONT fCUSTOM AbRadian Rlog10 B4Flo BCeil DELEE bREMOTE BBOMBU kURNING DFALL ASPHYXIA Wfalse7 LAYERATTR MAX_HP HP_RECOVc LIFE_NUM4 dOXYGEN WALK_SPEE6 ISNEAH SWII JUMP_POW TDODGE GATK_ DEFG sIMENSIO CSCORB CLEVE STRENGTH sPHYSICA BAGIC ENABLE_MOVE PLACEBLOCK wDESTROY sUSEITEMp DATTAO DKILL dPICKUP vATHDROP aISCARD TURNt RUNH S_TWICb DOWx c_GROUN ATEAM OPUSH CREATUREN BIDLE cSTANDBp SFOLLO5 DSWIMW6 QSELF_ ERACT uCOPULAT cWEIGHT DTANC BODY_LERPx AIR_ VLastC A_exe BKEYS GRAPHICS _HORNBOO vSUSPEND sPROGRES ARROW_ACTO LINW TSORT EVENTDATE YEARb MON1 HOUW DSECO TIMESTAMP QQMUSICOP PAUSEj SRESUM COMMC COCEA SDESER FRIGIDZON cVOLCANc CNUNJ5 AIRISLANDg RIGGERPARAMd GTMISSI _pairs Wtable CsDynamic genC0 Mi6rol
+
+### scriptsupport/scriptsupportvariable.lua  (49)
+LuaQ Script Bugc ssupport Variable onstructor os_mkdir data_to_file saveU Oload BStrx ServiceBase ache msgpack MessageP set_numberK float RarrayM without_hole StdioRoot LuaInterfac Aselfm bstring bgmatch cinsert rpairs io_dir_exsi kprefixx Qcpath S_tb generator Vstate vcontrol Rtemp Dform1 Bgsubt gFunc_is DirExist Dmake BCtrl rencrypt Mopen Twrite Iowid Ename b64str Bread2 varlib_arch trigger_vars
+
+### ai/aitaskproxy.lua  (93)
+LuaQ Script Bugc support AITaskProxy getTeamRelationsId1 DEnum calcDistance xyzToPos PosValByAxi eheMoonZ bOffset vObjSpawX RandomPosInArea1 create BAttr sgetHourv WeaponComboNumbe player2Obj NearestActorObj LisY CCoun1 Xmonst UrueRe estBlock SBrighg projectile dropItem Packback2 fObjRes_ Hold4 athOperat GroupPosByIndex PTimer SMethoo Define SetVariabl astParam pecialCode controller target getobjid NodeName _EventBeHurt sInterac nMsg CSoun eInvers BTDecorato DLoop cSucces CFailf Eeque lleW HComp vIsVoidNL GBuff InShieldDef SPicku_ cBoolea bString DObje hange TendMs RotateTo7 QRideT AAnim TBySeqa HKill YRemov xPutdown StDieD aNewDig tToTrigg rDestroy WStore tPutInHa AddToBagH kDirects CStar CPaus DResu ParticleEffectOP OStop hFollow PathM ULeave AttackMele ECharO SkillGravita CToAd Getg Aself1
+
+### visualcode/vcscriptload.lua  (82)
+LuaQ Script Bugc support visualcode Load Globel ModPack DirPath DirZ CheckDebugMode BInfo Btype bnumber Aselfy Eowid Ctrl findFrom ipairs BnameG workspace ractorid Aroot5 rSetting ToTu Ctabl einsert6 dirp glist Sidx generator Vstate vcontrol coustomui_ userdefault Sequir modpacketid triggera GetInst UgcFileSystem IsDirExisted _1_1 u_origin data Qtostr bModMgr getModDescByUUID AccountManage getSpecialh homegarden _map mapj Adesca print ERROR failed gic2 rzmqMgr_ IsDevelopRoomG Rs_SRRX cloud_mod _OnOff BWorl cOwnerU gFunc_isStdiou EncryptionFlag ContentBy leno sBlockMg Read Sjson2 LocalMain push_ss_ Poject reqkey ForceGen QwriteJ Zsrc Jgsub Qarget index Vlimit
+
+### visualcode/visualcodeapiproxy.lua  (228)
+LuaQ Script Bugc support visualcode CodeApiProxy CEventKeys FactorTo nameFnS GetCustom BName sever Player InvateFriend bMethod8 Trigg9 Check CloudS GetRoomIDY VCMathLogic mathExtractOp UnFixedBaseLog5 World getDefSpawn LastCreateEffectI ZBlock2 calcSpaceNumForz pgetGrid Buff dLeftTiW ProjectileShooto GetFirstInvit SGroup Monn16DefF CDesc Mob2 SimilarityUgcVC2 AArea UTotal ASpec8 MakeElementAni WUITex SmoothMoveTo EScalU URotatW CamerPosAtt SActiv CanvasStatus TypZ Relation hSwitch bFinish0 compareCourseAnsw AWith emptyCondito dispatch CAsynh singSpee SkyBoxMap rTemplat TWeath ReplaceBluePri EGAf PaddVC ToBackpa bileVibr fFilter TransmitToMa UttrStS MountObj Category Bange BOpenf BulletBoxn openDevGoods bDetail sBuyDial cUIView Ghide FStopO Qntera Roun Dtrue Cfals Sreturv ITEMATTR ATTACK HORTDEFENSE ILONG yEXPLODE iPOISON iWITHER DURATION INTERVAL MAGAZINE DROPMODE DISCARD1 ESTROYBO rFEATMOB VSPAWN CHANGEPLAY AANIM S_LOOPX ONCL _STQ bDEFAUL8 BACKPACK_TYPE INVENTORY CEQUI sCREATUR CmpH S82000 aLinear Aformh SQuadIj DExpo DCirc Ulasti Tounce SKYMA COLOR gMIDDLE gBOTTOM WLIGHT WCLOUD cUNSCAL sRDENSIT CSPEE CHIGHj FOGREMINDI PARTICLE STRENGTp cDOMNES FILTER CONTRAS SATF CFLOO UEXPOS aVOLUME SGAMMA sFTMSLOPl THOULD uBLACKCLE SFollo uAutoind FveRol tate AllP cOnlyYa GROUP COMM COCEA SDESERg FRIGIDZON rVOLCANO CNUNJ CPLAI AIRISLAN SWITCH DENAB RELATIVECAMP sFRIENDL DENEM TNEUTR ABSOLUT cPASSIV SNOTEA aBTREE_ DAROU oFRONT DBEHIB tTheAuth vCollect Evaluate DPara UTarge ShortCutId quip Ctrin cQQMusi cHurtlv cMissil FDrop Genf rhmetic2 vdouble Dsing_ tosm Dnumbv rand triar RmutilX Dmaxm anye Pvar_g Ateam posIn negb TByRes SettingAt Yloop_7 control_keepwaito fappend UByObj GraphicsA Vssign A_opek CurHou Rule Bvityp LISTENMS getOrthogonaK DIR_POS_Y secoD Tticksk Dbuff bhelper wdefault ufurancez ploQ Getz BInfo qAselfE Error SStr aObjLib ASKey Tessag
+
+### ss/ssautosave.lua  (16)
+LuaQ Script Bugc support SSAutoSave dSClass _index delay_ticks allback_sQ b_flag Instance bitData ASetFM RClean etmetatable AselfY
+
+### ss/ssdataactorid.lua  (16)
+LuaQ Script Bugc support SSDataActorid ClassBase assert _index GetValueDesc tonumber bstring DefMgr getMon BName Aselfy sfinfo
+
+### ss/ssdataarea.lua  (28)
+LuaQ Script Bugc support SSDataArea ClassBase assert _index Normalize heckValAvailable GetValueDesc8 tSame PPosIn BdataL FMove GScal alcCenter eposbeg pmath Btype tostringE print ERROR getDes failed Lval1 mbeg2 _floor
+
+### ss/ssdataareains.lua  (28)
+LuaQ Script Bugc support SSDataAreaIns ClassBase assert Pos5 _index Instance ARele Normalize CheckValAvailable GetValueDescS Sync FillSave BLoad sizeRange setmetat cself anumber tostringr Paread print ERROR found LRectA efailed
+
+### ss/ssdatabase.lua  (24)
+LuaQ Script Bugc support SSDataBase PClass _index Instanc ARele3 Normalize heckValAvailableA GetValue BDesc Sync FillSave ALoad setmetat Aself5 tostringd print ERROR data base triggere
+
+### ss/ssdatablocktype.lua  (15)
+LuaQ Script Bugc support SSDataBlockType ClassBase assert _index GetValueDesc tonumber bstring DefMgr BName Aselfy sfinfo
+
+### ss/ssdataboolean.lua  (8)
+LuaQ Script Bugc support SSDataBoolean ClassBase assert a_index
+
+### ss/ssdatabuff.lua  (22)
+LuaQ Script Bugc support SSDataBuff ClassBase assert _index Normalize heckValAvailable GetValueDesc Eself buffid tonumber ostring DefMgr isCustomStatusd ce96415 BName definfo Bmath Wfloorn
+
+### ss/ssdatacreature.lua  (10)
+LuaQ Script Bugc support SSDataCreature lassBase assert _index ync3 Rvalue
+
+### ss/ssdatacreaturegroup.lua  (10)
+LuaQ Script Bugc support SSDataCreatureGroup lassBase assert GetMgrR Mgrl Bselfc
+
+### ss/ssdataeffecttype.lua  (16)
+LuaQ Script Bugc support SSDataEffectType ClassNumber assert _index GetValueDesc bstring DefMgr getParticleDef ce96415 Name Aselfy sfinfo
+
+### ss/ssdataitemtype.lua  (15)
+LuaQ Script Bugc support SSDataItemType ClassBase assert _index GetValueDesc tonumber bstring DefMgr BName Aselfy sfinfo
+
+### ss/ssdatanumber.lua  (9)
+LuaQ Script Bugc support SSDataNumber ClassBase assert Normalize CheckValAvailable
+
+### ss/ssdataobjgroup.lua  (38)
+LuaQ Script Bugc support SSDataObjGroup ClassBase assert _index GetMgr Instance ARelet Normalize heckValAvailable ObjDesc RValue Sync FillSave ALoad Btype NewT print ERROR data objg failed ssetmetar Sins tonumbery string Uobjid Tpairs ce96415 maxshowcount content generator Vstate triggert found
+
+### ss/ssdataplayer.lua  (13)
+LuaQ Script Bugc support SSDataPlayer ClassBase assert _index GetValueDesc tonumber string Name ce96415
+
+### ss/ssdataplayergroup.lua  (15)
+LuaQ Script Bugc support SSDataPlayerGroup ClassBase assert _index GetMgrP ObjDesc Mgrz Bself tostring Name Uobjid
+
+### ss/ssdatapos.lua  (18)
+LuaQ Script Bugc support SSDataPos ClassBase assert _index Normalize heckValAvailable Same GetValueDesc Bmath Rfloor cself Btype Lval1 yostring
+
+### ss/ssdatastring.lua  (8)
+LuaQ Script Bugc support SSDataString ClassBase assert a_index
+
+### ss/ssdatatimer.lua  (25)
+LuaQ Script Bugc support SSDataTimer ClassBase assert _index Instance ARele Normalize heckValAvailable GetValueDesc Btypeu print ERROR data failed ssetmetao Sins ctonumb ostring color ce96415 ucontent
+
+### ss/ssio.lua  (56)
+LuaQ Script Bugc support SSIO loadwwwcache assert Ctrl SClassIO b_indexG config datapack relegate Instance getCurDir _file_backup Ucheck WriteFilR BRead Load PackContentU pMessage set_number floatR Rarrayd without_hoV erDecimalB qencrypt ERROR failed setmetatableW lockh Eself Owid rSetting getMapDirPathr modB path uuid Qtostr AccountManager getSpecialType homegarden b_map RExist createDirectory temp Bopen LuaInterfa tdioRoot Bclos BreadG Esave Jpick6 Rdebug dtraceb
+
+### ss/sslibbuffer.lua  (29)
+LuaQ Script Bugc support SSLibBuffer SSClassVar assert Ctrl Variable LibR b_index vartype datapool Instance ditDataP LeaveWorld assvarP AselfE ins2 pairs crement generator Vstate vcontrol GetValue bnumberL QkeyidH Eowid Ureset
+
+### ss/sslibobj.lua  (70)
+LuaQ Script Bugc support SSLibObj SSClassVar assert Ctrl Variable LibR _index version areapool Async SYNCMODE APPEND dREMOVE TRANSFORM Instan ditData eanA LeaveWorld sGetValuI AreaZ ByLibobjid BSave pTick ppendSync cCreate sDestroy Resize rigger UTool_r essvarP AselfM Sins pairs Decremen generator Vstate vcontrol reseJ rVARTYPE AREAINS POSITION CREATURE Newm uvartype BAuton ERROR failed ObjLibMgr getXYZByUUI Living Bitem DropItemByUuid Pget Wpos Range Bmath Smax Rbuffe QGetSS6 Qload MainManager isDevelop BModep _to_string rid_link Ainfow
+
+### ss/sslibvar.lua  (163)
+LuaQ Script Bugc support SSLibVar SSClassVar assert Ctrl Variable Libn _index version datas categoryP COPE_RATE gVARCFG cGLOBAL FGTOVARTYPO POSITION sAREAINS cNUMBER cSTRING dBOOLEAV EPLAY SGROUP WBLOCK GITEM tCREATUR cCTORID gEFFECTv SITE SORTDATA _vartype_2_cfg_ delegate Varcfg2V Instance itDk sGetValu RunZ GetConfigById1 BSave sLoad Origin _ObjGroup RTimer fRemove cLibvars id2Localid Dheck dalcNew FidBy PAvail hrCount FFind BName1 BSame dlback_ PChang ackContent ToRunModeV bToEdit placeAll Creatures RByDefb RecoveryCloud srInfo _pairs generator Vstate vcontrol ssvarPool modpacketid valX ERROR error QtransH rogrinid Gsort Pplaye CequaC ListenMgrA Aoldv already exist uVarTypeS onumber tostringZ iscY AAuto Qattr_ crem fill vvalChil Rcopy_ keyb found Wtmeta R__newb liss Flockj NDesc WByVal QSMgrPV pooM Ework allo _didid IdxL Lsave Bebug0 Ptrace Eowid abuffer Qnfo Qoad failed private Ureset Avals Si9BI pgetCurO_ MainManage isDevelop1 file_to_ u_arch trigg temp_obj Sids qIAD Okey same Eret_ AminiL maxpause spositiv YArepe firet Tbegti Dward oQdelta _AllSecond PRUNST bRPAUSE maxP getB8T AItem Moni cgamemo ao2ToI _floor param Xmin dgrA lc9l Bflow Vlimit oldt oldu aexcept afunc_c RefcntZer OyncDaQ bjSrc
+
+### ss/ssmainmanager.lua  (172)
+LuaQ Script Bugc support SSMainManager loadwwwcache assert SSClassVar LArea ObjGroup Timer Playes LModeG Shop ValueTypey _index datapack isDevelopment WorldInsi Running dmgrs Instance DInit itPs Clean QEnteri SLeave RToRun bOnTickn ARuled Data2Contenti Rlocal Ractor Citem Ccraf Pfurna Bplot bstatusw pcoustom Pars oadMod et_d bVarLib PluginAl uRelease6 Delet Originid6 SyncToGlobalp Transfomj Q2Curr Check idInMap LibvarCloud RrRole q_to_str Singleto ALLMapUI rSLogMsg IQiYiTriggerEvI erBuyItem cHost setmetatable tick Aselfm yreature OpenAutoS selegate rMessageP BCtrl set_number Cfloai Rarrayd without_hole bencryp ERROR Xpairs generator vcontrol MgrY bmain Rtrue Cdebu atraceb GMRULE_SAVEMODE RorDef add_ui_e p_root_n8 BTask VmRe uAccountc RgetCu BDesc SceneSwitcht UMakerE NomalToUGCl Eowid sreset OQuit OroldD dtoggle ESett OFlag VarlibRun UChangb R_func Code0 BcallR bErrorPQ ime1 eruleId lenE cinfo A_idx4 failed Onexte DirPath srequire Hopy_u SSSystem_q5 Wkey aidCoutn bibVars eateDire WriteFilA ileP oauthor Buuid nfoB UInfos VCAZ VIsUGC Wret Aret2 Bsynca srcA aconfig Dirs RLogic Getl TabQ qW0how BGetS rjson RSCOPE SLOCAL1d ategorys PDecre gFunc_SLOG Ewscope Gcove EJson taby ckstr Clientv isPureServ UIProjece Library LIB_ENTRYTYPE_MAP bcetByI AapuiV Vlimit xCclos Arch PSASKID LAYER_OP_DIS UBOARD t_param oinivipT uGAMEMSGh vipl Zobjid lnum
+
+### ss/ssmgrad.lua  (86)
+LuaQ Script Bugc support SSMgrAd SSClass assert Ctrl MgrC _index version bdatas Instance ditDataW LeaveWorld oRunMode bToEdit Load OnDeverloperStore CheckMap rAdCache setTriggerAdvInfo strI readFile _HasAdv dinfo Aself9 Eowid xgetCurO BgTri copy_tabl buffer Ttab ainManager clopmen Tprint _to_string ERROR load failed typb bipairs ADExchange Rtemid kItemID propList generator Vstate vcontrol Onext gflag eresult Bpool cwork GetU SyncGetMa uAccount1 aErrorC gamW ehasadv customui userdefault Bopen CclosN Cxxte rdecrypt Ifile BisIn UIProjectLibMg EnterLibrary3 LIB_ENTRYTYPE_MAP Geta bcetByI crequirS ReleaseLib EROOM3 ASett Anfig qfeReadC Player playAdvertis Vlimit WMap Qmapui tonumber cpos1
+
+### ss/ssmgrarea.lua  (61)
+LuaQ Script Bugc support SSMgrArea SSDataClassPos assert InsM Base _index datapool Async Instance alcNewb bDel RByVal Reload BRect CheckPosInside aCenter sMove RScale TickRunning4 SetSync pToRunMo FEdit LeaveWorld p_mgr etmetatable newJ getScene cself Bnewa EFlag AinfoD print ERROR exist Normaliz Scopy_k setB found ame_ ValAvail Oairs generator Vstate vcontrol O_cpt aend Esize Ustroy4 failed Qtostr C_to_ Sret eBuffer VSSLib Eowid istartX LendX
+
+### ss/ssmgrassets.lua  (187)
+LuaQ Script Bugc support SSMgrD SSClassK assert Ctrl MgrC _index version Instan ditDataT LeaveWorld oRunMode bToEdit pSave oadR bByOwid AudioInfo CustomPic UploadAllFully ListFileT POther Down ConfigTab Use5 OfficeMapFillU ReqMap UrlByStrIds getFromUin onRoC POnReq HandleClienth Finished XCheck RValid CPars bstring Bfind sub9 Logs Md5StrU CDNUrl match astartIz ChasL WCount SRes AselfQ HCurO copy_tabl6 abuffer isPureServer5 Cpair palOwner picb rManager eSSMain DevelopmenE D_to_ ERROR failed sPathByI RExist md5T gFunc_getBig tQueue deleteStl sState generator vcontrol sfpath Auser Sret Bqaud cnuin bFAA Syn_ trigge Aname format RrcDirG LuaInterface irectory_ lder srcdir Asize Vlimit gskey asuffixY httpX TRemot iCurMap FtmpF cFAD Sclose swwwcachH MessagePack Xcrypt_ unp6 Itent EsaveE bFJP b_cloud DisplayBoardToolh X9QFlatBW1 AsSf Cspli BisIn UIProjectLib rLibrary ILIB_ENTRYTYPE_MAP RcetBy AootN leaseLib BROOM VisualCodeDef kGlobal ESett SToNam crootdif workspaceM _efaul9 CquirE opBlockDB schildre yVHA jHA3 REVENT RnextBd F_def Cwalk Snum QDevUIc groups Sidx C0EA retur aUrlMapLF OTime WSet gnow_ dAnA_ T1AA needRD succNumbe nfoq thumbnail UrlReplace Yextra GUrlS AHttpvA miniw op_uins rlAddAuth_Exa I2unc Pall_b EresTHd rpcCallB AbroadEvn Dmap _single_ SRpcRe Celec Vuauthor_cN2ton notify1 c_DevEn rgNloortz curl QeLoop0EcBase SMax Num8 Bloop loKw pait Pcost upJJ r60Maxh PicProgre USmallr Q_md5_8 DefPass7 Uconca MAX_ASSETS_COUNT ngshuai over
+
+### ss/ssmgrbase.lua  (12)
+LuaQ Script Bugc support SSMgrBase SSClass assert _index Instance ditData4 Sean savefile
+
+### ss/ssmgrgamemode.lua  (15)
+LuaQ Script Bugc support SSMgrV Mode ClassBase assert _index Instance itData EnterWorld HoRunf isAdventur cself
+
+### ss/ssmgrminitimer.lua  (87)
+LuaQ Script Bugc support SSMgrZ Timer SSDataClassPos assert Base _index version tick datapool curc prShownP RUNSTATE dIDLE tPLAYING FPAUS DSTOP Instance uCalcNew etConfig BName ESetD IsExist AvailableZ SSecon_ getRealRun cReload TickRunning BDealI PlayBackward8 RPause bResume DStop Cpeat HHide HSync qrigger_ RunChange BLoad s100 erEnter AminiO Aself1 Cnewtc Btype TbegtiU tonumber print ERROR params failed always syncflag Bopy__ BmathQ _floor Kceilb Snum Vlimit Fstep Nairs generator vcontrol celta Oext aWorldS TranslateMgr splitProtoContent6 SSTIMER_RUNMOD wndrunmodem BTaskd send SSTASKID ER_SHOW_2 eisshow oldTY observer_event_ AAuto buffer Ureset GetVar Ins39 cVARTYP7 nUnique
+
+### ss/ssmgrobjgroup.lua  (55)
+LuaQ Script Bugc support SSMgrObjGroup SSDataClassBase assert _index QPos tidBeg datapool Instance tCalcNew Normalize Del8 BInfo AddObjid cRemove GetCount GetAllObjsv Uniquenek BByNo heckObjIn aActive RandomObj Cload RValue deleteVal Smergel SplaceX AsortW ggetSpc AselfA Btyped Ctabl Rpairs tonumber generator Vstate vcontrol Vlimit Anexto ERROR objx failed idxN _arr Bmath params floor ErrorCodU FAILED Wequal A4cnfo2 Qsexit
+
+### ss/ssmgrplayer.lua  (47)
+LuaQ Script Bugc support SSMgrPlayer ClassBase assert _index version datapool ronlines Async SYNCTYPEg rENTER TLEAVE UUPDAT JOINTEAM PLAYERd RGAMER RJUDGE Instance bitData bUpdate pInfo pName BTick ZEnter RLeave JoinTeam Aself1 WorldMgrm RByUin QActor3 Ifind4 print ERROR Tinfo QNickn ainManager Gpairw generator Vstate vcontrol tonumber Ctabl FABV Oteam
+
+### ss/ssmgrresource.lua  (52)
+LuaQ Script Bugc support SSMgr4 SSClassVar assert qPool yBase Buffer PluginAllocate b_index curowid zArea PlayerGroup Creature tPackets uInstanc itData EnterWorld SLeave ToRunMode bToEdit sTick tRunningZ GLoad wRelease kDeletej rVarlibRun bIns hObjLib OriginID AselfQ OpenAutoSave Rtable rVARTYPE AREAINSe PLAYERGROUPv CREATURE print ERROR always Rdebug tracebackv pairsl generator Vstate vcontrol rlibvarp loaded QtostrZ Current
+
+### ss/sspluginallocate.lua  (64)
+LuaQ Script Bugc support SSPluginAllocate SSClassVar assert _index modtype_idx block checkdef pactor Bitem RcraftW rfurnace Bplot bstatusm modpacket current bActive origin20 Instance ditData LoadOU rForModP UpdateD TransfomH idInMap bDefMgr getB CopyID OItem OPlot isCustomS Bmath floor Iselfr uiveMods eapDirP ERROR path failed owid QtostrX sReadFilh uuid info error Mnfo dir6 Afile Oairsz Xuthor generator vcontrol SIds gcell englishname Wkey curB cFlag aeditor Q_func _exe
+
+### ss/ssresource.lua  (28)
+LuaQ Script Bugc support SSClassVar assert AutoSave b_index AutosA Instance ditData EnterWorld SLeave ToRunMode bToEdit BLoadl sTick Running Open setmetatableW Aself5 Btype Efile cFlag Eowid Ureset ebuffer modpacket
+
+### ss/ssshopmodelmgr.lua  (81)
+LuaQ Script Bugc support SSShopModelMgr SSClass assert Ctrl MgrC _index version bdatas Instance ditDataW LeaveWorld check UnlockInMap pEdit iremove aveAvatorY HSkinY Rolr IHors PToRun cLoad shop Aself1 Eowid typK bstring find Rsub mobI Ypairs tonumber AccountManager get_s rcostdef PlatformUtility isPureServ Bloud HGetSF Ctabl BeginTim udelName gener Vstate vcontrol Suin CostDef previous_ s_list Snow Uina DCurOa Umapid GenuisLv9 eDefMgr Typ2 G_all TRider QLevel Qdisab actorid canx sInfos Vlimit BcurL Areal RChang bCenter getMapAc Sjson2 Scopy_ abuffer EMain Sopmen D_to_ ERROR load failed
+
+### ss/ssvar.lua  (73)
+LuaQ Script Bugc support SSVar SSDataClassBase assert mNumber String oolean lockType BItem Actoridz Play Groupd Creature reaIns bEffect DValux b_index rVARTYPE NUMBER dSTRING tBOOLEAN ALOCKO ITEM tACTORID FPLAY TGROUP uCREATUR uPOSITIO dREAINS hEFFECT SITr SORTDATA _vartypeAvailable sdelegat CheckVarT _get_data_c s_poolid BInit Instance rcrement DGetVb BDesc RByVal7 Sync AReleU rPoolIdxg MakeSave _fill_sav Bload pairs generator Vstate vcontrol ZList ERROR failed _Uniqu btmetat3 erefcnt0 BPush Pssvar Sins Svar overflow fali zero error EFill invalid nilI
+
+### ss/ssvarpool.lua  (63)
+LuaQ Script Bugc support SSVarPool SSClassVar assert _index version bmaxid Sbuffe bunique uInstanc ditDatao ean3 GetUB BPushy RefcntZero Savg BLoad cTick varp Aself1 rVARTYPEM RBLOCK rACTORIDS PLAYER RGROUP8 CREATUREl bREAINS RTIMER fEFFECT SIT7 gNUMBER cSTRING sBOOLEAN Zpairs _Release_ generator Vstate vcontrol ssvh uvartype get_ heckValAvailable qrint ERROR push always exist aetAuto Rsync eerror Jnil Nnext Acurk Make4 Eowid SMainManager isDevelopmentMode4 to_string failedG Ureset
+
+### groups/ssdatalist.lua  (38)
+LuaQ Script Bugc support groups SSDataList ClassBase assert ObjG _index GetMgrD ObjDesc RValue ItemName Instance1 FillLoad QSSMgrm Bself Uobjid vartype Ttable getlistCach ppairs R2json ce96415 maxshowcount content Sret generator Vstate Eitemu rogrinidP ssetmeta ins9 qrint ERROR gReload failed
+
+### groups/ssdatavaluegroup.lua  (41)
+LuaQ Script Bugc support groups SSDataValueG ClassBase assert _index GetMgrO ObjDesc ItemName Bself Uobjid vartype Tpairs ptable ce96415 maxshowcount content generator Vstate rVARTYPE NUMBERGROUP cSTRING tostring nilB CSITE GAREA rBOOLEAN RfalseY PBLOCK GITEM bnumber bDefMgr CREATUREl getMono gEFFECT ParticleDe Eitemb Pdef
+
+### groups/ssjson.lua  (114)
+LuaQ Script Bugc support groups SSJson rJ5sA JSON package Jeffrey Friedl http regex info blogQ json version VERSION UTHOR_NOTE pretty align_keys indent testArray __tostringq Object onDecodeError SOfNil CHTML setmetatableJ bself Cchar math floo Bpoin highpart rema format Rasser eessage ecation aOBJDEF expected number star ateger_ rdecimal Ronent Bull_ opening quote aAbBcCdDeEfF cdefCDE eunclos wVALUE lo_surrogate _as_utf8 Bfind E_end ctTypes colon BCoun Unew_i origL skip_whitespace Sgrok_ a_INDEXc fals null parsev Btype must called method Pnil argument gotf only sorry success s_to_be_escaped_in_ ckslash_replace U_func EC83 Xpairsi Ohuge with BsortG noKeyCon both ueric couldE abort nflict amixed winto exists fximum_0 generator Vstate vcontrol Vlimit _map yboolean Achil Abconcat uparents Rsult_r ITEMS KEYS Sgth FORMAT COMBINED_PARTS _literal Eargs
+
+### groups/ssmgrvaluelisttype.lua  (130)
+LuaQ Script Bugc support groups SSMgrValueListType SSDataClassBase assert READY eFINISH pVALUE RANK INDEXAREA OP_QPM_NOLISTw rSUCCESS OP_KEY_DATA_LENr OP_CD_LMT FAIELD_CANT_SEi nvalidTime automaticAnysc Preset ccount Wsynctr keymaxlen EFAIL MaxG Posn datapool Instance rBOOLREN bSTRING RTABLE NUMBER table2json Agrin w2String eceiveFromSever successfulg SAnsyc BArea qTick sSingleG RByKeyB SortRank aRemoveN syc1 Pclear NewJ cReload Normaliz Del8 pushGetReq2P RCache getOrder pUpdateA cself bns_SRR cloud_mode Rm_cur ixranklin Wm_key sQuickRoom _localsort Fm_ss Bwwwc4 aUpRent3 Rpcall rencode2H testArray BChar booo Zumber qVARTYPE rror Bfind global Xatus BSORT libvarid Yix1 ginfo save _OP_ERR aSTATUS JJSON pbascend Ikeys Sok1 Vlimit Fstep reqD rTrigger_ MgrK dtonPtr _onfigk Cc60 Rutils Tsplit maxE Gopy_ Sparam EventExeResult ADNam Rustom Ubacks ireturn jairs generator vcontrol BAqI LICim ChasSg oGQA AAZ1 allI Cnewg ERROR failed gFunc_SLOGj AFBC floor BFAB AE6i OTAE sWorldMg getPlayerByUi Ector BNick OFail o1And
+
+### groups/ssmgrvaluetypegroup.lua  (66)
+LuaQ Script Bugc support groups SSMgrValueTypeG SSDataClassBase assert _index QPos tidBeg datapool Instance tCalcNewJ Normalize Del8 BInfo AddObjid mRemove GetCount GetAllObjs Uniquene BByNo heckObjIn aActive RandomObj Cload reateSaveAre5 deleteVal Dmerg SplaceX AsortW ggetSpc AselfA yvartype Ctabl Rpairs tonumber generator Vstate vcontrol error newF rVARTYPE AREAGROUP CSITEr WTIMER Vequal Aarea Vlimit Anext Bmath floor cidxs ERROR failed params PNewBy aFAILEDX Scopy_ Dcnfo2 ssexit E1DB oldY wBOOLEAN Rstrin

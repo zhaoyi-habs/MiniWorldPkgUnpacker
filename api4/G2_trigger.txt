@@ -1,0 +1,81 @@
+
+### trigger/trigger.lua  (87)
+LuaQ Script trigger _insid_ event_name_ World vTeam YActor8 Player GroupIns Creature IArea YQuest JTime JSounc YBlock IBuff VarLib2l iObjLib Graphicss ListenPr Board FDisp CloudSever pVCMathLh YDebug bdefine rconstru getApi Bstop defaultMethodv BnsID _check Nlear spliceModpacketID2 BFunc SActiv AndI exei PeNewE BName fregOncA Uunreg OriginIdInMap bstatus ALast eEffectId sSplitStc ingInJson Sase bToggle YpairsH qmakeObj InstanceID QCache vloadMod generator vcontrol apiKey uthreadp esecond rint error eassertM aid__ Utmpid abl2 peatExeCount Qreqent Edata Igidx disL Ibegv index Vlimit tosN qSupport regDynamic Begin Scopy_ orky MainMana sPlugini ebuffid Emark dex3 Wret
+
+### trigger/triggeractor.lua  (39)
+LuaQ Script trigger Actor fonstru getPosition FaceDirec Angle appendSpeed OrthogonalJ Facade hangeCustomModel recoverinitial brandomB playerHurt xArea QCheck BTypek findNearestBlockk pGetProj leShootPc MobO Skin pErrorCo Uobjid Lposx Ypitch Rtable onumber Udecay FACE_DIRECTION DIR_NEG_X ZPOS_X AfaceY modleNameC aattack oareaidW CurEventParam QHelpO
+
+### trigger/triggerarea.lua  (46)
+LuaQ Script trigger Area hasxyz Preate BRect1 rdestroyB offset BReal fexpand getCenterPos hRandom BbjIns Tblock Players uures pfillByB cearAll replace4 SToNew Objs bSpecif BType RError Rtable number Bmath Ofloo1 rForTemp7 Code lengthx posbeg Wend eareaid _Range lposBeg py_m PositionV2 RGroupu Eface Xstart lbidsrc inairS eFAILED TABB
+
+### trigger/triggerblock.lua  (58)
+LuaQ Script trigger Block attrGet BLOCKATTR EXPLODE_RESISTANCE4 onstructord sDistance Compare ByPos Aheck SwitchStatus InBoxArea gDir SettingAttJ SreateH Sstroy BDrop dreplac Lfill learA brandom8 getLastC mefName BDesc bFacadeC rPlayAct uePrint Munpa ErrorCode Etype arvicen Ifunc Uvalue Bmath Esqrt Lpos1 Xstart Zinx Zaxx OData4 Tfloors isactive tonumberr Eolor jdimx jposx index Vlimit Fstep Ainfo eanimid AType cFAILEDg boolean ostringO Uangle
+
+### trigger/triggerbuff.lua  (21)
+LuaQ Script trigger Buff remove vcompare creplac DefName qDesc bearAll LeftTiP Data ErrorCode tonumber objid yforever useconds bNumByB index Vlimit Fstep
+
+### trigger/triggercloudsever.lua  (35)
+LuaQ Script trigger CloudSever onstructor playerid2string getN Value jNumber RIndex Key8 etDataListv kremove2 Clear automaticT ansmitToMap DRoom ROther Category CurEventParam Edata ErrorCodeE elibvar Ctabl valA createNew2 NamR uregOnce TunregO eglobalA Asort mapid Oroom UGroup NnextR
+
+### trigger/triggercreature.lua  (55)
+LuaQ Script trigger Creature onstructor getAttribute fackTyp anstanc getPosition3 FaceYaw fheckIfb rBoxArea ETeamT GroupIdx kill Tremov sWithId hImmune SettingAttStatus playBodyEffectA irandom tryMoveToPos Ostop CScal XSound1 ObjJ Dplac GetM RerDef Desc BBase rData Bself ErrorCode Uobjid Pattrt Fvalu ackr yawR dFAILEDb startpos jminx Zaxx Oteam DWorl Fpawn Ubopen oggle qparticl oPlayer ivolume9 Ypitch eisLoop onumber _block
+
+### trigger/triggercreaturegroup.lua  (37)
+LuaQ Script trigger CreatureGroup onstructor makeObj SeTemp addP remove GFrom5 Lclea Cexec CWith get0 jIdx drandom BBase Sset metatable SIns Pfunc objg Bpair arrobjs generator Vstate vcontrol Uobjid Smgr ErrorCode Sret Scopy_ curparam etoggle Edata Vlimit aresult
+
+### trigger/triggerdebug.lua  (37)
+LuaQ Script trigger Debug onstructor getLogData logQ Begin Check LogValid Event lParams TOther qConditiU iult Report EInfo CustomFunc Toggle tartTime logIdx Aselfa eenable GindeE Arund error found Elog Acellb Vlimit Fstep tnumber temJ oinsert QBreakZ Poi5 func
+
+### trigger/triggerdisplayboard.lua  (15)
+LuaQ Script trigger DisplayBoard show Chide Picture VideoUrl CustomUI ViedoPlayMode CsetN DisPT aErrorC Eerid url5
+
+### trigger/triggergraphics.lua  (44)
+LuaQ Script trigger Graphics onstructor make BText zflotage kPro ArrowToPos Surface ELine Image getRandomColF Ereat Txtm ProGres _remov ObjID PosJ Utitle Ifont Iapha4 Fityp4 autoWrap Yimgid Bmathx bstring bformatK tonumberN ptable ErrorCode fFAILED rRAPHICS _PROGRESS SUSPENDBOOK BHORN2 ARROW_POS vACTOR BLINE CRFACy _IMAGE EInfo eoffest
+
+### trigger/triggergroup.lua  (56)
+LuaQ Script trigger Group onstructor ID2Type ValueByNo insertIn_ remove _Index jlength RandomPosS Area oNumber oStringL Bool Olock1 OItem1 bEffect Glete aplaceVR wCountBy UgetNo NumX getAllObjs BBaseZ gPrivat slibID SCOPE_RATE gVARCFG CFGTOVARTYP PLAYERGROUP CREATURE HAREA JNUMBf hSTRING xBOOLEAN PBLOCK LITEM fEFFECT7 TMP2 Bmath _floor aRunLib libvarid tmpconfg avarcfg ErrorCode Wuin Wret Ctabl oFAILED kuin2 bSpcialX Tplaye UTempV
+
+### trigger/triggeritem.lua  (50)
+LuaQ Script trigger Item heckDrop dNum InBoxArea Compare Areat ToStorageBox Pspawn HFrom ProjectileJ ForPlayer HtroyT setCD enterCDO getPosition FEven fame playBodyEffectById Ostop _Scale ByObjDir randomx GLast BDesc rGetAttr Sset Onum1 jminx Zaxx WorldContainer eremove AByID ErrorCode Sure Sret uSkillCD Tarf UParam MdataB epartic vyeHeigh OSize Bmath GsqrtF Qratio Ganim value
+
+### trigger/triggerlistenpram.lua  (8)
+LuaQ Script trigger ListenPram onstructor AddGraphics Yobjid Yfuncs
+
+### trigger/triggerminicode.lua  (25)
+LuaQ Script trigger Code onstructor mpareCourseAnswer WithEventBlock getSimilarityUgcVC AArea Types rotalNum ASpec emptyAction Condit udeObjId workspace gmethod eareaid Epos3 EEnum NumInfo Btype ptable SGroup atabRet
+
+### trigger/triggerobjlib.lua  (14)
+LuaQ Script trigger ObjLib getObjWithKey Object AreaData ErrorCode Position bLiving Bmath floor AItem8 Euuid
+
+### trigger/triggerplayer.lua  (140)
+LuaQ Script trigger Player onstructor stop getHost bgetAll BAttr killq rosition reviveToPos RPoint rsetTeam2 yFaceDir addItemToBackpack adiscar4 Fmove AearPa Fswap calcSpaceNumFor kNum bmountA Winh playAct notify Info2Self SystemMsg cDefeat etJoinJudge GQuit rotateCamera changeViewMode chrowAt GDrop tryNaviga isEquipByResID UObjidp AimK BodyEffectById4 RScale XSound1 RMusic CDire dvertising openDevStore GoodsBuyDialog tetailed VideoUrl Dhide ropsType QOffBy actCreate RactDe BMovet BNickB mmuneAttack grateQQ OpenAppraise BColl InviteBull StandReportEvent SendFriendApply ShortCutIx ActInHan aenough hase BarF UBoxBy bforceO uiltinRank IHide MobileVib Fvom Set_ BAnim GSkin GetFirst eGroupS MapIntera rData teamBeforeC Cpair vcontrol Fvalu UinY QrrorC Uerarr Aattr Lposx FACE_DIRECTIONM DIR_POS_X TNEG_Z ufacedir Qt_yaw BACKPACK_TYPE SHORTCUT NVENTORY Bt_ba1 index Vlimit gridtable durabilit OILED tonumber CPara DChat ndD4 getCurToolID uResults Upitch Tviewmc slock u80ion PLAYERATTR ITEM_DISABLE_THROW EDROP1 Ptotal sid3 aRiding _ObjId particleI evolume MLoop c2UgOnce Tunregm Sins customDesc EQUIP_START_INDEX power Cnisfrinu amplitud PosTransformTo Einfo Isadd enDJ Fobjs extY ForTempc FAui_
+
+### trigger/triggerplayergroup.lua  (34)
+LuaQ Script trigger PlayerGroup onstructor makeObj reateTemp addN bremove GFrom1 Jclea exec CWith brandom BBase Sset setmetatable SIns Pfunc objg Bpair arrobjs generator Vstate vcontrol Uobjid Smgr ErrorCode Sret curparam etoggle Edata Vlimit aresult
+
+### trigger/triggerquest.lua  (9)
+LuaQ Script trigger Quest onstructor Sreate Sstroy Einfo playeridl
+
+### trigger/triggersound.lua  (7)
+LuaQ Script trigger Sound onstructor play Cstop
+
+### trigger/triggerteam.lua  (26)
+LuaQ Script trigger Team attrGet EAMATTR PLAYER_NUM PlayerNums SCORE VScoreh rgetRank Creatures BBase4 rData Sset kunpack ErrorCode eteamid Etype rvicename Ifunc Sret Uvalue ranking pGroup ReTemp
+
+### trigger/triggertimer.lua  (23)
+LuaQ Script trigger Timer onstructo Wreate Edele startBackward pausP Tresum Rchang Ghide Iname Eowid isprivat intervalsec ErrorCode Sret Uvalue PlayerGroup bgetAll ucontent Carrp
+
+### trigger/triggertool.lua  (12)
+LuaQ Script trigger Tool getByteCount substring Ebyte Btype ucontent eartIdx Xcur harArr
+
+### trigger/triggerui.lua  (43)
+LuaQ Script trigger CustomAnim MOVETO SCAL ROTAT onstructor getElementID akeUIText rSize SColor howp Ehide rotat UAlpha Position getItemIc RerObj wBlockIca IRole RShuct SmoothMoveTo AScal BPlay BStop StringSplit EuiID cdata banimid playerid Einfo Uwidth eheight Xeffec pageIndex PrrorC Gitem Sret Obuff Yisadd Engle _print
+
+### trigger/triggervarlib.lua  (13)
+LuaQ Script trigger VarLib onstructor Data rPrivate uin6 BselfF GlobalVarWithKeym Btype table Cmeta
+
+### trigger/triggervarlib2.lua  (30)
+LuaQ Script trigger VarLib2 onstructor getGlobalVarWithKey Private Base BVar2 rData SCOPE_RATE gVARCFG CFGTOVARTYP sOSITION sAREAINS cNUMBER cSTRING dBOOLEAV EPLAY SGROUP WBLOCK GITEM tCREATUR cCTORID aEFFECTv ErrorCode libvarid Wret oPlayer Arlib
+
+### trigger/triggerworld.lua  (70)
+LuaQ Script trigger World onstructor hasxyz CurHour getDefSpawn xyzToPos offset getp sTime eather PlayerTotD rGravity rMidJoin RayLength RayBlock calcDistance HorizontalAngle eVertic playEffectOnPosition Nstop XScale randomPak WSoundY recc eByPos26 _Coord normalizeDirW rdirToVe EventAdna getBuildingb bSetTxt1 oup1 BFrom6 dString9 VanishingSpeed SetSkyBoxTempl Color BAttr Param fFilters VSwitc RValue1 isTypeErr bnumber Eport Code eFAILED ERule create Bmath1 pmax AllowMidwayJo lposSrc wDst_h PosMul v_degree costheta QLastCD evolume eisLoop Lpos1 Slta _local serv SKYBOXFILTER TEMPLATEf UCOLOR

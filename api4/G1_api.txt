@@ -1,0 +1,102 @@
+
+### api/actor.lua  (89)
+LuaQ Script actor ApiA bonstru isPlayerD isMob getObjType CInAiG getPosition Bjumpu killSelf CurPlaceDir tryMoveTo raddBuff bremove bearAll BList reftTick RaddHP RgetHP getMax bOxygen rEnchant findNearestBlock9 setFaceYaw Eturn RPitch playBodyEffect Hstop bByFile RSound rSpecial bWithId setAttack bImmune Smount9 AttrState tryNaviga QandomY aRiding AappeM RDirec EyeHeighl codySiz hownickname orFacade hangeCustomModel recoverinitial cerHurt BAreaK Ski5 Bstub Tosx pairs generator vcontrol keyw Uvalue QtypesK Uobjid pErrorCo FAILED Sret ameobj eFlying EOnce arget Obuff ticks Level MainManager TransfomOrigin2Curren ffsetl yncG Gvolu Mflag posindex Iattr particleI MLoop AP5Q DdleN reaM RsObjsD Creature Careac tonumber uinJ1
+
+### api/area.lua  (52)
+LuaQ Script area ApiArea onstructor Preate Rect rByRange rdestroyQ ForTemp ByPos offs bexpand Center Length aRandomr FbjIn Tblock yPlayersk ureY PfillBN eclearA APosO areplac illObjs ByObjTyp rwrapper Bstub ToIdx rBJ_TYPE _PLAYER CREATURE DROPITEM eMISSIL Aselfc Nobji MainManagerW TransfomOrigin2Current Eface Xstart srcL ErrorCode oFAILED5 Etype Ctabl oipairs6 Rnsert Onext1 generator Vstate vcontrol Uinair
+
+### api/backpack.lua  (35)
+LuaQ Script backpack ApiB BarIDRange SizU setGridItem remove AearP Fswap enoughSpaceFor ValidList BName Durability rEnchant ToolType cdiscar Numr actEquipUpByRes QOffBy actCreate PlayShortCutIxEffecX NStop rwrapperK AstubQ Eself bart9 SSCm MainManager TransfomOrigin2Curren P__mod betid__ playerid Kgrid scale
+
+### api/block.lua  (45)
+LuaQ Script block ApiBA onstructor listento isSolid1 ELiqu AllV BData wdestroyE Splace ForUpdate Notify SettingAttSt7 Pwitch BirTo ByDir TPowerK erandomW mefName wDesc Facade PlayAct uePrint rwrapper EstubI func rrorCo SSCV MainManag TransfomCurrent2Origin Sret dropitem Eolor attrtype oFAILED isactivM onumber eanimid aisType boolean ostring Ubluep Uangle
+
+### api/buff.lua  (32)
+LuaQ Script buff ApiBuff onstructor isCustom vData transfomPluginOrigin2Current addr bremove bearAll vList PNumBy RIndex eftTick Desc rwrapper EstubI BtypeU Dnumb Bmath Sfloor rrorCode table aFAILED lStatuss Uticks oipairs generator Vstate vcontrol Qcondst
+
+### api/chat.lua  (11)
+LuaQ Script chat ApiChat onstructor send SystemMsg rwrapper EstubI ucontent targetuin
+
+### api/cloudsever.lua  (59)
+LuaQ Script cloudsever ApiC onstructor setDataListValue remove agetAny ByKey Index ClearB POrderX automatic Area listCach Updatl SenZ MsgP TransmitToMapD BRoom ROther Category rwrapper Bstub Play bTime xm_Board Aself5 elibvar Bname params ForTrigge Qevent pglobald callback5 BTask create ErrorCode rFAILED regOncee Jbcod7 Sret onumber Bmath _floor eicount tostring sAsync BDefS notifyg dInfo2S ecustomp Cdtti otiQ Etabl oinsert Vlimit Fstep Groom
+
+### api/creature.lua  (64)
+LuaQ Script creature ApiActor rconstru getAtt isAdult OxygenNeed TamedOwnerID setPanicn IActive BName addMod ETeam uMaxFood HpRecoverh WalkSpee6 JSwim JumpPoweR getDodge PunchAttack TRange uDefense RMaxHp RsetHP sreplace cDesc Pwrapp AstubQ Eself Uobjid attrtype ErrorCode SSCj MainManag TransfomCurrent2Origin Sret _table oipairso Rnumbe eteamid generator Vstate vcontrol CREATU MAX_HUNGER HP_RECOV ZeOXYGEN WALK_SPEED VKSWIN JUMP_POWP eWEIGHT UDODGE ATK_MELE VREMOT bFAILED vosition SWorld Epawn rraphics VarLib2 dLibvar jret4 jret5
+
+### api/creaturegroup.lua  (27)
+LuaQ Script creaturegroup ApiC onstructor Sstroy ForTemp WithPlayerId reset BData loadArchivex Dmove HFrom Klear execTrigger get0 IdxQ Tandom AstubI ErrorCode eFAILED VObjTo Ccobj NisOf Mndex JbjInq EObjsn
+
+### api/customui.lua  (41)
+LuaQ Script customui ApiC iconBase PCfg Bitem Tblock Tactor dstatus Drole qconstruW setText csetFon SColor howElement Ehide UAlpha Position getItemIc RerObj IRole RShuct getAngle SmoothMoveTo AScal PlayO BAnim BStop rwrapper AstubI playerid Uwidth eheight Xeffec pageIndex ErrorC FAILED objt Sret Obuff
+
+### api/debug.lua  (13)
+LuaQ Script debug ApiD onstructor rmmitLog BreakInfo RPointM __Resume rwrapper EstubI Edata errorFlag
+
+### api/displayboard.lua  (15)
+LuaQ Script displayboard ApiD show Chide Picture VideoUrl CustomUI ViedoPlayMode CsetN rwrapper AstubI DisPs Eerid
+
+### api/dynamic.lua  (17)
+LuaQ Script dynamic ApiD onstructor pstroy Bcall Bapis rwrapper EstubI Btype lstring ErrorCod aFAILED Ename Ytoken UobjId
+
+### api/game.lua  (29)
+LuaQ Script game onstructor ispatchEvent getDefString setQ Qs2CliQ addRenderGlobalEffect remove oPos RScale msgBox plitStr InJson rwrapperK AstubQ Self msgh eparams Yindex binsert ErrorCode PFAILE Emark generator Vstate vcontrol Sjson2
+
+### api/gameeventque.lua  (10)
+LuaQ Script gameeventque onstructor postGasTimer CurPlayerNum AstubI cur_ alivenum Utotal
+
+### api/gamerule.lua  (75)
+LuaQ Script gamerule CurTime bLocked rWeather MaxPlayers BlockDestroy Place GravityFa StartModea TeamNum Rttack Score BKill4 MobX pCollect bReviveh Invulnerabs DisplayNa iinLose bNotifyC rBgMusic bMobGen gSpawnP sDieDrop ALifeL howSight torChang PoisonSwitch afeD0 AllowMidwayJoind CShar BView CType ountDown Dound Pwrapp AstubQ sValue GAMEMAKER_RULE _CURTIMEm eLOCKED uWEATHER MAXPLAYERS uDESTROY FPLAC GRAVITYFACTO UAMERA STARTMOD uTEAMNUM AATTA vENDSCOR _KILL pCOLLECT yREVIVE_ INVULNERABL g_WINLO ISAVE VNOTIF yBGMUSIC eMOBGEN jSPAWNP qMINIMAP DIE_DROP XLIFE_ SHOW_SIGHT CvORCHANGD POISON_SWITCH eAFE_D0 ALLOW_MIDWAYJOI yET_VIEW3 B6TYP COUNTDOW RESETROUN
+
+### api/graphics.lua  (51)
+LuaQ Script graphics ApiG make sText rflotage Progres ArrowToPos CLine oSurfac RImage Vcreat ExtBy remov RObjID Yupdat BById PosJ Esnyc nfo2Client find4 cwrappeM EstubI title rontsize Bapha Cityp GRAPHICS _HORNBOOK autoWrapq Adata qSUSPEND Bring tonumber scurvalu Oolor PROGRESSp ARROW_PO ILINEb JRFACe _objidB sACTOR Rimgid Iscall IMAG ErrorCod hFAILED eoffest Lval1 vplayeri
+
+### api/item.lua  (22)
+LuaQ Script item ApiItem onstructor vName ADrop arandom ProjectileID BDesc rGetAttr rplayAct rwrapper AstubI MainManag TransfomOrigin2Current ErrorCode Uobjid BtypeY mnumber oFAILED Ganim
+
+### api/listenparam.lua  (25)
+LuaQ Script listenParam ApiL onstructor ddGraphics snyc Info2Client Change rwrapper Bstub rSupport CheckFinshFunc Aself9 ErrorCode oFAILED objid Yfuncs btype ostring dupdate TextByIdV numbR Progress Edata
+
+### api/mapmark.lua  (15)
+LuaQ Script mapmark ApiMapMark newShape cdelete Col2 qupdateLr Rectangle Circ rwrapper AstubI Etype Uapeid Eflag
+
+### api/minicode.lua  (11)
+LuaQ Script minicode getSimilarityUgcVC AreaBlockNumInfo rwrapper EstubI eareaid Epos3 EEnum IdForNum
+
+### api/minitimer.lua  (33)
+LuaQ Script miniA Apik onstructor transPlayersid updateTick AloadD RCache Hsave exit isExistx WithParentID Edele tartBackward Wpause Tresum Qchang Interval Fhide rwrapperK AstubQ RWorld cgetAll ErrorCode bFAILEDf Btype Ctabl tonumberL Eowid ostring curo Utitle
+
+### api/objectlib.lua  (13)
+LuaQ Script objectlib ApiO onstructor getAreaData Position bLiving BItem rwrapper EstubI oobjlib Euuid
+
+### api/player.lua  (112)
+LuaQ Script player ApiActor bonstru getAttr HostUin DMain rResults RScore jankingL gainItem teleportHomem CurToolID getNickna removeBackpackN DieTimes LeftLifeNum ETeamT FoodLevel rShotcut BUsed setSkillC reviveToPof RPoint5 Smount notifyN Info2Self rotateCamerai changeViewMod PctionB EquipByRes psetPosi QetAim RMusic Cstop openDevStg PropsTyp qdvertis Task Callback BoxScale UBoxBy bforceO GoodsBuyDialogA VideoUrl Dhide BMove Erate Appraisez QColle aStandR REvent SendFriendApply InHa pBuiltinU IHide tetailedm MobileVib PosTransformBy GSkin InviteBulletBox GetLanguageAB RFirst7 bGroupS gGetNew MapIntera Rela rwrapper Bstub P__mod betid__ a__ssmo ustomuiid Anext Uobjid Pattrt rManager mOrigin2Curr priority qosindexI aErrorC VFAILE Minfo Utatus shift Upitch vviewmod slock ELoop RParam9 emsgStr Ipage Itask Qtdata Preate NamV _gOnce7 c96ODesc effg power threadpool Dwait amplitud enablV Eumbe ACKA Rinser yagesize rezD Vlimit Fstep
+
+### api/playergroup.lua  (28)
+LuaQ Script playergroup ApiP onstructor Sreate Sstroy ForTemp BWithl Qreset BData loadArchive add6 Bmove CFrom execTrigger brandom Bhang MoveType AstubI ErrorCode eFAILED VObjTo NisOf Mndex JbjInm EObjsl obj2
+
+### api/spawnport.lua  (9)
+LuaQ Script spawnport ApiS onstructor RPoint ChunkValid rwrapper AstubI
+
+### api/task.lua  (39)
+LuaQ Script task ApiTask TASK_TYPE askCount sPool Category newC makeCallback create8 BName BOncej regPython Dsend9 ceive AndClear Aself3 QpcallC arg4 Afunc BJSON bencodeY support ujsonstr aErrorCj Auto3 bostrin _FAILEN typ6 einsert Ainfo pairs yremove generator Vstate vcontrol Bvalu qdelList
+
+### api/team.lua  (18)
+LuaQ Script team ApiTeam onstructor getNum PlayerNum frandom Creatures RScore yResults sDieTime bchangeY rwrapper AstubI Ualive rrorCode eFAILED
+
+### api/ui.lua  (32)
+LuaQ Script ApiUI onstructor Blist Bshow hide regC Sblock2 makedummy etGBattle world2RadarPos mapRenderModeU aShapeL Circle ShowScreenEffec Print2Wnd WithTag BData cwrappen AstubI aErrorC7 uimgr Ename keyQ MpathR Fvalu Cleng eradius Itype eisloop incspeed
+
+### api/valuegroup.lua  (50)
+LuaQ Script valuegroup ApiV onstructor getTempVarid SByNamN insertInGN aremoved ByIndex length Item getD cRandom Glete addG Dplace wCountBy getSpcial cLibTyp Objs Bstub CFGTOVARTYPE PLAYERGROUP CREATURE HAREA JNUMBf hSTRING xBOOLEAN PBLOCK LITEM fEFFECT7 SCOPE_TMP2 tonumber RError BCode FAILED Bmath7 _floor uVarLib2 Globa Player5 Alibv tmpconfg sgvRet vart flibnam Sret BSORT cret2
+
+### api/variablelib2.lua  (20)
+LuaQ Script variablelib2 ApiVarLib2 onstructor getGlobalVa getPlayer find7 LibG vdByName replaceAl Creatures AstubI Avarl ErrorCode oFAILED Etype _ret lobjSrc DesJ
+
+### api/world.lua  (91)
+LuaQ Script world ApiWa onstructor stroy isDay Custom reativeMode5 Extremity Fre4 ESurvG HeRun RMaker getHours CameraEditStatL bConfig getRangeXZ ryLengthe RBlock7 getAs esByBox PlayerTotal randomOne despawnA vItem RObjidR Projectile CByDi calcDistancn playParticalEffectD OnPosition XScale WSoundY qLightBy WeatherID getBuildingbE eSetTxt7 eLocalD eString bServer vFromTim imeVanishingSpeedw PGetSk QTempl BMaps Color BAttr RParam kFilter eSwitch SGroup TwrappM EstubI Ehour Ldstx aErrorCG SSCR MainManage TransfomCurrent2Origin Sret SJAA aisType mnumber dFAILED Ctabl _pairs Rallar Yarray generator vcontrol objP ndA_ Naliv trig shoo Lpos1 evolume eisLoop faultSt VENTDATE OYEAR SMONTH CHOUR cMINUTE cSECOND TIMESTAMPO Sset aindex Vlimit Nvalu
+
+### api/worldcontainer.lua  (23)
+LuaQ Script worldcontainer ApiW onstructor addFurnace remove Eheck HeatPercent StorageBox EmptyGrid BItem ByID rndex wrappM AstubI ublockid MainManag TransfomOrigin2Curr __modpacketid__G ioffset ErrorCode retZ
+
+### api/worldenum.lua  (289)
+LuaQ Script worldenum Type OWTYPE_SINGLE UCREAT EXTREMITY u_RUNGAMC TMAKER uFREEMOD dRECORD STUDIO_EDIT ANDBOXNODE Terrain ERRAIN_FLAT qNORMAL CameraEditState QAMERA _STt ONULL _CURTIME iLOCKED yWEATHER MAXPLAYERS yDESTROY0 RPLACE GRAVITYFACTO QSTARTM yTEAMNUM AATTA VENDTI ESCOR Z_KILLa pCOLLECT xREVIVE__ INVULNERABG f_WINLO UNOTIF xBGMUSICA UMOBGE xSPAWNPT qMINIMAP DIE_DROP SHOW_SIGH tORCHANGe POISON_SWITCH dAFE_D0p ALLOW_MIDWAYJOI NUMd SET_VIEW COUNTDOW RESETROUNb tNTERVALB OLESHADOW MAPMARK_ LIND QRECTA SCIRCL EQUIP_SLOTL BHEAD7 BREA xLEGGING5 HSHOE5 cWEAPON MODATTRIB _MOV OSWIM DJUMP o_PUNCH EEXPL FIRE tDAMAGED AFALLW DRMOR z_ABSORB CRITICAL_HI ZKNOCK _PROB f_SCALE CMOB_ LUCK _BR7 OXYGEN_SUPPLYA BWALK BODY_EFFECT PORT RACCUM bDRAGON iSUMMON TAME_SUCC DFAIL1 AI_NEEDREEDS EARB APROT ODIE0 HORSE_FLY aDISAPP EBENT TOOLFX_JETPACK2 bACTIONw QHUDFX7 BSHOT AMILK ANGRY ZSLEEP RANS FORBIDDENj yCONCEAL IIZZY BI_HU BALL_CHAR SHOOT_RELEASM RENCH_ ameActor_ cMONSTE BITEMB ARROWT TNTT CVALU STR2 DPIST AHROW sENDEREYi SIGNS IREWORK LBOAT lFUNNEL LEXPO PROJECTIL tECHA_UN nDRIVER MENSO RAILKN LCKET RRADIO bPRETER N_LAS MGIAN FLYy eQUATIC EGIONREPLICATO BUILDBLUEPRINT VOLLID UVEHIC uDELCRAF DSHOPD BOOK DWHEEQ fVILLAG uSNAKEGO ESERTBUSINESSMAH SEASPIRIT FISHING PIRf UIXENI HIPPOCAMPU aVACANT AMISS VToObj SHORTCUT4 pINVENTO DIR_NOT_INL UEG_X b_INDEX STOR CPOWE RDODGEF ATK_MELEz SREMOT QIMENSJ VLEVEL9 RCHAOS FDIST PHYS CAGIC TPICKU AWAs SELF_BOMB bCOPULAw ESNEA STRENGTH AUTOFORW ISCX TWI8 TURNi ABURNV YFLASH YANVILk YACTUS ASPHYXIA tUFFOCAT pNTIINJUd ZFIXEDk tGLISSAD cABILITa KPUSH INE_AN pANDDUST UMPEST fLIZZART OMMj COCEA FRIGIDZON rVOLCANOB RNUNJA CPLAI AIRISLANx MAIN FSTOM bRESLIBg FKEYS bstringi Cchar3 BPOSI cAREAIN eNUMBER ITEu WOKESTAGA YREPAIt QGRAPHd rSUSPEND dPROGREL FURNACEI IROM ECOPPh ESTOP BPEAT DATB HOUj CINUTY SSECON CSTAM AreaSimilarity IgnBlock RCKMAX rDEFENSE ELONG FDURA EATF _LOOP cDEFAUL2 LinearTransformation SineIn2 cineOut DQuad PCubic TQuart DExpo DCirc Blast DBackY Aounc Sustom GDDLE cBOTTOM WCLOUD ARD8 CHIGH_ hMINDIS bRANDOM QCONTRF COSUR vVOLUMEL SGAMMA LUTv cTMSLOP TFTMTOs TMSHOULDA FTMBLACKCLI SModel oveFollowB utoindent relative CllDi rOnlyYaw SPitch SoTurn pBSOLUTE UASSIVu RENDLY UNEUTRj BTREE CEHIN bPlayerp TheAuthor ollectMaps qvaluate Vlimit Fstep
