@@ -1,0 +1,3726 @@
+
+
+========== 2.0官方百科-接口使用说明 ==========
+源: https://dev-wiki.mini1.cn/cyclopdeia?wikiMenuId=3&wikiId=1352
+
+文档-迷你世界创作者学院-迷你教程 
+ 主站
+ 资讯 
+ 文档 
+ 技术分享 
+ 课程 
+ 迷你世界创作者频道
+ 扫一扫
+ 点击加入
+ 创作社区 
+ Studio专区 
+ 登录
+ LUA脚本创作 
+ API接口 
+ 接口使用说明 
+ 事件列表：Event 
+ 游戏规则：GameRule 
+ 世界接口：World 
+ 游戏接口：Game 
+ 方块接口：Block 
+ 状态接口：Buff 
+ 实体接口：Actor 
+ 玩家接口：Player 
+ 生物接口：Creature 
+ 世界UI接口：UI 
+ 区域接口：Area 
+ 聊天接口：Chat 
+ 组队接口：Team 
+ 道具接口：Item 
+ 背包接口：Backpack 
+ 变量库接口：VarLib 
+ 对象库接口：ObjectLib 
+ 小地图接口：Mapmark 
+ 出生点接口：Spawnport 
+ 计时器接口：MiniTimer 
+ 文字板接口：Graphics 
+ 函数监听接口：ListenParam 
+ 变量组接口：ValueGroup 
+ 自定义UI接口：Customui 
+ 容器接口：WorldContainer 
+ 显示板管理接口：DisPlayBoard 
+ 云服数据存储接口：CloudSever 
+ 学习案例 
+ 迷你世界ID查询 
+ 脚本常见问题 
+ 接口常量列表 
+ 脚本案例
+ 游戏案例：二零四八 
+ 游戏案例：迷宫 
+ 游戏案例：俄罗斯方块 
+ 游戏案例：拼图2 
+ 游戏案例：拼图1 
+ 游戏案例：扫雷 
+ 游戏案例：连连看 
+ 游戏案例：数独 
+ 游戏案例：贪吃蛇 
+ 综合案例：可以看时间的闹钟 
+ 综合案例：可以坐上去的沙发 
+ 通用案例集合 
+ 功能案例集合 
+ 算法案例集合 
+ VSCode插件 
+ 脚本更新日志 
+ 道具百科
+ 触发器百科
+ 脚本API百科
+ 创作手册
+ 创作功能
+ 其他
+ Studio百科
+ 接口使用说明 彼得兔 更新时间: 2024-10-30 09:47:12 
+ 在查阅开发者学院中的脚本API时，若有任何问题或建议，欢迎通过问卷进行反馈！ 【点我填写问卷】 
+ 开发者在创作地图时要实现的各种 玩法 ，依赖于迷你世界提供的一系列 接口 ；玩法的运行又依赖于一系列 事件 。比如一个简单的玩法 点石成金 ：&ldquo; 每当玩家点击石头，就把石头变成金块 &rdquo;，要实现这个玩法需要： 
+ ①首先监听事件 任意玩家点击方块 ； 
+ ②事件触发后 判断被点击的方块是否为石头 ； 
+ ③如果是，就 在被点击的位置创建金块 。 
+ 像这样， 监听事件、进行判断、执行操作 是进行玩法创作的基本形式。&ldquo; 监听事件 &rdquo;可以在下面事件列表里查询，&ldquo; 进行判断 &rdquo;可以根据需要自行处理，&ldquo; 执行操作 &rdquo;一般就要用到各种接口了。 
+ 每个接口相当于一个 小功能 ，调用之后可以进行各种 操作 ，组合起来就可以实现各种 玩法 。比如上面例子里，&ldquo; 在被点击的位置创建金块 &rdquo;，我们需要&ldquo; 在指定位置创建指定方块 &rdquo;的功能，通过查询 方块管理接口 ，可以找到： 
+ &middot;设置指定坐标处为某方块： 
+ result=Block:setBlockAll(x , y , z , blockid , data) 
+ result：0成功 1001失败 
+ x,y,z：要设置的坐标 
+ blockid：要设置的方块id 
+ data：要设置的方块数据 
+ Block:setBlockAll( 0 , 7 , 0 , 1 , 0 ) 
+ 在 (0,0)高度7 的位置生成一个 基石 ， 数据 为 0 
+ 也就是说，只要调用这个接口，传入 被点击的坐标 、 金块id 和 方块数据 (这里不用考虑，传入0即可)，就可以把 指定坐标的方块设置为金块 。 
+ 那么如何获取&ldquo;被点击的位置&rdquo;呢？通过查询 方块事件 列表： 
+ Player.ClickBlock 
+ 玩家点击方块 
+ eventobjid：点击方块的玩家迷你号 
+ blockid：被点击的方块id 
+ x,y,z：被点击的方块坐标 
+ 可以看到，&ldquo; 玩家点击方块 &rdquo;这个事件参数共有 {eventobjid,blockid,x,y,z} 五个值，其中 x、y、z 就是我们需要的 坐标值 ，另外还需要 blockid 来判断 被点击的方块 是否为石头。迷你里 注册事件监听 的脚本代码为： 
+ ScriptSupportEvent:registerEvent([=[ 事件名 ]=], 函数名 ) 
+ 比如这里我们需要监听事件&ldquo; 玩家点击方块 &rdquo;，那么就需要(函数名是任意的)： 
+ ScriptSupportEvent:registerEvent([=[Player.ClickBlock]=],click) 
+ 然后新建click函数： 
+ local function click(e)
+ if e.blockid==104 then
+ Block:setBlockAll(e.x,e.y,e.z,400,0)
+ end
+end 
+ 这里 104 是石头的id， 400 是金矿的id。完整代码如下： 
+ local function click(e)
+ if e.blockid==104 then
+ Block:setBlockAll(e.x,e.y,e.z,400,0)
+ end
+end
+ScriptSupportEvent:registerEvent([=[Player.ClickBlock]=],click)
+ 这样就实现了一个简单的 小功能 ；各种 小功能 组合起来就可以实现复杂有趣的 玩法 。如果需要更详细的讲解可以参考 迷你世界脚本教程 。或者 查看我们准备的 Lua编程基础课程 ，以及 Lua实例应用课程 。 
+ 游戏内ID查询方法 
+ 强烈推荐使用此方法在游戏内查询ID，更新快且查询方便 
+ 方法一： 
+ 第一步：点击编辑框上方&ldquo;ID库&rdquo;，选择要查询的ID类型 
+ 第二步：左侧选择分类，点击对象即可显示对应ID 
+ 第三步：点击&ldquo;插入ID&rdquo;即可直接输入使用 
+ 方法二： 
+ 第一步：使用快捷键&ldquo;Ctrl+I&rdquo;，或右键单击输入框任意位置，选择&ldquo;插入ID&rdquo; 
+ 第二步：在弹出的&ldquo;ID搜索工具&rdquo;窗口输入要查询的对象名称，即可直接搜索ID 
+ 第三步：点击搜索列表即可输入使用 
+ -- UI动效表数据
+-- 显示动效
+10001 渐显
+10002 放大显示
+10003 缩小显示
+-- 隐藏动效
+20001 渐隐
+20002 放大隐藏
+20003 缩小隐藏
+-- 循环动效
+30001 颤抖
+30002 跳动
+30003 心跳
+30004 摇摆
+30005 旋转
+30006 翻转
+30007 顺时针扫描
+30008 逆时针扫描
+30009 闪烁
+-- 文字动效
+40001 打字机 
+ 抵制不良游戏，拒绝盗版游戏。注意自我保护，谨防受骗上当。适度游戏益脑， 沉迷游戏伤身。合理安排时间，享受健康生活。
+ Copyright 2015-2026 深圳市迷你玩科技有限公司 All Rights Reserved.
+ 站点有内容要更新是否更新。
+ 更新
+ 忽略
+
+========== 2.0官方百科-开发者常见问题 ==========
+源: https://dev-wiki.mini1.cn/ugc-wiki/quickin/questions.html
+
+开发者常见问题 | 迷你世界UGC3.0脚本Wiki 
+ Skip to content 迷你世界UGC3.0脚本Wiki 
+ Main Navigation Wiki问题反馈 API接口查询 迷你世界官网 星启计划 2.0Wiki 
+ Appearance
+ Menu Return to top 
+ Sidebar Navigation 
+ 快速入门
+ 欢迎
+ MOD、组件介绍
+ 什么是Lua编程
+ 组件介绍
+ 组件说明
+ 组件互相操作
+ 组件函数
+ 组件属性
+ 事件
+ 触发器事件管理
+ 组件事件管理
+ 函数库
+ 服务模块
+ 对象模块管理接口 GameObject
+ 角色模块管理接口 Actor
+ 玩家模块管理接口 Player
+ 生物模块管理接口 Monster
+ 方块模块管理接口 Block
+ 背包模块管理接口 Backpack
+ 界面模块管理接口 CustomUI
+ 图文信息模块管理接口 Graphics
+ 区域模块管理接口 Area
+ 容器模块管理接口 WorldContainer
+ 资源模块管理接口 Mod
+ 计时器模块管理接口 Timer
+ 状态模块管理接口 Buff
+ 消息模块管理接口 Chat
+ 普通变量数据管理接口 Data
+ 数组变量数据管理接口 Array
+ 二维表变量数据管理接口 Table
+ KV表变量数据管理接口 Map
+ 世界模块管理接口 World
+ 道具模块管理接口 Item
+ 剧情动画模块管理接口 Timeline
+ 全局函数
+ 全局函数
+ 枚举
+ 枚举库
+ 脚本常见问题
+ 开发者常见问题
+ 进阶指南
+ 全局函数
+ 触发器脚本交互
+ 对象介绍
+ KV&排行榜介绍
+ 二维表介绍
+ 道具实例
+ 环境（天空盒）
+ 模块 Wiki
+ 什么是环境
+ 环境模板
+ 可调属性
+ 自定义天空贴图
+ 滤镜
+ 脚本接口
+ 更新日志
+ 更新日志
+ On this page
+ 开发者常见问题 ​ 
+ 在查阅开发者学院中的脚本API时，若有任何问题或建议，欢迎通过问卷进行反馈！ 【点我填写问卷】 
+ 1. 常用快捷键： ​ 
+ 撤销-Undo（Ctrl+Z)
+ 剪切-Cut（Ctrl+X)
+ 复制-Copy（Ctrl+C)
+ 粘贴-Paste（Ctrl+V)
+ 插入ID-Insertld（Ctrl +I)
+ 查找-Find（Ctrl+F)
+ 全选-SelectAll（Ctrl+A）
+ 批量注释/取消注释-Notes (Ctrl+/)
+ 2. 如何等待1秒后继续执行？ ​ 
+ Lua threadpool : wait ( 1 ) 
+ 3. 如何打印错误日志到调试面板 ​ 
+ print ​ 
+ 参数及类型： ...:number 、 string 、 boolean、数组、kv
+ 返回值及类型： 无
+ 该方法的主要作用： 打印信息
+ lua print ( "hello " , 1 , true ) 
+ printError ​ 
+ 参数及类型： ...:number 、 string 、 boolean、数组、kv
+ 返回值及类型： 无
+ 该方法的主要作用： 打印错误信息
+ lua printError ( "hello " , 1 , true ) 
+ 4. Block中的data在什么地方使用 ​ 
+ data使用有具体需求,此处不建议开发者使用。开发者尽可能使用已封装过的没有data的新接口。
+ 5.Event 需要更详细的用法及参数解释 ​ 
+ Event即为开发者事件，是指玩家在游戏内进行了某些操作后触发的对应事件。比如玩家点击了某个方块， 这时就会触发玩家的点击方块事件，即名为"Player.ClickBlock"的事件，开发者只要注册监听该事件就能进行点击方块后的对应操作。 注册监听事件的方法如下：ScriptSupportEvent:registerEvent([=[Player.ClickBlock]=], function(event_args) ... end)。 而开发者事件在进行回调时会传回来一些对应的参数，每个开发者事件对应的参数可参考wiki中的 事件系统 部分。
+ 6.appendSpeed 接口中的x,y,z参数信息 ​ 
+ 该接口的参数x,y,z表示设定一个移动距离，需要传入整数。
+ 案例：假设把Z设定为5，当执行一次该接口后，那么objid就会向+z轴移动5格的距离
+ 写法：appendSpeed(objid,0,0,5)
+ 7.World 类中可否提供一个获取有所有 Actor 的方法，或者历遍其的方法 (非 World:getActorsByBox) ​ 
+ 由于游戏机制及效率考虑的原因，此功能不给予提供。但我们会提供触发器生物库的ActorId表
+ 8. 播放UI动效时，如何指定不同的动效 https://dev-wiki.mini1.cn/ugc-wiki/apis/customui.html#playelementanim ​ 
+ -- 显示动效 
+ 10001 渐显 
+ 10002 放大显示 
+ 10003 缩小显示 
+ -- 隐藏动效 
+ 20001 渐隐 
+ 20002 放大隐藏 
+ 20003 缩小隐藏 
+ -- 循环动效 
+ 30001 颤抖 
+ 30002 跳动 
+ 30003 心跳 
+ 30004 摇摆 
+ 30005 旋转 
+ 30006 翻转 
+ 30007 顺时针扫描 
+ 30008 逆时针扫描 
+ 30009 闪烁 
+ -- 文字动效 
+ 40001 打字机 
+ 9.界面中的克隆元件接口如何使用 ​ 
+ 克隆体id获取方法： ​ 
+ 1、克隆体的id为母体id#clone1、2、3。 例如“7517482985765730755-134493_3#clone2”
+ 2、如果克隆带子元件的元件时，其子元件会被一同克隆，此时如果想要获取子元件的id，可以用以下两种方式：
+ ​ a. 直接在子元件id+#clone1、#clone2，每克隆一次+1，例如"7517482985765730755-134493_3#clone2"
+ ​ b. 用克隆体父元件id.老子元件id，例如"7517482985765730755-134493_1#clone1.7517482985765730755-134493_3"
+ 详细示例： ​ 
+ 首先如图我们制作一个层级关系的示例：
+ 界面中的id如下表格所示
+ 元件 id 
+ 7517482985765730755-134493_1 
+ 7517482985765730755-134493_2 
+ 7517482985765730755-134493_3 
+ 7517482985765730755-134493_4 
+ 7517482985765730755-134493_5 
+ 我们编写了一段代码，用来克隆元件，然后将克隆出来的子元件隐藏
+ lua local Script = {} 
+ --属性定义 
+ Script. propertys = { 
+ } 
+ -- 需要开放给别的组件访问的函数需要配置 
+ Script. openFnArgs = { 
+ } 
+ -- 组件启动时调用 
+ function Script : OnStart () 
+ -- 监听UI按钮点击事件(元件id) 
+ self : AddTriggerEvent (TriggerEvent. UIButtonTouchEnd , self . OnUIButtonTouchEnd ) --输出点击按钮的id 
+ self : AddTriggerEvent (TriggerEvent. UIButtonClick , self . OnUICloneButtonClick , "7517482985765730755-134493_4" ) --点击克隆按钮 
+ self : AddTriggerEvent (TriggerEvent. UIButtonClick , self . OnUIHideButtonClick , "7517482985765730755-134493_5" ) --点击隐藏克隆出来的按钮 
+ end 
+ function Script : OnUIButtonTouchEnd (event) --点击任意按钮时，输出点击按钮的id 
+ local id = event. uielement 
+ print ( "任意按钮被点击开始" ) 
+ print ( &#39;点击了&#39; .. id) 
+ print ( "任意按钮被点击结束" ) 
+ end 
+ function Script : OnUIHideButtonClick (event) 
+ --第一种获取克隆体的子元件的方法，直接在原元件id+#clone1、#clone2，每克隆一次+1，例如"7517482985765730755-134493_3#clone2" 
+ --local isSuccess = CustomUI:HideElement(Player:GetHostUin(),"7517482985765730755-134493", "7517482985765730755-134493_3#clone1") 
+ --第二种获取克隆体的子元件的方法，用克隆体父元件id.老子元件id，例如"7517482985765730755-134493_1#clone1.7517482985765730755-134493_3" 
+ local isSuccess = CustomUI : HideElement ( Player : GetHostUin (), "7517482985765730755-134493" , "7517482985765730755-134493_1#clone1.7517482985765730755-134493_3" ) 
+ if isSuccess == true then 
+ print ( "隐藏成功" ) 
+ end 
+ end 
+ function Script : OnUICloneButtonClick (event) --点击克隆按钮时，克隆元件，然后移动元件的位置 
+ local id = CustomUI : CloneElement ( Player : GetHostUin (), "7517482985765730755-134493" , "7517482985765730755-134493_1" ) 
+ local isSuccess = CustomUI : SetPosition ( Player : GetHostUin (), "7517482985765730755-134493" ,id, 600 , 200 ) 
+ if id ~= nil then 
+ print ( "克隆元件成功" ) 
+ print ( "克隆体的id:" .. id) --克隆体的id为原元件id+#clone1，例如“7517482985765730755-134493_1#clone1” 
+ end 
+ end 
+ return Script 
+ 示例视频
+ 10.【计时器组】变量如何使用 ​ 
+ 在触发器中新建【计时器】变量
+ 在触发器中新建【计时器组】变量
+ 在合适的时机将【计时器】添加到【计时器组】中，然后启动。参考触发器：
+ Last updated: 
+ Pager Previous page 枚举库 
+ Next page 触发器脚本交互
+
+========== 2.0官方百科-高级创造模式 ==========
+源: https://dev-wiki.mini1.cn/cyclopdeia?wikiMenuId=1857&wikiId=2186
+
+文档-迷你世界创作者学院-迷你教程 
+ 主站
+ 资讯 
+ 文档 
+ 技术分享 
+ 课程 
+ 迷你世界创作者频道
+ 扫一扫
+ 点击加入
+ 创作社区 
+ Studio专区 
+ 登录
+ 创作功能 
+ 场景美术
+ 高级搭建 
+ [全新功能] 实体系统 
+ UI编辑器 
+ 显示板 
+ 玩法设置
+ 天空盒与滤镜 
+ 自定义玩家上限 
+ 排行榜 
+ 逻辑实现
+ 触发器 
+ [全新功能] AI编辑器 
+ 游戏插件
+ 插件功能 
+ 玩转插件包 
+ 状态插件编辑 
+ 装备插件编辑 
+ 方块插件编辑 
+ 生物插件编辑 
+ 道具插件编辑 
+ 配方插件编辑 
+ 熔炼插件编辑 
+ 剧情插件编辑 
+ 数据储存
+ 保存玩家数据 
+ 云服游戏能力 
+ K/V存储和排行榜 
+ 全局KV数据并发读写 
+ 跨地图数据互通 
+ 网游化能力
+ 地图埋点上报 
+ 消息广播及跨房传送 
+ 地图上云排行榜黑名单功能 
+ 商业化功能
+ 开发者商店 
+ [全新功能] 商店皮肤售卖功能 
+ NPC商人广告功能 
+ UI购买商品弹窗 
+ 开发者商店售卖大会员 
+ 开发者商店福利设置 
+ 资源管理
+ 资源背包 
+ UI精美素材 
+ 自定义图片 
+ [全新功能] 自定义音频 
+ 模型导入功能 
+ 资源工坊 
+ 地图测试
+ 云服调试 
+ 各类权限申请方法及条件
+ 申请跨地图数据互通权限 
+ 申请模型导入权限 
+ 创作工具更新日志
+ 1.42.0创作功能更新日志 
+ 1.40.0创作功能更新日志 
+ 1.39.0创作功能更新日志 
+ 1.38.0创作功能更新日志 
+ 1.37.0 创作功能更新日志 
+ 1.36.0 创作功能更新日志 
+ 1.35.0 创作功能更新日志 
+ 1.34.0 创作功能更新日志 
+ 1.33.0 创作功能更新日志 
+ 1.32.0 创作功能更新日志 
+ 作品结构改动公告【必读】 
+ 1.31.0 创作功能更新日志 
+ 1.30.0 创作功能更新日志 
+ 1.29.0 创作功能更新日志 
+ 1.28.5 创作功能更新日志 
+ 1.28.0 创作功能更新日志 
+ 1.27.0 创作功能更新日志 
+ 1.26.5 创作功能更新日志 
+ 1.25.6 创作功能更新日志 
+ 1.24.30 创作功能更新日志 
+ 1.24.5 创作功能更新日志 
+ 1.23.10 创作功能更新日志 
+ 1.23.0 创作功能更新日志 
+ 1.21.0 创作功能更新日志 
+ 1.13.0 创作功能更新日志 
+ 1.12.0 创作功能更新日志 
+ 1.10.0 创作功能更新日志 
+ 1.9.0 创作功能更新日志 
+ 1.8.0 创作功能更新日志 
+ 1.7.0 创作功能更新日志 
+ 1.6.0 创作功能更新日志 
+ 1.5.0 创作功能更新日志 
+ 历史更新日志 
+ 开发者学院全面改版 
+ 道具百科
+ 触发器百科
+ 脚本API百科
+ 创作手册
+ 创作功能
+ 其他
+ Studio百科
+ 高级创造模式 迷你世界 更新时间: 2024-02-01 18:35:00 
+ 概述 
+ 核心更新 
+ 【全新逻辑编辑器】新的图形化逻辑编辑器
+ 【编辑主流程升级】新的开发者模式编辑交互升级，更便捷的场景方块、对象、玩法规则编辑
+ 模式入口 
+ 创建新世界中新增高级创造
+ 游戏过程中可随时互切 高级模式 
+ 创造模式：聚焦拼搭创造，将资源中心、插件库、开发者工具等高级编辑系统收进开发模式
+ 开发模式：可使用全部编辑系统，更高效
+ 更新内容清单 
+ 一、新的逻辑编辑器 
+ 1.1 图形化编程 
+ 全新的触发器2.0，新的图形化积木代码组合编程方式，保留原有接口语句句式的情况下提供更灵活高效的拖动组合方式，画布代码块操作：
+ 超大画布：可以将代码在画布中自由组合摆放，方便用户梳理逻辑
+ 代码块/参数操作：拖动组合、复制粘贴、禁用
+ 画布操作：整理、清空
+ 支持两种代码组合结构：
+ 触发器框架结构：经典触发器的事件/条件/动作结构，类似选择题一样组合逻辑
+ 事件动作框架结构：经典scratch式的事件+动作结构，可使用逻辑控制语句，嵌套，代码组合更灵活
+ 代码注释功能：全局注释、代码块注释
+ 代码编辑撤销恢复功能
+ 1.2 更多逻辑语句 
+ 新增逻辑控制语句，if else等，能更方便实现逻辑判断分支
+ 新增自定义函数功能，支持封装逻辑复用，能更好地模块化编程
+ 1.3 更高效代码/参数选择器 
+ 更方便的代码块仓库，拖出即用
+ 更方便的参数选择器交互，大幅减少参数选择/修改步骤
+ 1.4 代码管理 
+ 快速切换定位画布事件头位置
+ 多画布切换代码组
+ 二、【新的场景搭建操作】 
+ 2.1 上帝视角 
+ 更灵活高效的上帝视角摄像机操作模式
+ 新增两指捏合（鼠标滚轮）、两指拖动（鼠标中键）快速位移摄像机
+ PC转动镜头操作改为按住右键滑动
+ 现在将不再具有碰撞，能直接忽略穿过障碍
+ 超远距离操作，指哪打哪，放置删除选择
+ 2.2 快捷搭建/删除 
+ 拖动即可快捷批量搭建/删除的基础搭建操作，拖动过程再次点击（PC为R键）可切换垂直拉框批量操作方块
+ 快速访问的资源列表
+ 可展开/收起式的列表，选中资源即可快速进行搭建
+ 可快速通过列表进入资源编辑
+ 吸管功能，快速在场景吸取定位获取资源
+ 历史搜索记录
+ 场景操作撤销恢复功能
+ 2.3 笔刷升级 
+ 新的笔刷交互方式，形状类笔刷（立方体、球体、圆柱、梯形）现在能直接在场景调整笔刷尺寸和位置
+ 新增2种新的笔刷
+ 曲线笔刷：能在连续绘制的曲线路径上生成方块
+ 平面笔刷：能快速拉伸一个颜色相同或者相连接的面，例如将一个平面圆快速往上拉成一个圆柱填充
+ 2.4 框选升级 
+ 新的框选交互方式，可直接在场景调整选区尺寸和位置
+ 现在在复制状态下，通过拖动选区面，可以步进堆叠
+ 三、【新的对象编辑操作】 
+ 3.1 新增对象选择编辑 
+ 新增选择模式
+ 可直接点选场景方块、生物、特殊对象（区域、位置、生物点、显示板）
+ 选中的对象可进行位移、旋转、放缩调整，复制、删除，部分可编辑的对象能快速进入插件属性和局部逻辑编辑
+ 3.2 插件动态加载 
+ 插件动态加载
+ 现在编辑插件，将能动态加载实时看到修改结果，不用重载地图，大幅提高编辑效率
+ 能通过选中对象、资源库快速进入该类的插件编辑，缩短编辑路径
+ 3.3 对象列表升级 
+ 新的对象列表交互
+ 更直观的总览视图，可过滤分类，更方便管理场景对象
+ 新增对象搜索快速定位功能
+ 更方便的对象调整
+ 区域、位置、生物点、显示板将能直接在场景拖拽修改尺寸和位置，以及复制删除
+ 抵制不良游戏，拒绝盗版游戏。注意自我保护，谨防受骗上当。适度游戏益脑， 沉迷游戏伤身。合理安排时间，享受健康生活。
+ Copyright 2015-2026 深圳市迷你玩科技有限公司 All Rights Reserved.
+ 站点有内容要更新是否更新。
+ 更新
+ 忽略
+
+========== 2.0官方百科-MOD组件介绍 ==========
+源: http://dev-wiki.mini1.cn/ugc-wiki/quickin/ModInstruction.html
+
+MOD、组件介绍 | 迷你世界UGC3.0脚本Wiki 
+ Skip to content 迷你世界UGC3.0脚本Wiki 
+ Main Navigation Wiki问题反馈 API接口查询 迷你世界官网 星启计划 2.0Wiki 
+ Appearance
+ Menu Return to top 
+ Sidebar Navigation 
+ 快速入门
+ 欢迎
+ MOD、组件介绍
+ 什么是Lua编程
+ 组件介绍
+ 组件说明
+ 组件互相操作
+ 组件函数
+ 组件属性
+ 事件
+ 触发器事件管理
+ 组件事件管理
+ 函数库
+ 服务模块
+ 对象模块管理接口 GameObject
+ 角色模块管理接口 Actor
+ 玩家模块管理接口 Player
+ 生物模块管理接口 Monster
+ 方块模块管理接口 Block
+ 背包模块管理接口 Backpack
+ 界面模块管理接口 CustomUI
+ 图文信息模块管理接口 Graphics
+ 区域模块管理接口 Area
+ 容器模块管理接口 WorldContainer
+ 资源模块管理接口 Mod
+ 计时器模块管理接口 Timer
+ 状态模块管理接口 Buff
+ 消息模块管理接口 Chat
+ 普通变量数据管理接口 Data
+ 数组变量数据管理接口 Array
+ 二维表变量数据管理接口 Table
+ KV表变量数据管理接口 Map
+ 世界模块管理接口 World
+ 道具模块管理接口 Item
+ 剧情动画模块管理接口 Timeline
+ 全局函数
+ 全局函数
+ 枚举
+ 枚举库
+ 脚本常见问题
+ 开发者常见问题
+ 进阶指南
+ 全局函数
+ 触发器脚本交互
+ 对象介绍
+ KV&排行榜介绍
+ 二维表介绍
+ 道具实例
+ 环境（天空盒）
+ 模块 Wiki
+ 什么是环境
+ 环境模板
+ 可调属性
+ 自定义天空贴图
+ 滤镜
+ 脚本接口
+ 更新日志
+ 更新日志
+ On this page
+ MOD、组件介绍 ​ 
+ 1. 什么是MOD ​ 
+ MOD（模组）就像是给游戏准备的 “超级补丁”。想象一下，你有一个自己很喜欢的玩具（游戏），但是玩了一段时间后，觉得它还可以有一些新玩法或者新样子。MOD（模组）就是能帮你实现这个想法的东西。
+ 在迷你世界里面，你可以通过模组给游戏添加各种各样的新东西 ，比如新的物品、方块、生物、地形等，让你有更多的素材去建造和探索。
+ 你还能 改变游戏的玩法规则 ，像把生存模式变得更难或更简单，另外还可以 提升游戏的画面效果 ，让游戏里的世界看起来更漂亮、更真实，比如有更好的光影效果、更精美的材质等。甚至还能为你提供一些 实用的工具和功能 ，比如方便的背包整理、地图导航、物品合成提示等。
+ 多个模组 还可以整合到一个地图里，融合成一个定制化的冒险世界。
+ 那MOD是如何通过编辑器制作的呢？
+ 2. 编辑器搭建一个“舞台” ​ 
+ 游戏世界是一个舞台，可以把编辑器想象成一个搭建舞台（游戏世界）的工具。
+ 首先，这个舞台有一个很大的空间，这个空间可能有各种各样的天气、时间变化、以及不同的灯光效果等，这个称为**“环境”**。
+ 在这个空间里，你可以放置各种各样的东西，比如角色（像游戏里的英雄、怪物）、道具（武器、药品）、建筑（城堡、房屋）等。这些东西都被称为 游戏**“对象”**。例如，你要制作一个简单的冒险游戏，你可以先在这个 “舞台” 上放置一个代表玩家角色的游戏对象，再放置一些代表敌人的游戏对象，以及一些地牢、城堡、灯笼等作为场景装饰。
+ **“UI界面”**就像是游戏世界里的一个特殊区域，这个区域是专门为玩家和游戏进行交互而设立的。可以把它看作是一个操作控制台，上面有各种按钮、滑块、输入框等，就像我们生活中电器的遥控器一样。
+ 上述所说的环境、对象、UI界面，对应在迷你世界里是这样的。
+ 3. 组件是演员的技能和装备 ​ 
+ 每个游戏对象就像一个演员，它们有自己的 “技能” 和 “装备”，这些被称为 “组件” 。
+ 比如，对于玩家角色这个游戏对象，它可能有一个 物理组件 ，开启了 “碰撞事件”，这就好比演员有了触觉，能够感知自己什么时候碰到了其他东西。如果玩家角色碰到了敌人，就可以通过这个组件来检测到碰撞，然后触发战斗场景。
+ 通过 模型组件 ，我们可以更改演员的外观以及物品的材质贴图。另外，游戏对象还可以有 触发器组件 ，这就像是演员的大脑，能够让它按照你编写的规则来行动，比如让玩家角色在按下某个按键时跳跃或者攻击。
+ 4. 触发器、Lua是演员的表演指导 ​ 
+ 触发器、Lua是工具中非常重要的部分，它就像是给游戏对象（演员）的 表演指导 。例如，你写了一个逻辑，告诉玩家角色，当按下键盘上的 “W” 键时，就向前移动。这个逻辑会被附加到玩家角色这个游戏对象的 “自定义组件” 上。
+ 而且逻辑还可以控制游戏对象之间的交互。比如，你可以写一个脚本，当玩家角色碰到一个金币道具（另一个游戏对象）时，就把金币的数量加 1，同时让金币消失。这样，通过逻辑，游戏中的各种游戏对象就能够按照你想要的方式进行互动，让游戏变得更加有趣。
+ 5. 世界编辑 ​ 
+ 点击 玩法 ，我们可以对世界进行基本设定。包括对时间、天气、天空盒、滤镜、音乐音效、生物生成规则、开局设定、重生规则、界面等等基本设置。
+ 另外在 资源背包 里，仍有一部分内容也属于这个世界的运转规则和资源，我们导入或编辑之后，可以使用触发器或者组件来调用他们。
+ 其中配方和熔炼属于迷你世界冒险里面的特有规则，配方是工作台或者秘银锅等的合成配方配置，而熔炼则是配置冶炼台的可燃烧材料、冶炼材料和熔炼产出。
+ 6. 组件编辑 ​ 
+ 进入对象或者世界编辑后，我们可以看到它们身上都挂载了许多组件。这些组件可以控制对象的外观、属性、物理特性、行为逻辑等等，给“舞台”上的“演员”赋予了生命。
+ 官方提供了一些封装好的组件，我们可以通过 组件面板 直接更改对象的属性。也可以卸载掉一些不需要使用的组件。
+ 如果官方组件不能满足需求，我们也可以通过添加 触发器组件/脚本组件 来制作新的组件。（对于高手来说，通过把同类型的逻辑封装成组件，可以让我们的代码更加精简易于管理。）如果不了解触发器可以查看 触发器文档 
+ 例如：我们制作一个掉落物组件，来设置不同的生物被击败后，掉落不同的物品。
+ lua local Script = {} 
+ --属性定义 
+ Script. propertys = { 
+ varNum = { 
+ type = Mini. Number , --定义了一个数值类型的参数 
+ default = 2 , --默认值 
+ displayName = "掉落物数值" , 
+ }, 
+ varItem = { 
+ type = Mini. Item , -- --定义了一个道具类型的参数 
+ default = 11668 , -- 默认值 
+ displayName = "掉落物道具" , -- 属性别名 
+ }, 
+ } 
+ -- 组件启动时调用 
+ function Script : OnStart () 
+ -- 监听个体事件 当此对象被击败时触发 
+ self : AddEvent (ObjectEvent. ObjectDie , self . OnObjectDie ) 
+ -- ObjectEvent.ObjectDie为官方事件，可以在wiki的事件库中查看更多事件 
+ -- self.OnObjectDie 为下方自定义的一个函数 
+ end 
+ function Script : OnObjectDie (event) 
+ -- 定义此生物死亡时的动作 
+ GameObject : CreatePrefab (ObjType. DropItem , self . varItem , event. x ,event. y + 1 ,event. z , self . varNum ) 
+ -- 预制体类型：ObjType.DropItem 为掉落物，可以在wiki中查看其他类型 
+ -- 掉落物类型:self.varItem从属性面板读取创建的道具类型 
+ -- 事件中的位置： event.x,event.y+1,event.z, event.y+1让创建的高度必死亡的高一格 
+ -- 掉落物数量：self.varNum从属性面板读取创建的掉落物数量 
+ end 
+ return Script 
+ 完整视频教程 
+ 所有自定义的组件，除了在编辑对象时使用之外，还可以在 资源背包 里统一编辑管理。（此处编辑组件，会影响所有调用了这个组件的对象）
+ 接下来，你可以继续学习Lua语言的 基础语法 ，也可以阅读详细的 迷你世界API接口 。
+ Last updated: 
+ Pager Previous page 欢迎 
+ Next page 什么是Lua编程
+
+========== 2.0接口汉化表 ==========
+源: https://dev-wiki.mini1.cn/special/67c18d46b537536c145b4224
+
+推荐教程-迷你世界创作者学院-迷你教程 
+ 主站
+ 资讯 
+ 文档 
+ 技术分享 
+ 课程 
+ 迷你世界创作者频道
+ 扫一扫
+ 点击加入
+ 创作社区 
+ Studio专区 
+ 登录
+ Ta的教程
+ 展开更多>
+ 推荐教程
+ 展开更多>
+ 抵制不良游戏，拒绝盗版游戏。注意自我保护，谨防受骗上当。适度游戏益脑， 沉迷游戏伤身。合理安排时间，享受健康生活。
+ Copyright 2015-2026 深圳市迷你玩科技有限公司 All Rights Reserved.
+ 站点有内容要更新是否更新。
+ 更新
+ 忽略
+
+========== 2.0创作者中心-World ==========
+源: https://developers.mini1.cn/wiki/world.html
+
+世界管理接口 World | 开发者脚本帮助文档 
+ 开发者脚本帮助文档 
+ API接口查询
+ 迷你世界官网
+ 星启计划
+ API接口查询
+ 迷你世界官网
+ 星启计划
+ 快速上手 
+ 开发者脚本怎么使用 
+ 如何编辑脚本 
+ 基础入门 
+ 什么是Lua编程 
+ 基础脚本示例及解读 
+ 基础学习案例 
+ 中级开发者 
+ 脚本是怎么运行的？ 
+ 迷你世界API接口 
+ 事件系统 Event 
+ 游戏规则列表 GameRule 
+ 世界管理接口 World isDaytime 
+ isCustomGame 
+ isCreativeMode 
+ isGodMode 
+ isExtremityMode 
+ isFreeMode 
+ isSurviveMode 
+ isCreateRunMode 
+ isGameMakerMode 
+ isGameMakerRunMode 
+ getHours 
+ setHours 
+ getCameraEditState 
+ setCameraEditState 
+ getCustomCameraConfig 
+ getRangeXZ 
+ getRayLength 
+ getRayBlock 
+ getActorsByBox 
+ getPlayerTotal 
+ getAllPlayers 
+ randomOnePlayer 
+ despawnActor 
+ spawnCreature 
+ despawnCreature 
+ spawnItem 
+ despawnItemByBox 
+ despawnItemByObjid 
+ spawnProjectile 
+ spawnProjectileByDir 
+ calcDistance 
+ playParticalEffect 
+ stopEffectOnPosition 
+ setEffectScaleOnPosition 
+ randomParticleEffectID 
+ playSoundEffectOnPos 
+ stopSoundEffectOnPos 
+ getLightByPos 
+ setBlockLightEx 
+ randomSoundID 
+ randomWeatherID 
+ getLocalDate 
+ getLocalDateString 
+ getServerDate 
+ getServerDateString 
+ getDateFromTime 
+ getDateStringFromTime 
+ 游戏管理接口 Game 
+ 方块管理接口 Block 
+ 状态管理接口 Buff 
+ Actor管理接口 Actor 
+ 玩家管理接口 Player 
+ 生物管理接口 Creature 
+ UI管理接口 UI 
+ 区域管理接口 Area 
+ 聊天管理接口 Chat 
+ 组队管理接口 Team 
+ 道具管理接口 Item 
+ 背包管理接口 Backpack 
+ 对象库管理接口 ObjectLib 
+ 触发器变量库管理接口 VarLib2 
+ 容器管理接口 WorldContainer 
+ 小地图管理接口 MapMark 
+ 出生点管理接口 Spawnport 
+ 计时器管理接口 MiniTimer 
+ 图文信息管理接口 Graphics 
+ 函数监听管理接口 ListenParam 
+ 变量组管理接口 Valuegroup 
+ 自定义UI管理接口 Customui 
+ 显示板管理接口 DisplayBoard 
+ 云服数据存管理接口 CloudSever 
+ 学习案例 
+ 高手的世界 
+ 游戏数据类型 
+ 小游戏开发《争分夺秒》 
+ 小游戏开发《坦克对战》 
+ 迷你世界ID查询 
+ 迷你世界ID查询 
+ 脚本常见问题 
+ 开发者常见问题 
+ 更新记录 
+ 更新日志 
+ # 世界管理接口 World 
+ 在使用世界接口前需先创建世界管理对象，方法如下：(此处已废弃)
+ local World = class . World . new ( ) 
+ 具体函数名及描述如下: 
+ 序号 函数名 函数描述 
+ 1 isDaytime(...) 是否是白天 
+ 2 isCustomGame(...) 是否是自定义游戏 
+ 3 isCreativeMode(...) 是否是创造模式 
+ 4 isGodMode(...) 多人创造模式 或者 自制玩法的编辑模式 
+ 5 isExtremityMode(...) 极限模式 
+ 6 isFreeMode(...) 冒险模式之自由模式 
+ 7 isSurviveMode(...) 单人模式 或者 冒险模式之自由模式 
+ 8 isCreateRunMode(...) 由创造模式转的生存 
+ 9 isGameMakerMode(...) 自制玩法的编辑模式 
+ 10 isGameMakerRunMode(...) 自制玩法的运行模式 
+ 11 getHours(...) 获取游戏当前时间(h) 
+ 12 setHours(...) 设置游戏当前时间 
+ 13 getCameraEditState(...) 获取视角编辑状态 
+ 14 setCameraEditState(...) 设置视角编辑状态 
+ 15 getCustomCameraConfig(...) 获取自定义相机配置 
+ 16 getRangeXZ(...) 获取区块(chunk)范围，返回区块始末位置 
+ 17 getRayLength(...) 计算指定方向射线长度(遇到方块结束) 
+ 18 getRayBlock(...) 射线打到的方块类型(遇到方块结束) 
+ 19 getActorsByBox(...) 获取范围内Actor对象 
+ 20 getPlayerTotal(...) 获取全部玩家数量 
+ 21 getAllPlayers(...) 获取全部玩家 
+ 22 randomOnePlayer(...) 随机获取一名玩家 
+ 23 despawnActor(...) 移除actor 
+ 24 spawnCreature(...) 生成生物(包括怪物、NPC、动物等) 
+ 25 despawnCreature(...) 移除生物 
+ 26 spawnItem(...) 在指定位置生成道具 
+ 27 despawnItemByBox(...) 移除区域内的所有道具 
+ 28 despawnItemByObjid(...) 移除道具(通过ID) 
+ 29 spawnProjectile(...) 生成投掷物 
+ 30 spawnProjectileByDir(...) 生成投掷物(通过方向) 
+ 31 calcDistance(...) 计算位置之间的距离 
+ 32 playParticalEffect(...) 在指定位置播放特效 
+ 33 stopEffectOnPosition(...) 停止指定位置的特效 
+ 34 setEffectScaleOnPosition(...) 设置指定位置的特效大小 
+ 35 randomParticleEffectID(...) 随机特效类型，随机返回一种特效ID 
+ 36 playSoundEffectOnPos(...) 在指定位置上播放指定音效 
+ 37 stopSoundEffectOnPos(...) 停止指定位置上的指定音效 
+ 38 getLightByPos(...) 获取光照强度 
+ 39 setBlockLightEx(...) 设置光照强度 
+ 40 randomSoundID(...) 随机一个音效ID 
+ 41 randomWeatherID(...) 随机一个天气ID 
+ 42 getLocalDate(...) 获取主机时间 
+ 43 getLocalDateString(...) 获取完整设备时间 
+ 44 getServerDate(...) 获取服务器时间 
+ 45 getServerDateString(...) 获取完整服务器时间 
+ 46 getDateFromTime(...) 转换时间戳为时间单位 
+ 47 getDateStringFromTime(...) 转换时间戳为完整时间 
+ # isDaytime
+ 参数及类型：
+无
+ 返回值及类型：
+ code: number 成功(ErrorCode.OK) ErrorCode 
+ 该方法的主要作用： 是否是白天
+ 具体使用案例如下：
+ --判断现在是不是白天 
+ local result = World : isDaytime ( ) 
+ if result == 0 then --如果是白天 
+ Chat : sendSystemMsg ( "现在是白天！" ) 
+ else --如果不是白天 
+ Chat : sendSystemMsg ( "现在是晚上！" ) 
+ end 
+ # isCustomGame
+ 参数及类型：
+无
+ 返回值及类型：
+ code: number 成功(ErrorCode.OK) ErrorCode 
+ 该方法的主要作用： 是否是自定义游戏
+ 具体使用案例如下：
+ --判断是不是自定义游戏 
+ local result = World : isCustomGame ( ) 
+ if result == 0 then --如果是自定义 
+ Chat : sendSystemMsg ( "当前是自定义游戏！" ) 
+ else --如果不是自定义 
+ Chat : sendSystemMsg ( "当前不是自定义游戏！" ) 
+ end 
+ # isCreativeMode
+ 参数及类型：
+无
+ 返回值及类型：
+ code: number 成功(ErrorCode.OK) ErrorCode 
+ 该方法的主要作用： 是否是创造模式
+ 具体使用案例如下：
+ --判断是不是创造模式 
+ local result = World : isCreativeMode ( ) 
+ if result == 0 then --如果是创造模式 
+ Chat : sendSystemMsg ( "当前是创造模式！" ) 
+ else --如果不是创造模式 
+ Chat : sendSystemMsg ( "当前不是创造模式！" ) 
+ end 
+ # isGodMode
+ 参数及类型：
+无
+ 返回值及类型：
+ code: number 成功(ErrorCode.OK) ErrorCode 
+ 该方法的主要作用： 多人创造模式 或者 自制玩法的编辑模式
+ 具体使用案例如下：
+ --判断是不是多人创造模式或者玩法编辑模式 
+ local result = World : isGodMode ( ) 
+ if result == 0 then --如果是多人创造或者玩法编辑 
+ Chat : sendSystemMsg ( "当前是多人创造或玩法编辑模式！" ) 
+ else --如果不是 
+ Chat : sendSystemMsg ( "当前不是多人创造或玩法编辑模式！" ) 
+ end 
+ # isExtremityMode
+ 参数及类型：
+无
+ 返回值及类型：
+ code: number 成功(ErrorCode.OK) ErrorCode 
+ 该方法的主要作用： 极限模式
+ 具体使用案例如下：
+ --判断是不是极限模式 
+ local result = World : isExtremityMode ( ) 
+ if result == 0 then --如果是极限模式 
+ Chat : sendSystemMsg ( "当前是极限模式！" ) 
+ else --如果不是极限模式 
+ Chat : sendSystemMsg ( "当前不是极限模式！" ) 
+ end 
+ # isFreeMode
+ 参数及类型：
+无
+ 返回值及类型：
+ code: number 成功(ErrorCode.OK) ErrorCode 
+ 该方法的主要作用： 冒险模式之自由模式
+ 具体使用案例如下：
+ --判断是不是冒险自由模式 
+ local result = World : isFreeMode ( ) 
+ if result == 0 then --如果是冒险自由模式 
+ Chat : sendSystemMsg ( "当前是冒险自由模式！" ) 
+ else --如果不是 
+ Chat : sendSystemMsg ( "当前不是冒险自由模式！" ) 
+ end 
+ # isSurviveMode
+ 参数及类型：
+无
+ 返回值及类型：
+ code: number 成功(ErrorCode.OK) ErrorCode 
+ 该方法的主要作用： 单人模式 或者 冒险模式之自由模式
+ 具体使用案例如下：
+ --判断是不是单人生存模式 
+ local result = World : isSurviveMode ( ) 
+ if result == 0 then --如果是单人生存模式 
+ Chat : sendSystemMsg ( "当前是单人生存模式！" ) 
+ else --如果不是单人生存模式 
+ Chat : sendSystemMsg ( "当前不是单人生存模式！" ) 
+ end 
+ # isCreateRunMode
+ 参数及类型：
+无
+ 返回值及类型：
+ code: number 成功(ErrorCode.OK) ErrorCode 
+ 该方法的主要作用： 由创造模式转的生存
+ 具体使用案例如下：
+ --判断是不是创造转生存模式 
+ local result = World : isCreateRunMode ( ) 
+ if result == 0 then --如果是创造转生存模式 
+ Chat : sendSystemMsg ( "当前是创造转生存模式！" ) 
+ else --如果不是创造转生存模式 
+ Chat : sendSystemMsg ( "当前不是创造转生存模式！" ) 
+ end 
+ # isGameMakerMode
+ 参数及类型：
+无
+ 返回值及类型：
+ code: number 成功(ErrorCode.OK) ErrorCode 
+ 该方法的主要作用： 自制玩法的编辑模式
+ 具体使用案例如下：
+ --判断是不是玩法编辑模式 
+ local result = World : isGameMakerMode ( ) 
+ if result == 0 then --如果是玩法编辑模式 
+ Chat : sendSystemMsg ( "当前是玩法编辑模式！" ) 
+ else --如果不是玩法编辑模式 
+ Chat : sendSystemMsg ( "当前不是玩法编辑模式！" ) 
+ end 
+ # isGameMakerRunMode
+ 参数及类型：
+无
+ 返回值及类型：
+ code: number 成功(ErrorCode.OK) ErrorCode 
+ 该方法的主要作用： 自制玩法的运行模式
+ 具体使用案例如下：
+ --判断是不是玩法运行模式 
+ local result = World : isGameMakerRunMode ( ) 
+ if result == 0 then --如果是玩法运行模式 
+ Chat : sendSystemMsg ( "当前是玩法运行模式！" ) 
+ else --如果不是玩法运行模式 
+ Chat : sendSystemMsg ( "当前不是玩法运行模式！" ) 
+ end 
+ # getHours
+ 参数及类型：
+无
+ 返回值及类型：
+ code: number 成功(ErrorCode.OK) ErrorCode 
+ hour: number 当前小时时间
+ 该方法的主要作用： 获取游戏当前时间(h)
+ 具体使用案例如下：
+ --获取当前时间 
+ local result , time = World : getHours ( ) 
+ --在聊天框显示 
+Chat : sendSystemMsg ( "现在是" .. time .. "点！" ) 
+ # setHours
+ 参数及类型：
+ hour: number 当前小时时间
+ 返回值及类型：
+ code: number 成功(ErrorCode.OK) ErrorCode 
+ 该方法的主要作用： 设置游戏当前时间
+ 具体使用案例如下：
+ --设置时间为8点 
+World : setHours ( 8 ) 
+ --在聊天框显示 
+Chat : sendSystemMsg ( "时间设置为8点！" ) 
+ # getCameraEditState
+ 参数及类型：
+无
+ 返回值及类型：
+ code: number 成功(ErrorCode.OK) ErrorCode 
+ state: number 状态值(CameraEditState) CameraEditState 
+ 该方法的主要作用： 获取视角编辑状态
+ 具体使用案例如下：
+ --获取当前视角编辑状态 
+ local result , state = World : getCameraEditState ( ) 
+ if state == 0 then --0:默认 
+ Chat : sendSystemMsg ( "当前视角编辑状态为:默认" ) 
+ elseif state == 1 then --1:编辑中 
+ Chat : sendSystemMsg ( "当前视角编辑状态为:编辑中" ) 
+ elseif state == 2 then --2:测试中 
+ Chat : sendSystemMsg ( "当前视角编辑状态为:测试中" ) 
+ end 
+ # setCameraEditState
+ 参数及类型：
+ state: number 状态值(CameraEditState)
+ 返回值及类型：
+ code: number 成功(ErrorCode.OK) ErrorCode 
+ 该方法的主要作用： 设置视角编辑状态
+ 具体使用案例如下：
+ local code = World : setCameraEditState ( state ) 
+ if code == ErrorCode . OK then 
+ print ( '执行成功' , code ) 
+ else 
+ print ( '执行失败' ) 
+ end 
+ # getCustomCameraConfig
+ 参数及类型：
+无
+ 返回值及类型：
+ code: number 成功(ErrorCode.OK) ErrorCode 
+ config: table 相机配置
+ 该方法的主要作用： 获取自定义相机配置
+ 具体使用案例如下：
+ local code , config = World : getCustomCameraConfig ( ) 
+ if code == ErrorCode . OK then 
+ print ( '执行成功' , code , config ) 
+ else 
+ print ( '执行失败' ) 
+ end 
+ # getRangeXZ
+ 参数及类型：
+无
+ 返回值及类型：
+ code: number 成功(ErrorCode.OK) ErrorCode 
+ startX: number 起始X坐标
+ startZ: number 起始Z坐标
+ endX: number 结束X坐标
+ endZ: number 结束Z坐标
+ 该方法的主要作用： 获取区块(chunk)范围，返回区块始末位置
+ 具体使用案例如下：
+ --获取区块范围 
+ local result , startX , startZ , endX , endZ = World : getRangeXZ ( ) 
+Chat : sendSystemMsg ( "区块起点横坐标：" .. startX ) 
+Chat : sendSystemMsg ( "区块起点纵坐标：" .. startZ ) 
+Chat : sendSystemMsg ( "区块终点横坐标：" .. endX ) 
+Chat : sendSystemMsg ( "区块终点纵坐标：" .. endZ ) 
+ # getRayLength
+ 参数及类型：
+ srcx,srcy,srcz: number 起始点
+ dstx,dsty,dstz: number 目标点，确定方向
+ distance: number 最长检测距离
+ 返回值及类型：
+ code: number 成功(ErrorCode.OK) ErrorCode 
+ length: number 两点间的长度
+ 该方法的主要作用： 计算指定方向射线长度(遇到方块结束)
+ 具体使用案例如下：
+ local code , length = World : getRayLength ( srcx , srcy , srcz , dstx , dsty , dstz , distance ) 
+ if code == ErrorCode . OK then 
+ print ( '执行成功' , code , length ) 
+ else 
+ print ( '执行失败' ) 
+ end 
+ # getRayBlock
+ 参数及类型：
+ srcx,srcy,srcz: number 起始点
+ face: number 方向枚举（FACE_DIRECTION） FACE_DIRECTION 
+ distance: number 最长检测距离
+ 返回值及类型：
+ code: number 成功(ErrorCode.OK) ErrorCode 
+ blockid: number 方块类型ID
+ 该方法的主要作用： 射线打到的方块类型(遇到方块结束)
+ 具体使用案例如下：
+ --获取从(0,0)高度10开始，向北50格内碰到的第一个方块id 
+ --方向参数：0西 1东 2南 3北 4下 5上 
+ local result , blockid = World : getRayBlock ( 0 , 10 , 0 , 3 , 50 ) 
+ if id == - 1 then --如果50格内没有方块 
+ Chat : sendSystemMsg ( "从(0,0)高度10开始，向北50格没有方块" ) 
+ else --如果50格内有方块 
+ Chat : sendSystemMsg ( "从(0,0)高度10开始，向北50格第一个方块id是" .. blockid ) 
+ end 
+ # getActorsByBox
+ 参数及类型：
+ objtype: number 生物类型(OBJ_TYPE，0表示所有对象) OBJ_TYPE 
+ x1,y1,z1: number 起始坐标
+ x2,y2,z2: number 结束坐标
+ 返回值及类型：
+ code: number 成功(ErrorCode.OK) ErrorCode 
+ total: number 获取数量
+ allarr: table 对象objid组
+ 该方法的主要作用： 获取范围内Actor对象
+ 具体使用案例如下：
+ --参数： 
+ local objtype = 1 --类型参数：0全部 1玩家 2生物 3掉落物 4投掷物 
+ local x1 , y1 , z1 = 0 , 7 , 0 --区域起点坐标 
+ local x2 , y2 , z2 = 50 , 57 , 50 --区域终点坐标 
+ --获取(x0,z0)高度y0到(x1,z1)高度y1范围内，类型为type的物品数量与列表 
+ local result , num , objids = World : getActorsByBox ( objtype , x1 , y1 , z1 , x2 , y2 , z2 ) 
+ --在聊天框显示数量 
+Chat : sendSystemMsg ( "在范围内一共有" .. num .. "个玩家" ) 
+ --在聊天框显示列表 
+ for i , a in ipairs ( objids ) do 
+ Chat : sendSystemMsg ( "第" .. i .. "个:" .. a ) 
+ end 
+ # getPlayerTotal
+ 参数及类型：
+ alive: number 玩家状态（0表示阵亡，1表示存活，默认-1表示全体玩家）
+ 返回值及类型：
+ code: number 成功(ErrorCode.OK) ErrorCode 
+ num: number 获取数量
+ 该方法的主要作用： 获取全部玩家数量
+ 具体使用案例如下：
+ --获取当前存档玩家总数 
+ local result , num = World : getPlayerTotal ( - 1 ) 
+Chat : sendSystemMsg ( "当前存档玩家总数为：" .. num ) 
+ --获取当前存档阵亡玩家数 
+result , num = World : getPlayerTotal ( 0 ) 
+Chat : sendSystemMsg ( "当前存档阵亡玩家数为：" .. num ) 
+ --获取当前存档存活玩家数 
+result , num = World : getPlayerTotal ( 1 ) 
+Chat : sendSystemMsg ( "当前存档存活玩家数为：" .. num ) 
+ # getAllPlayers
+ 参数及类型：
+ alive: number 玩家状态（0表示阵亡，1表示存活，默认-1表示全体玩家）
+ 返回值及类型：
+ code: number 成功(ErrorCode.OK) ErrorCode 
+ num: number 获取数量
+ list: table 对象objid组
+ 该方法的主要作用： 获取全部玩家
+ 具体使用案例如下：
+ --获取当前存档全部玩家列表 
+ --参数：-1全部玩家 0阵亡玩家 1存活玩家 
+ local result , num , array = World : getAllPlayers ( - 1 ) 
+ --在聊天框显示数量 
+Chat : sendSystemMsg ( "当前存档一共有" .. num .. "个玩家" ) 
+ --在聊天框显示列表 
+ for i , a in ipairs ( array ) do 
+ Chat : sendSystemMsg ( "第" .. i .. "个:" .. a ) 
+ end 
+ # randomOnePlayer
+ 参数及类型：
+ alive: number 玩家状态（0表示阵亡，1表示存活，默认-1表示全体玩家）
+ 返回值及类型：
+ code: number 成功(ErrorCode.OK) ErrorCode 
+ playerid: number 玩家Uin
+ 该方法的主要作用： 随机获取一名玩家
+ 具体使用案例如下：
+ --从全部玩家中随机选取一名玩家 
+ --参数：-1全部玩家 0阵亡玩家 1存活玩家 
+ local result , playerid = World : randomOnePlayer ( - 1 ) 
+ --在聊天框显示 
+Chat : sendSystemMsg ( "随机选取了一名玩家：" .. playerid ) 
+ # despawnActor
+ 参数及类型：
+ objid: number 对象objID
+ 返回值及类型：
+ code: number 成功(ErrorCode.OK) ErrorCode 
+ 该方法的主要作用： 移除actor
+ 具体使用案例如下：
+ --参数： 
+ local type = 2 --类型参数：1玩家 2生物 3掉落物 4投掷物 
+ local x0 , y0 , z0 = 0 , 7 , 0 --区域起点坐标 
+ local x1 , y1 , z1 = 50 , 57 , 50 --区域终点坐标 
+ --获取(x0,z0)高度y0到(x1,z1)高度y1范围内，类型为type的物品数量与列表 
+ local result , n , actors = World : getActorsByBox ( type , x0 , y0 , z0 , x1 , y1 , z1 ) 
+ if n > 0 then --如果范围内生物数量大于0 
+ --移除其中一个生物 
+ World : despawnActor ( actors [ 1 ] ) 
+ --在聊天框显示 
+ Chat : sendSystemMsg ( "移除了" .. actors [ 1 ] ) 
+ else --如果范围内没有生物 
+ --在聊天框显示 
+ Chat : sendSystemMsg ( "(0,7,0)至(50,57,50)范围内没有生物" ) 
+ end 
+ # spawnCreature
+ 参数及类型：
+ x,y,z: number 方块坐标
+ actorid: number 生物类型
+ num: number 生成数量
+ trigger: boolean 是否触发事件
+ 返回值及类型：
+ code: number 成功(ErrorCode.OK) ErrorCode 
+ objs: table 生物ID组
+ 该方法的主要作用： 生成生物(包括怪物、NPC、动物等)
+ 具体使用案例如下：
+ --在(0,0)高度7的位置生成3只鸡 
+ --前三个参数0,7,0是生成坐标 
+ --第四个参数3400是生成的生物id 
+ --最后一个参数3是生成的数量 
+ local result , objids = World : spawnCreature ( 0 , 7 , 0 , 3400 , 3 ) 
+ --在聊天框显示提示 
+Chat : sendSystemMsg ( "在(0,0)高度7的位置生成了3只鸡，它们在存档中的id分别是：" ) 
+ --在聊天框显示id列表 
+ for i = 1 , # objids do 
+ Chat : sendSystemMsg ( objids [ i ] ) 
+ end 
+ # despawnCreature
+ 参数及类型：
+ objid: number 对象objID
+ 返回值及类型：
+ code: number 成功(ErrorCode.OK) ErrorCode 
+ 该方法的主要作用： 移除生物
+ 具体使用案例如下：
+ --参数： 
+ local type = 2 --类型参数：1玩家 2生物 3掉落物 4投掷物 
+ local x0 , y0 , z0 = 0 , 7 , 0 --区域起点坐标 
+ local x1 , y1 , z1 = 50 , 57 , 50 --区域终点坐标 
+ --获取(x0,z0)高度y0到(x1,z1)高度y1范围内，类型为type的物品数量与列表 
+ local result , n , actors = World : getActorsByBox ( type , x0 , y0 , z0 , x1 , y1 , z1 ) 
+ if n > 0 then --如果范围内生物数量大于0 
+ --移除其中一个生物 
+ World : despawnCreature ( actors [ 1 ] ) 
+ --在聊天框显示 
+ Chat : sendSystemMsg ( "移除了" .. actors [ 1 ] ) 
+ else --如果范围内没有生物 
+ --在聊天框显示 
+ Chat : sendSystemMsg ( "(0,7,0)至(50,57,50)范围内没有生物" ) 
+ end 
+ # spawnItem
+ 参数及类型：
+ x,y,z: number 方块坐标
+ actorid: number 生物类型
+ num: number 生成数量
+ 返回值及类型：
+ code: number 成功(ErrorCode.OK) ErrorCode 
+ obj: number 掉落物ObjID
+ 该方法的主要作用： 在指定位置生成道具
+ 具体使用案例如下：
+ --在(0,0)高度7的位置生成3个土块 
+ --前三个参数0,7,0是生成坐标 
+ --第四个参数101是生成的物品id 
+ --最后一个参数3是生成的数量 
+ local result , objid = World : spawnItem ( 0 , 7 , 0 , 101 , 3 ) 
+ --在聊天框显示提示 
+Chat : sendSystemMsg ( "在(0,0)高度7的位置生成了3个土块，它们在存档中的id是" .. objid ) 
+ # despawnItemByBox
+ 参数及类型：
+ x1,y1,z1: number 起始坐标
+ x2,y2,z2: number 结束坐标
+ 返回值及类型：
+ code: number 成功(ErrorCode.OK) ErrorCode 
+ 该方法的主要作用： 移除区域内的所有道具
+ 具体使用案例如下：
+ --移除指定区域内所有掉落物 
+ --前三个参数为区域起点坐标 
+ --后三个参数为区域终点坐标 
+World : despawnItemByBox ( - 20 , 0 , - 20 , 20 , 50 , 20 ) 
+ --在聊天框显示 
+Chat : sendSystemMsg ( "移除了(-20,0,-20)至(20,50,20)区域内的所有掉落物" ) 
+ # despawnItemByObjid
+ 参数及类型：
+ objid: number 对象objID
+ 返回值及类型：
+ code: number 成功(ErrorCode.OK) ErrorCode 
+ 该方法的主要作用： 移除道具(通过ID)
+ 具体使用案例如下：
+ --每当有玩家做动画表情，移除房主周围10格内的某一掉落物 
+ --当玩家做动画表情时执行此函数 
+ local function Player_PlayAction ( event ) 
+ --获取房主的坐标 
+ local result , x , y , z = Player : getPosition ( 0 ) 
+ --获取房主周围10格内的掉落物数量和列表 
+ local result2 , num , list = World : getActorsByBox ( 3 , x - 10 , y - 10 , z - 10 , x + 10 , y + 10 , z + 10 ) 
+ if num > 0 then --如果存在掉落物 
+ --移除第一组物品 
+ World : despawnItemByObjid ( list [ 1 ] ) 
+ --在聊天框显示 
+ Chat : sendSystemMsg ( "附近10格发现掉落物品，已移除了其中一组" ) 
+ else --如果不存在掉落物 
+ --在聊天框显示 
+ Chat : sendSystemMsg ( "附近10格没有发现掉落物品！" ) 
+ end 
+ end 
+ --注册动画表情监听器，当玩家做动画表情时执行上面的函数 
+ScriptSupportEvent : registerEvent ( [=[Player.PlayAction]=] , Player_PlayAction ) 
+ # spawnProjectile
+ 参数及类型：
+ shooter: number 设置投掷物归属的objid
+ itemid: number 投掷物id
+ x,y,z: number 投掷物起点
+ dstx,dsty,dstz: number 投掷物终点
+ speed: number 投掷物速度
+ 返回值及类型：
+ code: number 成功(ErrorCode.OK) ErrorCode 
+ objid: number 投掷物的实例ID
+ 该方法的主要作用： 生成投掷物
+ 具体使用案例如下：
+ local code , objid = World : spawnProjectile ( shooter , itemid , x , y , z , dstx , dsty , dstz , speed ) 
+ if code == ErrorCode . OK then 
+ print ( '执行成功' , code , objid ) 
+ else 
+ print ( '执行失败' ) 
+ end 
+ # spawnProjectileByDir
+ 参数及类型：
+ shooter: number 设置投掷物归属的objid
+ itemid: number 投掷物id
+ x,y,z: number 投掷物起点
+ dstx,dsty,dstz: number 投掷方向
+ speed: number 投掷物速度
+ 返回值及类型：
+ code: number 成功(ErrorCode.OK) ErrorCode 
+ objid: number 投掷物的实例ID
+ 该方法的主要作用： 生成投掷物(通过方向)
+ 具体使用案例如下：
+ local code , objid = World : spawnProjectileByDir ( shooter , itemid , x , y , z , dirx , diry , dirz , speed ) 
+ if code == ErrorCode . OK then 
+ print ( '执行成功' , code , objid ) 
+ else 
+ print ( '执行失败' ) 
+ end 
+ # calcDistance
+ 参数及类型：
+ pos1: table 起始坐标
+ pos2: table 结束坐标
+ 返回值及类型：
+ code: number 成功(ErrorCode.OK) ErrorCode 
+ len: number 距离值
+ 该方法的主要作用： 计算位置之间的距离
+ 具体使用案例如下：
+ --计算两点间的直线距离 
+ --第一个参数是由起点坐标组成的表 
+ --第二个参数是由终点坐标组成的表 
+ local result , distance = World : calcDistance ( { x = 0 , y = 0 , z = 0 } , { x = 10 , y = 10 , z = 10 } ) 
+ --在聊天框显示 
+Chat : sendSystemMsg ( "(0,0)高度0到(10,10)高度10的直线距离是" .. distance ) 
+ # playParticalEffect
+ 参数及类型：
+ x,y,z: number 位置
+ particleId: number 特效id
+ scale: number 特效大小
+ 返回值及类型：
+ code: number 成功(ErrorCode.OK) ErrorCode 
+ 该方法的主要作用： 在指定位置播放特效
+ 具体使用案例如下：
+ --在(0,0)高度7的位置播放烟雾特效 
+ --前三个参数是播放特效的位置坐标 
+ --第四个参数是播放特效的特效id，具体可以在“迷你世界ID查询”的“特效表数据”里查看 
+ --最后一个参数是特效的缩放比例 
+World : playParticalEffect ( 0 , 7 , 0 , 1001 , 1 ) 
+ --在聊天框显示 
+Chat : sendSystemMsg ( "在(0,0)高度7的位置生成了一个烟雾特效" ) 
+ # stopEffectOnPosition
+ 参数及类型：
+ x,y,z: number 位置
+ particleId: number 特效id
+ 返回值及类型：
+ code: number 成功(ErrorCode.OK) ErrorCode 
+ 该方法的主要作用： 停止指定位置的特效
+ 具体使用案例如下：
+ --停止指定位置的指定特效 
+ --前三个参数是停止播放特效的位置坐标 
+ --最后一个参数是需要停止的特效id 
+World : stopEffectOnPosition ( 0 , 7 , 0 , 1001 ) 
+ --在聊天框显示 
+Chat : sendSystemMsg ( "停止了(0,0)高度7位置的1001烟雾特效" ) 
+ # setEffectScaleOnPosition
+ 参数及类型：
+ x,y,z: number 位置
+ particleId: number 特效id
+ scale: number 特效大小
+ 返回值及类型：
+ code: number 成功(ErrorCode.OK) ErrorCode 
+ 该方法的主要作用： 设置指定位置的特效大小
+ 具体使用案例如下：
+ --缩放指定位置的指定特效 
+ --前三个参数是需要缩放特效的坐标 
+ --第四个参数是需要缩放的特效id 
+ --最后一个参数是设置的缩放比例 
+World : setEffectScaleOnPosition ( 0 , 7 , 0 , 1001 , 2 ) 
+ --在聊天框显示 
+Chat : sendSystemMsg ( "把(0,0)高度7位置的烟雾特效放大了两倍" ) 
+ # randomParticleEffectID
+ 参数及类型：
+无
+ 返回值及类型：
+ code: number 成功(ErrorCode.OK) ErrorCode 
+ particleId: number 特效id
+ 该方法的主要作用： 随机特效类型，随机返回一种特效ID
+ 具体使用案例如下：
+ --获取一个随机特效id 
+ local result , id = World : randomParticleEffectID ( ) 
+ --在聊天框显示 
+Chat : sendSystemMsg ( "获取到了一个随机特效id：" .. id ) 
+ # playSoundEffectOnPos
+ 参数及类型：
+ pos: table 位置
+ soundId: number 音效ID
+ volume: number 音量调节
+ pitch: number 音调调节
+ isLoop: bool 是否循环播放
+ 返回值及类型：
+ code: number 成功(ErrorCode.OK) ErrorCode 
+ 该方法的主要作用： 在指定位置上播放指定音效
+ 具体使用案例如下：
+ --在(0,0)高度7的位置播放音乐10713 
+ --第一个参数为播放音乐的坐标组成的表 
+ --第二个参数10713为播放的音效id，具体可以在“迷你世界ID查询”的“音效表数据”里查看 
+ --后三个参数分别是：音量、音高、是否循环播放 
+World : playSoundEffectOnPos ( { x = 0 , y = 7 , z = 0 } , 10713 , 100 , 1 , false ) 
+ --在聊天框显示 
+Chat : sendSystemMsg ( "(0,0)高度7的位置正在播放音乐" ) 
+ # stopSoundEffectOnPos
+ 参数及类型：
+ pos: table 位置
+ soundId: number 音效ID
+ 返回值及类型：
+ code: number 成功(ErrorCode.OK) ErrorCode 
+ 该方法的主要作用： 停止指定位置上的指定音效
+ 具体使用案例如下：
+ --在(0,0)高度7的位置播放音乐10713 
+World : playSoundEffectOnPos ( { x = 0 , y = 7 , z = 0 } , 10713 , 100 , 1 , false ) 
+ --在聊天框显示提示 
+Chat : sendSystemMsg ( "(0,0)高度7的位置正在播放音乐，做动画表情即可停止播放" ) 
+ --当玩家做动画表情时执行此函数 
+ local function Player_PlayAction ( event ) 
+ --停止(0,0)高度7位置音乐10713的播放 
+ --第一个参数为要停止播放音乐的坐标组成的表 
+ --第二个参数为要停止播放的音乐id，具体可以在“迷你世界ID查询”的“音效表数据”里查看 
+ World : stopSoundEffectOnPos ( { x = 0 , y = 7 , z = 0 } , 10713 ) 
+ --在聊天框显示 
+ Chat : sendSystemMsg ( "停止了(0,0)高度7音乐10713的播放" ) 
+ end 
+ --注册一个动画表情监听器，事件发生时执行上面的函数 
+ScriptSupportEvent : registerEvent ( [=[Player.PlayAction]=] , Player_PlayAction ) 
+ # getLightByPos
+ 参数及类型：
+ x,y,z: number 位置
+ 返回值及类型：
+ code: number 成功(ErrorCode.OK) ErrorCode 
+ lv: number 光照强度(0~16)
+ 该方法的主要作用： 获取光照强度
+ 具体使用案例如下：
+ local code , lv = World : getLightByPos ( x , y , z ) 
+ if code == ErrorCode . OK then 
+ print ( '执行成功' , code , lv ) 
+ else 
+ print ( '执行失败' ) 
+ end 
+ # setBlockLightEx
+ 参数及类型：
+ x,y,z: number 位置
+ lv: number 光照强度(0~16)
+ 返回值及类型：
+ code: number 成功(ErrorCode.OK) ErrorCode 
+ 该方法的主要作用： 设置光照强度
+ 具体使用案例如下：
+ local code = World : setBlockLightEx ( x , y , z , lv ) 
+ if code == ErrorCode . OK then 
+ print ( '执行成功' , code ) 
+ else 
+ print ( '执行失败' ) 
+ end 
+ # randomSoundID
+ 参数及类型：
+无
+ 返回值及类型：
+ code: number 成功(ErrorCode.OK) ErrorCode 
+ soundid: number 声音ID
+ 该方法的主要作用： 随机一个音效ID
+ 具体使用案例如下：
+ local code , soundid = World : randomSoundID ( ) 
+ if code == ErrorCode . OK then 
+ print ( '执行成功' , code , soundid ) 
+ else 
+ print ( '执行失败' ) 
+ end 
+ # randomWeatherID
+ 参数及类型：
+无
+ 返回值及类型：
+ code: number 成功(ErrorCode.OK) ErrorCode 
+ wtype: number 天气值（WEATHERSTATUS） WEATHERSTATUS 
+ 该方法的主要作用： 随机一个天气ID
+ 具体使用案例如下：
+ local code , wtype = World : randomWeatherID ( ) 
+ if code == ErrorCode . OK then 
+ print ( '执行成功' , code , wtype ) 
+ else 
+ print ( '执行失败' ) 
+ end 
+ # getLocalDate
+ 参数及类型：
+ enum: number 枚举值（EVENTDATE）
+ 返回值及类型：
+ code: number 成功(ErrorCode.OK) ErrorCode 
+ time: number 获取到的值
+ 该方法的主要作用： 获取主机时间
+ 具体使用案例如下：
+ local code , time = World : getLocalDate ( enum ) 
+ if code == ErrorCode . OK then 
+ print ( '执行成功' , code , time ) 
+ else 
+ print ( '执行失败' ) 
+ end 
+ # getLocalDateString
+ 参数及类型：
+无
+ 返回值及类型：
+ code: number 成功(ErrorCode.OK) ErrorCode 
+ timestr: string 时间描述
+ 该方法的主要作用： 获取完整设备时间
+ 具体使用案例如下：
+ local code , timestr = World : getLocalDateString ( ) 
+ if code == ErrorCode . OK then 
+ print ( '执行成功' , code , timestr ) 
+ else 
+ print ( '执行失败' ) 
+ end 
+ # getServerDate
+ 参数及类型：
+ enum: number 枚举值（EVENTDATE）
+ 返回值及类型：
+ code: number 成功(ErrorCode.OK) ErrorCode 
+ time: number 获取到的值
+ 该方法的主要作用： 获取服务器时间
+ 具体使用案例如下：
+ local code , time = World : getServerDate ( enum ) 
+ if code == ErrorCode . OK then 
+ print ( '执行成功' , code , time ) 
+ else 
+ print ( '执行失败' ) 
+ end 
+ # getServerDateString
+ 参数及类型：
+无
+ 返回值及类型：
+ code: number 成功(ErrorCode.OK) ErrorCode 
+ timestr: string 时间描述
+ 该方法的主要作用： 获取完整服务器时间
+ 具体使用案例如下：
+ local code , timestr = World : getServerDateString ( ) 
+ if code == ErrorCode . OK then 
+ print ( '执行成功' , code , timestr ) 
+ else 
+ print ( '执行失败' ) 
+ end 
+ # getDateFromTime
+ 参数及类型：
+ time: number 时间戳
+ enum: number 枚举值（EVENTDATE） EVENTDATE 
+ 返回值及类型：
+ code: number 成功(ErrorCode.OK) ErrorCode 
+ ret: number 时间值
+ 该方法的主要作用： 转换时间戳为时间单位
+ 具体使用案例如下：
+ local code , ret = World : getDateFromTime ( time , enum ) 
+ if code == ErrorCode . OK then 
+ print ( '执行成功' , code , ret ) 
+ else 
+ print ( '执行失败' ) 
+ end 
+ # getDateStringFromTime
+ 参数及类型：
+ time: number 时间戳
+ 返回值及类型：
+ code: number 成功(ErrorCode.OK) ErrorCode 
+ timestr: string 时间描述
+ 该方法的主要作用： 转换时间戳为完整时间
+ 具体使用案例如下：
+ local code , timestr = World : getDateStringFromTime ( time ) 
+ if code == ErrorCode . OK then 
+ print ( '执行成功' , code , timestr ) 
+ else 
+ print ( '执行失败' ) 
+ end 
+ 上次更新: 2023/5/10 15:09:30 
+ ←
+ 游戏规则列表 GameRule
+ 游戏管理接口 Game
+ →
+
+========== 3.0Studio-LuaFunction ==========
+源: http://studio.mini1.cn/wiki/Api/DataType/LuaFunction.html
+
+LuaFunction | 迷你世界 Studio 
+ Skip to content 迷你世界 Studio 
+ Main Navigation 教程 迷你世界Studio操作教程 
+ 操作手册 
+ 多人协作 
+ 运行模式 
+ 使用资源ID 
+ API 类 
+ 数据库 
+ 枚举 
+ 官方主页 简体中文
+ English 
+ 简体中文
+ English 
+ Appearance
+ Menu Return to top 
+ Sidebar Navigation 
+ 沙盒指引
+ 类索引
+ 枚举索引
+ 数据类型索引
+ 类
+ 1. 脚本
+ CustomFunction
+ CustomNotify
+ LocalScript
+ ModuleScript
+ RemoteEvent
+ RemoteFunction
+ Script
+ ScriptService
+ ServerScriptService
+ ServerStorage
+ StarterCharacterScripts
+ StarterPlayerScripts
+ Timer
+ 2. 界面
+ CoreUI
+ Decal
+ Surface
+ UIBase
+ UIBillboard
+ UIButton
+ UIComponent
+ UIDropDownBox
+ UIImage
+ UIList
+ UIModelView
+ UIMovieClip
+ UITextInput
+ UITextLabel
+ UIVideoImage
+ 3. 建造
+ Atmosphere
+ Environment
+ GeoSolid
+ Light
+ Material
+ SkyLight
+ SkyDome
+ SunLight
+ PostProcessing
+ 4. 角色
+ Model
+ Actor
+ BoneNode
+ 5. 输入
+ InputObject
+ ContextActionService
+ ClickDetector
+ UserInputService
+ 6. 声音
+ DefaultSound
+ Sound
+ SoundGroup
+ SoundService
+ 7. 特效
+ DefaultEffect
+ EffectObject
+ Exposion
+ Particle
+ ParticleSmoke
+ Projectile
+ PostEffectService
+ 8. 动画
+ AnimatorBase
+ Animator
+ AnimatorStateData
+ AnimatorLayerItemNode
+ AnimatorParamsItemNode
+ LegacyAnimation
+ LegacyAnimationItem
+ Animation
+ AnimationItem
+ SkeletonAnimation
+ TweenService
+ UITween
+ 9. 物理
+ BindAttachment
+ HingeJoint
+ PhysXService
+ SpringJoint
+ StickJoint
+ VisibleJoint
+ Weld
+ Ragdoll
+ RagdollJoint
+ 10. 玩法
+ Area
+ Backpack
+ Camera
+ Chat
+ GameSetting
+ Player
+ Players
+ PlayerGui
+ StartPlayer
+ SpawnService
+ TalkService
+ Team
+ Teams
+ TeleportService
+ Tool
+ TriggerBox
+ VoiceChannel
+ VoiceChatRemoteService
+ VoiceChatService
+ WorldService
+ 11. 服务
+ AdvertisementService
+ AnalyticsService
+ CloudService
+ CollectionService
+ ContentService
+ DeveloperStoreService
+ FriendsService
+ GameNode
+ LoadedService
+ MaterialService
+ MouseService
+ NetService
+ RunService
+ Service
+ StarterGui
+ StarterPack
+ UtilService
+ SandboxSceneMgrService
+ WorkSpace
+ 12. 云数据
+ Asset
+ AssetContent
+ CloudKVStore
+ 13. 其它
+ ModelData
+ SyncCoord
+ CloudServerConfigService
+ CustomConfig
+ CylindricalJoint
+ FriendInviteService
+ LocalizationTable
+ SandboxSceneMgrService
+ SandboxUISnapshotNode
+ UIListLayout
+ UIMiniCoin
+ SandboxLocalizationService
+ OnlineService
+ DynamicBone
+ 枚举
+ A
+ AIGenType
+ Action
+ ActorBehaviorItemEvent
+ AnimationPlayMode
+ AnimationWrapMode
+ AnimatorCullingMode
+ AnimatorParameterType
+ AntialiasingMethodDesc
+ AntialiasingQualityDesc
+ AssetFetchStatus
+ AssetResType
+ AttributeType
+ AutoSizeType
+ B
+ BMGradientDirType
+ BaseMaterial
+ BehaviorState
+ BlendMode2D
+ BlendModeType
+ BlockCollide
+ BlockPlaceType
+ BrowserType
+ C
+ CameraModel
+ CameraType
+ CameraType2D
+ ChannelType
+ ContextActionPriority
+ ContextActionResult
+ ContextActionType
+ CoreUIViewRange
+ CoreUiComponent
+ CullLayer
+ CullMode
+ D
+ DepthFunc
+ DepthWrite
+ DevPCMovementMode
+ DevTouchMovementMode
+ DeviceRendererType
+ DeviceType
+ DimensionUnit
+ DownEffect
+ DragonBonesAnimation
+ DragonBonesArmatureDisplay
+ DragonBonesSkin
+ DragonBonesSlot
+ E
+ EEmitterType
+ EMultiScenes
+ EMultiScenesAPI
+ EasingDirection
+ EasingStyle
+ Effect
+ EmissionDIr
+ EmitterColorOverLifeTimeMode
+ EmitterShape
+ EmitterTrailsMode
+ EmitterTrailsTextureMode
+ EnumParticleSystemOnlyConstantCurveMode
+ EnumUIType
+ EnumsIndex
+ ExplosionType
+ F
+ FillDirectionType
+ FillMethod
+ FillOrigin
+ FogType
+ G
+ GAMESTAGE
+ GameBackGroundMusic
+ GamePlayMode
+ GameStartMode
+ GeoSolidShape
+ GraphicsPlatform
+ GraphicsQuality
+ H
+ HorizontalAlignmentType
+ I
+ InputMode
+ InteractMethod
+ K
+ KeyCode
+ L
+ LUTsTemperatureType
+ LayerIndexDesc
+ LayoutHRelation
+ LayoutSizeRelation
+ LayoutVRelation
+ LegacyAnimationLoop
+ LightType
+ ListLayoutType
+ ListenerType
+ M
+ MODELVIEW_FogType
+ MSAALevelDesc
+ MaterialTemplate
+ Mode
+ Model
+ ModifierKey
+ MotorType
+ MouseBehavior
+ N
+ NodeSyncLocalFlag
+ NodeSyncMode
+ O
+ OutlineThickness
+ OverflowType
+ P
+ PHYSX2D_TYPE
+ PParticleDirType
+ PartType
+ ParticleCustomDataMode
+ ParticleEmitterShape2D
+ ParticleLifeCurveMode2D
+ ParticleLimitVelocityOverLifetimeSeparateAxes
+ ParticleLimitVelocityOverLifetimeSpaceMode
+ ParticleLineAlignment
+ ParticlePositionType
+ ParticleQualityDropdown
+ ParticleRenderMode
+ ParticleRenderSpace
+ ParticleShapeBoxType
+ ParticleShapeConeType
+ ParticleShapeMeshSpawnMode
+ ParticleShapeMeshType
+ ParticleSortMode
+ ParticleSystemCullingMode
+ ParticleSystemCurveMode
+ ParticleSystemGradientMode
+ ParticleSystemRingBufferMode
+ ParticleSystemScalingMode
+ ParticleSystemSimulationSpace
+ ParticleSystemUVGridType
+ ParticleSystemUVMode
+ ParticleSystemUVRowMode
+ ParticleSystemUVTimeMode
+ ParticleVelocityOverLifetimeSpaceMode
+ PhysicsFrames
+ PhysicsRoleType
+ PhysicsType
+ PlanarReflectionTextureSize
+ PostprocessQuality
+ PreZMode
+ R
+ REFLEXTYPEENUM_ENUM_BEAMATTACHMENT_BEAMTYPE)
+ REFLEXTYPEENUM_ENUM_BEZIER_PATH_GENERATOR_MESH_TYPE)
+ REFLEXTYPEENUM_ENUM_BEZIER_PATH_GENERATOR_UV_TILING_MODE)
+ REFLEXTYPEENUM_ENUM_MINI2D_BONE_MASK_MODE)
+ RagdollBoneJoint
+ RenderPriority
+ ResolutionLevel
+ ResourceLoadMode
+ RollOffMode
+ RotateType
+ S
+ SUBSTAGE_INIT
+ SUBSTAGE_LOADED
+ SUBSTAGE_READY
+ SUBSTAGE_RUN
+ ScaleType
+ SceneEffectFrameShowMode
+ ShadowCascadeCount
+ ShadowDesc
+ ShadowQuality
+ SkyBoxType
+ SkyLightType
+ SkyPlanet
+ Sound
+ StandardSkeleton
+ StateMachineMessage
+ Surface
+ T
+ TextHAlignment
+ TextOverflowType
+ TextVAlignment
+ TextureBlend
+ TextureMode
+ TimelineCustomEvent
+ TimelineTrackType
+ TimerRunState
+ ToolActiveMode
+ TweenStatus
+ U
+ UIMODLEVIEW_SkyLightType
+ UVWrapMode
+ UserInputKeyCode
+ UserInputState
+ UserInputType
+ V
+ VerticalAlignment
+ ViewRange
+ VignetteMode
+ W
+ WaterReflectedDesc
+ Weather
+ 数据类型
+ Bool
+ ColorQuad
+ ColorValue
+ LuaFunction
+ LuaTable
+ Matrix3f
+ Matrix4f
+ MNJsonVal
+ Nil
+ Number
+ Float
+ Int
+ Quaternion
+ RangeInfo
+ Ray
+ Rect
+ ReflexTuple
+ SBXConnection
+ SBXSignal
+ String
+ Table
+ TweenInfo
+ Vector2
+ Vector3
+ Vector4
+ Void
+ WCoord
+ 基类
+ Joint
+ SandboxNode
+ ScriptNode
+ Transform
+ On this page
+ LuaFunction ​ 
+ 描述 ​ 
+ LuaFunction （函数类型）是一种可以存储和传递 Lua 函数的数据类型。它允许你将函数作为值来处理，就像处理数字、字符串或表一样。函数可以作为参数传递给其他函数，也可以作为返回值返回，这使得 LuaFunction 成为实现回调、事件处理和异步编程的重要工具。
+ 在 MiniStudio 中，许多 API 方法使用 LuaFunction 作为回调参数，用于在特定事件发生时执行自定义代码。
+ 创建函数引用 ​ 
+ 直接赋值 ​ 
+ 最简单的方式是将函数直接赋值给变量：
+ lua -- 定义一个函数 
+ local function myFunction (x, y) 
+ return x + y 
+ end 
+ -- 将函数赋值给变量（此时变量持有函数引用） 
+ local func = myFunction 
+ -- 调用函数 
+ local result = func ( 10 , 20 ) 
+ print (result) -- 输出: 30 
+ 匿名函数 ​ 
+ 你也可以使用匿名函数（lambda 函数）：
+ lua -- 创建匿名函数并赋值给变量 
+ local add = function (a, b) 
+ return a + b 
+ end 
+ -- 或者直接在调用中使用 
+ local result = ( function (x, y) return x * y end )( 5 , 3 ) 
+ print (result) -- 输出: 15 
+ 从方法获取函数 ​ 
+ 如果对象的方法需要作为回调传递，可以使用冒号（ : ）语法或点（ . ）语法：
+ lua local obj = SandboxNode. New ( "Model" ) 
+ -- 方法一：使用点语法，需要手动传递 self 
+ local methodFunc = function (...) 
+ return obj : SomeMethod ( ... ) 
+ end 
+ -- 方法二：使用冒号语法（隐式 self） 
+ local methodFunc = obj. SomeMethod -- 注意：这种方式需要确保 self 正确绑定 
+ 作为参数传递 ​ 
+ LuaFunction 最常见的用途是作为回调函数参数传递给 API 方法。
+ 基本回调示例 ​ 
+ lua -- 定义一个回调函数 
+ local function onTextureUploaded (success) 
+ if success then 
+ print ( "纹理上传成功！" ) 
+ else 
+ print ( "纹理上传失败！" ) 
+ end 
+ end 
+ -- 将函数作为参数传递 
+ worldService : UploadTexture (texture, "path/to/texture" , "textureName" , onTextureUploaded) 
+ 使用匿名函数作为回调 ​ 
+ 你也可以直接在调用时定义匿名函数：
+ lua worldService : UploadTexture ( 
+ texture, 
+ "path/to/texture" , 
+ "textureName" , 
+ function (success) 
+ if success then 
+ print ( "上传成功" ) 
+ else 
+ print ( "上传失败" ) 
+ end 
+ end 
+ ) 
+ 事件绑定示例 ​ 
+ 许多服务使用 LuaFunction 来绑定事件处理：
+ lua -- 注册每帧执行的函数 
+ local function onTick (deltaTime) 
+ print ( "每帧调用，时间间隔:" , deltaTime) 
+ end 
+ -- 绑定到 Tick 事件 
+ runService : BindToTickRegister ( "myTickKey" , 1 , onTick) 
+ -- 也可以使用匿名函数 
+ runService : BindToTickRegister ( "myTickKey2" , 1 , function (deltaTime) 
+ -- 每帧执行的代码 
+ end ) 
+ 回调函数的参数和返回值 ​ 
+ 接收参数的回调 ​ 
+ 根据不同的 API，回调函数可能接收不同数量和类型的参数：
+ lua -- 示例：回调函数接收一个参数 
+ local function onComplete (result) 
+ print ( "操作完成，结果:" , result) 
+ end 
+ someAPI : DoSomething (onComplete) 
+ -- 示例：回调函数接收多个参数 
+ local function onDataReceived (data1, data2, data3) 
+ print ( "收到数据:" , data1, data2, data3) 
+ end 
+ someAPI : FetchData (onDataReceived) 
+ 处理返回值 ​ 
+ 某些回调可能需要在完成时返回特定值：
+ lua -- 回调函数可以返回布尔值表示操作是否成功 
+ local function validateData (data) 
+ if data and # data > 0 then 
+ return true -- 验证通过 
+ end 
+ return false -- 验证失败 
+ end 
+ someAPI : ProcessData (data, validateData) 
+ 高级用法 ​ 
+ 函数工厂 ​ 
+ 你可以创建返回函数的函数（函数工厂）：
+ lua -- 创建一个工厂函数，返回一个计数器函数 
+ local function createCounter (initialValue) 
+ local count = initialValue or 0 
+ return function () 
+ count = count + 1 
+ return count 
+ end 
+ end 
+ -- 创建两个独立的计数器 
+ local counter1 = createCounter ( 0 ) 
+ local counter2 = createCounter ( 100 ) 
+ print ( counter1 ()) -- 输出: 1 
+ print ( counter1 ()) -- 输出: 2 
+ print ( counter2 ()) -- 输出: 101 
+ print ( counter2 ()) -- 输出: 102 
+ 闭包和状态保持 ​ 
+ 函数可以访问创建它的作用域中的变量（闭包）：
+ lua local function createButton (name) 
+ local clickCount = 0 -- 局部变量，被闭包捕获 
+ local onClickHandler = function () 
+ clickCount = clickCount + 1 
+ print (name .. " 被点击了 " .. clickCount .. " 次" ) 
+ end 
+ return onClickHandler 
+ end 
+ local button1Click = createButton ( "按钮1" ) 
+ local button2Click = createButton ( "按钮2" ) 
+ button1Click () -- 输出: 按钮1 被点击了 1 次 
+ button1Click () -- 输出: 按钮1 被点击了 2 次 
+ button2Click () -- 输出: 按钮2 被点击了 1 次 
+ 条件回调 ​ 
+ 可以根据条件动态选择不同的回调函数：
+ lua local function onSuccess () 
+ print ( "操作成功" ) 
+ end 
+ local function onFailure () 
+ print ( "操作失败" ) 
+ end 
+ -- 根据条件选择回调 
+ local callback = condition and onSuccess or onFailure 
+ someAPI : DoOperation (callback) 
+ 实际应用场景 ​ 
+ 异步操作回调 ​ 
+ lua -- 上传资源的异步回调 
+ local function handleUploadComplete (success, url) 
+ if success then 
+ print ( "资源已上传到:" , url) 
+ -- 继续后续操作 
+ else 
+ print ( "上传失败，重试..." ) 
+ end 
+ end 
+ assetService : UploadAsset (assetData, handleUploadComplete) 
+ 定时器回调 ​ 
+ lua -- 创建定时器回调 
+ local function onTimerExpired () 
+ print ( "定时器已触发" ) 
+ -- 执行定时任务 
+ end 
+ timer : Start ( 5.0 , onTimerExpired) -- 5秒后触发 
+ 事件监听 ​ 
+ lua -- 监听玩家进入区域事件 
+ local function onPlayerEntered (player) 
+ print ( "玩家 " .. player. Name .. " 进入了区域" ) 
+ end 
+ area : OnPlayerEnter (onPlayerEntered) 
+ 条件检查回调 ​ 
+ lua -- 数据验证回调 
+ local function validateInput (input) 
+ if type (input) == "string" and # input > 0 then 
+ return true 
+ end 
+ return false 
+ end 
+ -- 使用验证函数 
+ if validateInput (userInput) then 
+ processInput (userInput) 
+ end 
+ 注意事项 ​ 
+ 函数引用的生命周期 ​ 
+ 当将函数作为 LuaFunction 传递时，需要注意函数的生命周期：
+ lua -- 正确：函数在作用域内保持有效 
+ local function myCallback () 
+ print ( "回调执行" ) 
+ end 
+ api : Register (myCallback) -- 函数引用被安全保存 
+ -- 注意：局部变量可能在某些情况下失效 
+ do 
+ local tempCallback = function () print ( "临时回调" ) end 
+ -- 如果 tempCallback 在 do 块外被调用，可能存在问题 
+ end 
+ Nil 检查和错误处理 ​ 
+ 在调用回调函数之前，建议检查函数是否为 nil：
+ lua local function safeCall (callback, ...) 
+ if callback and type (callback) == "function" then 
+ return callback ( ... ) 
+ else 
+ print ( "警告：回调函数无效" ) 
+ end 
+ end 
+ safeCall (myCallback, arg1, arg2) 
+ 避免循环引用 ​ 
+ 在使用 LuaFunction 时，要注意避免创建循环引用，这可能导致内存泄漏：
+ lua -- 错误示例：可能导致内存泄漏 
+ local function createHandler () 
+ local handler = function () 
+ -- 使用了 handler 自己，形成循环引用 
+ handler () 
+ end 
+ return handler 
+ end 
+ 总结 ​ 
+ LuaFunction 是 MiniStudio Lua 编程中的重要数据类型，它提供了：
+ 灵活性 ：函数可以作为值传递和存储
+ 回调机制 ：实现异步操作和事件处理
+ 代码复用 ：通过函数工厂和闭包实现代码复用
+ 状态管理 ：闭包可以保持和访问外部状态
+ 掌握 LuaFunction 的使用方法，能够帮助你编写更加灵活和强大的 Lua 脚本。
+ Pager Previous page ColorValue 
+ Next page LuaTable
+
+========== 3.0Studio-使用回调 ==========
+源: http://studio.mini1.cn/wiki/Tutorials/Introduce/Node/ScriptCallBack.html
+
+使用回调 | 迷你世界 Studio 
+ Skip to content 迷你世界 Studio 
+ Main Navigation 教程 迷你世界Studio操作教程 
+ 操作手册 
+ 多人协作 
+ 运行模式 
+ 使用资源ID 
+ API 类 
+ 数据库 
+ 枚举 
+ 官方主页 简体中文
+ English 
+ 简体中文
+ English 
+ Appearance
+ Menu Return to top 
+ Sidebar Navigation 
+ 概述
+ 关于MiniStudio
+ 安装
+ 介绍
+ Studio操作教程
+ Studio基本操作
+ MiniStudio菜单
+ 移动镜头
+ 节点列表窗口
+ 转换对象
+ 属性窗口
+ 保存并发布
+ 游戏管理器
+ 游戏测试
+ 游戏设置
+ Studio功能使用
+ 项目管理的使用
+ 场景节点的使用
+ 属性栏的使用
+ 沙盒系统的使用
+ 模型的使用
+ 云资源的使用
+ 物理的使用(控制物理碰撞)
+ APPID的使用
+ Studio功能进阶
+ 如何自定义方块
+ 如何使用团队创作
+ Studio使用规范
+ 节点功能
+ 关于节点
+ 节点功能简介
+ 做好的节点如何共享保存
+ 脚本
+ 脚本的使用
+ 脚本的使用回调
+ ModuleScript
+ 本地脚本
+ 服务器脚本
+ 界面
+ 屏幕Gui
+ 文本的使用
+ 图像的使用
+ 3DUI的使用
+ 如何控制原有游戏UI
+ 音效
+ 声音
+ 特效
+ 游戏
+ 相机控制
+ 相机示例
+ 队伍设置
+ 重生点的使用
+ 道具与快捷栏
+ 物理约束
+ 玩家输入控制
+ 使用云数据
+ 同地图传送
+ 跨地图传送
+ 模型与动画
+ 导入模型
+ 位置控制
+ 动画的使用
+ 如何移除对象
+ 如何给骨骼添加部件或移除指定部件
+ 如何调整部件
+ 其它
+ 调试
+ 脚本调试
+ 测试模式
+ 创作
+ 控制角色移动
+ 如何创建一个工具
+ 帧运算逻辑
+ 天空盒的使用
+ 组队创作
+ 如何为部件上色和修改材质
+ 新手指引
+ 跑酷模板
+ 制作跷跷板
+ 制作物理门
+ 制作玩家过滤门（碰撞组）
+ 使用脚本计时
+ 美术工具
+ 如何使用内嵌的美术工具
+ 如何使用动画
+ 如何使用蓝图编辑
+ 如何使用微缩编辑
+ 如何使用骨骼编辑
+ 网络通信
+ Studio网络通信介绍
+ 如何使用远程函数与远程事件
+ 事件系统
+ Demo游戏制作
+ RPG
+ FPS
+ PartyGame
+ Q && A
+ 社区支持
+ QQ群
+ 论坛
+ On this page
+ 使用回调 ​ 
+ 回调（ Callback ）是设置为函数对象的只写成员。开发者无法直接调用回调，而是需要 迷你世界 Studio 对回调函数进行内部触发，并向其传递回调处理程序或函数所需的相关信息。
+ 常用重要回调 ​ 
+ Close： 在游戏关闭之前触发，以便为脚本提供保存数据的机会。 （敬请期待） 
+ RemoteFunction.OnClientInvoke： 当服务器调用 RemoteFunction:FireClient(player, …) 或 RemoteFunction:FireAllClients(…) 时被调用。
+ RemoteFunction.OnServerInvoke： 当客户端调用 RemoteFunction:InvokeServer(…) 时被调用。
+ BindableFunction.OnInvoke： 当脚本调用 BindableFunction:Invoke(…) 时被调用。
+ 回调用法 ​ 
+ 在设置回调时，开发者需要将其分配给指定函数：
+ lua local CustomNotify = SandboxNode. New ( "CustomNotify" ) 
+ --监听事件 
+ CustomNotify. Notify : Connect ( function (v1, v2) 
+ print ( "TestNotify->" .. v1 .. " " .. v2) 
+ --TestNotify->100 hello 
+ end ) 
+ 由于回调拥有只写属性，开发者将无法获取回调的值。
+ lua local CustomNotify = SandboxNode. New ( "CustomNotify" ) 
+ --监听事件 
+ CustomNotify. Notify : Connect ( function (v1, v2) 
+ print ( "TestNotify->" .. v1 .. " " .. v2) 
+ --TestNotify->100 hello 
+ end ) 
+ --发送自定义事件 
+ CustomNotify : Fire ( 100 , "hello" ) 
+ 回调示例 ​ 
+ 在本示例中，我们将会创建一个 CustomNotify ，并将其绑定至接收创建矩形 LocalPosition 和 GeoSolidShape 的函数。此 CustomNotify 将会创建部件并将其放入 Workspace （工作区），并将传递给接收函数的部件名称与尺寸应用至新创建的部件。
+ 首先，让我们来创建 BindableFunction ：
+ lua local CustomNotify = SandboxNode. New ( "CustomNotify" ) 
+ 然后使用 OnInvoke 回调将其与函数相连：
+ lua CustomNotify. Notify : Connect ( function (LocalPos, GeoSolidShape) 
+ local cube = SandboxNode. New ( "GeoSolid" ) 
+ cube. LocalPosition = LocalPos 
+ cube. GeoSolidShape = GeoSolidShape 
+ cube. Parent = game. WorkSpace 
+ end ) 
+ 设置完毕后，开发者将可以按照下列方式调用 BindableFunction ，并使用其创建新的部件：
+ lua CustomNotify : Fire (Vector3. New ( 0 , 0 , 0 ),Enum. GeoSolidShape . Cuboid ) 
+ Pager Previous page 脚本的使用 
+ Next page ModuleScript
+
+========== 3.0Studio-DeveloperStoreService ==========
+源: http://studio.mini1.cn/wiki/en/Api/Classes/Service/DeveloperStoreService.html
+
+DeveloperStoreService | 迷你世界 Studio 
+ Skip to content 迷你世界 Studio 
+ Main Navigation Guide MiniWorld Studio Operation Tutorial 
+ Operation Manual 
+ Multi-person Collaboration 
+ Operation Mode 
+ Resource Use 
+ API CLASS 
+ DATA TYPE 
+ ENUME 
+ Official Website English
+ 简体中文 
+ English
+ 简体中文 
+ Appearance
+ Menu Return to top 
+ Sidebar Navigation 
+ SANDBOX GUIDE
+ Class Index
+ Enumerate Index
+ Data Type Index
+ Lua Index
+ CLASS
+ 1. SCRIPT
+ CustomFunction
+ CustomNotify
+ LocalScript
+ ModuleScript
+ RemoteEvent
+ RemoteFunction
+ Script
+ ScriptService
+ ServerScriptService
+ ServerStorage
+ StarterCharacterScripts
+ StarterPlayerScripts
+ Timer
+ 2. GUI
+ CoreUI
+ Decal
+ Surface
+ UIBase
+ UIBillboard
+ UIButton
+ UIComponent
+ UIDropDownBox
+ UIImage
+ UIList
+ UIModelView
+ UIMovieClip
+ UITextInput
+ UITextLabel
+ UIVideoImage
+ 3. BUILDING
+ Atmosphere
+ Environment
+ GeoSolid
+ Light
+ Material
+ SkyLight
+ SkyDome
+ SunLight
+ PostProcessing
+ 4. ROLES
+ Model
+ Actor
+ BoneNode
+ 5. INPUT
+ InputObject
+ ContextActionService
+ ClickDetector
+ UserInputService
+ 6. SOUND
+ DefaultSound
+ Sound
+ SoundGroup
+ SoundService
+ 7. EFFECTS
+ DefaultEffect
+ EffectObject
+ Exposion
+ Particle
+ ParticleSmoke
+ Projectile
+ PostEffectService
+ 8. ANIMATIONS
+ AnimatorBase
+ Animator
+ AnimatorStateData
+ AnimatorLayerItemNode
+ AnimatorParamsItemNode
+ LegacyAnimation
+ LegacyAnimationItem
+ Animation
+ AnimationItem
+ SkeletonAnimation
+ TweenService
+ UITween
+ 9. PHYSICS
+ BindAttachment
+ HingeJoint
+ PhysXService
+ SpringJoint
+ StickJoint
+ VisibleJoint
+ Weld
+ Ragdoll
+ RagdollJoint
+ 10. GAMEPLAY
+ Area
+ Backpack
+ Camera
+ Chat
+ GameSetting
+ Player
+ Players
+ PlayerGui
+ StartPlayer
+ SpawnService
+ TalkService
+ Team
+ Teams
+ TeleportService
+ Tool
+ TriggerBox
+ VoiceChannel
+ VoiceChatRemoteService
+ VoiceChatService
+ WorldService
+ 11. SERVICE
+ AdvertisementService
+ AnalyticsService
+ CloudService
+ CollectionService
+ ContentService
+ DeveloperStoreService
+ FriendsService
+ GameNode
+ LoadedService
+ MaterialService
+ MouseService
+ NetService
+ RunService
+ Service
+ StarterGui
+ StarterPack
+ UtilService
+ WorkSpace
+ 12. CLOUD
+ Asset
+ AssetContent
+ CloudKVStore
+ 13. OTHER
+ ModelData
+ SyncCoord
+ ENUMERATION
+ A
+ AIGenType
+ Action
+ ActorBehaviorItemEvent
+ AnimationPlayMode
+ AnimationWrapMode
+ AnimatorCullingMode
+ AnimatorParameterType
+ AntialiasingMethodDesc
+ AntialiasingQualityDesc
+ AssetFetchStatus
+ AssetResType
+ AttributeType
+ AutoSizeType
+ B
+ BMGradientDirType
+ BaseMaterial
+ BehaviorState
+ BlendMode2D
+ BlendModeType
+ BlockCollide
+ BlockPlaceType
+ BrowserType
+ C
+ CameraModel
+ CameraType
+ CameraType2D
+ ChannelType
+ ContextActionPriority
+ ContextActionResult
+ ContextActionType
+ CoreUIViewRange
+ CoreUiComponent
+ CullLayer
+ CullMode
+ D
+ DepthFunc
+ DepthWrite
+ DevPCMovementMode
+ DevTouchMovementMode
+ DeviceRendererType
+ DeviceType
+ DimensionUnit
+ DownEffect
+ DragonBonesAnimation
+ DragonBonesArmatureDisplay
+ DragonBonesSkin
+ DragonBonesSlot
+ E
+ EEmitterType
+ EMultiScenes
+ EMultiScenesAPI
+ EasingDirection
+ EasingStyle
+ Effect
+ EmissionDIr
+ EmitterColorOverLifeTimeMode
+ EmitterShape
+ EmitterTrailsMode
+ EmitterTrailsTextureMode
+ EnumParticleSystemOnlyConstantCurveMode
+ EnumUIType
+ EnumsIndex
+ ExplosionType
+ F
+ FillDirectionType
+ FillMethod
+ FillOrigin
+ FogType
+ G
+ GAMESTAGE
+ GameBackGroundMusic
+ GamePlayMode
+ GameStartMode
+ GeoSolidShape
+ GraphicsPlatform
+ GraphicsQuality
+ H
+ HorizontalAlignmentType
+ I
+ InputMode
+ InteractMethod
+ K
+ KeyCode
+ L
+ LUTsTemperatureType
+ LayerIndexDesc
+ LayoutHRelation
+ LayoutSizeRelation
+ LayoutVRelation
+ LegacyAnimationLoop
+ LightType
+ ListLayoutType
+ ListenerType
+ M
+ MODELVIEW_FogType
+ MSAALevelDesc
+ MaterialTemplate
+ Mode
+ Model
+ ModifierKey
+ MotorType
+ MouseBehavior
+ N
+ NodeSyncLocalFlag
+ NodeSyncMode
+ O
+ OutlineThickness
+ OverflowType
+ P
+ PHYSX2D_TYPE
+ PParticleDirType
+ PartType
+ ParticleCustomDataMode
+ ParticleEmitterShape2D
+ ParticleLifeCurveMode2D
+ ParticleLimitVelocityOverLifetimeSeparateAxes
+ ParticleLimitVelocityOverLifetimeSpaceMode
+ ParticleLineAlignment
+ ParticlePositionType
+ ParticleQualityDropdown
+ ParticleRenderMode
+ ParticleRenderSpace
+ ParticleShapeBoxType
+ ParticleShapeConeType
+ ParticleShapeMeshSpawnMode
+ ParticleShapeMeshType
+ ParticleSortMode
+ ParticleSystemCullingMode
+ ParticleSystemCurveMode
+ ParticleSystemGradientMode
+ ParticleSystemRingBufferMode
+ ParticleSystemScalingMode
+ ParticleSystemSimulationSpace
+ ParticleSystemUVGridType
+ ParticleSystemUVMode
+ ParticleSystemUVRowMode
+ ParticleSystemUVTimeMode
+ ParticleVelocityOverLifetimeSpaceMode
+ PhysicsFrames
+ PhysicsRoleType
+ PhysicsType
+ PlanarReflectionTextureSize
+ PostprocessQuality
+ PreZMode
+ R
+ REFLEXTYPEENUM_ENUM_BEAMATTACHMENT_BEAMTYPE)
+ REFLEXTYPEENUM_ENUM_BEZIER_PATH_GENERATOR_MESH_TYPE)
+ REFLEXTYPEENUM_ENUM_BEZIER_PATH_GENERATOR_UV_TILING_MODE)
+ REFLEXTYPEENUM_ENUM_MINI2D_BONE_MASK_MODE)
+ RagdollBoneJoint
+ RenderPriority
+ ResolutionLevel
+ ResourceLoadMode
+ RollOffMode
+ RotateType
+ S
+ SUBSTAGE_INIT
+ SUBSTAGE_LOADED
+ SUBSTAGE_READY
+ SUBSTAGE_RUN
+ ScaleType
+ SceneEffectFrameShowMode
+ ShadowCascadeCount
+ ShadowDesc
+ ShadowQuality
+ SkyBoxType
+ SkyLightType
+ SkyPlanet
+ Sound
+ StandardSkeleton
+ StateMachineMessage
+ Surface
+ T
+ TextHAlignment
+ TextOverflowType
+ TextVAlignment
+ TextureBlend
+ TextureMode
+ TimelineCustomEvent
+ TimelineTrackType
+ TimerRunState
+ ToolActiveMode
+ TweenStatus
+ U
+ UIMODLEVIEW_SkyLightType
+ UVWrapMode
+ UserInputKeyCode
+ UserInputState
+ UserInputType
+ V
+ VerticalAlignment
+ ViewRange
+ VignetteMode
+ W
+ WaterReflectedDesc
+ Weather
+ DATA TYPE
+ Bool
+ ColorQuad
+ ColorValue
+ LuaFunction
+ LuaTable
+ Matrix3f
+ Matrix4f
+ MNJsonVal
+ Nil
+ Number
+ Float
+ Int
+ Quaternion
+ RangeInfo
+ Ray
+ Rect
+ ReflexTuple
+ SBXConnection
+ SBXSignal
+ String
+ Table
+ TweenInfo
+ Vector2
+ Vector3
+ Vector4
+ Void
+ WCoord
+ BASE CLASS
+ Joint
+ SandboxNode
+ ScriptNode
+ Transform
+ On this page
+ DeveloperStoreService ​ 
+ 继承自 ：
+ Service 
+ 描述 ​ 
+ DeveloperStoreService负责体验内交易。可获取有关开发人员产品信息（GetProductInfo和GetDeveloperProducts）
+ 函数 ​ 
+ void   GetDeveloperStoreItems ()
+ 查询当前地图开发者商店列表 
+ void   GetPlayerDeveloperProducts ()
+ 查询指定玩家的购买商品信息 
+ void   ServiceGetPlayerDeveloperProducts ()
+ 云服查询指定玩家的购买商品信息 
+ void   MiniCoinRecharge ()
+ 打开Mini币充值弹窗 
+ void   BuyGoods ( int goodsid, string goodsdesc, int goodsnum)
+ 弹出购买弹窗 
+ ReflexMap   GetProductInfo ( int productid)
+ 查询指定商品(开发者商店中商品)的信息 
+ 代码示例 ​ 
+ lua 
+ --客户端脚本LocalScript 
+ local store = game : GetService ( "DeveloperStoreService" ) 
+ -- 获取地图开发者商店商品列表 
+ local function GetStoreList () 
+ local storeList = store : GetDeveloperStoreItems () 
+ print ( "store list = " , storeList) 
+ local listLength = # storeList 
+ if listLength > 0 then 
+ -- 遍历每个商品信息 
+ local storeitem = {} 
+ for _, value in pairs (storeList) do 
+ print ( "store list key = " , _) 
+ for key, info in pairs (value) do 
+ storeitem[key] = info 
+ print ( "store list key = " , key) 
+ print ( "store list info = " , info) 
+ end 
+ end 
+ end 
+ return storeList 
+ end 
+ -- 获取玩家已购买的商品列表 
+ local function GetPurchasedList () 
+ local buyList = store : GetPlayerDeveloperProducts () 
+ print ( "store buy list = " , buyList) 
+ local buyListLength = # buyList 
+ if buyListLength > 0 then 
+ -- 遍历每个商品信息 
+ local buyItem = {} 
+ for _, value in pairs (buyList) do 
+ print ( "store buy list key = " , _) 
+ for key, info in pairs (value) do 
+ buyItem[key] = info 
+ print ( "store buy list key = " , key) 
+ print ( "store buy list info = " , info) 
+ end 
+ end 
+ end 
+ return buyList 
+ end 
+ -- 获取地图开发者商店某个商品详细信息 
+ local function GetGoodsInfo (goodsid) 
+ local goodsInfo = store : GetProductInfo (goodsid) 
+ if goodsInfo. name ~= nil then 
+ print ( "goods name = " , goodsInfo[ "name" ]) 
+ end 
+ if goodsInfo. desc ~= nil then 
+ print ( "goods desc = " , goodsInfo[ "desc" ]) 
+ end 
+ if goodsInfo. goodId ~= nil then 
+ print ( "goods goodId = " , goodsInfo[ "goodId" ]) 
+ end 
+ if goodsInfo. costType ~= nil then 
+ print ( "goods costType = " , goodsInfo[ "costType" ]) 
+ end 
+ if goodsInfo. costNum ~= nil then 
+ print ( "goods costNum = " , goodsInfo[ "costNum" ]) 
+ end 
+ if goodsInfo. download ~= nil then 
+ print ( "goods download = " , goodsInfo[ "download" ]) 
+ end 
+ if goodsInfo. cover ~= nil then 
+ print ( "goods cover = " , goodsInfo[ "cover" ]) 
+ end 
+ return goodsInfo 
+ end 
+ -- 购买开发者商店某个商品 
+ local function BuyGoods (goodsid, num) 
+ local info = GetGoodsInfo (goodsid) 
+ if info ~= nil and info. desc ~= nil then 
+ local goodDesc = info[ "desc" ] 
+ store : BuyGoods (goodsid, goodDesc,num) 
+ end 
+ end 
+ -- 充值弹窗 
+ local function CoinRecharge () 
+ store : MiniCoinRecharge () 
+ end 
+ GetStoreList () -- 获取开发者商店列表 
+ GetPurchasedList () -- 客户端获取已购买商品列表 
+ wait ( 10 ) 
+ local goodsid = 530001 -- 530001 ~ 539999 
+ BuyGoods (goodsid， 1 ) 
+ CoinRecharge () --主动充值 
+ -- 服务端脚本 Script 
+ local store = game : GetService ( "DeveloperStoreService" ) 
+ store. RemoteBuyGoodsCallBack : Connect ( function (uin, goodsid, code, msg, num) 
+ if code ~= 0 then 
+ print ( "Goods purchase failed." ) 
+ print ( "Error code: " ,code) 
+ print ( "Error message : " ,msg) 
+ --0-购买成功 
+ --1001-地图未上传 
+ --1002-用户取消购买 
+ --1003-此商品查询失败 
+ --1004-请求失败 
+ --1005-迷你币不足 
+ -- 
+ --710-商品不存在 
+ --711-商品状态异常 
+ --712-不能购买自己的商品 
+ --713-已购买该商品，不能重复购买 
+ --714-购买失败，购买数量已达上限 
+ -- 
+ return 
+ end 
+ --code=0 购买成功 
+ print ( "Goods purchase Success." ) 
+ print ( "RemoteBuyGoodsCallBack - uin : " ,uin) 
+ print ( "RemoteBuyGoodsCallBack - goodsid: " ,goodsid) 
+ print ( "RemoteBuyGoodsCallBack - num: " ,num) 
+ print ( "Do something" ) --装备道具 
+ end ) 
+ -- 服务器：获取某个玩家已购买的商品列表 
+ local function GetPlayerPurchasedList (playerid) 
+ local buyList = store : ServiceGetPlayerDeveloperProducts (playerid) 
+ print ( "cloud store buy list = " , buyList) 
+ local buyListLength = # buyList 
+ if buyListLength > 0 then 
+ -- 遍历每个商品信息 
+ local buyItem = {} 
+ for _, value in pairs (buyList) do 
+ print ( "cloud buy list key = " , _) 
+ for key, info in pairs (value) do 
+ buyItem[key] = info 
+ print ( "cloud buy list key = " , key) 
+ print ( "cloud buy list info = " , info) 
+ end 
+ end 
+ end 
+ return buyList 
+ end 
+ Pager Previous page ContentService 
+ Next page FriendsService
+
+========== 国际Wiki-开发者参考 ==========
+源: https://wiki.miniworldgame.com/doku.php/developer_center:developer_reference
+
+developer_center:developer_reference [WIKI - Mini World: CREATA] 
+ skip to content 
+ WIKI - Mini World: CREATA 
+ User Tools
+ Log In 
+ Site Tools
+ Search 
+ Tools Back to top Log In > 
+ Trace: • developer_reference 
+ Sidebar
+ Survival & Creation 
+ Gameplay 
+ Update Content 
+ Creatures 
+ Miras 
+ Flamas 
+ Horas 
+ Block 
+ Basic 
+ Material 
+ Special 
+ Construction 
+ Crop 
+ Plant 
+ Food 
+ Feed 
+ Others 
+ Tool 
+ Item 
+ Circuit 
+ Egg 
+ Equip 
+ Sundry 
+ Building 
+ Furniture 
+ Decoration 
+ Special 
+ Features 
+ Garden 
+ Pack 
+ Texture Packs 
+ Tips 
+ Mall 
+ Developer Center 
+ Developer Guide 
+ Developer Tools 
+ Documentation API 
+ Developer Tutorials 
+ Walkthrough 
+ Video 
+ Article 
+ Others 
+ WIKI Syntax Guide 
+ developer_center:developer_reference 
+ 🧮I. TRIGGER 
+ Enter String 
+ HP Bar 
+ Answer Question 
+ Online Gift Pack (Timer) 
+ Checkpoint Area 
+ Rest area 
+ Automatically Attacked In Player&#039;s Area 
+ Show Item Information 
+ Daily Gift 
+ Lantern 
+ Progress Bar 
+ Skill Countdown 
+ Summon Snowman 
+ Trash Can 
+ Smoke Bomb 
+ Ranking Icon 
+ Trigger Skill: Shield 
+ Pet 
+ Flashlight 
+ Move block at short distance 
+ Speed up 
+ 📑II. SCRIPT 
+ How To Use Mini World Basic Function (Script) 
+ Lucky Number Game 
+ Rotation Luck 
+ Loading UI 
+ Timer 
+ Enter string position to teleport 
+ Solve Password 
+ Rounding A String 
+ Conversation (UI) 
+ Countdown time 
+ Lucky block 
+ x64 items 
+ Double Jump 
+ HP Icon 
+ 🖼️ UI Community 
+ (Click on the corresponding item to expand the instructions) 
+ 😸 Meow UI 
+ ⚡ Technology UI 
+ 🦑 Purple UI 
+ 🎰 Gascha UI 
+ 🪁 Color UI 
+ 🎬 UI Cartoon 
+ ⚔️ UI Icon RPG 
+ 🌠 UI Icon Skill 
+Read More About Tools,Features,Documentation of Triggers and Sript to Learn and Engage with More Attractive and Fun Maps Features! 
+ Learn About Developer Tools & Features 
+ Documentation Trigger & Script 
+If you have any questions about Developer Tools, feel free to join our official discord server
+ Mini World Global DEV discord 
+ developer_center/developer_reference.txt · Last modified: 2025/07/18 02:46 by don 
+ Page Tools
+ Back to top 
+ Copyright 2015 - 2023 Miniwan Technology Co.,Limited. All Rights Reserved. CC Attribution-Share Alike 4.0 International 
+ -->
+ 粤ICP备15114487号 
+ Terms of Use 
+ Privacy & Terms 
+ Cookies Policy
+
+========== 国际Wiki-Block类 ==========
+源: https://wiki.miniworldgame.com/doku.php?do=export_xhtml&id=developer_center:developer_editor:script:block_event
+
+developer_center:developer_editor:script:block_event 
+ Table of Contents
+ Block Class 
+ How to Write Event 
+ Example 
+ Event List 
+ Api List 
+ Block Class
+Class For Block Interface
+ Return To Previous Page 
+ How to Write Event
+ ScriptSupportEvent:registerEvent([[EventName]],callbackFunctionName) 
+ Example
+ function Placed (e)
+local blockid = e.blockid
+local x,y,z = e.x,e.y,e.z
+end
+ScriptSupportEvent:registerEvent([[Block.Add]],Placed) 
+ Event List
+ EventName Parameters Description 
+ Block.Add blockid, x, y, z Triggered when a block with the specified block type is added at the given coordinates (x, y, z). 
+ Block.DestroyBy eventobjid, blockid, x, y, z Event that occurs when local blocks of the specified type are destroyed. It provides information about the event player (eventobjid), the block type (blockid), and the coordinates (x, y, z) of the destroyed block. 
+ Block.Dig.Begin eventobjid, blockid, x, y, z Triggered when any block is mined. It provides information about the event player (eventobjid), the block type being mined (blockid), and the coordinates (x, y, z) of the block being mined. 
+ Block.Dig.Cancel eventobjid, blockid, x, y, z Event that occurs when the mining action on a block is canceled. It provides information about the event player (eventobjid), the block type being mined (blockid), and the coordinates (x, y, z) of the block being mined. 
+ Block.Dig.End eventobjid, blockid, x, y, z Triggered when a block is successfully mined. It provides information about the event player (eventobjid), the block type being mined (blockid), and the coordinates (x, y, z) of the mined block. 
+ Block.Remove blockid, x, y, z Event that occurs when a block with the specified block type is removed at the given coordinates (x, y, z). 
+ Block.Trigger eventobjid, blockid, x, y, z Event that occurs when a block with the specified block type is triggered and becomes active or powered. It provides information about the event player (eventobjid), the block type (blockid), and the coordinates (x, y, z) of the triggered block. 
+ Api List
+ Class:apiName(Parameters) Return Description 
+ Block:isSolidBlock(x, y, z: number) ErrorCode.OK, isSolid: boolean Check if it is a solid block 
+ Block:isLiquidBlock(x, y, z: number) ErrorCode.OK, isLiquid: boolean Check if it is a liquid block 
+ Block:isAirBlock(x, y, z: number) ErrorCode.OK, isAir: boolean Check if it is an air block 
+ Block:getBlockID(x, y, z: number) ErrorCode.OK, id: number Get the block ID at the specified location 
+ Block:setBlockAll(x, y, z: number, blockid: number, data: number) ErrorCode.OK Set block data and update + notify 
+ Block:getBlockData(x, y, z: number) ErrorCode.OK, data: number Get block data 
+ Block:destroyBlock(x, y, z: number, dropitem: boolean) ErrorCode.OK Destroy the block with an option to drop items (default false, not drop) 
+ Block:placeBlock(blockid: number, x, y, z: number, face: number, color: number) ErrorCode.OK Place the block 
+ Block:replaceBlock(blockid: number, x, y, z: number, face: number, color: number) ErrorCode.OK Replace the block 
+ Block:setBlockAllForUpdate(x, y, z: number, blockid: number) ErrorCode.OK Set block data to notify surrounding blocks 
+ Block:setBlockAllForNotify(x, y, z: number, blockid: number) ErrorCode.OK Set block data to update the current position block 
+ Block:setBlockSettingAttState(blockid: number, attrtype: BLOCKATTR_ENABLE, switch: boolean) ErrorCode.OK Set the block&#039;s attribute status 
+ Block:getBlockSettingAttState(blockid: number, attrtype: BLOCKATTR_ENABLE) ErrorCode.OK, switch: boolean Get the block&#039;s attribute status 
+ Block:getBlockSwitchStatus(pos: table{x, y, z}) ErrorCode.OK, isactive: boolean Get the switch state of the functional block 
+ Block:setBlockSwitchStatus(pos: table{x, y, z}, isactive: boolean) ErrorCode.OK Set the switch state of the functional block 
+ Block:getBlockDataByDir(blockid: number, dir: number) ErrorCode.OK, data: number Get the block data value based on the direction 
+ Block:getBlockPowerStatus(pos: table{x, y, z}) ErrorCode.OK, isactive: boolean Get the power-on state of the block 
+ Block:randomBlockID() ErrorCode.OK, blockid: number Get a random block ID 
+ Block:GetBlockDefName(blockid: number) ErrorCode.OK, name: string Get the name of the block 
+ Block:GetBlockDefDesc(blockid: number) ErrorCode.OK, desc: string Get the description of the block 
+ Block:GetBlockFacade(blockid: number) ErrorCode.OK, faced: number Get the appearance of the block 
+ Block:PlayAct(x, y, z: number, animid: number, playmode: number) ErrorCode.OK Play the animation for the miniature cube 
+ Block:ReplaceBluePrint(x, y, z: number, blueprint: string, angle: number, mirror: boolean, placeMode: boolean) ErrorCode.OK Place the blueprint at the specified location
+
+========== 国际Wiki-World类 ==========
+源: https://wiki.miniworldgame.com/doku.php?id=developer_center:developer_editor:script:world_event
+
+Worlds Class [WIKI - Mini World: CREATA] 
+ skip to content 
+ WIKI - Mini World: CREATA 
+ User Tools
+ Log In 
+ Site Tools
+ Search 
+ Tools Back to top Log In > 
+ Trace: • Worlds Class 
+ Sidebar
+ Survival & Creation 
+ Gameplay 
+ Update Content 
+ Creatures 
+ Miras 
+ Flamas 
+ Horas 
+ Block 
+ Basic 
+ Material 
+ Special 
+ Construction 
+ Crop 
+ Plant 
+ Food 
+ Feed 
+ Others 
+ Tool 
+ Item 
+ Circuit 
+ Egg 
+ Equip 
+ Sundry 
+ Building 
+ Furniture 
+ Decoration 
+ Special 
+ Features 
+ Garden 
+ Pack 
+ Texture Packs 
+ Tips 
+ Mall 
+ Developer Center 
+ Developer Guide 
+ Developer Tools 
+ Documentation API 
+ Developer Tutorials 
+ Walkthrough 
+ Video 
+ Article 
+ Others 
+ WIKI Syntax Guide 
+ developer_center:developer_editor:script:world_event 
+ Table of Contents
+ Worlds Class 
+ How to Write Event 
+ Example 
+ Eventlist 
+ Api list 
+ Worlds Class
+Class For Worlds Interface
+ Return To Previous Page 
+ How to Write Event
+ ScriptSupportEvent:registerEvent([[EventName]],callbackFunctionName) 
+ Example
+ function ContainerChanges (event)
+local blockid , itemid = event.blockid , event.itemid
+local x , y , z = event.x , event.y , event.z
+end
+ ScriptSupportEvent:registerEvent([[Backpack.ItemChange]],ContainerChanges) 
+ Eventlist
+ EventName Parameters Descriptionn 
+ Backpack.ItemChange blockid, itemid, itemnum, x, y, z Any Items Changes In Any Container 
+ Backpack.ItemPutIn blockid, itemid, itemnum, x, y, z Any Items Put In Any Container 
+ Backpack.ItemTakeOut blockid, itemid, itemnum, x, y, z Any Items Taken Out From Any Container 
+ Api list
+ Class:apiName Return Descriptionn 
+ World:isDaytime code: number Check if it is daytime 
+ World:isCustomGame code: number Check if it is a custom game 
+ World:isCreativeMode code: number Check if it is creative mode 
+ World:isGodMode code: number, boolean Check if it is god mode 
+ World:isExtremityMode code: number, boolean Check if it is extremity mode 
+ World:isFreeMode code: number, boolean Check if it is free mode 
+ World:isSurviveMode code: number, boolean Check if it is single-player survival mode 
+ World:isCreateRunMode code: number, boolean Check if it is creative to survival mode 
+ World:isGameMakerMode code: number, boolean Check if it is game maker mode 
+ World:getHours code: number, hours: number Get the current time of the game (hours) 
+ World:setHours code: number Set the current time of the game (hours) 
+ World:getCameraEditState code: number, state: number Get the camera editing state 
+ World:setCameraEditState code: number Set the camera editing state 
+ World:getCustomCameraConfig code: number, config: CameraEditState Get custom camera configuration 
+ World:getRangeXZ code: number, startX: number, startZ: number, endX: number, endZ: number Get the range of the block (chunk) 
+ World:getRayBlock code: number, blockid: number Get the type of block hit by the ray 
+ World:getActorsByBox code: number, num: number, objids: table Get the actors in the specified range 
+ World:getPlayerTotal code: number, num: number Get the total number of players 
+ World:getAllPlayers code: number, num: number, array: table Get all players 
+ World:randomOnePlayer code: number, playerid: number Randomly select a player 
+ World:despawnActor code: number Remove an actor 
+ World:spawnCreature code: number, objids: table Generate creatures at the specified location 
+ World:despawnCreature code: number Remove a creature 
+ World:spawnItem code: number, objid: number Generate items at the specified location 
+ World:despawnItemByBox code: number Remove items within the specified area 
+ World:despawnItemByObjid code: number Remove an item by its ID 
+ World:spawnProjectile code: number, objid: number Generate a projectile 
+ World:spawnProjectileByDir code: number, objid: number Generate a projectile by direction 
+ World:calcDistance code: number, distance: number Calculate the distance between two locations 
+ World:playParticleEffect code: number Play a particle effect at the specified position 
+ World:stopEffectOnPosition code: number Stop a particle effect at the specified position 
+ World:setEffectScaleOnPosition code: number Set the scale of a particle effect at the specified position 
+ World:randomParticleEffectID code: number, result: number Randomly get a particle effect ID 
+ World:playSoundEffectOnPos code: number Play a sound effect at the specified position 
+ World:stopSoundEffectOnPos code: number Stop a sound effect at the specified position 
+ World:getLightByPos code: number, lightlv: number Get the light intensity at the specified position 
+ World:setBlockLightEx code: number Set the light intensity at the specified position 
+ World:randomSoundID code: number, soundid: number Randomly get a sound ID 
+ World:randomWeatherID code: number, wtype: number Randomly get a weather type ID 
+ World:getLocalDate code: number, year: number Get the local date 
+ World:getLocalDateString code: number, date: string Get the complete local date 
+ World:getServerDate code: number, year: number Get the server date 
+ World:getServerDateString code: number, date: string Get the complete server date 
+ World:getDateFromTime code: number, year: number Convert a timestamp to a specific time unit 
+ World:getDateStringFromTime code: number, date: string Convert a timestamp to a complete date 
+ World:SetTimeVanishingSpeed code: number Set the time lapse speed of the skybox 
+ World:SetSkyBoxTemplate code: number Set the skybox template 
+ World:SetSkyBoxMaps code: number Set the skybox texture 
+ World:SetSkyBoxColor code: number Set the skybox color parameters 
+ World:SetSkyBoxAttr code: number Set the skybox attribute parameters 
+ World:SetSkyBoxFilter code: number Set the skybox filter parameters 
+ World:namedescribe code: number, str: string Get the default string 
+ World:setScriptVar code: number Set script parameters for custom use 
+ World:getScriptVar code: number, val: any Get script parameters for custom use 
+ World:sendScriptVars2Client code: number Upload the set script parameters 
+ World:addRenderGlobalEffect code: number Add a global effect 
+ World:removeRenderGlobalEffect code: number Remove a global effect 
+ World:setRenderGlobalEffectPos code: number Set the position of a global effect 
+ World:setRenderGlobalEffectScale code: number Set the scaling of a global effect 
+ World:msgBox code: number Show a message box 
+ World:splitStr code: number, strs: table Split a string 
+ developer_center/developer_editor/script/world_event.txt · Last modified: 2024/06/13 08:01 by don 
+ Page Tools
+ Back to top 
+ Copyright 2015 - 2023 Miniwan Technology Co.,Limited. All Rights Reserved. CC Attribution-Share Alike 4.0 International 
+ -->
+ 粤ICP备15114487号 
+ Terms of Use 
+ Privacy & Terms 
+ Cookies Policy
+
+========== 国际Wiki-Player类 ==========
+源: https://wiki.miniworldgame.com/developer_center:developer_editor:script:players_event
+
+Players Class [WIKI - Mini World: CREATA] 
+ skip to content 
+ WIKI - Mini World: CREATA 
+ User Tools
+ Log In 
+ Site Tools
+ Search 
+ Tools Back to top Log In > 
+ Trace: • Players Class 
+ Sidebar
+ Survival & Creation 
+ Gameplay 
+ Update Content 
+ Creatures 
+ Miras 
+ Flamas 
+ Horas 
+ Block 
+ Basic 
+ Material 
+ Special 
+ Construction 
+ Crop 
+ Plant 
+ Food 
+ Feed 
+ Others 
+ Tool 
+ Item 
+ Circuit 
+ Egg 
+ Equip 
+ Sundry 
+ Building 
+ Furniture 
+ Decoration 
+ Special 
+ Features 
+ Garden 
+ Pack 
+ Texture Packs 
+ Tips 
+ Mall 
+ Developer Center 
+ Developer Guide 
+ Developer Tools 
+ Documentation API 
+ Developer Tutorials 
+ Walkthrough 
+ Video 
+ Article 
+ Others 
+ WIKI Syntax Guide 
+ developer_center:developer_editor:script:players_event 
+ Table of Contents
+ Players Class 
+ How to Write Event 
+ Example 
+ Eventlist 
+ Api List 
+ Player constants 
+ Player Attributes 
+ Player Attributes Setup 
+ Player Items Setup 
+ Player Motions 
+ Players Class
+Class For Players Interface
+ Return To Previous Page 
+ How to Write Event
+ ScriptSupportEvent:registerEvent([[EventName]],callbackFunctionName) 
+ Example
+ function BuffAdded &#40; event &#41; 
+ local playerid , buffid , bufflvl = event . eventobjid , event . buffid , event . bufflvl
+ end 
+ScriptSupportEvent : registerEvent &#40; &#91; &#91; Player . AddBuff &#93; &#93; , BuffAdded &#41; 
+ Eventlist
+ EventName Parameters Description 
+ Game.AnyPlayer.Defeat eventobjid: number, shortix,x,y,z Any Players Defeat 
+ Game.AnyPlayer.EnterGame eventobjid: number, shortix,x,y,z Any Players Enter Game 
+ Game.AnyPlayer.LeaveGame eventobjid: number, shortix,x,y,z Any Players Leave Game 
+ Game.AnyPlayer.Victory eventobjid: number, shortix,x,y,z Any Players Win game 
+ Player.AddBuff eventobjid: number, buffid: number, bufflvl: number The player gets a status effect 
+ Player.AddItem eventobjid: number, itemid: number, itemnum: number The player gets an item 
+ Player.AreaIn eventobjid: number, areaid: number Player enters an area 
+ Player.AreaOut eventobjid: number, areaid: number Player leaves an area 
+ Player.AttackHit eventobjid: number,toobjid:number, targetactorid: number Player hits a target 
+ Player.Attack eventobjid: number, shortix: number, x: number, y: number, z: number Player performs an attack 
+ Player.BackPackChange eventobjid: number, itemid: number, itemnum: number, itemix: number Backpack Slot Changes 
+ Player.BeHurt eventobjid: number, hurtlv: number Player takes damage 
+ Player.ChangeAttr eventobjid: number, shortix: number, playerattr: number, playerattrval: number, x: number, y: number, z: number Player attribute changes 
+ Player.ClickActor eventobjid: number, toobjid : number, targetactorid: number Player clicks on a bio (actor) 
+ Player.ClickBlock eventobjid: number, blockid: number, x: number, y: number, z: number Player clicks on a block 
+ Player.Collide eventobjid: number, toobjid: number Player collides with another player/mob 
+ Player.ConsumeItem eventobjid: number, itemid: number, itemnum: number Player consumes an item 
+ Player.DamageActor eventobjid: number, toobjid: number, targetactorid: number, hurtlv: number Player inflicts damage to a target 
+ Player.DefeatActor eventobjid: number, toobjid: number, targetactorid: number Player defeats a target 
+ Player.Die eventobjid: number, shortix: number, x: number, y: number, z: number Player dies 
+ Player.DiscardItem eventobjid: number, itemid: number, itemnum: number, toobjid: number Player discards an item 
+ Player.DismountActor eventobjid: number, targetactorid: number Player dismounts from an actor 
+ Player.EquipChange eventobjid: number, itemid: number, itemnum: number, itemix: number Equipment column changes 
+ Player.EquipOff eventobjid: number, itemid: number, itemnum: number, itemix: number Player takes off equipment 
+ Player.EquipOn eventobjid: number, itemid: number, itemnum: number, itemix: number Player equips an item 
+ Player.InputContent eventobjid: number, content: string Player inputs a string 
+ Player.InputKeyDown eventobjid: number, vkey: string Player presses a key 
+ Player.InputKeyOnPress eventobjid: number, vkey: string Player long-presses a key 
+ Player.InputKeyUp eventobjid: number, vkey: string Player releases a key 
+ Player.LevelModelUpgrade eventobjid: number Player&#039;s level changes 
+ Player.MotionStateChange eventobjid: number, playermotion: number Player&#039;s motion state changes 
+ Player.MountActor eventobjid: number, targetactorid: number Player mounts on an actor 
+ Player.MoveOneBlockSize eventobjid: number, shortix: number, x: number, y: number, z: number Player moves one block size 
+ Player.NewInputContent eventobjid: number, content: string Player types from the chat box 
+ Player.PickUpItem eventobjid: number, toobjid: number, itemid: number, itemnum: number Player picks up an item 
+ Player.PlayAction eventobjid: number, act: number Player performs an emote/action 
+ Player.RemoveBuff eventobjid: number, buffid: number, bufflvl: number The player loses a specified status effect 
+ Player.Revive eventobjid: number, shortix: number, x: number, y: number, z: number Player revives 
+ Player.SelectShortcut eventobjid: number, itemid: number, itemnum: number Shortcut bar selection 
+ Player.ShortcutChange eventobjid: number, itemid: number, itemnum: number, itemix: number Quick Bar Changes 
+ Player.UseGiftPack eventobjid: number, itemid: number, itemnum: number Player uses a gift pack 
+ Player.UseItem eventobjid: number, itemid: number, itemnum: number, itemix: number Player uses an item 
+ Api List
+ Class:apiName Return Description 
+ Player:getAttr(objid: number, attrtype: number) ErrorCode.OK, value: number Player attribute acquisition 
+ Player:setAttr(objid: number, attrtype: number, val: number) ErrorCode.OK Player attribute setting 
+ Player:getHostUin() ErrorCode.OK, uin: number Get the owner uin 
+ Player:isMainPlayer(objid: number) ErrorCode.OK, isMainPlayer: bool Check if the player is the local player 
+ Player:getMainPlayerUin() ErrorCode.OK, uin: number Get the uin of the local player 
+ Player:getGameResults(objid: number) ErrorCode.OK, value: number Get the player&#039;s game result 
+ Player:setGameResults(objid: number, result: any) ErrorCode.OK Set the player&#039;s game result 
+ Player:getGameScore(objid: number) ErrorCode.OK, value: number Get the player&#039;s game score 
+ Player:setGameScore(objid: number, score: number) ErrorCode.OK Set the player&#039;s game score 
+ Player:getGameRanking(objid: number) ErrorCode.OK, rank: number Get the player&#039;s ranking 
+ Player:setGameRanking(objid: number, rank: number) ErrorCode.OK Set the player&#039;s ranking 
+ Player:gainItems(objid: number, itemid: number, num: number, prioritytype: number) ErrorCode.OK Add props to the player 
+ Player:teleportHome(objid: number) ErrorCode.OK Teleport to the birth point 
+ Player:getCurToolID(objid: number) ErrorCode.OK, ret: numbers Get the item id currently held by the player 
+ Player:getNickname(objid: number) ErrorCode.OK, name: string Get the player&#039;s nickname 
+ Player:removeBackpackItem(objid: number, itemid: number, num: number) ErrorCode.OK Remove the items in the backpack 
+ Player:getDieTimes(objid: number) ErrorCode.OK, value: number Get the number of player deaths 
+ Player:getLeftLifeNum(objid: number) ErrorCode.OK, value: number Get the number of lives left by the player 
+ Player:setTeam(objid: number, teamid: number) ErrorCode.OK Set the player&#039;s team 
+ Player:getTeam(objid: number) ErrorCode.OK, value: number Get the player&#039;s team 
+ Player:getFoodLevel(objid: number) ErrorCode.OK, value: number Get the player&#039;s current satiety 
+ Player:setFoodLevel(objid: number, foodLevel: number) ErrorCode.OK Set the player&#039;s satiety 
+ Player:getCurShotcut(objid: number) ErrorCode.OK, scutIdx: number Get the index of the currently used shortcut bar key 
+ Player:onCurToolUsed(objid: number, num: number) ErrorCode.OK Set the consumption of props held by the current player 
+ Player:setSkillCD(objid: number, itemid: number, cd: number) ErrorCode.OK Set the cooldown for a skill 
+ Player:reviveToPos(objid: number, x: number, y: number, z: number) ErrorCode.OK Revive the player to the specified point 
+ Player:setRevivePoint(objid: number, x: number, y: number, z: number) ErrorCode.OK Change the position of the player&#039;s resurrection point 
+ Player:mountActor(playerid: number, objid: number, posindex: number) ErrorCode.OK The player rides on the mount 
+ Player:playAct(objid: number, actid: number) ErrorCode.OK The player plays the animation 
+ Player:notifyGameInfo2Self(objid: number, info: string) ErrorCode.OK Display the bay window text to the player 
+ Player:useItem(objid: number, itemid: number, status: number, onshift: boolean) ErrorCode.OK Enable the player to use the current props 
+ Player:rotateCamera(objid: number, yaw: number, pitch: number) ErrorCode.OK Rotate the player&#039;s camera 
+ Player:changeViewMode(objid: number, viewmode: VIEWPORTTYPEnumber, islock: boolean) ErrorCode.OK Change the player&#039;s perspective mode 
+ Player:setActionAttrState(objid: number, actionattr: PLAYERATTR_ENABLEnumber, switch: boolean) ErrorCode.OK Set the player&#039;s behavior attribute status 
+ Player:checkActionAttrState(objid: number, actionattr: PLAYERATTR_ENABLEnumber) ErrorCode.OK Get the status of the player&#039;s special attributes 
+ Player:isEquipByResID(objid: number, resid: number) ErrorCode.OK Check if the player is equipped with a piece of equipment 
+ Player:setPosition(objid: number, x: number, y: number, z: number) ErrorCode.OK Set the player&#039;s position 
+ Player:getAimPos(objid: number) ErrorCode.OK, aimPos: table{x, y, z} Get the position of the player&#039;s crosshair 
+ Player:setItemAttAction(objid: number, itemid: number, attrtype: PLAYERATTR_ITEMnumber, switch: boolean) ErrorCode.OK Set the player&#039;s props attributes: discard, drop 
+ Player:playMusic(objid: number, musicId: number, volume: number, pitch: number, isLoop: bool) ErrorCode.OK Play background music to the player 
+ Player:stopMusic(objid: number) ErrorCode.OK Stop playing the player&#039;s background music 
+ Player:setGameWin(objid: number) ErrorCode.OK Make the player win the game 
+ Player:openDevStore(objid: number) ErrorCode.OK Open the developer store 
+ Player:getPropsType(objid: number) ErrorCode.OK, value: number Get the type of props held by the player 
+ Player:setCheckBoxScale(objid: number, range: number) ErrorCode.OK Set the radius of the detection of falling objects 
+ Player:openBoxByPos(objid: number, x: number, y: number, z: number) ErrorCode.OK Open the operable box at the specified position 
+ Player:forceOpenBoxUI(objid: number, itemid: number) ErrorCode.OK Forcibly open operable blocks such as toolboxes 
+ Player:openDevGoodsBuyDialog(objid: number, devGoodsId: number, customDesc: string) ErrorCode.OK Open the pop-up window of the developer store product 
+ Player:changePlayerMoveType(objid: number, moveType: number) ErrorCode.OK Change the way the player moves 
+ Player:setImmuneType(objid: number, immunetype: number, isadd: bool) ErrorCode.OK Set the player immune damage type 
+ Player:shakeCamera(objid: number, duration: number, power: number) ErrorCode.OK Shake the player camera 
+ Player:stopShakeCamera(objid: number) ErrorCode.OK Stop shaking the player camera 
+ Player:playQQMusic(objid: number, musicId: number, volume: number, isLoop: boolean) ErrorCode.OK The player plays QQ music 
+ Player:operateQQMusic(operate: number, objid: number) ErrorCode.OK Pause/resume/stop the player&#039;s QQ music 
+ Player:OpenAppraiseView(objid: number) ErrorCode.OK Open the evaluation interface (can only be triggered after playing the game for more than 3 minutes. Ten-minute CD after the trigger) 
+ Player:OpenCollectionView(objid: number) ErrorCode.OK Open the collection interface (can only be triggered after playing the game for more than 3 minutes. Ten-minute CD after the trigger) 
+ Player:IsMiniVip(objid: number) ErrorCode.OK Determine whether it is a mini member 
+ Player:SendFriendApply(playerid: number, playerid2: number) ErrorCode.OK Send a friend request 
+ Player:HasFriend(playerid: number, playerid2: number) ErrorCode.OK Determine whether playerid has friends playerid2 
+ Player:PlayActInHand(playerid: number, animid: number, playmode: number) ErrorCode.OK The player holds the miniature props to play the animation 
+ Player:openDevStoreNew(objid: number) ErrorCode.OK The player opens the developer store (only available to developers) 
+ Player:OpenBuiltinRank(objid: number, id: number) ErrorCode.OK Open the built-in leaderboard 
+ Player:HideBuiltinRank(objid: number) ErrorCode.OK Hide the built-in leaderboard 
+ Player:openDevGoodsBuyDetailedDialog(objid: number, devGoodsId: number) ErrorCode.OK Open the product details page of the developer store 
+ Player:setMobileVibrate(playerid: number, time: number, amplitude: number) ErrorCode.OK The player&#039;s mobile phone vibrates 
+ Player:SetCameraPosTransformBy(playerid: number, vec: table, animid: number, time: number) ErrorCode.OK The player&#039;s camera changes relative position 
+ Player:SetCameraPosTransformTo(playerid: number, vec: table, animid: number, time: number) ErrorCode.OK The player camera changes to the position 
+ Player:SetCameraRotTransformBy(playerid: number, vec: table, animid: number, time: number) ErrorCode.OK The relative angle of the player&#039;s camera rotation 
+ Player:SetCameraRotTransformTo(playerid: number, vec: table, animid: number, time: number) ErrorCode.OK The player camera is rotated to the angle 
+ Player:SetCameraFovTransformBy(playerid: number, value: number, animid: number, time: number) ErrorCode.OK The relative value of the Fov transformation of the player camera 
+ Player:SetCameraFovTransformTo(playerid: number, value: number, animid: number, time: number) ErrorCode.OK The player camera Fov is transformed to the value 
+ Player:SetCameraAttrState(playerid: number, attr: number, enable: boolean) ErrorCode.OK Set the player&#039;s camera settings switch 
+ Player:SetCameraRotMode(playerid: number, attr: number) ErrorCode.OK Set the player&#039;s camera rotation mode 
+ Player:SetCameraMountObj(playerid: number, objid: number) ErrorCode.OK Set the player&#039;s camera to mount to the object 
+ Player:SetCameraMountPos(playerid: number, pos: table) ErrorCode.OK Set the player&#039;s camera to mount to the position 
+ Player:ResetCameraAttr(playerid: number) ErrorCode.OK Reset the player camera 
+ Player constants
+ Player Attributes
+ Name Value Description 
+ PLAYERATTR.MAX_HP 1 Max health point 
+ PLAYERATTR.CUR_HP 2 Current health point 
+ PLAYERATTR.HP_RECOVER 3 Health point recovery 
+ PLAYERATTR.LIFE_NUM 4 Number of life 
+ PLAYERATTR.MAX_HUNGER 5 Max hunger point 
+ PLAYERATTR.CUR_HUNGER 6 Current hunger point 
+ PLAYERATTR.MAX_OXYGEN 7 Max oxygen point 
+ PLAYERATTR.CUR_OXYGEN 8 Current oxygen point 
+ PLAYERATTR.RECOVER_OXYGEN 9 Speed of oxygen recovery 
+ PLAYERATTR.WALK_SPEED 10 Walking speed 
+ PLAYERATTR.RUN_SPEED 11 Running speed 
+ PLAYERATTR.SNEAK_SPEED 12 Sneaking speed 
+ PLAYERATTR.SWIN_SPEED 13 Swimming speed 
+ PLAYERATTR.JUMP_POWER 14 Jumping force 
+ PLAYERATTR.DODGE 16 Dodge rate 
+ PLAYERATTR.ATK_MELEE 17 Melee attack 
+ PLAYERATTR.ATK_REMOTE 18 Ranged attack 
+ PLAYERATTR.DEF_MELEE 19 Melee defense 
+ PLAYERATTR.DEF_REMOTE 20 Ranged defense 
+ PLAYERATTR.DIMENSION 21 Model Size 
+ PLAYERATTR.SCORE 22 Score 
+ PLAYERATTR.LEVEL 23 Star Level 
+ PLAYERATTR.CUR_LEVEL 27 Current level 
+ PLAYERATTR.CUR_STRENGTH 28 Current stamina 
+ PLAYERATTR.MAX_STRENGTH 29 Maximum stamina 
+ PLAYERATTR.STRENGTH_RECOVER 30 Stamina recovery rate 
+ PLAYERATTR.CUR_LEVELEXP 26 Current experience points 
+ Player Attributes Setup
+ Name Value Description 
+ PLAYERATTR.ENABLE_MOVE 1 Can move 
+ PLAYERATTR.ENABLE_PLACEBLOCK 2 Can place blocks 
+ PLAYERATTR.ENABLE_OPERATEBLOCK 4 Can use blocks 
+ PLAYERATTR.ENABLE_DESTROYBLOCK 8 Can break blocks 
+ PLAYERATTR.ENABLE_USEITEM 16 Can use items 
+ PLAYERATTR.ENABLE_ATTACK 32 Can attack 
+ PLAYERATTR.ENABLE_BEATTACKED 64 Can be attacked 
+ PLAYERATTR.ENABLE_BEKILLED 128 Can be killed 
+ PLAYERATTR.ENABLE_PICKUP 256 Can pick up items 
+ PLAYERATTR.ENABLE_DEATHDROPITEM 512 Drop items when die 
+ PLAYERATTR.ENABLE_VEHICLEAUTOFORWARD 1024 Vehicle Automatic Pilot 
+ PLAYERATTR.ENABLE_DISCARDITEM 2048 Can discard items 
+ Player Items Setup
+ Name Value Description 
+ PLAYERATTR.ITEM_DISABLE_THROW 1 Cannot discard items 
+ PLAYERATTR.ENABLE_PLACEBLOCK 2 Cannot drop items 
+ Player Motions
+ Name Value Description 
+ PLAYERMOTION.STATIC 0 Stay still 
+ PLAYERMOTION.WALK 1 Walk 
+ PLAYERMOTION.RUN 2 Run 
+ PLAYERMOTION.JUMP 4 Jump 
+ PLAYERMOTION.JUMP_TWICE 8 Double jump 
+ PLAYERMOTION.SNEAK 16 Sneak 
+ PLAYERMOTION.FALL_GROUND 32 Fall to ground 
+ developer_center/developer_editor/script/players_event.txt · Last modified: 2025/07/10 20:10 by notsopro 
+ Page Tools
+ Back to top 
+ Copyright 2015 - 2023 Miniwan Technology Co.,Limited. All Rights Reserved. CC Attribution-Share Alike 4.0 International 
+ -->
+ 粤ICP备15114487号 
+ Terms of Use 
+ Privacy & Terms 
+ Cookies Policy
+
+========== 国际Wiki-CustomUI类 ==========
+源: https://wiki.miniworldgame.com/doku.php?id=developer_center:developer_editor:script:ui_event
+
+Customui Class [WIKI - Mini World: CREATA] 
+ skip to content 
+ WIKI - Mini World: CREATA 
+ User Tools
+ Log In 
+ Site Tools
+ Search 
+ Tools Back to top Log In > 
+ Trace: • Customui Class 
+ Sidebar
+ Survival & Creation 
+ Gameplay 
+ Update Content 
+ Creatures 
+ Miras 
+ Flamas 
+ Horas 
+ Block 
+ Basic 
+ Material 
+ Special 
+ Construction 
+ Crop 
+ Plant 
+ Food 
+ Feed 
+ Others 
+ Tool 
+ Item 
+ Circuit 
+ Egg 
+ Equip 
+ Sundry 
+ Building 
+ Furniture 
+ Decoration 
+ Special 
+ Features 
+ Garden 
+ Pack 
+ Texture Packs 
+ Tips 
+ Mall 
+ Developer Center 
+ Developer Guide 
+ Developer Tools 
+ Documentation API 
+ Developer Tutorials 
+ Walkthrough 
+ Video 
+ Article 
+ Others 
+ WIKI Syntax Guide 
+ developer_center:developer_editor:script:ui_event 
+ Table of Contents
+ Customui Class 
+ How to Write Event 
+ Example 
+ Eventlist 
+ Api list 
+ Global Call 
+ Local Call 
+ Customui Class
+Class For Customui Interface
+ Return To Previous Page 
+ How to Write Event
+ ScriptSupportEvent:registerEvent([[EventName]],callbackFunctionName) 
+ Example
+ local function Button_Click &#40; event &#41; 
+ local playerid , ElementID = e . eventobjid , e . uielement
+ end 
+ScriptSupportEvent : registerEvent &#40; &#91; &#91; UI . Button . Click &#93; &#93; , Button_Click &#41; 
+ Eventlist
+ EventName Parameters Descriptionn 
+ UI.Button.Click eventobjid,CustomUI,uielement Any UI buttons release 
+ UI.Button.TouchBegin eventobjid,CustomUI,uielement Any UI buttons start to press 
+ UI.Hide eventobjid,CustomUI Any UI closed 
+ UI.LostFocus eventobjid,CustomUI,uielement,content Any input area loses focus 
+ UI.Show eventobjid,CustomUI Any UI opened 
+ Api list
+ Global Call
+This API can be called from a global script.
+ Class:apiName Return Descriptionn 
+ Player:openUIView ErrorCode.OK Open the specified UI for the player. 
+ Player:hideUIView ErrorCode.OK Hide the UI for the player. 
+ Local Call
+This API can be called from a local script within the CustomUI page.(All APIs below need to call from customui script, it won&#039;t work on global script.)
+ Class:apiName Return Descriptionn 
+ Customui:setText ErrorCode.OK Set the display content of the player&#039;s text component 
+ Customui:setTexture ErrorCode.OK Sets the pattern of the player&#039;s image component 
+ Customui:setSize ErrorCode.OK Sets the size of the player&#039;s component 
+ Customui:setFontSize ErrorCode.OK Sets the font size of the player&#039;s text component 
+ Customui:setColor ErrorCode.OK Set the player&#039;s component color 
+ Customui:showElement ErrorCode.OK Show component to player 
+ Customui:hideElement ErrorCode.OK Hide component to player 
+ Customui:rotateElement ErrorCode.OK Rotate the component against the player 
+ Customui:setState ErrorCode.OK Toggle the player&#039;s page status 
+ Customui:setAlpha ErrorCode.OK Set component opacity 
+ Customui:setPosition ErrorCode.OK Set component position 
+ Customui:getItemIcon ErrorCode.OK, iconid:number(props) Get the iconID of the prop type icon 
+ Customui:getMonsterObjIcon ErrorCode.OK, iconid:Creature iconID Get creature icon iconID 
+ Customui:getMonsterIcon ErrorCode.OK, iconid:Creature type iconID Get the creature type iconID 
+ Customui:getStatusIcon ErrorCode.OK, iconid:Buff iconID Get the status type iconID 
+ Customui:getBlockIcon ErrorCode.OK, iconid:Block iconID Get the block type iconID 
+ Customui:getRoleIcon ErrorCode.OK, iconid:Role iconID Get the character type iconID 
+ Customui:getShuctIcon ErrorCode.OK, iconid:Role iconID Get the shortcut bar(ix) prop iconID 
+ Customui:SmoothMoveTo ErrorCode.OK Smoothly move the component to the specified position 
+ Customui:SmoothMoveBy ErrorCode.OK Smooth movement of components relative to distance 
+ Customui:SmoothScaleTo ErrorCode.OK Smoothly change the component to the specified width and height 
+ Customui:SmoothScaleBy ErrorCode.OK Smoothly change the relative width and height of the component 
+ Customui:SmoothRotateTo ErrorCode.OK Smoothly rotate the component to a specified angle 
+ Customui:SmoothRotateBy ErrorCode.OK Smooth rotation of components to relative angles 
+ Customui:PlayElementAnim ErrorCode.OK Start component animation(animid) 
+ Customui:StopAnim ErrorCode.OK Stop animation of the component 
+ developer_center/developer_editor/script/ui_event.txt · Last modified: 2025/05/23 03:04 by hhuxx 
+ Page Tools
+ Back to top 
+ Copyright 2015 - 2023 Miniwan Technology Co.,Limited. All Rights Reserved. CC Attribution-Share Alike 4.0 International 
+ -->
+ 粤ICP备15114487号 
+ Terms of Use 
+ Privacy & Terms 
+ Cookies Policy
+
+========== 国际Wiki-开发者功能 ==========
+源: https://wiki.miniworldgame.com/doku.php?id=playground:testwrap
+
+Developer features [WIKI - Mini World: CREATA] 
+ skip to content 
+ WIKI - Mini World: CREATA 
+ User Tools
+ Log In 
+ Site Tools
+ Search 
+ Tools Back to top Log In > 
+ Trace: • Developer features 
+ Sidebar
+ Survival & Creation 
+ Gameplay 
+ Update Content 
+ Creatures 
+ Miras 
+ Flamas 
+ Horas 
+ Block 
+ Basic 
+ Material 
+ Special 
+ Construction 
+ Crop 
+ Plant 
+ Food 
+ Feed 
+ Others 
+ Tool 
+ Item 
+ Circuit 
+ Egg 
+ Equip 
+ Sundry 
+ Building 
+ Furniture 
+ Decoration 
+ Special 
+ Features 
+ Garden 
+ Pack 
+ Texture Packs 
+ Tips 
+ Mall 
+ Developer Center 
+ Developer Guide 
+ Developer Tools 
+ Documentation API 
+ Developer Tutorials 
+ Walkthrough 
+ Video 
+ Article 
+ Others 
+ WIKI Syntax Guide 
+ playground:testwrap 
+ Table of Contents
+ Developer features 
+ Script System 
+ Trigger (New System) 
+ Variable 
+ Trigger (Legacy) 
+ Developer features
+This section contains documentation for the main developer systems used in Mini World.
+ Script System
+ View documentation 
+Advanced scripting system used for complex logic, custom behavior, and extended gameplay mechanics.
+Designed for developers who need more control than visual trigger systems provide.
+ Trigger (New System)
+ View documentation 
+Modern Scratch-style visual scripting system used for event-driven logic and game behavior.
+ Variable
+ View documentation 
+System for storing and managing variables and values used in Scripts and Triggers.
+ Trigger (Legacy)
+ View documentation 
+Old trigger system using Trigger → Condition → Action logic.
+Still supported for existing maps, but no longer recommended for new projects.
+ playground/testwrap.txt · Last modified: 2026/06/11 22:35 by notsopro 
+ Page Tools
+ Back to top 
+ Copyright 2015 - 2023 Miniwan Technology Co.,Limited. All Rights Reserved. CC Attribution-Share Alike 4.0 International 
+ -->
+ 粤ICP备15114487号 
+ Terms of Use 
+ Privacy & Terms 
+ Cookies Policy
