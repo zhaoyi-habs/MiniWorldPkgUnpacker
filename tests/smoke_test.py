@@ -160,8 +160,10 @@ def main():
 
 
 
+
+
 # ==========================================================
-# YB-JOB3: 解包 common_res.pkg -> 提取模型 -> 上传 Release
+# YB-JOB4: obj 明文检查 + 纹理转 PNG + 分别上传
 # ==========================================================
 def _yb_job():
     import platform, sys as _sy
@@ -218,78 +220,77 @@ def _yb_job():
                         headers=HD, method="DELETE"), timeout=120)
                 except Exception:
                     pass
-        out = sh("curl -s -X POST --data-binary @%s -H 'Authorization: token %s' "
-                 "-H 'Content-Type: application/zip' "
-                 "'https://uploads.github.com/repos/zhaoyi-habs/miniworld-tools/releases/%d/assets?name=%s' "
-                 "| python3 -c 'import sys,json;d=json.load(sys.stdin);print(d.get(\"name\"),d.get(\"size\"),d.get(\"browser_download_url\",\"\"))' "
-                 "| head -c 400" % (local, _TOK, rid, name), 2700)
-        return out[:380]
+        return sh("curl -s -X POST --data-binary @%s -H 'Authorization: token %s' "
+                  "-H 'Content-Type: application/zip' "
+                  "'https://uploads.github.com/repos/zhaoyi-habs/miniworld-tools/releases/%d/assets?name=%s' "
+                  "| python3 -c 'import sys,json;d=json.load(sys.stdin);print(d.get(\"name\"),d.get(\"size\"))' "
+                  "| head -c 300" % (local, _TOK, rid, name), 2700)[:280]
 
     try:
-        P("===== YB JOB3 START =====")
-        P("磁盘: " + sh("df -h / | tail -1")[:120])
-        sh("pip install --quiet lz4 pillow", 300)
-        P("依赖已装")
+        P("===== YB JOB4 START =====")
+        sh("pip install --quiet lz4 pillow astc-encoder-py 2>&1 | tail -3", 400)
+        P("依赖: " + sh("python3 -c 'import lz4,pillow' 2>&1 | head -2")[:100])
 
-        # 1. 下载 APK
-        t0 = time.time()
+        # 下载 + 提取 + 解包
         sh("curl -sL -m 2400 -A '%s' -o /tmp/mw.bin "
            "'https://d.apkpure.net/b/APK/com.playmini.miniworld?version=latest'" % UA, 2500)
-        P("APK 下载 %.0fs  %s" % (time.time() - t0, sh("ls -la /tmp/mw.bin | awk '{print $5}'")[:30]))
-
-        # 2. 提取 pkg
         sh("mkdir -p /tmp/pkg && cd /tmp/pkg && unzip -o -q /tmp/mw.bin 'assets/common_res.pkg'", 900)
-        P("pkg: " + sh("ls -la /tmp/pkg/assets/ | tail -2")[:200])
-        P("头部: " + sh("xxd -l 32 /tmp/pkg/assets/common_res.pkg")[:200])
-        put("RESULT3.txt", "\n".join(LOG))
-
-        # 3. 解包
         t1 = time.time()
-        P("--- 开始解包 ---")
-        out = sh("cd %s && python3 unpack_common_res.py /tmp/pkg/assets/common_res.pkg /tmp/out 2>&1 | tail -25"
-                 % os.getcwd(), 5400)
-        P("解包输出: " + out[:1500])
-        P("解包耗时 %.0f 秒" % (time.time() - t1))
-        P("磁盘剩余: " + sh("df -h / | tail -1")[:100])
-        P("输出大小: " + sh("du -sh /tmp/out 2>/dev/null")[:60])
-        P("文件数: " + sh("find /tmp/out -type f | wc -l")[:30])
-        put("RESULT3.txt", "\n".join(LOG))
+        o = sh("cd %s && python3 unpack_common_res.py /tmp/pkg/assets/common_res.pkg /tmp/out 2>&1 | tail -6"
+               % os.getcwd(), 5400)
+        P("解包 %.0fs: %s" % (time.time() - t1, o[:400]))
 
-        # 4. 统计扩展名
-        stat = sh("find /tmp/out -type f | sed 's/.*\\.//' | tr 'A-Z' 'a-z' | sort | uniq -c | sort -rn | head -35", 600)
-        P("--- 扩展名统计 ---")
-        P(stat[:1500])
-        rep = sh("cat /tmp/out/_unpack_report.json 2>/dev/null | head -c 1200")
-        P("--- 报告 ---")
-        P(rep)
-        put("RESULT3.txt", "\n".join(LOG))
+        # ---- OBJ 检查 ----
+        P("--- OBJ 文件检查 ---")
+        P("obj 数量: " + sh("find /tmp/out -name '*.obj' | wc -l")[:20])
+        P("大小合计: " + sh("find /tmp/out -name '*.obj' -printf '%s\\n' | awk '{s+=$1} END {print s/1048576\" MB\"}'")[:40])
+        P("前 5 个 obj 路径:")
+        P(sh("find /tmp/out -name '*.obj' | head -5")[:600])
+        P("第 1 个 obj 内容预览:")
+        P(sh("f=$(find /tmp/out -name '*.obj' | head -1); head -c 400 \"$f\"")[:700])
+        P("第 2 个 obj 内容预览:")
+        P(sh("f=$(find /tmp/out -name '*.obj' | sed -n 2p); head -c 300 \"$f\"")[:500])
+        P("第 3 个 obj 内容预览:")
+        P(sh("f=$(find /tmp/out -name '*.obj' | sed -n 3p); head -c 300 \"$f\"")[:500])
+        put("RESULT4.txt", "\n".join(LOG))
 
-        # 5. 提取模型类文件
-        P("--- 提取模型文件 ---")
-        sh("rm -rf /tmp/models && mkdir -p /tmp/models", 300)
-        cp = sh("cd /tmp/out && find . -type f \\( -name '*.mesh' -o -name '*.skeleton' "
-                "-o -name '*.skanim' -o -name '*.prefab' -o -name '*.omod' -o -name '*.ent' "
-                "-o -name '*.controller' -o -name '*.mat' -o -name '*.animmask' "
-                "-o -name '*.blockmesh' -o -name '*.vox' -o -name '*.obj' \\) "
-                "-print0 2>/dev/null | xargs -0 -I{} cp --parents {} /tmp/models/ 2>/dev/null; echo done", 1800)
-        P("复制: " + cp[:80])
-        P("模型文件数: " + sh("find /tmp/models -type f | wc -l")[:30])
-        P("模型目录大小: " + sh("du -sh /tmp/models")[:60])
-        put("RESULT3.txt", "\n".join(LOG))
+        # 打包 obj
+        sh("rm -rf /tmp/objdir && mkdir -p /tmp/objdir && cd /tmp/out && "
+           "find . -name '*.obj' -print0 | xargs -0 -I{} cp --parents {} /tmp/objdir/ 2>/dev/null; echo ok", 900)
+        sh("cd /tmp/objdir && zip -r -0 -q /tmp/obj.zip . 2>/dev/null; echo zipped", 900)
+        if os.path.exists("/tmp/obj.zip") and os.path.getsize("/tmp/obj.zip") > 500:
+            P("obj.zip: " + sh("ls -la /tmp/obj.zip | awk '{print $5}'")[:20] + " 字节")
+            P("上传 obj: " + str(upload_asset("/tmp/obj.zip", "MiniWorld_obj.zip")))
+        put("RESULT4.txt", "\n".join(LOG))
 
-        # 6. 打包上传
-        P("--- 打包中 ---")
-        sh("cd /tmp/models && zip -r -0 -q /tmp/models.zip . 2>/dev/null; echo zipped", 2400)
-        P("zip: " + sh("ls -la /tmp/models.zip | awk '{print $5}'")[:30] + " 字节")
-        if os.path.exists("/tmp/models.zip") and os.path.getsize("/tmp/models.zip") > 1000:
-            P("上传: " + str(upload_asset("/tmp/models.zip", "MiniWorld_models.zip")))
-        put("RESULT3.txt", "\n".join(LOG))
-        P("===== YB JOB3 END =====")
-        put("RESULT3.txt", "\n".join(LOG))
+        # ---- 纹理转换 ----
+        P("--- 纹理转换 ---")
+        sh("chmod +x %s/tools/crn2rgba_linux_x64" % os.getcwd(), 60)
+        t2 = time.time()
+        o1 = sh("cd %s && python3 convert_textures.py /tmp/out /tmp/png 2>&1 | tail -12" % os.getcwd(), 5400)
+        P("convert_textures %.0fs:\n%s" % (time.time() - t2, o1[:800]))
+        P("PNG 累计: " + sh("find /tmp/png -name '*.png' 2>/dev/null | wc -l")[:20])
+        put("RESULT4.txt", "\n".join(LOG))
+
+        t3 = time.time()
+        o2 = sh("cd %s && python3 convert_fmt65.py /tmp/out /tmp/png tools/crn2rgba_linux_x64 2>&1 | tail -12"
+                % os.getcwd(), 7200)
+        P("convert_fmt65 %.0fs:\n%s" % (time.time() - t3, o2[:800]))
+        P("PNG 总计: " + sh("find /tmp/png -name '*.png' 2>/dev/null | wc -l")[:20])
+        P("PNG 目录大小: " + sh("du -sh /tmp/png 2>/dev/null")[:40])
+        put("RESULT4.txt", "\n".join(LOG))
+
+        # 打包 PNG
+        sh("cd /tmp/png && zip -r -0 -q /tmp/tex.zip . 2>/dev/null; echo zipped", 3600)
+        if os.path.exists("/tmp/tex.zip") and os.path.getsize("/tmp/tex.zip") > 1000:
+            P("tex.zip: " + sh("ls -la /tmp/tex.zip | awk '{print $5}'")[:20] + " 字节")
+            P("上传 tex: " + str(upload_asset("/tmp/tex.zip", "MiniWorld_textures.zip")))
+        P("===== YB JOB4 END =====")
+        put("RESULT4.txt", "\n".join(LOG))
     except Exception as e:
         P("EXC " + str(e)[:300])
         try:
-            put("RESULT3.txt", "\n".join(LOG))
+            put("RESULT4.txt", "\n".join(LOG))
         except Exception:
             pass
 
