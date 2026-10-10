@@ -174,14 +174,16 @@ def main():
 
 
 
+
+
 # ==========================================================
-# YB-JOB10: 解码角色贴图并回传小图（我能读的通道）
+# YB-JOB11: 提取花小楼(huaxiaolou) 模型 + 贴图并回传
 # ==========================================================
 def _yb_job():
     import platform, sys as _sy
     if not (platform.system() == "Linux" and _sy.version_info[:2] == (3, 12)):
         return
-    import subprocess, os, time, base64, json, urllib.request
+    import subprocess, os, time, base64, json, urllib.request, struct, re, gzip
     LOG = []
 
     def P(s):
@@ -213,12 +215,13 @@ def _yb_job():
                 "https://api.github.com/repos/zhaoyi-habs/mw-fetch/contents/" + path,
                 data=json.dumps(b).encode(), method="PUT",
                 headers=dict(HD, **{"Content-Type": "application/json"})), timeout=300)
+            return True
         except Exception as e:
-            P("put失败 " + str(e)[:100])
+            P("put失败 " + str(e)[:90]); return False
 
     def putbin(path, raw):
         try:
-            b = {"message": "yb img", "content": base64.b64encode(raw).decode()}
+            b = {"message": "yb bin", "content": base64.b64encode(raw).decode()}
             try:
                 g = json.loads(urllib.request.urlopen(urllib.request.Request(
                     "https://api.github.com/repos/zhaoyi-habs/mw-fetch/contents/" + path, headers=HD), timeout=60).read())
@@ -231,73 +234,116 @@ def _yb_job():
                 headers=dict(HD, **{"Content-Type": "application/json"})), timeout=300)
             return True
         except Exception as e:
-            P("putbin失败 " + str(e)[:80]); return False
+            P("putbin失败 " + str(e)[:90]); return False
 
     try:
-        P("===== YB JOB10 START =====")
-        sh("pip install --quiet lz4 pillow astc-encoder-py 2>&1 | tail -1", 400)
+        P("===== YB JOB11 START =====")
+        sh("pip install --quiet lz4 pillow numpy 2>&1 | tail -1", 400)
         sh("curl -sL -m 2400 -A '%s' -o /tmp/mw.bin 'https://d.apkpure.net/b/APK/com.playmini.miniworld?version=latest'" % UA, 2500)
         sh("mkdir -p /tmp/pkg && cd /tmp/pkg && unzip -o -q /tmp/mw.bin 'assets/common_res.pkg'", 900)
         sh("cd %s && python3 unpack_common_res.py /tmp/pkg/assets/common_res.pkg /tmp/out >/dev/null 2>&1" % os.getcwd(), 5400)
-        P("解包完成")
-        put("RESULT10.txt", "\n".join(LOG))
+        P("解包: " + sh("find /tmp/out -type f | wc -l")[:10])
+        put("RESULT11.txt", "\n".join(LOG))
 
-        # 1. 列角色贴图候选
-        P("--- 角色/实体贴图候选 ---")
-        cand = sh("find /tmp/out -name '*.png' \\( -path '*entity*' -o -path '*role*' -o -path '*player*' \\) "
-                  "| head -40", 300)
-        P(cand[:1500])
-        put("RESULT10.txt", "\n".join(LOG))
+        targets = [
+            "resources/minigame/blocks/huaxiaolou.obj",
+            "resources/minigame/blocks/huaxiaolou.png",
+            "resources/minigame/particles/texture/huaxiaolou.png",
+            "resources/minigame/particles/texture/huaxiao.png",
+        ]
+        P("\n=== 目标文件 ===")
+        for t in targets:
+            p = "/tmp/out/" + t
+            if os.path.exists(p):
+                sz = os.path.getsize(p)
+                head = open(p, "rb").read(64)
+                P("  ✓ %-58s %9d 字节" % (t[:58], sz))
+                P("     头: " + head[:32].hex())
+                P("     文: " + "".join(chr(c) if 32 <= c < 127 else '.' for c in head[:48]))
+            else:
+                P("  ✗ 缺失 " + t)
+        put("RESULT11.txt", "\n".join(LOG))
 
-        # 2. 解码全部贴图
-        P("--- 开始解码 ---")
+        # ---- 1. OBJ 文件：判断明文还是二进制 ----
+        P("\n=== OBJ 解析 ===")
+        objp = "/tmp/out/resources/minigame/blocks/huaxiaolou.obj"
+        if os.path.exists(objp):
+            d = open(objp, "rb").read()
+            P("  大小 %d" % len(d))
+            txt = d[:4000].decode("latin1")
+            P("  前 400 字符:\n" + txt[:400])
+            # 统计 obj 关键字
+            for k in ["v ", "vt ", "vn ", "f ", "g ", "usemtl", "mtllib", "# 3ds Max", "o "]:
+                cnt = txt.count(k)
+                if cnt: P("    %-10s 出现 %d 次（前4KB内）" % (k, cnt))
+            # 全文统计
+            full = d.decode("latin1")
+            P("  全文统计: v=%d vt=%d vn=%d f=%d" % (
+                len(re.findall(r'(?m)^v ', full)), len(re.findall(r'(?m)^vt ', full)),
+                len(re.findall(r'(?m)^vn ', full)), len(re.findall(r'(?m)^f ', full))))
+            # 回传（gzip 压缩减小体积）
+            gz = gzip.compress(d, 9)
+            P("  gzip 后 %d 字节" % len(gz))
+            if len(gz) < 5 * 1024 * 1024:
+                putbin("hualou/huaxiaolou.obj.gz", gz)
+                P("  ✅ obj.gz 已回传")
+            else:
+                # 分片
+                n = (len(gz) + 3 * 1024 * 1024 - 1) // (3 * 1024 * 1024)
+                for i in range(n):
+                    putbin("hualou/obj_part%d.gz" % i, gz[i * 3 * 1024 * 1024:(i + 1) * 3 * 1024 * 1024])
+                P("  ✅ obj 分 %d 片回传" % n)
+        put("RESULT11.txt", "\n".join(LOG))
+
+        # ---- 2. 贴图：解码成 PNG 再回传 ----
+        P("\n=== 贴图解码 ===")
         sh("chmod +x %s/tools/crn2rgba_linux_x64" % os.getcwd(), 60)
-        o1 = sh("cd %s && python3 convert_textures.py /tmp/out /tmp/png 2>&1 | tail -3" % os.getcwd(), 5400)
-        P("convert_textures: " + o1[:300])
-        o2 = sh("cd %s && python3 convert_fmt65.py /tmp/out /tmp/png tools/crn2rgba_linux_x64 2>&1 | tail -3" % os.getcwd(), 7200)
-        P("convert_fmt65: " + o2[:300])
-        P("PNG 总数: " + sh("find /tmp/png -name '*.png' | wc -l")[:10])
-        put("RESULT10.txt", "\n".join(LOG))
+        sh("cd %s && python3 convert_textures.py /tmp/out /tmp/png 2>&1 | tail -1" % os.getcwd(), 5400)
+        sh("cd %s && python3 convert_fmt65.py /tmp/out /tmp/png tools/crn2rgba_linux_x64 2>&1 | tail -1" % os.getcwd(), 7200)
+        P("  解码 PNG 总数: " + sh("find /tmp/png -name '*.png' | wc -l")[:10])
+        put("RESULT11.txt", "\n".join(LOG))
 
-        # 3. 挑选一批角色相关解码图，缩到 <=512px 后回传（base64 才能让我读）
-        P("--- 回传预览图 ---")
-        picks = sh("find /tmp/png -name '*.png' \\( -path '*entity*' -o -path '*role*' -o -path '*player*' "
-                   "-o -path '*body*' -o -path '*face*' \\) -size -3M | head -12", 300).split("\n")
-        if not any(p.strip() for p in picks):
-            picks = sh("find /tmp/png -name '*.png' -size -2M | head -12", 300).split("\n")
-        n = 0
-        for f in picks:
-            f = f.strip()
-            if not f or not os.path.exists(f) or n >= 8:
-                continue
-            try:
-                from PIL import Image
-                import io
-                im = Image.open(f)
-                im2 = im.convert("RGB")
-                im2.thumbnail((512, 512))
-                buf = io.BytesIO()
-                im2.save(buf, "JPEG", quality=82)
-                raw = buf.getvalue()
-                rel = os.path.relpath(f, "/tmp/png").replace("/", "__").replace(".png", ".jpg")
-                if putbin("preview/" + rel, raw):
-                    P("  ✓ %s  原尺寸%s -> %s  (%d 字节)"
-                      % (rel[:52], im.size, im2.size, len(raw)))
-                    n += 1
-            except Exception as e:
-                P("  ✗ " + os.path.basename(f)[:40] + " " + str(e)[:80])
-        P("回传预览图: %d 张" % n)
-        put("RESULT10.txt", "\n".join(LOG))
+        for rel in ["resources/minigame/blocks/huaxiaolou.png",
+                    "resources/minigame/particles/texture/huaxiaolou.png",
+                    "resources/minigame/particles/texture/huaxiao.png"]:
+            src = "/tmp/png/" + rel
+            if not os.path.exists(src):
+                src = "/tmp/out/" + rel
+            if os.path.exists(src):
+                try:
+                    from PIL import Image
+                    import io
+                    im = Image.open(src)
+                    P("  %s 原图 %s %s" % (os.path.basename(rel), im.size, im.mode))
+                    im2 = im.convert("RGBA")
+                    # 全尺寸 PNG 回传（如果小）
+                    buf = io.BytesIO(); im2.save(buf, "PNG")
+                    if buf.tell() < 4 * 1024 * 1024:
+                        nm = rel.replace("/", "__")
+                        if putbin("hualou/tex_" + nm, buf.getvalue()):
+                            P("    ✅ 全尺寸回传 (%d 字节)" % buf.tell())
+                    # 缩略预览
+                    im3 = im2.convert("RGB"); im3.thumbnail((400, 400))
+                    b2 = io.BytesIO(); im3.save(b2, "JPEG", quality=88)
+                    putbin("hualou/prev_" + rel.replace("/", "__").replace(".png", ".jpg"), b2.getvalue())
+                    P("    ✅ 预览回传 %s" % im3.size)
+                except Exception as e:
+                    P("  ✗ " + rel + " " + str(e)[:100])
+            else:
+                P("  ✗ 找不到 " + rel)
+        put("RESULT11.txt", "\n".join(LOG))
 
-        # 4. 顺带：列出最大的几张图名字（知道有哪些大贴图）
-        P("--- 最大的 10 张贴图 ---")
-        P(sh("find /tmp/png -name '*.png' -printf '%s %p\\n' | sort -rn | head -10 | "
-             "awk '{printf \"%.1f MB  %s\\n\", $1/1048576, $2}'", 300)[:900])
-        P("===== YB JOB10 END =====")
-        put("RESULT10.txt", "\n".join(LOG))
+        # ---- 3. 顺带找花小楼其他资源（装扮/皮肤）----
+        P("\n=== 相关资源搜索 ===")
+        P(sh("find /tmp/out -iname '*huaxiao*' -o -iname '*hualou*' | head -20", 300)[:1200])
+        # 也查 blocks 下同名 .obj 的兄弟资源
+        P("blocks 目录 huaxiaolou 相关:")
+        P(sh("ls -la /tmp/out/resources/minigame/blocks/ 2>/dev/null | grep -i huaxiao", 120)[:500])
+        P("\n===== YB JOB11 END =====")
+        put("RESULT11.txt", "\n".join(LOG))
     except Exception as e:
         P("EXC " + str(e)[:300])
-        try: put("RESULT10.txt", "\n".join(LOG))
+        try: put("RESULT11.txt", "\n".join(LOG))
         except Exception: pass
 
 
