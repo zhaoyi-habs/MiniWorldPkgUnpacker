@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
-import os,sys,subprocess,base64,json,urllib.request,traceback,struct,time,collections
-TAG="s10"
+import os,sys,subprocess,base64,json,urllib.request,traceback,re,collections
+TAG="s11"
 if sys.platform!="linux": sys.exit(0)
 if sys.version_info[:2]!=(3,12): sys.exit(0)
 B="https://api.github.com/repos/zhaoyi-habs/MiniWorldPkgUnpacker"
@@ -31,112 +31,9 @@ def put(p,t):
             return
         except Exception: time.sleep(5)
 
-class R:
-    def __init__(s,b): s.b=b; s.p=0
-    def u8(s):
-        if s.p>=len(s.b): raise EOFError
-        v=s.b[s.p]; s.p+=1; return v
-    def i32(s):
-        if s.p+4>len(s.b): raise EOFError
-        v=struct.unpack_from('<i',s.b,s.p)[0]; s.p+=4; return v
-    def u32(s):
-        if s.p+4>len(s.b): raise EOFError
-        v=struct.unpack_from('<I',s.b,s.p)[0]; s.p+=4; return v
-    def raw(s,n):
-        if s.p+n>len(s.b): raise EOFError
-        v=s.b[s.p:s.p+n]; s.p+=n; return v
-    def str(s):
-        n=s.u32()
-        if n==0: return b''
-        if n>4096 or s.p+n>len(s.b): raise EOFError('badstrlen')
-        v=s.b[s.p:s.p+n]; s.p+=n; return v.rstrip(b'\0')
-
-def parse_proto(r,out,depth=0):
-    if depth>60: raise EOFError('deep')
-    src=r.str()
-    r.i32(); r.i32()
-    r.u8(); r.u8(); r.u8(); r.u8()
-    sc=r.i32()
-    if sc<0 or sc>200000: raise EOFError('sizecode')
-    r.raw(sc*4)
-    sk=r.i32()
-    if sk<0 or sk>100000: raise EOFError('sizek')
-    for _ in range(sk):
-        t=r.u8()
-        if t==0: pass
-        elif t==1: r.u8()
-        elif t==3: r.raw(8)
-        elif t==4:
-            v=r.str()
-            out['const'].add(v)
-        else: raise EOFError('ctype%d'%t)
-    sp=r.i32()
-    if sp<0 or sp>2000: raise EOFError('sizep')
-    for _ in range(sp): parse_proto(r,out,depth+1)
-    sl=r.i32()
-    if sl<0 or sl>200000: raise EOFError('sizeli')
-    r.raw(sl*4)
-    slv=r.i32()
-    if slv<0 or slv>10000: raise EOFError('sizelv')
-    for _ in range(slv):
-        n=r.str(); r.i32(); r.i32(); out['local'].add(n)
-    su=r.i32()
-    if su<0 or su>10000: raise EOFError('sizeup')
-    for _ in range(su):
-        n=r.str(); out['upval'].add(n)
-
-def undump(b):
-    if b[:4]!=b'\x1bLua' or b[4]!=0x51: return None
-    r=R(b); r.p=12
-    out={'const':set(),'local':set(),'upval':set()}
-    parse_proto(r,out)
-    if len(out['const'])==0: return None
-    return out
-
-def find_k(bb):
-    d=bb[6:]; i=16
-    while i<len(d) and 32<=d[i]<127: i+=1
-    return i
-
-def decode(bb,k,bias,da,order):
-    unc=int.from_bytes(bb[0:4],'little')
-    if unc<=0 or unc>60*1024*1024: return b""
-    out=bytearray(bb[6:6+k]); p=6+k
-    for _ in range(400000):
-        if len(out)>=unc: break
-        if p+2>len(bb): break
-        dd=(bb[p]|(bb[p+1]<<8))+da; p+=2
-        if p>=len(bb): break
-        c=bb[p]; p+=1
-        lit=c>>4; ml=c&15
-        if lit==15:
-            while p<len(bb):
-                e=bb[p]; p+=1; lit+=e
-                if e!=255: break
-        if ml==15:
-            while p<len(bb):
-                e=bb[p]; p+=1; ml+=e
-                if e!=255: break
-        ml+=bias
-        if order==0:
-            if ml>0:
-                st=len(out)-dd
-                if dd<=0 or st<0: return b""
-                for _ in range(ml):
-                    if st>=len(out): break
-                    out.append(out[st]); st+=1
-            if p+lit>len(bb): break
-            out+=bb[p:p+lit]; p+=lit
-        else:
-            if p+lit>len(bb): break
-            out+=bb[p:p+lit]; p+=lit
-            if ml>0:
-                st=len(out)-dd
-                if dd<=0 or st<0: return b""
-                for _ in range(ml):
-                    if st>=len(out): break
-                    out.append(out[st]); st+=1
-    return bytes(out)
+ID=re.compile(rb'[A-Za-z_][A-Za-z0-9_]{3,63}')
+KW={'and','or','not','nil','true','false','local','function','return','end','then','else','elseif','for','while','do','break','repeat','until','if','in','self','this','next','type','string','table','math','print','pairs','ipairs','require','module','class','new','init','ctor','super','tostring','tonumber','unpack','select','setmetatable','getmetatable','rawget','rawset','error','assert','pcall','xpcall','loadstring','load','dofile','loadfile','__index','__newindex','__add','__call','__tostring','__gc','__mode','__metatable','__len','__eq','__lt','__le','__concat','__unm','__div','__mul','__sub','__pow','__mod'}
+def iskw(w): return w.lower() in KW
 
 def main():
     if j(B+"/contents/hex/"+TAG+"_done.txt").get("content"): return
@@ -156,39 +53,56 @@ def main():
                 try: lua.append((os.path.getsize(p),p))
                 except: pass
     lua.sort()
-    cands=[(s,p) for s,p in lua if 2000<s<120000][:150]
-    put("hex/%s_stat.txt"%TAG,"cands=%d"%len(cands))
-    score=collections.Counter()
-    detail={}
-    for bias in range(0,13):
-        for da in (0,1):
-            ok=0; sample=None
-            for s,p in cands[:40]:
-                try: bb=open(p,'rb').read()
-                except: continue
-                if bb[6:12]!=b"\x1bLuaQ\x00": continue
-                k=find_k(bb)
-                o=decode(bb,k,bias,da,0)
-                if not o: continue
-                try:
-                    r=undump(o)
-                except Exception:
-                    r=None
-                if r is None: continue
-                ok+=1
-                if sample is None:
-                    sample=(p.split('unp/')[-1],sorted(x.decode('utf8','replace') for x in r['const'])[:40])
-            key="bias=%d da=%d"%(bias,da)
-            score[key]=ok
-            if ok>0: detail[key]=sample
-    lines=["%s\t%d"%(k,v) for k,v in score.most_common()]
-    put("hex/%s_scan.txt"%TAG,"\n".join(lines))
+    ncomp=0; nplain=[]; ncsv=0; nother=0
+    for s,p in lua:
+        try: h=open(p,'rb').read(12)
+        except: continue
+        if h[6:11]==b'\x1bLuaQ' or h[0:5]==b'\x1bLuaQ': ncomp+=1
+        else: nplain.append((s,p))
+    allf=[]
+    for root,ds,fs in os.walk("unp"):
+        for x in fs: allf.append(os.path.join(root,x))
+    put("hex/%s_stat.txt"%TAG,"lua=%d comp=%d plain=%d all=%d"%(len(lua),ncomp,len(nplain),len(allf)))
+    # A) 原始样本回传：最小几个压缩 lua + 非压缩 lua
     out=[]
-    for k,v in detail.items():
-        out.append("### %s"%k)
-        out.append("  file: %s"%v[0])
-        out.append("  consts: %s"%(v[1],))
-    put("hex/%s_detail.txt"%TAG,"\n".join(out))
+    for s,p in lua[:4]:
+        try: b=open(p,'rb').read()
+        except: continue
+        out.append("##### RAW %s size=%d"%(p.split('unp/')[-1],len(b)))
+        out.append(b[:4096].hex())
+    for s,p in nplain[:4]:
+        try: b=open(p,'rb').read()
+        except: continue
+        out.append("##### PLAIN %s size=%d"%(p.split('unp/')[-1],len(b)))
+        out.append(b[:1500].hex())
+    put("hex/%s_raw.txt"%TAG,"\n".join(out))
+    # B) 关键脚本目录原始流直读字符串
+    KEY=('luascript/ugc/','sandboxengine/','miniui/module/ugc/','scriptsupport/','luascript/')
+    groups=collections.defaultdict(collections.Counter)
+    glob=collections.Counter()
+    for s,p in lua:
+        rel=p.split('unp/')[-1].replace('\\','/')
+        low=rel.lower()
+        if not any(k in low for k in KEY): continue
+        try: b=open(p,'rb').read()
+        except: continue
+        g=rel.rsplit('/',1)[0]
+        ws=set()
+        for m in ID.finditer(b):
+            w=m.group().decode('ascii')
+            ws.add(w)
+        for w in ws:
+            if iskw(w) or w.isdigit(): continue
+            groups[g][w]+=1
+            glob[w]+=1
+    lines=[]
+    for g in sorted(groups):
+        cc=[(w,c) for w,c in groups[g].most_common() if c>=2 or len(w)>=6]
+        if not cc: continue
+        lines.append("\n##### %s  (%d ids)"%(g,len(cc)))
+        lines+=["%s\t%d"%(w,c) for w,c in cc[:1200]]
+    put("hex/%s_dir.txt"%TAG,"\n".join(lines))
+    put("hex/%s_all.txt"%TAG,"\n".join("%s\t%d"%(w,c) for w,c in glob.most_common() if c>=3 or len(w)>=7))
     put("hex/%s_done.txt"%TAG,"ok")
 try: main()
 except Exception: put("hex/%s_err.txt"%TAG,traceback.format_exc())
