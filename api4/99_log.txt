@@ -1,4 +1,4 @@
-=== JOB4 START === 14:54:12
+=== JOB4 START === 14:54:00
 pkg 55446388
 unpack rc 0 index: 881390 bytes
 records: 8172   paths: 8172   (index consumed 881390 / 881390 bytes)
@@ -7,7 +7,7 @@ extracted: 8172  md5 ok: 8172 bad: 0
 pathless (orphan) records: 0 -> _orphans/
 
 files 8174
-sample: ['unp/script_res/_unpack_report.json', 'unp/script_res/commonresource/script/ui/accelkeysf12_init.lua', 'unp/script_res/commonresource/script/ui/mobile/palette.lua']
+sample: ['unp/script_res/_unpack_report.json', 'unp/script_res/_containers/manifest.json', 'unp/script_res/commonresource/script/json/skillscfg/skill/skill_pro_sword1.json']
 G1_api 34 files
 G2_trigger 27 files
 G3_scriptsupport 60 files
@@ -23,6 +23,6 @@ G12_miniui 3337 files
 uniq idents 95284
 PUSHFAIL <HTTPError 422: 'Unprocessable Entity'>
 PUSHFAIL <HTTPError 422: 'Unprocessable Entity'>
-pushed 010d47cdb1
-pushed 43726b213f
-pushed 2500042791
+PUSHFAIL <HTTPError 422: 'Unprocessable Entity'>
+PUSHFAIL <HTTPError 422: 'Unprocessable Entity'>
+pushed 0df661483d
