@@ -1,0 +1,3604 @@
+
+
+---- http://studio.mini1.cn/wiki/Api/Classes/Script/LocalScript.html ----
+LocalScript | 迷你世界 Studio 
+ Skip to content 迷你世界 Studio 
+ Main Navigation 教程 迷你世界Studio操作教程 
+ 操作手册 
+ 多人协作 
+ 运行模式 
+ 使用资源ID 
+ API 类 
+ 数据库 
+ 枚举 
+ 官方主页 简体中文
+ English 
+ 简体中文
+ English 
+ Appearance
+ Menu Return to top 
+ Sidebar Navigation 
+ 沙盒指引
+ 类索引
+ 枚举索引
+ 数据类型索引
+ 类
+ 1. 脚本
+ CustomFunction
+ CustomNotify
+ LocalScript
+ ModuleScript
+ RemoteEvent
+ RemoteFunction
+ Script
+ ScriptService
+ ServerScriptService
+ ServerStorage
+ StarterCharacterScripts
+ StarterPlayerScripts
+ Timer
+ 2. 界面
+ CoreUI
+ Decal
+ Surface
+ UIBase
+ UIBillboard
+ UIButton
+ UIComponent
+ UIDropDownBox
+ UIImage
+ UIList
+ UIModelView
+ UIMovieClip
+ UITextInput
+ UITextLabel
+ UIVideoImage
+ 3. 建造
+ Atmosphere
+ Environment
+ GeoSolid
+ Light
+ Material
+ SkyLight
+ SkyDome
+ SunLight
+ PostProcessing
+ 4. 角色
+ Model
+ Actor
+ BoneNode
+ 5. 输入
+ InputObject
+ ContextActionService
+ ClickDetector
+ UserInputService
+ 6. 声音
+ DefaultSound
+ Sound
+ SoundGroup
+ SoundService
+ 7. 特效
+ DefaultEffect
+ EffectObject
+ Exposion
+ Particle
+ ParticleSmoke
+ Projectile
+ PostEffectService
+ 8. 动画
+ AnimatorBase
+ Animator
+ AnimatorStateData
+ AnimatorLayerItemNode
+ AnimatorParamsItemNode
+ LegacyAnimation
+ LegacyAnimationItem
+ Animation
+ AnimationItem
+ SkeletonAnimation
+ TweenService
+ UITween
+ 9. 物理
+ BindAttachment
+ HingeJoint
+ PhysXService
+ SpringJoint
+ StickJoint
+ VisibleJoint
+ Weld
+ Ragdoll
+ RagdollJoint
+ 10. 玩法
+ Area
+ Backpack
+ Camera
+ Chat
+ GameSetting
+ Player
+ Players
+ PlayerGui
+ StartPlayer
+ SpawnService
+ TalkService
+ Team
+ Teams
+ TeleportService
+ Tool
+ TriggerBox
+ VoiceChannel
+ VoiceChatRemoteService
+ VoiceChatService
+ WorldService
+ 11. 服务
+ AdvertisementService
+ AnalyticsService
+ CloudService
+ CollectionService
+ ContentService
+ DeveloperStoreService
+ FriendsService
+ GameNode
+ LoadedService
+ MaterialService
+ MouseService
+ NetService
+ RunService
+ Service
+ StarterGui
+ StarterPack
+ UtilService
+ SandboxSceneMgrService
+ WorkSpace
+ 12. 云数据
+ Asset
+ AssetContent
+ CloudKVStore
+ 13. 其它
+ ModelData
+ SyncCoord
+ CloudServerConfigService
+ CustomConfig
+ CylindricalJoint
+ FriendInviteService
+ LocalizationTable
+ SandboxSceneMgrService
+ SandboxUISnapshotNode
+ UIListLayout
+ UIMiniCoin
+ SandboxLocalizationService
+ OnlineService
+ DynamicBone
+ 枚举
+ A
+ AIGenType
+ Action
+ ActorBehaviorItemEvent
+ AnimationPlayMode
+ AnimationWrapMode
+ AnimatorCullingMode
+ AnimatorParameterType
+ AntialiasingMethodDesc
+ AntialiasingQualityDesc
+ AssetFetchStatus
+ AssetResType
+ AttributeType
+ AutoSizeType
+ B
+ BMGradientDirType
+ BaseMaterial
+ BehaviorState
+ BlendMode2D
+ BlendModeType
+ BlockCollide
+ BlockPlaceType
+ BrowserType
+ C
+ CameraModel
+ CameraType
+ CameraType2D
+ ChannelType
+ ContextActionPriority
+ ContextActionResult
+ ContextActionType
+ CoreUIViewRange
+ CoreUiComponent
+ CullLayer
+ CullMode
+ D
+ DepthFunc
+ DepthWrite
+ DevPCMovementMode
+ DevTouchMovementMode
+ DeviceRendererType
+ DeviceType
+ DimensionUnit
+ DownEffect
+ DragonBonesAnimation
+ DragonBonesArmatureDisplay
+ DragonBonesSkin
+ DragonBonesSlot
+ E
+ EEmitterType
+ EMultiScenes
+ EMultiScenesAPI
+ EasingDirection
+ EasingStyle
+ Effect
+ EmissionDIr
+ EmitterColorOverLifeTimeMode
+ EmitterShape
+ EmitterTrailsMode
+ EmitterTrailsTextureMode
+ EnumParticleSystemOnlyConstantCurveMode
+ EnumUIType
+ EnumsIndex
+ ExplosionType
+ F
+ FillDirectionType
+ FillMethod
+ FillOrigin
+ FogType
+ G
+ GAMESTAGE
+ GameBackGroundMusic
+ GamePlayMode
+ GameStartMode
+ GeoSolidShape
+ GraphicsPlatform
+ GraphicsQuality
+ H
+ HorizontalAlignmentType
+ I
+ InputMode
+ InteractMethod
+ K
+ KeyCode
+ L
+ LUTsTemperatureType
+ LayerIndexDesc
+ LayoutHRelation
+ LayoutSizeRelation
+ LayoutVRelation
+ LegacyAnimationLoop
+ LightType
+ ListLayoutType
+ ListenerType
+ M
+ MODELVIEW_FogType
+ MSAALevelDesc
+ MaterialTemplate
+ Mode
+ Model
+ ModifierKey
+ MotorType
+ MouseBehavior
+ N
+ NodeSyncLocalFlag
+ NodeSyncMode
+ O
+ OutlineThickness
+ OverflowType
+ P
+ PHYSX2D_TYPE
+ PParticleDirType
+ PartType
+ ParticleCustomDataMode
+ ParticleEmitterShape2D
+ ParticleLifeCurveMode2D
+ ParticleLimitVelocityOverLifetimeSeparateAxes
+ ParticleLimitVelocityOverLifetimeSpaceMode
+ ParticleLineAlignment
+ ParticlePositionType
+ ParticleQualityDropdown
+ ParticleRenderMode
+ ParticleRenderSpace
+ ParticleShapeBoxType
+ ParticleShapeConeType
+ ParticleShapeMeshSpawnMode
+ ParticleShapeMeshType
+ ParticleSortMode
+ ParticleSystemCullingMode
+ ParticleSystemCurveMode
+ ParticleSystemGradientMode
+ ParticleSystemRingBufferMode
+ ParticleSystemScalingMode
+ ParticleSystemSimulationSpace
+ ParticleSystemUVGridType
+ ParticleSystemUVMode
+ ParticleSystemUVRowMode
+ ParticleSystemUVTimeMode
+ ParticleVelocityOverLifetimeSpaceMode
+ PhysicsFrames
+ PhysicsRoleType
+ PhysicsType
+ PlanarReflectionTextureSize
+ PostprocessQuality
+ PreZMode
+ R
+ REFLEXTYPEENUM_ENUM_BEAMATTACHMENT_BEAMTYPE)
+ REFLEXTYPEENUM_ENUM_BEZIER_PATH_GENERATOR_MESH_TYPE)
+ REFLEXTYPEENUM_ENUM_BEZIER_PATH_GENERATOR_UV_TILING_MODE)
+ REFLEXTYPEENUM_ENUM_MINI2D_BONE_MASK_MODE)
+ RagdollBoneJoint
+ RenderPriority
+ ResolutionLevel
+ ResourceLoadMode
+ RollOffMode
+ RotateType
+ S
+ SUBSTAGE_INIT
+ SUBSTAGE_LOADED
+ SUBSTAGE_READY
+ SUBSTAGE_RUN
+ ScaleType
+ SceneEffectFrameShowMode
+ ShadowCascadeCount
+ ShadowDesc
+ ShadowQuality
+ SkyBoxType
+ SkyLightType
+ SkyPlanet
+ Sound
+ StandardSkeleton
+ StateMachineMessage
+ Surface
+ T
+ TextHAlignment
+ TextOverflowType
+ TextVAlignment
+ TextureBlend
+ TextureMode
+ TimelineCustomEvent
+ TimelineTrackType
+ TimerRunState
+ ToolActiveMode
+ TweenStatus
+ U
+ UIMODLEVIEW_SkyLightType
+ UVWrapMode
+ UserInputKeyCode
+ UserInputState
+ UserInputType
+ V
+ VerticalAlignment
+ ViewRange
+ VignetteMode
+ W
+ WaterReflectedDesc
+ Weather
+ 数据类型
+ Bool
+ ColorQuad
+ ColorValue
+ LuaFunction
+ LuaTable
+ Matrix3f
+ Matrix4f
+ MNJsonVal
+ Nil
+ Number
+ Float
+ Int
+ Quaternion
+ RangeInfo
+ Ray
+ Rect
+ ReflexTuple
+ SBXConnection
+ SBXSignal
+ String
+ Table
+ TweenInfo
+ Vector2
+ Vector3
+ Vector4
+ Void
+ WCoord
+ 基类
+ Joint
+ SandboxNode
+ ScriptNode
+ Transform
+ On this page
+ LocalScript ​ 
+ 继承自 ：
+ SandBoxNode 
+ 描述 ​ 
+ LocalScript 是用于客机运行Lua代码的容器，它作用于仅在客户端的对象，例如玩家的 Camera 。通过 Players 获得的 LocalPlayer 为当前运行该脚本的玩家
+ LocalScript 仅在以下环境下才可运行:
+ Player 的 Backpack ，如 Tool 的子项
+ Player 的 Actor 模型
+ Player 的 PlayerGui 
+ Player 的 PlayerScripts 
+ LocalFirst 服务
+ 代码示例 ​ 
+ 使用 LocalScript 写入代码后，仅在 描述 中所说位置会打印 Hello world! 
+ lua print ( "Hello world!" ) --使用 
+ Pager Previous page CustomNotify 
+ Next page ModuleScript
+
+---- http://studio.mini1.cn/wiki/Api/DataType/Bool.html ----
+Bool | 迷你世界 Studio 
+ Skip to content 迷你世界 Studio 
+ Main Navigation 教程 迷你世界Studio操作教程 
+ 操作手册 
+ 多人协作 
+ 运行模式 
+ 使用资源ID 
+ API 类 
+ 数据库 
+ 枚举 
+ 官方主页 简体中文
+ English 
+ 简体中文
+ English 
+ Appearance
+ Menu Return to top 
+ Sidebar Navigation 
+ 沙盒指引
+ 类索引
+ 枚举索引
+ 数据类型索引
+ 类
+ 1. 脚本
+ CustomFunction
+ CustomNotify
+ LocalScript
+ ModuleScript
+ RemoteEvent
+ RemoteFunction
+ Script
+ ScriptService
+ ServerScriptService
+ ServerStorage
+ StarterCharacterScripts
+ StarterPlayerScripts
+ Timer
+ 2. 界面
+ CoreUI
+ Decal
+ Surface
+ UIBase
+ UIBillboard
+ UIButton
+ UIComponent
+ UIDropDownBox
+ UIImage
+ UIList
+ UIModelView
+ UIMovieClip
+ UITextInput
+ UITextLabel
+ UIVideoImage
+ 3. 建造
+ Atmosphere
+ Environment
+ GeoSolid
+ Light
+ Material
+ SkyLight
+ SkyDome
+ SunLight
+ PostProcessing
+ 4. 角色
+ Model
+ Actor
+ BoneNode
+ 5. 输入
+ InputObject
+ ContextActionService
+ ClickDetector
+ UserInputService
+ 6. 声音
+ DefaultSound
+ Sound
+ SoundGroup
+ SoundService
+ 7. 特效
+ DefaultEffect
+ EffectObject
+ Exposion
+ Particle
+ ParticleSmoke
+ Projectile
+ PostEffectService
+ 8. 动画
+ AnimatorBase
+ Animator
+ AnimatorStateData
+ AnimatorLayerItemNode
+ AnimatorParamsItemNode
+ LegacyAnimation
+ LegacyAnimationItem
+ Animation
+ AnimationItem
+ SkeletonAnimation
+ TweenService
+ UITween
+ 9. 物理
+ BindAttachment
+ HingeJoint
+ PhysXService
+ SpringJoint
+ StickJoint
+ VisibleJoint
+ Weld
+ Ragdoll
+ RagdollJoint
+ 10. 玩法
+ Area
+ Backpack
+ Camera
+ Chat
+ GameSetting
+ Player
+ Players
+ PlayerGui
+ StartPlayer
+ SpawnService
+ TalkService
+ Team
+ Teams
+ TeleportService
+ Tool
+ TriggerBox
+ VoiceChannel
+ VoiceChatRemoteService
+ VoiceChatService
+ WorldService
+ 11. 服务
+ AdvertisementService
+ AnalyticsService
+ CloudService
+ CollectionService
+ ContentService
+ DeveloperStoreService
+ FriendsService
+ GameNode
+ LoadedService
+ MaterialService
+ MouseService
+ NetService
+ RunService
+ Service
+ StarterGui
+ StarterPack
+ UtilService
+ SandboxSceneMgrService
+ WorkSpace
+ 12. 云数据
+ Asset
+ AssetContent
+ CloudKVStore
+ 13. 其它
+ ModelData
+ SyncCoord
+ CloudServerConfigService
+ CustomConfig
+ CylindricalJoint
+ FriendInviteService
+ LocalizationTable
+ SandboxSceneMgrService
+ SandboxUISnapshotNode
+ UIListLayout
+ UIMiniCoin
+ SandboxLocalizationService
+ OnlineService
+ DynamicBone
+ 枚举
+ A
+ AIGenType
+ Action
+ ActorBehaviorItemEvent
+ AnimationPlayMode
+ AnimationWrapMode
+ AnimatorCullingMode
+ AnimatorParameterType
+ AntialiasingMethodDesc
+ AntialiasingQualityDesc
+ AssetFetchStatus
+ AssetResType
+ AttributeType
+ AutoSizeType
+ B
+ BMGradientDirType
+ BaseMaterial
+ BehaviorState
+ BlendMode2D
+ BlendModeType
+ BlockCollide
+ BlockPlaceType
+ BrowserType
+ C
+ CameraModel
+ CameraType
+ CameraType2D
+ ChannelType
+ ContextActionPriority
+ ContextActionResult
+ ContextActionType
+ CoreUIViewRange
+ CoreUiComponent
+ CullLayer
+ CullMode
+ D
+ DepthFunc
+ DepthWrite
+ DevPCMovementMode
+ DevTouchMovementMode
+ DeviceRendererType
+ DeviceType
+ DimensionUnit
+ DownEffect
+ DragonBonesAnimation
+ DragonBonesArmatureDisplay
+ DragonBonesSkin
+ DragonBonesSlot
+ E
+ EEmitterType
+ EMultiScenes
+ EMultiScenesAPI
+ EasingDirection
+ EasingStyle
+ Effect
+ EmissionDIr
+ EmitterColorOverLifeTimeMode
+ EmitterShape
+ EmitterTrailsMode
+ EmitterTrailsTextureMode
+ EnumParticleSystemOnlyConstantCurveMode
+ EnumUIType
+ EnumsIndex
+ ExplosionType
+ F
+ FillDirectionType
+ FillMethod
+ FillOrigin
+ FogType
+ G
+ GAMESTAGE
+ GameBackGroundMusic
+ GamePlayMode
+ GameStartMode
+ GeoSolidShape
+ GraphicsPlatform
+ GraphicsQuality
+ H
+ HorizontalAlignmentType
+ I
+ InputMode
+ InteractMethod
+ K
+ KeyCode
+ L
+ LUTsTemperatureType
+ LayerIndexDesc
+ LayoutHRelation
+ LayoutSizeRelation
+ LayoutVRelation
+ LegacyAnimationLoop
+ LightType
+ ListLayoutType
+ ListenerType
+ M
+ MODELVIEW_FogType
+ MSAALevelDesc
+ MaterialTemplate
+ Mode
+ Model
+ ModifierKey
+ MotorType
+ MouseBehavior
+ N
+ NodeSyncLocalFlag
+ NodeSyncMode
+ O
+ OutlineThickness
+ OverflowType
+ P
+ PHYSX2D_TYPE
+ PParticleDirType
+ PartType
+ ParticleCustomDataMode
+ ParticleEmitterShape2D
+ ParticleLifeCurveMode2D
+ ParticleLimitVelocityOverLifetimeSeparateAxes
+ ParticleLimitVelocityOverLifetimeSpaceMode
+ ParticleLineAlignment
+ ParticlePositionType
+ ParticleQualityDropdown
+ ParticleRenderMode
+ ParticleRenderSpace
+ ParticleShapeBoxType
+ ParticleShapeConeType
+ ParticleShapeMeshSpawnMode
+ ParticleShapeMeshType
+ ParticleSortMode
+ ParticleSystemCullingMode
+ ParticleSystemCurveMode
+ ParticleSystemGradientMode
+ ParticleSystemRingBufferMode
+ ParticleSystemScalingMode
+ ParticleSystemSimulationSpace
+ ParticleSystemUVGridType
+ ParticleSystemUVMode
+ ParticleSystemUVRowMode
+ ParticleSystemUVTimeMode
+ ParticleVelocityOverLifetimeSpaceMode
+ PhysicsFrames
+ PhysicsRoleType
+ PhysicsType
+ PlanarReflectionTextureSize
+ PostprocessQuality
+ PreZMode
+ R
+ REFLEXTYPEENUM_ENUM_BEAMATTACHMENT_BEAMTYPE)
+ REFLEXTYPEENUM_ENUM_BEZIER_PATH_GENERATOR_MESH_TYPE)
+ REFLEXTYPEENUM_ENUM_BEZIER_PATH_GENERATOR_UV_TILING_MODE)
+ REFLEXTYPEENUM_ENUM_MINI2D_BONE_MASK_MODE)
+ RagdollBoneJoint
+ RenderPriority
+ ResolutionLevel
+ ResourceLoadMode
+ RollOffMode
+ RotateType
+ S
+ SUBSTAGE_INIT
+ SUBSTAGE_LOADED
+ SUBSTAGE_READY
+ SUBSTAGE_RUN
+ ScaleType
+ SceneEffectFrameShowMode
+ ShadowCascadeCount
+ ShadowDesc
+ ShadowQuality
+ SkyBoxType
+ SkyLightType
+ SkyPlanet
+ Sound
+ StandardSkeleton
+ StateMachineMessage
+ Surface
+ T
+ TextHAlignment
+ TextOverflowType
+ TextVAlignment
+ TextureBlend
+ TextureMode
+ TimelineCustomEvent
+ TimelineTrackType
+ TimerRunState
+ ToolActiveMode
+ TweenStatus
+ U
+ UIMODLEVIEW_SkyLightType
+ UVWrapMode
+ UserInputKeyCode
+ UserInputState
+ UserInputType
+ V
+ VerticalAlignment
+ ViewRange
+ VignetteMode
+ W
+ WaterReflectedDesc
+ Weather
+ 数据类型
+ Bool
+ ColorQuad
+ ColorValue
+ LuaFunction
+ LuaTable
+ Matrix3f
+ Matrix4f
+ MNJsonVal
+ Nil
+ Number
+ Float
+ Int
+ Quaternion
+ RangeInfo
+ Ray
+ Rect
+ ReflexTuple
+ SBXConnection
+ SBXSignal
+ String
+ Table
+ TweenInfo
+ Vector2
+ Vector3
+ Vector4
+ Void
+ WCoord
+ 基类
+ Joint
+ SandboxNode
+ ScriptNode
+ Transform
+ On this page
+ Bool ​ 
+ 描述 ​ 
+ Boolean （布尔值）是一种非常简单的数据类型，其值为 true 或 false 。布尔值常用于例如下列代码的条件语句中：
+ lua local testBoolean = true 
+ if testBoolean == true then 
+ -- Value of &#39;testBoolean&#39; is true, so this condition is executed 
+ else 
+ -- If value of &#39;testBoolean&#39; is false, this condition is executed 
+ end 
+ Lua 估算 ​ 
+ 在 Lua 中，如果某个值不是 false 或 nil ，则在条件语句中使用时会将其视为 “true” 。下面的代码仅输出 Lua 解释为 true 的值：
+ lua -- These values are all "true" 
+ if true then 
+ print ( "true" ) 
+ end 
+ if 1 then 
+ print ( "1" ) 
+ end 
+ if "text" then 
+ print ( &#39;"text"&#39; ) 
+ end 
+ if { 1 , 2 , 3 } then 
+ print ( "{1, 2, 3}" ) 
+ end 
+ if workspace then 
+ print ( "workspace" ) 
+ end 
+ if "" then 
+ print ( &#39;""&#39; ) 
+ end 
+ -- But these values are not... 
+ if false then 
+ print ( "false" ) 
+ end 
+ if nil then 
+ print ( "nil" ) 
+ end 
+ 运算符 ​ 
+ 根据上述估算规则，带有 Lua operators （运算符）的条件语句工作方式如下所示：
+ And ​ 
+ 如果为 false 或 nil ， and 运算符返回第一个参数，否则返回第二个参数。
+ lua print ( 4 and 5 ) 
+ print ( nil and 12 ) 
+ print ( false and 12 ) 
+ print ( true and true ) 
+ print ( true and false ) 
+ print ( false and true ) 
+ print ( false and false ) 
+ Or ​ 
+ or 运算符对两个值进行运算。如果第一个值 既不是 false 也不是 nil ，则 or 运算符返回第一个值。如果第一个值是 false 或 nil ，则该运算符返回第二个值。例如：
+ lua local y = x or 1 
+ print (y) 
+ 之所以输出 1 ，是因为 x 不存在，因此为 nil 。实际上， or 运算符是让我们选择 1 而不是 nil 。
+ lua local x = false 
+ local y = x or 1 
+ print (y) 
+ 之所以也输出 1 ，是因为尽管 x 存在，但其值为 false 。如果 x 为 true ，则 or 运算符将选择 x 而不是 1 。
+ Not ​ 
+ 如果参数为 false 或 nil ，则 not 运算符返回 true ，否则返回 false 。
+ lua print ( not true ) 
+ print ( not false ) 
+ print ( not nil ) 
+ print ( not "text" ) 
+ print ( not 0 ) 
+ Pager Previous page Weather 
+ Next page ColorQuad
+
+---- http://studio.mini1.cn/wiki/Api/Enums/Action.html ----
+Action | 迷你世界 Studio 
+ Skip to content 迷你世界 Studio 
+ Main Navigation 教程 迷你世界Studio操作教程 
+ 操作手册 
+ 多人协作 
+ 运行模式 
+ 使用资源ID 
+ API 类 
+ 数据库 
+ 枚举 
+ 官方主页 简体中文
+ English 
+ 简体中文
+ English 
+ Appearance
+ Menu Return to top 
+ Sidebar Navigation 
+ 沙盒指引
+ 类索引
+ 枚举索引
+ 数据类型索引
+ 类
+ 1. 脚本
+ CustomFunction
+ CustomNotify
+ LocalScript
+ ModuleScript
+ RemoteEvent
+ RemoteFunction
+ Script
+ ScriptService
+ ServerScriptService
+ ServerStorage
+ StarterCharacterScripts
+ StarterPlayerScripts
+ Timer
+ 2. 界面
+ CoreUI
+ Decal
+ Surface
+ UIBase
+ UIBillboard
+ UIButton
+ UIComponent
+ UIDropDownBox
+ UIImage
+ UIList
+ UIModelView
+ UIMovieClip
+ UITextInput
+ UITextLabel
+ UIVideoImage
+ 3. 建造
+ Atmosphere
+ Environment
+ GeoSolid
+ Light
+ Material
+ SkyLight
+ SkyDome
+ SunLight
+ PostProcessing
+ 4. 角色
+ Model
+ Actor
+ BoneNode
+ 5. 输入
+ InputObject
+ ContextActionService
+ ClickDetector
+ UserInputService
+ 6. 声音
+ DefaultSound
+ Sound
+ SoundGroup
+ SoundService
+ 7. 特效
+ DefaultEffect
+ EffectObject
+ Exposion
+ Particle
+ ParticleSmoke
+ Projectile
+ PostEffectService
+ 8. 动画
+ AnimatorBase
+ Animator
+ AnimatorStateData
+ AnimatorLayerItemNode
+ AnimatorParamsItemNode
+ LegacyAnimation
+ LegacyAnimationItem
+ Animation
+ AnimationItem
+ SkeletonAnimation
+ TweenService
+ UITween
+ 9. 物理
+ BindAttachment
+ HingeJoint
+ PhysXService
+ SpringJoint
+ StickJoint
+ VisibleJoint
+ Weld
+ Ragdoll
+ RagdollJoint
+ 10. 玩法
+ Area
+ Backpack
+ Camera
+ Chat
+ GameSetting
+ Player
+ Players
+ PlayerGui
+ StartPlayer
+ SpawnService
+ TalkService
+ Team
+ Teams
+ TeleportService
+ Tool
+ TriggerBox
+ VoiceChannel
+ VoiceChatRemoteService
+ VoiceChatService
+ WorldService
+ 11. 服务
+ AdvertisementService
+ AnalyticsService
+ CloudService
+ CollectionService
+ ContentService
+ DeveloperStoreService
+ FriendsService
+ GameNode
+ LoadedService
+ MaterialService
+ MouseService
+ NetService
+ RunService
+ Service
+ StarterGui
+ StarterPack
+ UtilService
+ SandboxSceneMgrService
+ WorkSpace
+ 12. 云数据
+ Asset
+ AssetContent
+ CloudKVStore
+ 13. 其它
+ ModelData
+ SyncCoord
+ CloudServerConfigService
+ CustomConfig
+ CylindricalJoint
+ FriendInviteService
+ LocalizationTable
+ SandboxSceneMgrService
+ SandboxUISnapshotNode
+ UIListLayout
+ UIMiniCoin
+ SandboxLocalizationService
+ OnlineService
+ DynamicBone
+ 枚举
+ A
+ AIGenType
+ Action
+ ActorBehaviorItemEvent
+ AnimationPlayMode
+ AnimationWrapMode
+ AnimatorCullingMode
+ AnimatorParameterType
+ AntialiasingMethodDesc
+ AntialiasingQualityDesc
+ AssetFetchStatus
+ AssetResType
+ AttributeType
+ AutoSizeType
+ B
+ BMGradientDirType
+ BaseMaterial
+ BehaviorState
+ BlendMode2D
+ BlendModeType
+ BlockCollide
+ BlockPlaceType
+ BrowserType
+ C
+ CameraModel
+ CameraType
+ CameraType2D
+ ChannelType
+ ContextActionPriority
+ ContextActionResult
+ ContextActionType
+ CoreUIViewRange
+ CoreUiComponent
+ CullLayer
+ CullMode
+ D
+ DepthFunc
+ DepthWrite
+ DevPCMovementMode
+ DevTouchMovementMode
+ DeviceRendererType
+ DeviceType
+ DimensionUnit
+ DownEffect
+ DragonBonesAnimation
+ DragonBonesArmatureDisplay
+ DragonBonesSkin
+ DragonBonesSlot
+ E
+ EEmitterType
+ EMultiScenes
+ EMultiScenesAPI
+ EasingDirection
+ EasingStyle
+ Effect
+ EmissionDIr
+ EmitterColorOverLifeTimeMode
+ EmitterShape
+ EmitterTrailsMode
+ EmitterTrailsTextureMode
+ EnumParticleSystemOnlyConstantCurveMode
+ EnumUIType
+ EnumsIndex
+ ExplosionType
+ F
+ FillDirectionType
+ FillMethod
+ FillOrigin
+ FogType
+ G
+ GAMESTAGE
+ GameBackGroundMusic
+ GamePlayMode
+ GameStartMode
+ GeoSolidShape
+ GraphicsPlatform
+ GraphicsQuality
+ H
+ HorizontalAlignmentType
+ I
+ InputMode
+ InteractMethod
+ K
+ KeyCode
+ L
+ LUTsTemperatureType
+ LayerIndexDesc
+ LayoutHRelation
+ LayoutSizeRelation
+ LayoutVRelation
+ LegacyAnimationLoop
+ LightType
+ ListLayoutType
+ ListenerType
+ M
+ MODELVIEW_FogType
+ MSAALevelDesc
+ MaterialTemplate
+ Mode
+ Model
+ ModifierKey
+ MotorType
+ MouseBehavior
+ N
+ NodeSyncLocalFlag
+ NodeSyncMode
+ O
+ OutlineThickness
+ OverflowType
+ P
+ PHYSX2D_TYPE
+ PParticleDirType
+ PartType
+ ParticleCustomDataMode
+ ParticleEmitterShape2D
+ ParticleLifeCurveMode2D
+ ParticleLimitVelocityOverLifetimeSeparateAxes
+ ParticleLimitVelocityOverLifetimeSpaceMode
+ ParticleLineAlignment
+ ParticlePositionType
+ ParticleQualityDropdown
+ ParticleRenderMode
+ ParticleRenderSpace
+ ParticleShapeBoxType
+ ParticleShapeConeType
+ ParticleShapeMeshSpawnMode
+ ParticleShapeMeshType
+ ParticleSortMode
+ ParticleSystemCullingMode
+ ParticleSystemCurveMode
+ ParticleSystemGradientMode
+ ParticleSystemRingBufferMode
+ ParticleSystemScalingMode
+ ParticleSystemSimulationSpace
+ ParticleSystemUVGridType
+ ParticleSystemUVMode
+ ParticleSystemUVRowMode
+ ParticleSystemUVTimeMode
+ ParticleVelocityOverLifetimeSpaceMode
+ PhysicsFrames
+ PhysicsRoleType
+ PhysicsType
+ PlanarReflectionTextureSize
+ PostprocessQuality
+ PreZMode
+ R
+ REFLEXTYPEENUM_ENUM_BEAMATTACHMENT_BEAMTYPE)
+ REFLEXTYPEENUM_ENUM_BEZIER_PATH_GENERATOR_MESH_TYPE)
+ REFLEXTYPEENUM_ENUM_BEZIER_PATH_GENERATOR_UV_TILING_MODE)
+ REFLEXTYPEENUM_ENUM_MINI2D_BONE_MASK_MODE)
+ RagdollBoneJoint
+ RenderPriority
+ ResolutionLevel
+ ResourceLoadMode
+ RollOffMode
+ RotateType
+ S
+ SUBSTAGE_INIT
+ SUBSTAGE_LOADED
+ SUBSTAGE_READY
+ SUBSTAGE_RUN
+ ScaleType
+ SceneEffectFrameShowMode
+ ShadowCascadeCount
+ ShadowDesc
+ ShadowQuality
+ SkyBoxType
+ SkyLightType
+ SkyPlanet
+ Sound
+ StandardSkeleton
+ StateMachineMessage
+ Surface
+ T
+ TextHAlignment
+ TextOverflowType
+ TextVAlignment
+ TextureBlend
+ TextureMode
+ TimelineCustomEvent
+ TimelineTrackType
+ TimerRunState
+ ToolActiveMode
+ TweenStatus
+ U
+ UIMODLEVIEW_SkyLightType
+ UVWrapMode
+ UserInputKeyCode
+ UserInputState
+ UserInputType
+ V
+ VerticalAlignment
+ ViewRange
+ VignetteMode
+ W
+ WaterReflectedDesc
+ Weather
+ 数据类型
+ Bool
+ ColorQuad
+ ColorValue
+ LuaFunction
+ LuaTable
+ Matrix3f
+ Matrix4f
+ MNJsonVal
+ Nil
+ Number
+ Float
+ Int
+ Quaternion
+ RangeInfo
+ Ray
+ Rect
+ ReflexTuple
+ SBXConnection
+ SBXSignal
+ String
+ Table
+ TweenInfo
+ Vector2
+ Vector3
+ Vector4
+ Void
+ WCoord
+ 基类
+ Joint
+ SandboxNode
+ ScriptNode
+ Transform
+ On this page
+ Action ​ 
+ 描述 ​ 
+ 用于区分对应的枚举类型
+ 枚举 ​ 
+ Action
+ 名称 值 描述 
+ KEYBOARD 0 键盘输入 
+ MOUSE 1 鼠标输入 
+ GAMEPAD 2 游戏手柄输入 
+ CAMERA_INPUT 3 相机输入 
+ Pager Previous page AIGenType 
+ Next page ActorBehaviorItemEvent
+
+---- http://studio.mini1.cn/wiki/Api/Api.html ----
+这是迷你世界Studio的API文档 | 迷你世界 Studio 
+ Skip to content 迷你世界 Studio 
+ Main Navigation 教程 迷你世界Studio操作教程 
+ 操作手册 
+ 多人协作 
+ 运行模式 
+ 使用资源ID 
+ API 类 
+ 数据库 
+ 枚举 
+ 官方主页 简体中文
+ English 
+ 简体中文
+ English 
+ Appearance
+ Menu Return to top 
+ Sidebar Navigation 
+ 沙盒指引
+ 类索引
+ 枚举索引
+ 数据类型索引
+ 类
+ 1. 脚本
+ CustomFunction
+ CustomNotify
+ LocalScript
+ ModuleScript
+ RemoteEvent
+ RemoteFunction
+ Script
+ ScriptService
+ ServerScriptService
+ ServerStorage
+ StarterCharacterScripts
+ StarterPlayerScripts
+ Timer
+ 2. 界面
+ CoreUI
+ Decal
+ Surface
+ UIBase
+ UIBillboard
+ UIButton
+ UIComponent
+ UIDropDownBox
+ UIImage
+ UIList
+ UIModelView
+ UIMovieClip
+ UITextInput
+ UITextLabel
+ UIVideoImage
+ 3. 建造
+ Atmosphere
+ Environment
+ GeoSolid
+ Light
+ Material
+ SkyLight
+ SkyDome
+ SunLight
+ PostProcessing
+ 4. 角色
+ Model
+ Actor
+ BoneNode
+ 5. 输入
+ InputObject
+ ContextActionService
+ ClickDetector
+ UserInputService
+ 6. 声音
+ DefaultSound
+ Sound
+ SoundGroup
+ SoundService
+ 7. 特效
+ DefaultEffect
+ EffectObject
+ Exposion
+ Particle
+ ParticleSmoke
+ Projectile
+ PostEffectService
+ 8. 动画
+ AnimatorBase
+ Animator
+ AnimatorStateData
+ AnimatorLayerItemNode
+ AnimatorParamsItemNode
+ LegacyAnimation
+ LegacyAnimationItem
+ Animation
+ AnimationItem
+ SkeletonAnimation
+ TweenService
+ UITween
+ 9. 物理
+ BindAttachment
+ HingeJoint
+ PhysXService
+ SpringJoint
+ StickJoint
+ VisibleJoint
+ Weld
+ Ragdoll
+ RagdollJoint
+ 10. 玩法
+ Area
+ Backpack
+ Camera
+ Chat
+ GameSetting
+ Player
+ Players
+ PlayerGui
+ StartPlayer
+ SpawnService
+ TalkService
+ Team
+ Teams
+ TeleportService
+ Tool
+ TriggerBox
+ VoiceChannel
+ VoiceChatRemoteService
+ VoiceChatService
+ WorldService
+ 11. 服务
+ AdvertisementService
+ AnalyticsService
+ CloudService
+ CollectionService
+ ContentService
+ DeveloperStoreService
+ FriendsService
+ GameNode
+ LoadedService
+ MaterialService
+ MouseService
+ NetService
+ RunService
+ Service
+ StarterGui
+ StarterPack
+ UtilService
+ SandboxSceneMgrService
+ WorkSpace
+ 12. 云数据
+ Asset
+ AssetContent
+ CloudKVStore
+ 13. 其它
+ ModelData
+ SyncCoord
+ CloudServerConfigService
+ CustomConfig
+ CylindricalJoint
+ FriendInviteService
+ LocalizationTable
+ SandboxSceneMgrService
+ SandboxUISnapshotNode
+ UIListLayout
+ UIMiniCoin
+ SandboxLocalizationService
+ OnlineService
+ DynamicBone
+ 枚举
+ A
+ AIGenType
+ Action
+ ActorBehaviorItemEvent
+ AnimationPlayMode
+ AnimationWrapMode
+ AnimatorCullingMode
+ AnimatorParameterType
+ AntialiasingMethodDesc
+ AntialiasingQualityDesc
+ AssetFetchStatus
+ AssetResType
+ AttributeType
+ AutoSizeType
+ B
+ BMGradientDirType
+ BaseMaterial
+ BehaviorState
+ BlendMode2D
+ BlendModeType
+ BlockCollide
+ BlockPlaceType
+ BrowserType
+ C
+ CameraModel
+ CameraType
+ CameraType2D
+ ChannelType
+ ContextActionPriority
+ ContextActionResult
+ ContextActionType
+ CoreUIViewRange
+ CoreUiComponent
+ CullLayer
+ CullMode
+ D
+ DepthFunc
+ DepthWrite
+ DevPCMovementMode
+ DevTouchMovementMode
+ DeviceRendererType
+ DeviceType
+ DimensionUnit
+ DownEffect
+ DragonBonesAnimation
+ DragonBonesArmatureDisplay
+ DragonBonesSkin
+ DragonBonesSlot
+ E
+ EEmitterType
+ EMultiScenes
+ EMultiScenesAPI
+ EasingDirection
+ EasingStyle
+ Effect
+ EmissionDIr
+ EmitterColorOverLifeTimeMode
+ EmitterShape
+ EmitterTrailsMode
+ EmitterTrailsTextureMode
+ EnumParticleSystemOnlyConstantCurveMode
+ EnumUIType
+ EnumsIndex
+ ExplosionType
+ F
+ FillDirectionType
+ FillMethod
+ FillOrigin
+ FogType
+ G
+ GAMESTAGE
+ GameBackGroundMusic
+ GamePlayMode
+ GameStartMode
+ GeoSolidShape
+ GraphicsPlatform
+ GraphicsQuality
+ H
+ HorizontalAlignmentType
+ I
+ InputMode
+ InteractMethod
+ K
+ KeyCode
+ L
+ LUTsTemperatureType
+ LayerIndexDesc
+ LayoutHRelation
+ LayoutSizeRelation
+ LayoutVRelation
+ LegacyAnimationLoop
+ LightType
+ ListLayoutType
+ ListenerType
+ M
+ MODELVIEW_FogType
+ MSAALevelDesc
+ MaterialTemplate
+ Mode
+ Model
+ ModifierKey
+ MotorType
+ MouseBehavior
+ N
+ NodeSyncLocalFlag
+ NodeSyncMode
+ O
+ OutlineThickness
+ OverflowType
+ P
+ PHYSX2D_TYPE
+ PParticleDirType
+ PartType
+ ParticleCustomDataMode
+ ParticleEmitterShape2D
+ ParticleLifeCurveMode2D
+ ParticleLimitVelocityOverLifetimeSeparateAxes
+ ParticleLimitVelocityOverLifetimeSpaceMode
+ ParticleLineAlignment
+ ParticlePositionType
+ ParticleQualityDropdown
+ ParticleRenderMode
+ ParticleRenderSpace
+ ParticleShapeBoxType
+ ParticleShapeConeType
+ ParticleShapeMeshSpawnMode
+ ParticleShapeMeshType
+ ParticleSortMode
+ ParticleSystemCullingMode
+ ParticleSystemCurveMode
+ ParticleSystemGradientMode
+ ParticleSystemRingBufferMode
+ ParticleSystemScalingMode
+ ParticleSystemSimulationSpace
+ ParticleSystemUVGridType
+ ParticleSystemUVMode
+ ParticleSystemUVRowMode
+ ParticleSystemUVTimeMode
+ ParticleVelocityOverLifetimeSpaceMode
+ PhysicsFrames
+ PhysicsRoleType
+ PhysicsType
+ PlanarReflectionTextureSize
+ PostprocessQuality
+ PreZMode
+ R
+ REFLEXTYPEENUM_ENUM_BEAMATTACHMENT_BEAMTYPE)
+ REFLEXTYPEENUM_ENUM_BEZIER_PATH_GENERATOR_MESH_TYPE)
+ REFLEXTYPEENUM_ENUM_BEZIER_PATH_GENERATOR_UV_TILING_MODE)
+ REFLEXTYPEENUM_ENUM_MINI2D_BONE_MASK_MODE)
+ RagdollBoneJoint
+ RenderPriority
+ ResolutionLevel
+ ResourceLoadMode
+ RollOffMode
+ RotateType
+ S
+ SUBSTAGE_INIT
+ SUBSTAGE_LOADED
+ SUBSTAGE_READY
+ SUBSTAGE_RUN
+ ScaleType
+ SceneEffectFrameShowMode
+ ShadowCascadeCount
+ ShadowDesc
+ ShadowQuality
+ SkyBoxType
+ SkyLightType
+ SkyPlanet
+ Sound
+ StandardSkeleton
+ StateMachineMessage
+ Surface
+ T
+ TextHAlignment
+ TextOverflowType
+ TextVAlignment
+ TextureBlend
+ TextureMode
+ TimelineCustomEvent
+ TimelineTrackType
+ TimerRunState
+ ToolActiveMode
+ TweenStatus
+ U
+ UIMODLEVIEW_SkyLightType
+ UVWrapMode
+ UserInputKeyCode
+ UserInputState
+ UserInputType
+ V
+ VerticalAlignment
+ ViewRange
+ VignetteMode
+ W
+ WaterReflectedDesc
+ Weather
+ 数据类型
+ Bool
+ ColorQuad
+ ColorValue
+ LuaFunction
+ LuaTable
+ Matrix3f
+ Matrix4f
+ MNJsonVal
+ Nil
+ Number
+ Float
+ Int
+ Quaternion
+ RangeInfo
+ Ray
+ Rect
+ ReflexTuple
+ SBXConnection
+ SBXSignal
+ String
+ Table
+ TweenInfo
+ Vector2
+ Vector3
+ Vector4
+ Void
+ WCoord
+ 基类
+ Joint
+ SandboxNode
+ ScriptNode
+ Transform
+ On this page
+ 这是迷你世界Studio的API文档 ​ 
+ Pager 
+ Next page 类索引
+
+---- http://studio.mini1.cn/wiki/en/Api/Classes/Script/LocalScript.html ----
+LocalScript | 迷你世界 Studio 
+ Skip to content 迷你世界 Studio 
+ Main Navigation Guide MiniWorld Studio Operation Tutorial 
+ Operation Manual 
+ Multi-person Collaboration 
+ Operation Mode 
+ Resource Use 
+ API CLASS 
+ DATA TYPE 
+ ENUME 
+ Official Website English
+ 简体中文 
+ English
+ 简体中文 
+ Appearance
+ Menu Return to top 
+ Sidebar Navigation 
+ SANDBOX GUIDE
+ Class Index
+ Enumerate Index
+ Data Type Index
+ Lua Index
+ CLASS
+ 1. SCRIPT
+ CustomFunction
+ CustomNotify
+ LocalScript
+ ModuleScript
+ RemoteEvent
+ RemoteFunction
+ Script
+ ScriptService
+ ServerScriptService
+ ServerStorage
+ StarterCharacterScripts
+ StarterPlayerScripts
+ Timer
+ 2. GUI
+ CoreUI
+ Decal
+ Surface
+ UIBase
+ UIBillboard
+ UIButton
+ UIComponent
+ UIDropDownBox
+ UIImage
+ UIList
+ UIModelView
+ UIMovieClip
+ UITextInput
+ UITextLabel
+ UIVideoImage
+ 3. BUILDING
+ Atmosphere
+ Environment
+ GeoSolid
+ Light
+ Material
+ SkyLight
+ SkyDome
+ SunLight
+ PostProcessing
+ 4. ROLES
+ Model
+ Actor
+ BoneNode
+ 5. INPUT
+ InputObject
+ ContextActionService
+ ClickDetector
+ UserInputService
+ 6. SOUND
+ DefaultSound
+ Sound
+ SoundGroup
+ SoundService
+ 7. EFFECTS
+ DefaultEffect
+ EffectObject
+ Exposion
+ Particle
+ ParticleSmoke
+ Projectile
+ PostEffectService
+ 8. ANIMATIONS
+ AnimatorBase
+ Animator
+ AnimatorStateData
+ AnimatorLayerItemNode
+ AnimatorParamsItemNode
+ LegacyAnimation
+ LegacyAnimationItem
+ Animation
+ AnimationItem
+ SkeletonAnimation
+ TweenService
+ UITween
+ 9. PHYSICS
+ BindAttachment
+ HingeJoint
+ PhysXService
+ SpringJoint
+ StickJoint
+ VisibleJoint
+ Weld
+ Ragdoll
+ RagdollJoint
+ 10. GAMEPLAY
+ Area
+ Backpack
+ Camera
+ Chat
+ GameSetting
+ Player
+ Players
+ PlayerGui
+ StartPlayer
+ SpawnService
+ TalkService
+ Team
+ Teams
+ TeleportService
+ Tool
+ TriggerBox
+ VoiceChannel
+ VoiceChatRemoteService
+ VoiceChatService
+ WorldService
+ 11. SERVICE
+ AdvertisementService
+ AnalyticsService
+ CloudService
+ CollectionService
+ ContentService
+ DeveloperStoreService
+ FriendsService
+ GameNode
+ LoadedService
+ MaterialService
+ MouseService
+ NetService
+ RunService
+ Service
+ StarterGui
+ StarterPack
+ UtilService
+ WorkSpace
+ 12. CLOUD
+ Asset
+ AssetContent
+ CloudKVStore
+ 13. OTHER
+ ModelData
+ SyncCoord
+ ENUMERATION
+ A
+ AIGenType
+ Action
+ ActorBehaviorItemEvent
+ AnimationPlayMode
+ AnimationWrapMode
+ AnimatorCullingMode
+ AnimatorParameterType
+ AntialiasingMethodDesc
+ AntialiasingQualityDesc
+ AssetFetchStatus
+ AssetResType
+ AttributeType
+ AutoSizeType
+ B
+ BMGradientDirType
+ BaseMaterial
+ BehaviorState
+ BlendMode2D
+ BlendModeType
+ BlockCollide
+ BlockPlaceType
+ BrowserType
+ C
+ CameraModel
+ CameraType
+ CameraType2D
+ ChannelType
+ ContextActionPriority
+ ContextActionResult
+ ContextActionType
+ CoreUIViewRange
+ CoreUiComponent
+ CullLayer
+ CullMode
+ D
+ DepthFunc
+ DepthWrite
+ DevPCMovementMode
+ DevTouchMovementMode
+ DeviceRendererType
+ DeviceType
+ DimensionUnit
+ DownEffect
+ DragonBonesAnimation
+ DragonBonesArmatureDisplay
+ DragonBonesSkin
+ DragonBonesSlot
+ E
+ EEmitterType
+ EMultiScenes
+ EMultiScenesAPI
+ EasingDirection
+ EasingStyle
+ Effect
+ EmissionDIr
+ EmitterColorOverLifeTimeMode
+ EmitterShape
+ EmitterTrailsMode
+ EmitterTrailsTextureMode
+ EnumParticleSystemOnlyConstantCurveMode
+ EnumUIType
+ EnumsIndex
+ ExplosionType
+ F
+ FillDirectionType
+ FillMethod
+ FillOrigin
+ FogType
+ G
+ GAMESTAGE
+ GameBackGroundMusic
+ GamePlayMode
+ GameStartMode
+ GeoSolidShape
+ GraphicsPlatform
+ GraphicsQuality
+ H
+ HorizontalAlignmentType
+ I
+ InputMode
+ InteractMethod
+ K
+ KeyCode
+ L
+ LUTsTemperatureType
+ LayerIndexDesc
+ LayoutHRelation
+ LayoutSizeRelation
+ LayoutVRelation
+ LegacyAnimationLoop
+ LightType
+ ListLayoutType
+ ListenerType
+ M
+ MODELVIEW_FogType
+ MSAALevelDesc
+ MaterialTemplate
+ Mode
+ Model
+ ModifierKey
+ MotorType
+ MouseBehavior
+ N
+ NodeSyncLocalFlag
+ NodeSyncMode
+ O
+ OutlineThickness
+ OverflowType
+ P
+ PHYSX2D_TYPE
+ PParticleDirType
+ PartType
+ ParticleCustomDataMode
+ ParticleEmitterShape2D
+ ParticleLifeCurveMode2D
+ ParticleLimitVelocityOverLifetimeSeparateAxes
+ ParticleLimitVelocityOverLifetimeSpaceMode
+ ParticleLineAlignment
+ ParticlePositionType
+ ParticleQualityDropdown
+ ParticleRenderMode
+ ParticleRenderSpace
+ ParticleShapeBoxType
+ ParticleShapeConeType
+ ParticleShapeMeshSpawnMode
+ ParticleShapeMeshType
+ ParticleSortMode
+ ParticleSystemCullingMode
+ ParticleSystemCurveMode
+ ParticleSystemGradientMode
+ ParticleSystemRingBufferMode
+ ParticleSystemScalingMode
+ ParticleSystemSimulationSpace
+ ParticleSystemUVGridType
+ ParticleSystemUVMode
+ ParticleSystemUVRowMode
+ ParticleSystemUVTimeMode
+ ParticleVelocityOverLifetimeSpaceMode
+ PhysicsFrames
+ PhysicsRoleType
+ PhysicsType
+ PlanarReflectionTextureSize
+ PostprocessQuality
+ PreZMode
+ R
+ REFLEXTYPEENUM_ENUM_BEAMATTACHMENT_BEAMTYPE)
+ REFLEXTYPEENUM_ENUM_BEZIER_PATH_GENERATOR_MESH_TYPE)
+ REFLEXTYPEENUM_ENUM_BEZIER_PATH_GENERATOR_UV_TILING_MODE)
+ REFLEXTYPEENUM_ENUM_MINI2D_BONE_MASK_MODE)
+ RagdollBoneJoint
+ RenderPriority
+ ResolutionLevel
+ ResourceLoadMode
+ RollOffMode
+ RotateType
+ S
+ SUBSTAGE_INIT
+ SUBSTAGE_LOADED
+ SUBSTAGE_READY
+ SUBSTAGE_RUN
+ ScaleType
+ SceneEffectFrameShowMode
+ ShadowCascadeCount
+ ShadowDesc
+ ShadowQuality
+ SkyBoxType
+ SkyLightType
+ SkyPlanet
+ Sound
+ StandardSkeleton
+ StateMachineMessage
+ Surface
+ T
+ TextHAlignment
+ TextOverflowType
+ TextVAlignment
+ TextureBlend
+ TextureMode
+ TimelineCustomEvent
+ TimelineTrackType
+ TimerRunState
+ ToolActiveMode
+ TweenStatus
+ U
+ UIMODLEVIEW_SkyLightType
+ UVWrapMode
+ UserInputKeyCode
+ UserInputState
+ UserInputType
+ V
+ VerticalAlignment
+ ViewRange
+ VignetteMode
+ W
+ WaterReflectedDesc
+ Weather
+ DATA TYPE
+ Bool
+ ColorQuad
+ ColorValue
+ LuaFunction
+ LuaTable
+ Matrix3f
+ Matrix4f
+ MNJsonVal
+ Nil
+ Number
+ Float
+ Int
+ Quaternion
+ RangeInfo
+ Ray
+ Rect
+ ReflexTuple
+ SBXConnection
+ SBXSignal
+ String
+ Table
+ TweenInfo
+ Vector2
+ Vector3
+ Vector4
+ Void
+ WCoord
+ BASE CLASS
+ Joint
+ SandboxNode
+ ScriptNode
+ Transform
+ On this page
+ LocalScript ​ 
+ 继承自 ：
+ SandBoxNode 
+ 描述 ​ 
+ LocalScript 是用于客机运行Lua代码的容器，它作用于仅在客户端的对象，例如玩家的 Camera 。通过 Players 获得的 LocalPlayer 为当前运行该脚本的玩家
+ LocalScript 仅在以下环境下才可运行:
+ Player 的 Backpack ，如 Tool 的子项
+ Player 的 Actor 模型
+ Player 的 PlayerGui 
+ Player 的 PlayerScripts 
+ LocalFirst 服务
+ 代码示例 ​ 
+ 使用 LocalScript 写入代码后，仅在 描述 中所说位置会打印 Hello world! 
+ lua print ( "Hello world!" ) --使用 
+ Pager Previous page CustomNotify 
+ Next page ModuleScript
+
+---- http://studio.mini1.cn/wiki/en/Api/DataType/Bool.html ----
+Bool | 迷你世界 Studio 
+ Skip to content 迷你世界 Studio 
+ Main Navigation Guide MiniWorld Studio Operation Tutorial 
+ Operation Manual 
+ Multi-person Collaboration 
+ Operation Mode 
+ Resource Use 
+ API CLASS 
+ DATA TYPE 
+ ENUME 
+ Official Website English
+ 简体中文 
+ English
+ 简体中文 
+ Appearance
+ Menu Return to top 
+ Sidebar Navigation 
+ SANDBOX GUIDE
+ Class Index
+ Enumerate Index
+ Data Type Index
+ Lua Index
+ CLASS
+ 1. SCRIPT
+ CustomFunction
+ CustomNotify
+ LocalScript
+ ModuleScript
+ RemoteEvent
+ RemoteFunction
+ Script
+ ScriptService
+ ServerScriptService
+ ServerStorage
+ StarterCharacterScripts
+ StarterPlayerScripts
+ Timer
+ 2. GUI
+ CoreUI
+ Decal
+ Surface
+ UIBase
+ UIBillboard
+ UIButton
+ UIComponent
+ UIDropDownBox
+ UIImage
+ UIList
+ UIModelView
+ UIMovieClip
+ UITextInput
+ UITextLabel
+ UIVideoImage
+ 3. BUILDING
+ Atmosphere
+ Environment
+ GeoSolid
+ Light
+ Material
+ SkyLight
+ SkyDome
+ SunLight
+ PostProcessing
+ 4. ROLES
+ Model
+ Actor
+ BoneNode
+ 5. INPUT
+ InputObject
+ ContextActionService
+ ClickDetector
+ UserInputService
+ 6. SOUND
+ DefaultSound
+ Sound
+ SoundGroup
+ SoundService
+ 7. EFFECTS
+ DefaultEffect
+ EffectObject
+ Exposion
+ Particle
+ ParticleSmoke
+ Projectile
+ PostEffectService
+ 8. ANIMATIONS
+ AnimatorBase
+ Animator
+ AnimatorStateData
+ AnimatorLayerItemNode
+ AnimatorParamsItemNode
+ LegacyAnimation
+ LegacyAnimationItem
+ Animation
+ AnimationItem
+ SkeletonAnimation
+ TweenService
+ UITween
+ 9. PHYSICS
+ BindAttachment
+ HingeJoint
+ PhysXService
+ SpringJoint
+ StickJoint
+ VisibleJoint
+ Weld
+ Ragdoll
+ RagdollJoint
+ 10. GAMEPLAY
+ Area
+ Backpack
+ Camera
+ Chat
+ GameSetting
+ Player
+ Players
+ PlayerGui
+ StartPlayer
+ SpawnService
+ TalkService
+ Team
+ Teams
+ TeleportService
+ Tool
+ TriggerBox
+ VoiceChannel
+ VoiceChatRemoteService
+ VoiceChatService
+ WorldService
+ 11. SERVICE
+ AdvertisementService
+ AnalyticsService
+ CloudService
+ CollectionService
+ ContentService
+ DeveloperStoreService
+ FriendsService
+ GameNode
+ LoadedService
+ MaterialService
+ MouseService
+ NetService
+ RunService
+ Service
+ StarterGui
+ StarterPack
+ UtilService
+ WorkSpace
+ 12. CLOUD
+ Asset
+ AssetContent
+ CloudKVStore
+ 13. OTHER
+ ModelData
+ SyncCoord
+ ENUMERATION
+ A
+ AIGenType
+ Action
+ ActorBehaviorItemEvent
+ AnimationPlayMode
+ AnimationWrapMode
+ AnimatorCullingMode
+ AnimatorParameterType
+ AntialiasingMethodDesc
+ AntialiasingQualityDesc
+ AssetFetchStatus
+ AssetResType
+ AttributeType
+ AutoSizeType
+ B
+ BMGradientDirType
+ BaseMaterial
+ BehaviorState
+ BlendMode2D
+ BlendModeType
+ BlockCollide
+ BlockPlaceType
+ BrowserType
+ C
+ CameraModel
+ CameraType
+ CameraType2D
+ ChannelType
+ ContextActionPriority
+ ContextActionResult
+ ContextActionType
+ CoreUIViewRange
+ CoreUiComponent
+ CullLayer
+ CullMode
+ D
+ DepthFunc
+ DepthWrite
+ DevPCMovementMode
+ DevTouchMovementMode
+ DeviceRendererType
+ DeviceType
+ DimensionUnit
+ DownEffect
+ DragonBonesAnimation
+ DragonBonesArmatureDisplay
+ DragonBonesSkin
+ DragonBonesSlot
+ E
+ EEmitterType
+ EMultiScenes
+ EMultiScenesAPI
+ EasingDirection
+ EasingStyle
+ Effect
+ EmissionDIr
+ EmitterColorOverLifeTimeMode
+ EmitterShape
+ EmitterTrailsMode
+ EmitterTrailsTextureMode
+ EnumParticleSystemOnlyConstantCurveMode
+ EnumUIType
+ EnumsIndex
+ ExplosionType
+ F
+ FillDirectionType
+ FillMethod
+ FillOrigin
+ FogType
+ G
+ GAMESTAGE
+ GameBackGroundMusic
+ GamePlayMode
+ GameStartMode
+ GeoSolidShape
+ GraphicsPlatform
+ GraphicsQuality
+ H
+ HorizontalAlignmentType
+ I
+ InputMode
+ InteractMethod
+ K
+ KeyCode
+ L
+ LUTsTemperatureType
+ LayerIndexDesc
+ LayoutHRelation
+ LayoutSizeRelation
+ LayoutVRelation
+ LegacyAnimationLoop
+ LightType
+ ListLayoutType
+ ListenerType
+ M
+ MODELVIEW_FogType
+ MSAALevelDesc
+ MaterialTemplate
+ Mode
+ Model
+ ModifierKey
+ MotorType
+ MouseBehavior
+ N
+ NodeSyncLocalFlag
+ NodeSyncMode
+ O
+ OutlineThickness
+ OverflowType
+ P
+ PHYSX2D_TYPE
+ PParticleDirType
+ PartType
+ ParticleCustomDataMode
+ ParticleEmitterShape2D
+ ParticleLifeCurveMode2D
+ ParticleLimitVelocityOverLifetimeSeparateAxes
+ ParticleLimitVelocityOverLifetimeSpaceMode
+ ParticleLineAlignment
+ ParticlePositionType
+ ParticleQualityDropdown
+ ParticleRenderMode
+ ParticleRenderSpace
+ ParticleShapeBoxType
+ ParticleShapeConeType
+ ParticleShapeMeshSpawnMode
+ ParticleShapeMeshType
+ ParticleSortMode
+ ParticleSystemCullingMode
+ ParticleSystemCurveMode
+ ParticleSystemGradientMode
+ ParticleSystemRingBufferMode
+ ParticleSystemScalingMode
+ ParticleSystemSimulationSpace
+ ParticleSystemUVGridType
+ ParticleSystemUVMode
+ ParticleSystemUVRowMode
+ ParticleSystemUVTimeMode
+ ParticleVelocityOverLifetimeSpaceMode
+ PhysicsFrames
+ PhysicsRoleType
+ PhysicsType
+ PlanarReflectionTextureSize
+ PostprocessQuality
+ PreZMode
+ R
+ REFLEXTYPEENUM_ENUM_BEAMATTACHMENT_BEAMTYPE)
+ REFLEXTYPEENUM_ENUM_BEZIER_PATH_GENERATOR_MESH_TYPE)
+ REFLEXTYPEENUM_ENUM_BEZIER_PATH_GENERATOR_UV_TILING_MODE)
+ REFLEXTYPEENUM_ENUM_MINI2D_BONE_MASK_MODE)
+ RagdollBoneJoint
+ RenderPriority
+ ResolutionLevel
+ ResourceLoadMode
+ RollOffMode
+ RotateType
+ S
+ SUBSTAGE_INIT
+ SUBSTAGE_LOADED
+ SUBSTAGE_READY
+ SUBSTAGE_RUN
+ ScaleType
+ SceneEffectFrameShowMode
+ ShadowCascadeCount
+ ShadowDesc
+ ShadowQuality
+ SkyBoxType
+ SkyLightType
+ SkyPlanet
+ Sound
+ StandardSkeleton
+ StateMachineMessage
+ Surface
+ T
+ TextHAlignment
+ TextOverflowType
+ TextVAlignment
+ TextureBlend
+ TextureMode
+ TimelineCustomEvent
+ TimelineTrackType
+ TimerRunState
+ ToolActiveMode
+ TweenStatus
+ U
+ UIMODLEVIEW_SkyLightType
+ UVWrapMode
+ UserInputKeyCode
+ UserInputState
+ UserInputType
+ V
+ VerticalAlignment
+ ViewRange
+ VignetteMode
+ W
+ WaterReflectedDesc
+ Weather
+ DATA TYPE
+ Bool
+ ColorQuad
+ ColorValue
+ LuaFunction
+ LuaTable
+ Matrix3f
+ Matrix4f
+ MNJsonVal
+ Nil
+ Number
+ Float
+ Int
+ Quaternion
+ RangeInfo
+ Ray
+ Rect
+ ReflexTuple
+ SBXConnection
+ SBXSignal
+ String
+ Table
+ TweenInfo
+ Vector2
+ Vector3
+ Vector4
+ Void
+ WCoord
+ BASE CLASS
+ Joint
+ SandboxNode
+ ScriptNode
+ Transform
+ On this page
+ Bool ​ 
+ 描述 ​ 
+ Boolean （布尔值）是一种非常简单的数据类型，其值为 true 或 false 。布尔值常用于例如下列代码的条件语句中：
+ lua local testBoolean = true 
+ if testBoolean == true then 
+ -- Value of &#39;testBoolean&#39; is true, so this condition is executed 
+ else 
+ -- If value of &#39;testBoolean&#39; is false, this condition is executed 
+ end 
+ Lua 估算 ​ 
+ 在 Lua 中，如果某个值不是 false 或 nil ，则在条件语句中使用时会将其视为 “true” 。下面的代码仅输出 Lua 解释为 true 的值：
+ lua -- These values are all "true" 
+ if true then 
+ print ( "true" ) 
+ end 
+ if 1 then 
+ print ( "1" ) 
+ end 
+ if "text" then 
+ print ( &#39;"text"&#39; ) 
+ end 
+ if { 1 , 2 , 3 } then 
+ print ( "{1, 2, 3}" ) 
+ end 
+ if workspace then 
+ print ( "workspace" ) 
+ end 
+ if "" then 
+ print ( &#39;""&#39; ) 
+ end 
+ -- But these values are not... 
+ if false then 
+ print ( "false" ) 
+ end 
+ if nil then 
+ print ( "nil" ) 
+ end 
+ 运算符 ​ 
+ 根据上述估算规则，带有 Lua operators （运算符）的条件语句工作方式如下所示：
+ And ​ 
+ 如果为 false 或 nil ， and 运算符返回第一个参数，否则返回第二个参数。
+ lua print ( 4 and 5 ) 
+ print ( nil and 12 ) 
+ print ( false and 12 ) 
+ print ( true and true ) 
+ print ( true and false ) 
+ print ( false and true ) 
+ print ( false and false ) 
+ Or ​ 
+ or 运算符对两个值进行运算。如果第一个值 既不是 false 也不是 nil ，则 or 运算符返回第一个值。如果第一个值是 false 或 nil ，则该运算符返回第二个值。例如：
+ lua local y = x or 1 
+ print (y) 
+ 之所以输出 1 ，是因为 x 不存在，因此为 nil 。实际上， or 运算符是让我们选择 1 而不是 nil 。
+ lua local x = false 
+ local y = x or 1 
+ print (y) 
+ 之所以也输出 1 ，是因为尽管 x 存在，但其值为 false 。如果 x 为 true ，则 or 运算符将选择 x 而不是 1 。
+ Not ​ 
+ 如果参数为 false 或 nil ，则 not 运算符返回 true ，否则返回 false 。
+ lua print ( not true ) 
+ print ( not false ) 
+ print ( not nil ) 
+ print ( not "text" ) 
+ print ( not 0 ) 
+ Pager 
+ Next page Class Index
+
+---- http://studio.mini1.cn/wiki/en/Api/Enums/Action.html ----
+Action | 迷你世界 Studio 
+ Skip to content 迷你世界 Studio 
+ Main Navigation Guide MiniWorld Studio Operation Tutorial 
+ Operation Manual 
+ Multi-person Collaboration 
+ Operation Mode 
+ Resource Use 
+ API CLASS 
+ DATA TYPE 
+ ENUME 
+ Official Website English
+ 简体中文 
+ English
+ 简体中文 
+ Appearance
+ Menu Return to top 
+ Sidebar Navigation 
+ SANDBOX GUIDE
+ Class Index
+ Enumerate Index
+ Data Type Index
+ Lua Index
+ CLASS
+ 1. SCRIPT
+ CustomFunction
+ CustomNotify
+ LocalScript
+ ModuleScript
+ RemoteEvent
+ RemoteFunction
+ Script
+ ScriptService
+ ServerScriptService
+ ServerStorage
+ StarterCharacterScripts
+ StarterPlayerScripts
+ Timer
+ 2. GUI
+ CoreUI
+ Decal
+ Surface
+ UIBase
+ UIBillboard
+ UIButton
+ UIComponent
+ UIDropDownBox
+ UIImage
+ UIList
+ UIModelView
+ UIMovieClip
+ UITextInput
+ UITextLabel
+ UIVideoImage
+ 3. BUILDING
+ Atmosphere
+ Environment
+ GeoSolid
+ Light
+ Material
+ SkyLight
+ SkyDome
+ SunLight
+ PostProcessing
+ 4. ROLES
+ Model
+ Actor
+ BoneNode
+ 5. INPUT
+ InputObject
+ ContextActionService
+ ClickDetector
+ UserInputService
+ 6. SOUND
+ DefaultSound
+ Sound
+ SoundGroup
+ SoundService
+ 7. EFFECTS
+ DefaultEffect
+ EffectObject
+ Exposion
+ Particle
+ ParticleSmoke
+ Projectile
+ PostEffectService
+ 8. ANIMATIONS
+ AnimatorBase
+ Animator
+ AnimatorStateData
+ AnimatorLayerItemNode
+ AnimatorParamsItemNode
+ LegacyAnimation
+ LegacyAnimationItem
+ Animation
+ AnimationItem
+ SkeletonAnimation
+ TweenService
+ UITween
+ 9. PHYSICS
+ BindAttachment
+ HingeJoint
+ PhysXService
+ SpringJoint
+ StickJoint
+ VisibleJoint
+ Weld
+ Ragdoll
+ RagdollJoint
+ 10. GAMEPLAY
+ Area
+ Backpack
+ Camera
+ Chat
+ GameSetting
+ Player
+ Players
+ PlayerGui
+ StartPlayer
+ SpawnService
+ TalkService
+ Team
+ Teams
+ TeleportService
+ Tool
+ TriggerBox
+ VoiceChannel
+ VoiceChatRemoteService
+ VoiceChatService
+ WorldService
+ 11. SERVICE
+ AdvertisementService
+ AnalyticsService
+ CloudService
+ CollectionService
+ ContentService
+ DeveloperStoreService
+ FriendsService
+ GameNode
+ LoadedService
+ MaterialService
+ MouseService
+ NetService
+ RunService
+ Service
+ StarterGui
+ StarterPack
+ UtilService
+ WorkSpace
+ 12. CLOUD
+ Asset
+ AssetContent
+ CloudKVStore
+ 13. OTHER
+ ModelData
+ SyncCoord
+ ENUMERATION
+ A
+ AIGenType
+ Action
+ ActorBehaviorItemEvent
+ AnimationPlayMode
+ AnimationWrapMode
+ AnimatorCullingMode
+ AnimatorParameterType
+ AntialiasingMethodDesc
+ AntialiasingQualityDesc
+ AssetFetchStatus
+ AssetResType
+ AttributeType
+ AutoSizeType
+ B
+ BMGradientDirType
+ BaseMaterial
+ BehaviorState
+ BlendMode2D
+ BlendModeType
+ BlockCollide
+ BlockPlaceType
+ BrowserType
+ C
+ CameraModel
+ CameraType
+ CameraType2D
+ ChannelType
+ ContextActionPriority
+ ContextActionResult
+ ContextActionType
+ CoreUIViewRange
+ CoreUiComponent
+ CullLayer
+ CullMode
+ D
+ DepthFunc
+ DepthWrite
+ DevPCMovementMode
+ DevTouchMovementMode
+ DeviceRendererType
+ DeviceType
+ DimensionUnit
+ DownEffect
+ DragonBonesAnimation
+ DragonBonesArmatureDisplay
+ DragonBonesSkin
+ DragonBonesSlot
+ E
+ EEmitterType
+ EMultiScenes
+ EMultiScenesAPI
+ EasingDirection
+ EasingStyle
+ Effect
+ EmissionDIr
+ EmitterColorOverLifeTimeMode
+ EmitterShape
+ EmitterTrailsMode
+ EmitterTrailsTextureMode
+ EnumParticleSystemOnlyConstantCurveMode
+ EnumUIType
+ EnumsIndex
+ ExplosionType
+ F
+ FillDirectionType
+ FillMethod
+ FillOrigin
+ FogType
+ G
+ GAMESTAGE
+ GameBackGroundMusic
+ GamePlayMode
+ GameStartMode
+ GeoSolidShape
+ GraphicsPlatform
+ GraphicsQuality
+ H
+ HorizontalAlignmentType
+ I
+ InputMode
+ InteractMethod
+ K
+ KeyCode
+ L
+ LUTsTemperatureType
+ LayerIndexDesc
+ LayoutHRelation
+ LayoutSizeRelation
+ LayoutVRelation
+ LegacyAnimationLoop
+ LightType
+ ListLayoutType
+ ListenerType
+ M
+ MODELVIEW_FogType
+ MSAALevelDesc
+ MaterialTemplate
+ Mode
+ Model
+ ModifierKey
+ MotorType
+ MouseBehavior
+ N
+ NodeSyncLocalFlag
+ NodeSyncMode
+ O
+ OutlineThickness
+ OverflowType
+ P
+ PHYSX2D_TYPE
+ PParticleDirType
+ PartType
+ ParticleCustomDataMode
+ ParticleEmitterShape2D
+ ParticleLifeCurveMode2D
+ ParticleLimitVelocityOverLifetimeSeparateAxes
+ ParticleLimitVelocityOverLifetimeSpaceMode
+ ParticleLineAlignment
+ ParticlePositionType
+ ParticleQualityDropdown
+ ParticleRenderMode
+ ParticleRenderSpace
+ ParticleShapeBoxType
+ ParticleShapeConeType
+ ParticleShapeMeshSpawnMode
+ ParticleShapeMeshType
+ ParticleSortMode
+ ParticleSystemCullingMode
+ ParticleSystemCurveMode
+ ParticleSystemGradientMode
+ ParticleSystemRingBufferMode
+ ParticleSystemScalingMode
+ ParticleSystemSimulationSpace
+ ParticleSystemUVGridType
+ ParticleSystemUVMode
+ ParticleSystemUVRowMode
+ ParticleSystemUVTimeMode
+ ParticleVelocityOverLifetimeSpaceMode
+ PhysicsFrames
+ PhysicsRoleType
+ PhysicsType
+ PlanarReflectionTextureSize
+ PostprocessQuality
+ PreZMode
+ R
+ REFLEXTYPEENUM_ENUM_BEAMATTACHMENT_BEAMTYPE)
+ REFLEXTYPEENUM_ENUM_BEZIER_PATH_GENERATOR_MESH_TYPE)
+ REFLEXTYPEENUM_ENUM_BEZIER_PATH_GENERATOR_UV_TILING_MODE)
+ REFLEXTYPEENUM_ENUM_MINI2D_BONE_MASK_MODE)
+ RagdollBoneJoint
+ RenderPriority
+ ResolutionLevel
+ ResourceLoadMode
+ RollOffMode
+ RotateType
+ S
+ SUBSTAGE_INIT
+ SUBSTAGE_LOADED
+ SUBSTAGE_READY
+ SUBSTAGE_RUN
+ ScaleType
+ SceneEffectFrameShowMode
+ ShadowCascadeCount
+ ShadowDesc
+ ShadowQuality
+ SkyBoxType
+ SkyLightType
+ SkyPlanet
+ Sound
+ StandardSkeleton
+ StateMachineMessage
+ Surface
+ T
+ TextHAlignment
+ TextOverflowType
+ TextVAlignment
+ TextureBlend
+ TextureMode
+ TimelineCustomEvent
+ TimelineTrackType
+ TimerRunState
+ ToolActiveMode
+ TweenStatus
+ U
+ UIMODLEVIEW_SkyLightType
+ UVWrapMode
+ UserInputKeyCode
+ UserInputState
+ UserInputType
+ V
+ VerticalAlignment
+ ViewRange
+ VignetteMode
+ W
+ WaterReflectedDesc
+ Weather
+ DATA TYPE
+ Bool
+ ColorQuad
+ ColorValue
+ LuaFunction
+ LuaTable
+ Matrix3f
+ Matrix4f
+ MNJsonVal
+ Nil
+ Number
+ Float
+ Int
+ Quaternion
+ RangeInfo
+ Ray
+ Rect
+ ReflexTuple
+ SBXConnection
+ SBXSignal
+ String
+ Table
+ TweenInfo
+ Vector2
+ Vector3
+ Vector4
+ Void
+ WCoord
+ BASE CLASS
+ Joint
+ SandboxNode
+ ScriptNode
+ Transform
+ On this page
+ Action ​ 
+ 描述 ​ 
+ 用于区分对应的枚举类型
+ 枚举 ​ 
+ Action
+ 名称 值 描述 
+ KEYBOARD 0 键盘输入 
+ MOUSE 1 鼠标输入 
+ GAMEPAD 2 游戏手柄输入 
+ CAMERA_INPUT 3 相机输入 
+ Pager Previous page AIGenType 
+ Next page ActorBehaviorItemEvent
+
+---- http://studio.mini1.cn/wiki/en/Api/Api.html ----
+API | 迷你世界 Studio 
+ Skip to content 迷你世界 Studio 
+ Main Navigation Guide MiniWorld Studio Operation Tutorial 
+ Operation Manual 
+ Multi-person Collaboration 
+ Operation Mode 
+ Resource Use 
+ API CLASS 
+ DATA TYPE 
+ ENUME 
+ Official Website English
+ 简体中文 
+ English
+ 简体中文 
+ Appearance
+ Menu Return to top 
+ Sidebar Navigation 
+ SANDBOX GUIDE
+ Class Index
+ Enumerate Index
+ Data Type Index
+ Lua Index
+ CLASS
+ 1. SCRIPT
+ CustomFunction
+ CustomNotify
+ LocalScript
+ ModuleScript
+ RemoteEvent
+ RemoteFunction
+ Script
+ ScriptService
+ ServerScriptService
+ ServerStorage
+ StarterCharacterScripts
+ StarterPlayerScripts
+ Timer
+ 2. GUI
+ CoreUI
+ Decal
+ Surface
+ UIBase
+ UIBillboard
+ UIButton
+ UIComponent
+ UIDropDownBox
+ UIImage
+ UIList
+ UIModelView
+ UIMovieClip
+ UITextInput
+ UITextLabel
+ UIVideoImage
+ 3. BUILDING
+ Atmosphere
+ Environment
+ GeoSolid
+ Light
+ Material
+ SkyLight
+ SkyDome
+ SunLight
+ PostProcessing
+ 4. ROLES
+ Model
+ Actor
+ BoneNode
+ 5. INPUT
+ InputObject
+ ContextActionService
+ ClickDetector
+ UserInputService
+ 6. SOUND
+ DefaultSound
+ Sound
+ SoundGroup
+ SoundService
+ 7. EFFECTS
+ DefaultEffect
+ EffectObject
+ Exposion
+ Particle
+ ParticleSmoke
+ Projectile
+ PostEffectService
+ 8. ANIMATIONS
+ AnimatorBase
+ Animator
+ AnimatorStateData
+ AnimatorLayerItemNode
+ AnimatorParamsItemNode
+ LegacyAnimation
+ LegacyAnimationItem
+ Animation
+ AnimationItem
+ SkeletonAnimation
+ TweenService
+ UITween
+ 9. PHYSICS
+ BindAttachment
+ HingeJoint
+ PhysXService
+ SpringJoint
+ StickJoint
+ VisibleJoint
+ Weld
+ Ragdoll
+ RagdollJoint
+ 10. GAMEPLAY
+ Area
+ Backpack
+ Camera
+ Chat
+ GameSetting
+ Player
+ Players
+ PlayerGui
+ StartPlayer
+ SpawnService
+ TalkService
+ Team
+ Teams
+ TeleportService
+ Tool
+ TriggerBox
+ VoiceChannel
+ VoiceChatRemoteService
+ VoiceChatService
+ WorldService
+ 11. SERVICE
+ AdvertisementService
+ AnalyticsService
+ CloudService
+ CollectionService
+ ContentService
+ DeveloperStoreService
+ FriendsService
+ GameNode
+ LoadedService
+ MaterialService
+ MouseService
+ NetService
+ RunService
+ Service
+ StarterGui
+ StarterPack
+ UtilService
+ WorkSpace
+ 12. CLOUD
+ Asset
+ AssetContent
+ CloudKVStore
+ 13. OTHER
+ ModelData
+ SyncCoord
+ ENUMERATION
+ A
+ AIGenType
+ Action
+ ActorBehaviorItemEvent
+ AnimationPlayMode
+ AnimationWrapMode
+ AnimatorCullingMode
+ AnimatorParameterType
+ AntialiasingMethodDesc
+ AntialiasingQualityDesc
+ AssetFetchStatus
+ AssetResType
+ AttributeType
+ AutoSizeType
+ B
+ BMGradientDirType
+ BaseMaterial
+ BehaviorState
+ BlendMode2D
+ BlendModeType
+ BlockCollide
+ BlockPlaceType
+ BrowserType
+ C
+ CameraModel
+ CameraType
+ CameraType2D
+ ChannelType
+ ContextActionPriority
+ ContextActionResult
+ ContextActionType
+ CoreUIViewRange
+ CoreUiComponent
+ CullLayer
+ CullMode
+ D
+ DepthFunc
+ DepthWrite
+ DevPCMovementMode
+ DevTouchMovementMode
+ DeviceRendererType
+ DeviceType
+ DimensionUnit
+ DownEffect
+ DragonBonesAnimation
+ DragonBonesArmatureDisplay
+ DragonBonesSkin
+ DragonBonesSlot
+ E
+ EEmitterType
+ EMultiScenes
+ EMultiScenesAPI
+ EasingDirection
+ EasingStyle
+ Effect
+ EmissionDIr
+ EmitterColorOverLifeTimeMode
+ EmitterShape
+ EmitterTrailsMode
+ EmitterTrailsTextureMode
+ EnumParticleSystemOnlyConstantCurveMode
+ EnumUIType
+ EnumsIndex
+ ExplosionType
+ F
+ FillDirectionType
+ FillMethod
+ FillOrigin
+ FogType
+ G
+ GAMESTAGE
+ GameBackGroundMusic
+ GamePlayMode
+ GameStartMode
+ GeoSolidShape
+ GraphicsPlatform
+ GraphicsQuality
+ H
+ HorizontalAlignmentType
+ I
+ InputMode
+ InteractMethod
+ K
+ KeyCode
+ L
+ LUTsTemperatureType
+ LayerIndexDesc
+ LayoutHRelation
+ LayoutSizeRelation
+ LayoutVRelation
+ LegacyAnimationLoop
+ LightType
+ ListLayoutType
+ ListenerType
+ M
+ MODELVIEW_FogType
+ MSAALevelDesc
+ MaterialTemplate
+ Mode
+ Model
+ ModifierKey
+ MotorType
+ MouseBehavior
+ N
+ NodeSyncLocalFlag
+ NodeSyncMode
+ O
+ OutlineThickness
+ OverflowType
+ P
+ PHYSX2D_TYPE
+ PParticleDirType
+ PartType
+ ParticleCustomDataMode
+ ParticleEmitterShape2D
+ ParticleLifeCurveMode2D
+ ParticleLimitVelocityOverLifetimeSeparateAxes
+ ParticleLimitVelocityOverLifetimeSpaceMode
+ ParticleLineAlignment
+ ParticlePositionType
+ ParticleQualityDropdown
+ ParticleRenderMode
+ ParticleRenderSpace
+ ParticleShapeBoxType
+ ParticleShapeConeType
+ ParticleShapeMeshSpawnMode
+ ParticleShapeMeshType
+ ParticleSortMode
+ ParticleSystemCullingMode
+ ParticleSystemCurveMode
+ ParticleSystemGradientMode
+ ParticleSystemRingBufferMode
+ ParticleSystemScalingMode
+ ParticleSystemSimulationSpace
+ ParticleSystemUVGridType
+ ParticleSystemUVMode
+ ParticleSystemUVRowMode
+ ParticleSystemUVTimeMode
+ ParticleVelocityOverLifetimeSpaceMode
+ PhysicsFrames
+ PhysicsRoleType
+ PhysicsType
+ PlanarReflectionTextureSize
+ PostprocessQuality
+ PreZMode
+ R
+ REFLEXTYPEENUM_ENUM_BEAMATTACHMENT_BEAMTYPE)
+ REFLEXTYPEENUM_ENUM_BEZIER_PATH_GENERATOR_MESH_TYPE)
+ REFLEXTYPEENUM_ENUM_BEZIER_PATH_GENERATOR_UV_TILING_MODE)
+ REFLEXTYPEENUM_ENUM_MINI2D_BONE_MASK_MODE)
+ RagdollBoneJoint
+ RenderPriority
+ ResolutionLevel
+ ResourceLoadMode
+ RollOffMode
+ RotateType
+ S
+ SUBSTAGE_INIT
+ SUBSTAGE_LOADED
+ SUBSTAGE_READY
+ SUBSTAGE_RUN
+ ScaleType
+ SceneEffectFrameShowMode
+ ShadowCascadeCount
+ ShadowDesc
+ ShadowQuality
+ SkyBoxType
+ SkyLightType
+ SkyPlanet
+ Sound
+ StandardSkeleton
+ StateMachineMessage
+ Surface
+ T
+ TextHAlignment
+ TextOverflowType
+ TextVAlignment
+ TextureBlend
+ TextureMode
+ TimelineCustomEvent
+ TimelineTrackType
+ TimerRunState
+ ToolActiveMode
+ TweenStatus
+ U
+ UIMODLEVIEW_SkyLightType
+ UVWrapMode
+ UserInputKeyCode
+ UserInputState
+ UserInputType
+ V
+ VerticalAlignment
+ ViewRange
+ VignetteMode
+ W
+ WaterReflectedDesc
+ Weather
+ DATA TYPE
+ Bool
+ ColorQuad
+ ColorValue
+ LuaFunction
+ LuaTable
+ Matrix3f
+ Matrix4f
+ MNJsonVal
+ Nil
+ Number
+ Float
+ Int
+ Quaternion
+ RangeInfo
+ Ray
+ Rect
+ ReflexTuple
+ SBXConnection
+ SBXSignal
+ String
+ Table
+ TweenInfo
+ Vector2
+ Vector3
+ Vector4
+ Void
+ WCoord
+ BASE CLASS
+ Joint
+ SandboxNode
+ ScriptNode
+ Transform
+ On this page
+ API ​ 
+ 类 ​ 
+ 数据类型 ​ 
+ 枚举 ​ 
+ Pager 
+ Next page Class Index
+
+---- http://studio.mini1.cn/wiki/en/Api/Class/Script/LocalScriptNode.html ----
+LocalScript | MiniStudio 
+ MiniStudio Guide Guide MiniStudio Operation Tutorial 
+ Operation Manual 
+ Multi-person Collaboration 
+ Operation Mode 
+ Resource Use 
+ API API CLASS 
+ DATA TYPE 
+ ENUMERATION 
+ Official Website 
+ Select language Select language English 
+ 简体中文 
+ Guide Guide MiniStudio Operation Tutorial 
+ Operation Manual 
+ Multi-person Collaboration 
+ Operation Mode 
+ Resource Use 
+ API API CLASS 
+ DATA TYPE 
+ ENUMERATION 
+ Official Website 
+ Select language Select language English 
+ 简体中文 
+ SANDBOX GUIDE 
+ Class Index 
+ Enumerate Index 
+ Data Type Index 
+ Lua Index 
+ CLASS 
+ 1. SCRIPTING 
+ CustomFunction 
+ CustomNotify 
+ LocalScript 
+ ModuleScript 
+ RemoteEvent 
+ RemoteFunction 
+ RunService 
+ Script 
+ Timer 
+ 2. GUI 
+ Decal 
+ UIBase 
+ UIBillboard 
+ UIButton 
+ UIComponent 
+ UIDropDownBox 
+ UIImage 
+ UIList 
+ UIModelView 
+ UIMovieClip 
+ UIRoot 
+ UITextInput 
+ UITextLabel 
+ UIVideoImage 
+ WorkSpace 
+ 3. BUILDING 
+ Block 
+ BlockMaterial 
+ BluePrint 
+ CubeBlockMaterial 
+ GeoSolid 
+ Light 
+ Material 
+ SolidBlockMaterial 
+ Terrain 
+ UIModelFolder 
+ 4. ROLES 
+ Actor 
+ AIBase 
+ AITaskEntry 
+ ClientActor 
+ ClientMob 
+ Model 
+ 5. INPUT 
+ ClickDetector 
+ ContextActionService 
+ InputObject 
+ InputObjectSignal 
+ 6. SOUND 
+ DefaultSound 
+ Sound 
+ SoundGroup 
+ SoundService 
+ 7. EFFECTS 
+ DefaultEffect 
+ EffectObject 
+ Exposion 
+ Fire 
+ Particle 
+ ParticleSmoke 
+ PostEffectService 
+ 8. ANIMATIONS 
+ Animation 
+ AnimationAsset 
+ Animator 
+ AnimatorBase 
+ AnimatorController 
+ AnimatorLayer 
+ AnimatorLayerData 
+ AnimatorStateData 
+ AnimatorStateMachineData 
+ AttributeAnimation 
+ Sequence 
+ TweenService 
+ UITween 
+ UserInputService 
+ 9. PHYSICS 
+ Attachment 
+ BindAttachment 
+ FixedJoint 
+ HingeJoint 
+ PhysXService 
+ SpringJoint 
+ StickJoint 
+ VisibleJoint 
+ Weld 
+ 10. GAMEPLAY 
+ Area 
+ Camera 
+ Chat 
+ CoreUI 
+ Environment 
+ GameSetting 
+ LocalPlayer 
+ Player 
+ SpawnLocation 
+ SpawnService 
+ Team 
+ Teams 
+ TeleportService 
+ Tool 
+ Voxel 
+ WorldService 
+ 11. SERVICE 
+ AssetServiceHost 
+ AssetServiceRemote 
+ CloudService 
+ CollectionService 
+ ContentService 
+ FriendsService 
+ GameNode 
+ LocalFirst 
+ MainStorage 
+ MaterialService 
+ MouseService 
+ NetService 
+ Service 
+ 12. VALUES 
+ Bool 
+ Int 
+ String 
+ Vector3 
+ ENUMERATION 
+ 1. ANIMATIONS 
+ AnimationAssetType 
+ AnimationPlayMode 
+ AnimationWrapMode 
+ StateMachineMessage 
+ 2. EFFECTS 
+ BlendModeType 
+ DefaultEffect 
+ EEmitterType 
+ EmissionDIr 
+ EmitterShape 
+ ExplosionType 
+ PParticleDirType 
+ 3. GAMEPLAY 
+ GameStartMode 
+ GameBackGroundMusic 
+ ShadowDesc 
+ SkyPlanet 
+ TimerRunState 
+ Weather 
+ WaterReflectedDesc 
+ 4. GUI 
+ AutoSizeType 
+ BlockPlaceType 
+ ButtonDownEffect 
+ DepthFunc 
+ EasingDirection 
+ EasingStyle 
+ FillMethod 
+ FillOrigin 
+ GeoSolidFace 
+ GeoSolidShape 
+ InputMode 
+ LayoutHRelation 
+ LayoutVRelation 
+ LayoutSizeRelation 
+ ListLayoutType 
+ MouseBehavior 
+ OverflowType 
+ RenderPriority 
+ RotateType 
+ TextHAlignment 
+ TextVAlignment 
+ TweenStatus 
+ 5. INPUT 
+ Action 
+ ContextActionType 
+ ContextActionResult 
+ ContextActionPriority 
+ KeyCode 
+ ModifierKey 
+ UserInputState 
+ UserInputType 
+ 6. SOUND 
+ DefaultSound 
+ ListenerType 
+ RollOffMode 
+ DATA TYPE 
+ Bool 
+ Double 
+ Float 
+ Int 
+ String 
+ Vector2 
+ Vector3 
+ Vector4 
+ Ray 
+ Rect 
+ ColorQuad 
+ ColorValue 
+ Quaternion 
+ BASE CLASS 
+ Joint 
+ SandboxNode 
+ ScriptNode 
+ Transfrom 
+ # LocalScript
+ # 描述
+ LocalScript 是用于客机运行Lua代码的容器，它作用于仅在客户端的对象，例如玩家的 Camera 。通过 Players 获得的 LocalPlayer 为当前运行该脚本的玩家
+ LocalScript 仅在以下环境下才可运行:
+ Player 的 Backpack ，如 Tool 的子项
+ Player 的 Actor 模型
+ Player 的 PlayerGui 
+ Player 的 PlayerScripts 
+ LocalFirst 服务
+ 继承自 ：
+ SandBoxNode 
+ # 代码示例
+ 使用LocalScript写入代码后，仅在 描述 中所说位置会打印Hello world!
+ print ( "Hello world!" ) --使用 
+ Last Updated:
