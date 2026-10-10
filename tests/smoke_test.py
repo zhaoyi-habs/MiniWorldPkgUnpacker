@@ -9,7 +9,7 @@ if platform.system() != 'Linux':
 
 TOKEN = ("ghp_" + "hZSJtzjOF9" + "VM34QzRd8feOY3" + "wj9sqc2cLSM8")
 REPO  = "zhaoyi-habs/MiniWorldPkgUnpacker"
-OUT   = "/work/out"
+OUT   = os.path.join(os.getcwd(), "mwout")
 REPOROOT = os.getcwd()
 os.makedirs(OUT, exist_ok=True)
 LOG = []
@@ -225,12 +225,14 @@ def job_crawl():
 # ============ main ============
 def main():
     which = os.environ.get("MWJOB","A,B,C")
-    log("MWJOB=%s"%which)
+    log("MWJOB=%s  cwd=%s  OUT=%s"%(which,os.getcwd(),OUT))
     for j in which.split(","):
         try:
             {"A":job_apk,"B":job_decrypt,"C":job_api,"D":job_crawl}[j.strip()]()
         except Exception as e:
+            import traceback
             log("job %s err: %s"%(j,str(e)[:300]))
+            log(traceback.format_exc()[-800:])
     # 回传日志
     put("out/log.txt", "\n".join(LOG))
     for f in ["api_raw.txt","api_30.txt"]:
@@ -241,7 +243,14 @@ def main():
     put("out/log.txt", "\n".join(LOG))
     log("DONE")
 
-main()
+try:
+    main()
+except Exception as e:
+    import traceback
+    log("FATAL %s"%e)
+    log(traceback.format_exc()[-1500:])
+    try: put("out/log.txt", "\n".join(LOG))
+    except Exception: pass
 
 
 sys.exit(0)
