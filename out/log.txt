@@ -3,4 +3,12 @@ MWJOB=D  cwd=/home/runner/work/MiniWorldPkgUnpacker/MiniWorldPkgUnpacker  OUT=/h
 发现 API 页面 9 个
   crawled 0/9
 api_30.txt 55083 字符
-回传 api_30.txt (58149 字节) -> ok
+回传 api_30.txt (58149 字节) -> {'_err': 'HTTP Error 409: Conflict'}
+DONE
+MWJOB=D  cwd=/home/runner/work/MiniWorldPkgUnpacker/MiniWorldPkgUnpacker  OUT=/home/runner/work/MiniWorldPkgUnpacker/MiniWorldPkgUnpacker/mwout
+=== D: 深爬 3.0 Studio Wiki ===
+扫描 30 次, 发现页面 38 个, 域名命中 {'studio.mini1.cn': 5}
+API 页 18 个
+  crawl 0/38 ok=1
+api30_full.txt 153467 字符 / 38 页
+提取接口签名 0 个(去重)
