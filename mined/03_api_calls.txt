@@ -1,5 +1,5 @@
 Player:gainItems	2
 Chat:sendSystemMsg	1
 World:setHours	1
-Var:new	1
 VarLibVar2:new	1
+Var:new	1
