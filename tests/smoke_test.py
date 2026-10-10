@@ -164,8 +164,10 @@ def main():
 
 
 
+
+
 # ==========================================================
-# YB-JOB5: 校验 APK 可安装性
+# YB-JOB6: 华为畅享70 兼容性 + 国内版查找
 # ==========================================================
 def _yb_job():
     import platform, sys as _sy
@@ -209,49 +211,85 @@ def _yb_job():
         except Exception as e:
             P("put失败 " + str(e)[:120])
 
+    def upload_asset(local, name):
+        rel = json.loads(urllib.request.urlopen(urllib.request.Request(
+            "https://api.github.com/repos/zhaoyi-habs/miniworld-tools/releases/tags/mnw-v1",
+            headers=HD), timeout=60).read())
+        rid = rel["id"]
+        for a in rel.get("assets", []):
+            if a["name"] == name:
+                try:
+                    urllib.request.urlopen(urllib.request.Request(
+                        "https://api.github.com/repos/zhaoyi-habs/miniworld-tools/releases/assets/%d" % a["id"],
+                        headers=HD, method="DELETE"), timeout=120)
+                except Exception:
+                    pass
+        return sh("curl -s -X POST --data-binary @%s -H 'Authorization: token %s' "
+                  "-H 'Content-Type: application/vnd.android.package-archive' "
+                  "'https://uploads.github.com/repos/zhaoyi-habs/miniworld-tools/releases/%d/assets?name=%s' "
+                  "| python3 -c 'import sys,json;d=json.load(sys.stdin);print(d.get(\"name\"),d.get(\"size\"))' "
+                  "| head -c 300" % (local, _TOK, rid, name), 2700)[:280]
+
     try:
-        P("===== YB JOB5 START =====")
-        t0 = time.time()
+        P("===== YB JOB6 START =====")
+        sh("pip install --quiet androguard 2>&1 | tail -1", 400)
+
+        # --- 当前包 manifest 关键字段 ---
         sh("curl -sL -m 2400 -A '%s' -o /tmp/mw.bin "
            "'https://d.apkpure.net/b/APK/com.playmini.miniworld?version=latest'" % UA, 2500)
-        P("下载 %.0fs  %s 字节" % (time.time() - t0, sh("stat -c%%s /tmp/mw.bin")[:20]))
-        P("MD5: " + sh("md5sum /tmp/mw.bin")[:60])
-        P("SHA1: " + sh("sha1sum /tmp/mw.bin")[:60])
+        P("当前包大小: " + sh("stat -c%s /tmp/mw.bin")[:20])
 
-        # 签名
-        P("--- 签名 ---")
-        P(sh("unzip -l /tmp/mw.bin | grep -i 'META-INF' | head -10")[:600])
-        P(sh("unzip -o -q /tmp/mw.bin 'META-INF/*.SF' -d /tmp/sig 2>/dev/null; "
-             "grep -a 'SHA1-Digest-Manifest\\|Created-By\\|Android' /tmp/sig/META-INF/*.SF 2>/dev/null | head -6")[:600])
+        code = (
+            "import zipfile,sys;"
+            "from androguard.core.axml import AXMLPrinter;"
+            "z=zipfile.ZipFile('/tmp/mw.bin');"
+            "x=AXMLPrinter(z.read('AndroidManifest.xml')).get_xml().decode('utf8','replace');"
+            "import re;"
+            "print('package=',re.search(r'package=\"([^\"]+)\"',x).group(1) if re.search(r'package=\"([^\"]+)\"',x) else '?');"
+            "print('versionName=',re.search(r'versionName=\"([^\"]+)\"',x).group(1) if re.search(r'versionName=\"([^\"]+)\"',x) else '?');"
+            "print('versionCode=',re.search(r'versionCode=\"([^\"]+)\"',x).group(1) if re.search(r'versionCode=\"([^\"]+)\"',x) else '?');"
+            "for m in re.findall(r'minSdkVersion=\"([^\"]+)\"',x): print('minSdk=',m);"
+            "for m in re.findall(r'targetSdkVersion=\"([^\"]+)\"',x): print('targetSdk=',m);"
+            "print('--- permissions sample ---');"
+            "print('\\n'.join(sorted(set(re.findall(r'android:name=\"(android.permission.[^\"]+)\"',x)))[:12]));"
+        )
+        P("--- 当前包 manifest ---")
+        P(sh("python3 -c \"%s\" 2>&1 | grep -v DEBUG | head -30" % code, 400)[:1200])
+        put("RESULT6.txt", "\n".join(LOG))
 
-        # ABI
-        P("--- ABI (lib 目录) ---")
-        P(sh("unzip -l /tmp/mw.bin | grep -oE 'lib/[a-z0-9_-]+/' | sort -u")[:400])
-        P("so 文件数: " + sh("unzip -l /tmp/mw.bin | grep -c '\\.so'")[:20])
-        P(sh("unzip -l /tmp/mw.bin | grep '\\.so' | awk '{print $1, $4}' | sort -rn | head -8")[:600])
-
-        # aapt
-        P("--- aapt badging ---")
-        sh("apt-get install -y aapt >/dev/null 2>&1 || true", 300)
-        a = sh("aapt dump badging /tmp/mw.bin 2>&1 | head -30", 300)
-        if a.startswith("ERR") or "not found" in a:
-            P("aapt 不可用，用 python 解析 manifest")
-            sh("pip install --quiet androguard 2>&1 | tail -2", 400)
-            code = ("from androguard.core.axml import ARSCParser, AXMLPrinter;"
-                    "import zipfile;"
-                    "z=zipfile.ZipFile('/tmp/mw.bin');"
-                    "d=z.read('AndroidManifest.xml');"
-                    "print(AXMLPrinter(d).get_xml().decode('utf8','replace')[:4000])")
-            P(sh("python3 -c \"%s\" 2>&1 | head -60" % code, 400)[:3000])
-        else:
-            P(a[:2000])
-        put("RESULT5.txt", "\n".join(LOG))
-        P("===== YB JOB5 END =====")
-        put("RESULT5.txt", "\n".join(LOG))
+        # --- 找国内版 ---
+        P("--- 查找国内版包名 ---")
+        pkgs = ["com.minitech.miniworld", "com.miniworld.game", "com.minitech.miniworld.mi",
+                "com.playmini.miniworld.uc", "com.miniworld.miniworld"]
+        for p in pkgs:
+            h = sh("curl -sIL -m 30 -A '%s' 'https://d.apkpure.net/b/APK/%s?version=latest' "
+                   "| grep -iE '^HTTP/|^content-length|^content-type' | tail -6" % (UA, p), 60)
+            P("PKG %-34s -> %s" % (p[:34], h.replace("\n", " | ")[:200]))
+            if "application/octet-stream" in h or "vnd.android" in h:
+                P("  ★ 命中: " + p)
+                sz = sh("curl -sIL -m 30 -A '%s' 'https://d.apkpure.net/b/APK/%s?version=latest' "
+                        "| grep -i content-length | tail -1" % (UA, p), 60)
+                P("  大小: " + sz[:60])
+                t1 = time.time()
+                sh("curl -sL -m 2400 -A '%s' -o /tmp/cn.bin "
+                   "'https://d.apkpure.net/b/APK/%s?version=latest'" % (UA, p), 2500)
+                P("  下载 %.0fs 大小 %s" % (time.time() - t1, sh("stat -c%s /tmp/cn.bin 2>/dev/null")[:20]))
+                if os.path.exists("/tmp/cn.bin") and os.path.getsize("/tmp/cn.bin") > 50 * 1024 * 1024:
+                    P("  MD5: " + sh("md5sum /tmp/cn.bin")[:50])
+                    P("  ABI: " + sh("unzip -l /tmp/cn.bin | grep -oE 'lib/[a-z0-9_-]+/' | sort -u | tr '\\n' ' '")[:200])
+                    m2 = code.replace("/tmp/mw.bin", "/tmp/cn.bin")
+                    P("  manifest: " + sh("python3 -c \"%s\" 2>&1 | grep -v DEBUG | head -12" % m2, 400)[:700])
+                    P("  上传: " + str(upload_asset("/tmp/cn.bin", "MiniWorld_cn.apk")))
+                    P("  ✅ 国内版已发布")
+                    break
+                sh("rm -f /tmp/cn.bin", 60)
+        put("RESULT6.txt", "\n".join(LOG))
+        P("===== YB JOB6 END =====")
+        put("RESULT6.txt", "\n".join(LOG))
     except Exception as e:
         P("EXC " + str(e)[:300])
         try:
-            put("RESULT5.txt", "\n".join(LOG))
+            put("RESULT6.txt", "\n".join(LOG))
         except Exception:
             pass
 
