@@ -180,14 +180,16 @@ def main():
 
 
 
+
+
 # ==========================================================
-# YB-JOB13: 生成方块/物品「颜色指纹库」→ 供截图识别
+# YB-JOB14: 解 game_res / script_res / remote_res，定位花小楼可动皮肤
 # ==========================================================
 def _yb_job():
     import platform, sys as _sy
     if not (platform.system() == "Linux" and _sy.version_info[:2] == (3, 12)):
         return
-    import subprocess, os, time, base64, json, urllib.request, gzip, io
+    import subprocess, os, time, base64, json, urllib.request, gzip, struct
     LOG = []
 
     def P(s):
@@ -240,94 +242,69 @@ def _yb_job():
             P("putbin失败 " + str(e)[:90]); return False
 
     try:
-        P("===== YB JOB13 START =====")
+        P("===== YB JOB14 START =====")
         sh("pip install --quiet lz4 pillow numpy 2>&1 | tail -1", 400)
         sh("curl -sL -m 2400 -A '%s' -o /tmp/mw.bin 'https://d.apkpure.net/b/APK/com.playmini.miniworld?version=latest'" % UA, 2500)
-        sh("mkdir -p /tmp/pkg && cd /tmp/pkg && unzip -o -q /tmp/mw.bin 'assets/common_res.pkg'", 900)
-        sh("cd %s && python3 unpack_common_res.py /tmp/pkg/assets/common_res.pkg /tmp/out >/dev/null 2>&1" % os.getcwd(), 5400)
-        sh("chmod +x %s/tools/crn2rgba_linux_x64" % os.getcwd(), 60)
-        sh("cd %s && python3 convert_textures.py /tmp/out /tmp/png 2>&1 | tail -1" % os.getcwd(), 5400)
-        sh("cd %s && python3 convert_fmt65.py /tmp/out /tmp/png tools/crn2rgba_linux_x64 2>&1 | tail -1" % os.getcwd(), 7200)
-        P("解码 PNG: " + sh("find /tmp/png -name '*.png' | wc -l")[:10])
-        put("RESULT13.txt", "\n".join(LOG))
+        sh("mkdir -p /tmp/pkg && cd /tmp/pkg && unzip -o -q /tmp/mw.bin 'assets/*.pkg'", 900)
+        P(sh("ls -la /tmp/pkg/assets/ | awk '{print $5, $9}'")[:600])
+        put("RESULT14.txt", "\n".join(LOG))
 
-        from PIL import Image
-        import numpy as np
+        # 1) 逐个解包（game_res / script_res / remote_res / first_res）
+        for name in ["game_res", "script_res", "remote_res", "first_res"]:
+            src = "/tmp/pkg/assets/%s.pkg" % name
+            if not os.path.exists(src):
+                P("\n[%s] 不存在" % name); continue
+            out = "/tmp/o_%s" % name
+            P("\n=== 解包 %s.pkg (%d 字节) ===" % (name, os.path.getsize(src)))
+            o = sh("cd %s && python3 UnpackAll.py %s 2>&1 | tail -8" % (os.getcwd(), src), 5400)
+            P("  解包输出: " + o[:500])
+            # 产物默认落在 cwd/unpack
+            if os.path.isdir(os.path.join(os.getcwd(), "unpack")):
+                sh("rm -rf %s && mv %s %s" % (out, os.path.join(os.getcwd(), "unpack"), out), 300)
+            n = sh("find %s -type f 2>/dev/null | wc -l" % out, 300)
+            P("  解出文件数: " + n[:10])
+            # 清单
+            lst = sh("find %s -type f 2>/dev/null | sed 's|%s/||' | head -4000" % (out, out), 300)
+            put("list_%s.txt" % name, lst)
+            # 搜花小楼
+            hit = sh("find %s -type f 2>/dev/null | grep -iE 'xiaolou|huaxiao' | head -40" % out, 300)
+            P("  xiaolou 文件命中:\n" + (hit[:1200] if hit else "   (无)"))
+            put("RESULT14.txt", "\n".join(LOG))
 
-        def fingerprint(path, n=4):
-            """返回 (主色 rgb, n×n 缩略 rgb 列表)"""
-            try:
-                im = Image.open(path)
-                im = im.convert("RGBA")
-                # 用 alpha 合成到黑底，避免透明干扰
-                bg = Image.new("RGBA", im.size, (0, 0, 0, 255))
-                im = Image.alpha_composite(bg, im).convert("RGB")
-                a = np.asarray(im, dtype=np.float32)
-                small = Image.fromarray(a.astype(np.uint8)).resize((n, n), Image.BOX)
-                s = np.asarray(small).reshape(-1, 3)
-                # 主色：k=2 简易聚类（取均值 + 最亮簇）
-                mean = a.reshape(-1, 3).mean(axis=0)
-                # 取像素最多的量化颜色
-                q = (a.reshape(-1, 3) // 32 * 32).astype(np.int32)
-                keys, cnts = np.unique(q, axis=0, return_counts=True)
-                dom = keys[cnts.argmax()]
-                return [int(dom[0]), int(dom[1]), int(dom[2])], s.astype(int).tolist()
-            except Exception:
-                return None
+        # 2) game_res.pkg 原始偏移附近 dump
+        P("\n=== game_res.pkg huaxiaolou 偏移上下文 ===")
+        gp = "/tmp/pkg/assets/game_res.pkg"
+        if os.path.exists(gp):
+            with open(gp, "rb") as f:
+                for off in (131064879, 199115218):
+                    f.seek(max(0, off - 256))
+                    d = f.read(512)
+                    P("--- offset %d ---" % off)
+                    P("  hex: " + d[:128].hex())
+                    P("  txt: " + "".join(chr(c) if 32 <= c < 127 else "." for c in d)[:400])
+                    putbin("dump/game_res_%d.bin" % off, d)
+        put("RESULT14.txt", "\n".join(LOG))
 
-        out = {"blocks": {}, "items": {}}
-        for cat, sub in [("blocks", "blocks"), ("items", "items")]:
-            d = "/tmp/png/resources/minigame/" + sub
-            if not os.path.isdir(d):
-                P("无目录 " + d); continue
-            files = sorted(f for f in os.listdir(d) if f.endswith(".png"))
-            P("%s: %d 张" % (sub, len(files)))
-            ok = 0
-            for f in files:
-                r = fingerprint(os.path.join(d, f))
-                if r:
-                    out[cat][f[:-4]] = {"c": r[0], "t": r[1]}
-                    ok += 1
-            P("  %s 指纹生成 %d" % (sub, ok))
-            put("RESULT13.txt", "\n".join(LOG))
+        # 3) 全解包目录搜 skanim / skeleton / skin
+        P("\n=== 全解包目录 动画/骨骼/皮肤 ===")
+        for k in ["skanim", "skeleton", "anim"]:
+            c = sh("find /tmp/o_* -name '*.%s' 2>/dev/null | wc -l" % k, 300)
+            P("  *.%s : %s" % (k, c[:8]))
+        P("  含 skin 路径: " + sh("find /tmp/o_* -ipath '*skin*' 2>/dev/null | head -25", 300)[:1200])
+        P("  含 xiaolou 路径: " + sh("find /tmp/o_* -ipath '*xiaolou*' 2>/dev/null | head -25", 300)[:1200])
+        put("RESULT14.txt", "\n".join(LOG))
 
-        # 也做 entity（生物/角色）的指纹，便于识别截图里的生物
-        out["entity"] = {}
-        ed = "/tmp/png/resources/minigame/entity"
-        if os.path.isdir(ed):
-            cnt = 0
-            for root, dirs, fs in os.walk(ed):
-                for f in fs:
-                    if not f.endswith(".png") or cnt > 3000:
-                        continue
-                    p = os.path.join(root, f)
-                    r = fingerprint(p)
-                    if r:
-                        key = os.path.relpath(p, ed).replace("/", "__")[:-4]
-                        out["entity"][key] = {"c": r[0], "t": r[1]}
-                        cnt += 1
-            P("entity 指纹: %d" % cnt)
-        put("RESULT13.txt", "\n".join(LOG))
+        # 4) 中文名搜（script_res 含 csvdef 的话）
+        P("\n=== 中文名搜索 花小楼 ===")
+        g = sh("grep -rl '花小楼' /tmp/o_script_res 2>/dev/null | head -20", 600)
+        P(g[:1200] if g else "  (无)")
+        put("RESULT14.txt", "\n".join(LOG))
 
-        raw = json.dumps(out, separators=(",", ":")).encode()
-        gz = gzip.compress(raw, 9)
-        P("指纹库 JSON %d 字节 → gzip %d 字节" % (len(raw), len(gz)))
-        P("条目: blocks=%d items=%d entity=%d" % (
-            len(out["blocks"]), len(out["items"]), len(out["entity"])))
-        # 分片回传（每片 3MB）
-        n = (len(gz) + 3 * 1024 * 1024 - 1) // (3 * 1024 * 1024)
-        for i in range(n):
-            putbin("fp/fp_part%d.gz" % i, gz[i * 3 * 1024 * 1024:(i + 1) * 3 * 1024 * 1024])
-        put("fp_meta.json", json.dumps({
-            "parts": n, "raw": len(raw), "gz": len(gz),
-            "blocks": len(out["blocks"]), "items": len(out["items"]),
-            "entity": len(out["entity"])}))
-        P("✅ 指纹库已回传 %d 片" % n)
-        P("===== YB JOB13 END =====")
-        put("RESULT13.txt", "\n".join(LOG))
+        P("\n===== YB JOB14 END =====")
+        put("RESULT14.txt", "\n".join(LOG))
     except Exception as e:
         P("EXC " + str(e)[:300])
-        try: put("RESULT13.txt", "\n".join(LOG))
+        try: put("RESULT14.txt", "\n".join(LOG))
         except Exception: pass
 
 
