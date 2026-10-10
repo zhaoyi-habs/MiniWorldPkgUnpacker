@@ -1,5 +1,5 @@
-=== START === 14:30:16
-apk 1060171073 bytes in 2.6s
+=== START === 14:29:16
+apk 1060171073 bytes in 3.6s
 entries 3414
 extract assets/script_res.pkg 55446388
 extract assets/game_language.pkg 1097274
@@ -8,23 +8,23 @@ extract assets/first_res.pkg 11922855
 extract assets/game_res.pkg 209041340
 extract assets/material_ogles3.pkg 16582557
 extract lib/armeabi-v7a/liblibGameApp.so 109139024
-  fail script_res.pkg extract_game_script.py er/work/MiniWorldPkgUnpacker/MiniWorldPkgUnpacker/extract_game_script.py", line 23, in parse_index     assert N == 0, f"expected N=0, got {N}"            ^^^^^^ AssertionError: expected N=0, got 8172 
-  fail script_res.pkg unpack_pkg_intl.py <module>     from pkg_intl import open_pkg, PkgFormatError, is_pkg ImportError: cannot import name 'open_pkg' from 'pkg_intl' (/home/runner/work/MiniWorldPkgUnpacker/MiniWorldPkgUnpacker/pkg_intl.py) 
+  fail script_res.pkg extract_game_script.py e_index(idx)   File "D:\a\MiniWorldPkgUnpacker\MiniWorldPkgUnpacker\extract_game_script.py", line 23, in parse_index     assert N == 0, f"expected N=0, got {N}" AssertionError: expected N=0, got 8172 
+  fail script_res.pkg unpack_pkg_intl.py 
 unpacked script_res.pkg with unpack_common_res.py
-  fail game_language.pkg extract_game_script.py nner/work/MiniWorldPkgUnpacker/MiniWorldPkgUnpacker/extract_game_script.py", line 23, in parse_index     assert N == 0, f"expected N=0, got {N}"            ^^^^^^ AssertionError: expected N=0, got 39 
-  fail game_language.pkg unpack_pkg_intl.py <module>     from pkg_intl import open_pkg, PkgFormatError, is_pkg ImportError: cannot import name 'open_pkg' from 'pkg_intl' (/home/runner/work/MiniWorldPkgUnpacker/MiniWorldPkgUnpacker/pkg_intl.py) 
-  fail game_language.pkg unpack_common_res.py 错误: 路径长度异常（第 0 条，L=1181559597） 
-  fail remote_res.pkg extract_game_script.py r/work/MiniWorldPkgUnpacker/MiniWorldPkgUnpacker/extract_game_script.py", line 23, in parse_index     assert N == 0, f"expected N=0, got {N}"            ^^^^^^ AssertionError: expected N=0, got 21528 
-  fail remote_res.pkg unpack_pkg_intl.py <module>     from pkg_intl import open_pkg, PkgFormatError, is_pkg ImportError: cannot import name 'open_pkg' from 'pkg_intl' (/home/runner/work/MiniWorldPkgUnpacker/MiniWorldPkgUnpacker/pkg_intl.py) 
+  fail game_language.pkg extract_game_script.py rse_index(idx)   File "D:\a\MiniWorldPkgUnpacker\MiniWorldPkgUnpacker\extract_game_script.py", line 23, in parse_index     assert N == 0, f"expected N=0, got {N}" AssertionError: expected N=0, got 39 
+  fail game_language.pkg unpack_pkg_intl.py 
+  fail game_language.pkg unpack_common_res.py header: ver=0x130ba unk=17 index@1095053+2221 index: 4866 bytes 
+  fail remote_res.pkg extract_game_script.py _index(idx)   File "D:\a\MiniWorldPkgUnpacker\MiniWorldPkgUnpacker\extract_game_script.py", line 23, in parse_index     assert N == 0, f"expected N=0, got {N}" AssertionError: expected N=0, got 21528 
+  fail remote_res.pkg unpack_pkg_intl.py 
 unpacked remote_res.pkg with unpack_common_res.py
-  fail first_res.pkg extract_game_script.py er/work/MiniWorldPkgUnpacker/MiniWorldPkgUnpacker/extract_game_script.py", line 23, in parse_index     assert N == 0, f"expected N=0, got {N}"            ^^^^^^ AssertionError: expected N=0, got 2455 
-  fail first_res.pkg unpack_pkg_intl.py <module>     from pkg_intl import open_pkg, PkgFormatError, is_pkg ImportError: cannot import name 'open_pkg' from 'pkg_intl' (/home/runner/work/MiniWorldPkgUnpacker/MiniWorldPkgUnpacker/pkg_intl.py) 
+  fail first_res.pkg extract_game_script.py e_index(idx)   File "D:\a\MiniWorldPkgUnpacker\MiniWorldPkgUnpacker\extract_game_script.py", line 23, in parse_index     assert N == 0, f"expected N=0, got {N}" AssertionError: expected N=0, got 2455 
+  fail first_res.pkg unpack_pkg_intl.py 
 unpacked first_res.pkg with unpack_common_res.py
-  fail game_res.pkg extract_game_script.py er/work/MiniWorldPkgUnpacker/MiniWorldPkgUnpacker/extract_game_script.py", line 23, in parse_index     assert N == 0, f"expected N=0, got {N}"            ^^^^^^ AssertionError: expected N=0, got 3521 
-  fail game_res.pkg unpack_pkg_intl.py <module>     from pkg_intl import open_pkg, PkgFormatError, is_pkg ImportError: cannot import name 'open_pkg' from 'pkg_intl' (/home/runner/work/MiniWorldPkgUnpacker/MiniWorldPkgUnpacker/pkg_intl.py) 
-  fail game_res.pkg unpack_common_res.py 错误: 路径长度异常（第 0 条，L=1120056535） 
-  fail material_ogles3.pkg extract_game_script.py er/work/MiniWorldPkgUnpacker/MiniWorldPkgUnpacker/extract_game_script.py", line 23, in parse_index     assert N == 0, f"expected N=0, got {N}"            ^^^^^^ AssertionError: expected N=0, got 3711 
-  fail material_ogles3.pkg unpack_pkg_intl.py <module>     from pkg_intl import open_pkg, PkgFormatError, is_pkg ImportError: cannot import name 'open_pkg' from 'pkg_intl' (/home/runner/work/MiniWorldPkgUnpacker/MiniWorldPkgUnpacker/pkg_intl.py) 
+  fail game_res.pkg extract_game_script.py e_index(idx)   File "D:\a\MiniWorldPkgUnpacker\MiniWorldPkgUnpacker\extract_game_script.py", line 23, in parse_index     assert N == 0, f"expected N=0, got {N}" AssertionError: expected N=0, got 3521 
+  fail game_res.pkg unpack_pkg_intl.py 
+  fail game_res.pkg unpack_common_res.py header: ver=0x130ba unk=17 index@208860346+180994 index: 370305 bytes 
+  fail material_ogles3.pkg extract_game_script.py e_index(idx)   File "D:\a\MiniWorldPkgUnpacker\MiniWorldPkgUnpacker\extract_game_script.py", line 23, in parse_index     assert N == 0, f"expected N=0, got {N}" AssertionError: expected N=0, got 3711 
+  fail material_ogles3.pkg unpack_pkg_intl.py 
 unpacked material_ogles3.pkg with unpack_common_res.py
 unpacked file count 35874
 scannable files 14185
@@ -37,5 +37,3 @@ scanned first_res.pkg 11922855 uniq {'A_service': 1137, 'B_component': 212, 'C_m
 scanned game_res.pkg 209041340 uniq {'A_service': 1139, 'B_component': 213, 'C_mini': 292, 'D_ugc': 845, 'E_trigger': 789, 'F_dotted': 7361, 'G_snake': 11802, 'H_func': 12418, 'I_path': 2519}
 scanned material_ogles3.pkg 16582557 uniq {'A_service': 1139, 'B_component': 213, 'C_mini': 292, 'D_ugc': 847, 'E_trigger': 789, 'F_dotted': 7436, 'G_snake': 11846, 'H_func': 12418, 'I_path': 2520}
 cjk uniq 119068
-outputs ['01_apk_entries.txt', '02_unpacked_files.txt', '03_api_calls.txt', '04_event_names.txt', '10_A_service.txt', '10_B_component.txt', '10_C_mini.txt', '10_D_ugc.txt', '10_E_trigger.txt', '10_F_dotted.txt', '10_G_snake.txt', '10_H_func.txt', '10_I_path.txt', '11_chinese.txt', '99_log.txt']
-PUSHED 763c714a96 15
