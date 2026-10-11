@@ -1,0 +1,12 @@
+apk ok 790s
+core_res 802MB
+idx off=839753515 size=1607646 first8=3d682d00f227967b
+idx LZ4 ok usize=2975805 got=2975805
+idx strings=43043
+idx cjk=254
+run common_res rc=1 struct.error: unpack_from requires a buffer of at least 2975816 bytes for unpacking 12 bytes at offset 2975804 (actual b
+run game_script rc=1 AssertionError: expected N=0, got 31638
+run unpackall rc=1   astc_encoder_py: ModuleNotFoundError: No module named 'astc_encoder'
+run pkg_intl rc=1 ImportError: cannot import name 'open_pkg' from 'pkg_intl' (/home/runner/work/MiniWorldPkgUnpacker/MiniWorldPkgUnpacker/
+o1 -> 0 files
+o1 text chars=0
