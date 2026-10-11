@@ -4,3 +4,4 @@ recs 10591 total 81235640 endoff 359288
 probe done
 plain 1/300
 tot 77.5MB lua=0 csv=8689 other=1902
+luastr 0
