@@ -1,3 +1,3 @@
-src=sjqq#1 size=829095316 (1210s)
+src=sjqq#1 size=1050869138 (1210s)
 real_url=http://imtt2.dd.qq.com/sjy.00008/sjy.00002/16891/apk/8EE27253ACEAC82517E110F33B29050F.apk?fsname=com.tencent.tmgp.minitech.miniworld_80640.apk
 bad zip File is not a zip file
