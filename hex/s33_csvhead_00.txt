@@ -1,0 +1,985 @@
+===== f0 usize=556
+分数ID,分数（真实分数为10分值，中间省略了小数点）,超越百分数,组别,出现概率（先按概率抽组，再从组里选择其中随机数）,组句名词（string表）
+id,grade,percent,group,probability,tagid
+1,80,20,1,15,20288
+===== f1 usize=240
+风格名称ID,色相,饱和度,明度,锐化,立体感（否0，是1）,着色（否0，是1）
+id,hue,saturability,lightness,sharpen,shade,tinting
+58,0,0,0,0,0,0
+===== f2 usize=2533
+"类型[0=生物模型，1=方块模型，2=道具模型，3=生物模版，4=坐骑模版，5=方块模版，6=道具模版]	",ID,
+Type,ID,
+"0	",100001,
+===== f3 usize=1302
+"敏感词（第3行=无效汉字过滤，第4行=无效数字过滤，第5行=汉字拆分）
+[通配符过滤：词间加%=过滤最多128个任意单字；词间加若干.=过滤n个任意单字（n=.数量）]","中文特殊检测[0=不额外增加特殊检测，1=乱序检测，2=同音字检测，4=字母检测(如xjp/习近平），8=社交检测，单字过滤=16,32=不屏蔽自身的社交检测]（多种检测则将数字相加，命中几个加几个）",
+FraudString,FraudType,FraudNum
+===== f4 usize=693
+序号,名称,抽奖界面,抽奖UI1,抽奖UI2,抽奖UI3,规则,描述,抽奖音效
+ID,Name,Type,Drawui1,Drawui2,Drawui3,Ruler,Dec,Sound
+number,String,arry,string,string,string,number,string,string
+===== f5 usize=389
+���,����,����,����,����ģ��,����,����,��ע
+ID,Name,evn,Channel,Function,type,code,Remarks
+number,string,array,array,array,array,string,string
+===== f6 usize=1682
+序号,任务标题(维护用),标题String,任务描述(维护用),任务String,跳转（部分任务不可跳转，如登陆，在线等。主要用来区分跳转按钮是否存在）,图标,积分显示,功能(维护用),任务分类,次数
+ID,Name,Title,Des,Mission,Jump,Icon,Integral,Fuction,FuctionDec,Times
+number,string,number,string,number,number,string,number,string,number,number
+===== f7 usize=397
+序号,道具ID,数量
+ID,Item,Count
+Number,Number,number
+===== f8 usize=1932
+序号,名称主题,赛季任务,积分上限,普通奖励,通行证奖励,赛季开启时间,赛季结束时间,奖励背景图,任务背景图,抽奖背景图,最终大奖模型动画,其他界面位置,升级音效,规则描述,宣传描述,宣传描述1000,赛季规则描述1000
+ID,Name,Mission,MaxIntegral,GeneralReward,BattlePassReward,OpenTime,CloseTime,Background1,Background2,Background3,Modle,Uilocation,Sound,Rule,Propaganda,Remarks1,Remarks2
+number,string,array,array,array,array,timestamp,timestamp,string,string,string,string,string,string,number,number,string,string
+===== f11 usize=49142
+ID,名称,枚举类型,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+ID,Name,Type,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+10001,晴雨交错,1,天气,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+===== f13 usize=2351
+锘块敇鍟冭泟锠璂,浣滆卛d,绫诲瀷锛1=鍗曚欢avatar锛2=avatar濂楄咃紝3=鐨鑲,瑁呮壆ID,瑁呮壆鍚嶇О锛堜笉鐢熸晥锛,瑁呮壆绫诲瀷锛堜笉鐢熸晥锛,涓嶇敓鏁堢殑娓犻亾ID,鐢熸晥鐨勬渶浣庣増鏈鍙,缂╂斁姣斾緥
+ID,uin,type,avatarID,avatar_name,avatar_type,appids_no,version_min,zoom_percentage
+1,1000,2,"6,8,9,10",閭诲剁敺瀛╁,,,,
+===== f14 usize=650
+ID,名称,描述,类别【1=显示动效|2=隐藏动效|3=循环动效4=文字动效】,开关(0:关 1:开)
+ID,Name,Decs,Type,Open
+10001,渐显,,1,1
+===== f15 usize=34439
+ID,名称,文件名称,类别【1=图标|2=标签|3=按钮4=底板|5=背景图|6=文字|7=边框 8 = 天空盒】,上级,文件夹,开关(0:关 1:开),排序
+ID,Name,Resource,Type,Pack,Dir,Open,Order
+10001,图标2,icon_08,1,common,,1,2
+===== f17 usize=4267
+id,枚举名称,枚举类型,枚举类型名,属性类型（在本表中每新增一个新条目顺序向下加一，枚举名称相同归为一类）,备注
+ID,EnumName,Type,,AttType,
+100101,基础速度,1,速度类型,1001,
+===== f18 usize=1328
+滑动条id,描述,数值类型（1=百分比  2=整数数值  3=实数数值，支持小数点后一位 UI显示是除以10）,上限值,下限值,默认值,步长,数值单位描述ID,显示前缀（不填=不显示 1=显示个+号）
+ID,,NumericalType,Max,Minimum,Default,Step,UnitID,Prefix
+200001,整数数值（-100至100）,2,100,-100,0,1,,1
+===== f19 usize=1031
+����ID,��������,װ������[1=ͷ����2=�ؼף�3=���ȣ�4=ѥ�ӣ�5=����װ��],ģ��1,���ز�λ1[0=���֣�1=���֣�2=��ţ�3=�ҽţ�4=���ȣ�5=���ȣ�6=�ز���7=������8=ͷ����9=�貿],λ��1X,λ��1Y,λ��1Z,ת��1Y,ת��1P,ת��1R,����1X,����1Y,����1Z,ģ��2,���ز�λ2[0=���֣�1=���֣�2=��ţ�3=�ҽţ�4=���ȣ�5=���ȣ�6=�ز���7=������8=ͷ����9=�貿],λ��2X,λ��2Y,λ��2Z,ת��2Y,ת��2P,ת��2R,����2X,����2Y,����2Z
+ID,Name,EquipType,Model1,HangPos1,Pos1X,Pos1Y,Pos1Z,Yaw1,Pitch1,Roll1,scaleX1,scaleY1,scaleZ1,Model2,HangPos2,Pos2X,Pos2Y,Pos2Z,Yaw2,Pitch2,Roll2,scaleX2,scaleY2,scaleZ2
+12226,��ʽͷ��,1,#7345778771590031430,8,0,33,-61,0,95,0,0.9,1.2,0.9,,,,,,,,,,,
+===== f21 usize=1130
+动物蛋ID,动物名称（仅备注用）,成熟时间（秒）,收获道具1ID,收获道具1数量,收获道具2ID,收获道具2数量,收获经验下限,收获经验上限,收获奖励包ID（填PackID）,饥饿时间（秒）,食物ID,饲料ID,掉落肥料ID,掉落肥料几率（万分率）,掉落肥料数量,生物ID,幼年生物id,图鉴分数
+AnimalSeedID,Name,GrowthTime,HarvestItem1_ID,HarvestItem1_Num,HarvestItem2_ID,HarvestItem2_Num,ExpMin,ExpMax,AwardPackID,HungerTime,FoodID,FeedID,ManureID,ManureProb,ManureNum,MonsterID,ChildMonsterID,HandBookScore
+62101,鸡,1800,62901,1,62906,1,20,20,,905,62431,62431 | 63004,75025,2000,1,52101,52121,0
+===== f22 usize=432
+自建区域ID,需要家园等级,自建大小,扩建消耗类型（0免费，1迷你币，2家园币，3迷你豆，4迷你点）,扩建花费,消耗道具ID,消耗道具数量,扩建家园标题,扩增区块
+BuildID,NeedHomeLv,BuildSize,CostType,CostNum,CostItemID,CostItemNum,Title,Add
+1,1,41089,0,,,,41600,
+===== f23 usize=2468
+区域ID,区域名称,区域作用,坐标X,坐标Z
+ChunkID,ChunkName,ChunkFunction,Site_X,Site_Z
+1,自建区域,3,-2,-1
+===== f25 usize=3922
+农作物种子ID,农作物名称（仅用于备注）,对应农作物ID,成熟时间（秒）,收获道具1ID,收获道具1数量,收获奖励包ID,收获经验下限,收获经验上限,变异几率（万分率）,变异农作物种子ID
+CropsSeedID,Name,CropsBlockID,GrowthTime,HarvestItem1_ID,HarvestItem1_Num,AwardPackID,ExpMin,ExpMax,ChangeProb,ChangeID
+62001,向阳花种子,1493,600,62413,2,,5,5,,
+===== f27 usize=895
+农田ID,需要家园等级,解锁消耗类型（0=免费，1=迷你币，2=家园币，3=迷你豆，4=迷你点）,解锁花费,消耗道具ID,消耗道具数量
+FarmlandID,NeedHomeLv,CostType,CostNum,CostItemID,CostItemNum
+0,1,2,0,,
+===== f29 usize=5110
+解锁对象ID,解锁类型（（0免费，1迷你币，2家园币，3迷你豆，4迷你点，5道具不足用迷你豆）,消耗道具ID,消耗道具数量,消耗位置（0家园1账号）,代替道具ID,代替需要数量,系列ID,获得数量（在创造背包中获得的数量）
+ItemID,CostType,CostItemID,CostNum,CostPlace,ReplaceItemID,ReplaceItemNum,GroupID,GainNum
+419,5,20097,1,1,10000,270,16,0
+===== f30 usize=1121
+家园等级,升级需要经验,宠物数量,家园作用（填stringid）,奖励包ID（填PackID）,勋章阶段,勋章等级,解锁称号
+HomeLv,Exp,PetNum,StringID,AwardPackID,MedalStage,MedalLevel,TitleString
+1,0,2,40351,9001,1,1,46100
+===== f31 usize=293
+神秘商人级别,出现几率（权重式，例：商人1的概率=商人1的权重/所有商人权重之和）,价格比例（百分率）,文本（stringID）,Npc模型,Npc图标
+MysticalLv,AppearProb,PriceRatio,Desc,NpcID,Icon
+1,2000,120,41701,39201,39201
+===== f34 usize=716
+��ԸID,�Ƿ�����0�رգ�1������,����ID1,����ID2,����Ȩ��,����ʱ�䣨�룩,�ɳ�ʱ�䣨�룩,����ʱ�䣨�룩,��Ըʱ�䣨�룩,������������,����1��������,����1������ID,����2��������,����2������ID,����3��������,����3������ID,����4��������,����4������ID,����5��������,����5������ID
+PrayID,Open,Monster1_ID,Monster2_ID,Odds,RiseTime,GrowthTime,MatureTime,PrayTime,SectionNum,Section1_MinNum,Section1_PackID,Section2_MinNum,Section2_PackID,Section3_MinNum,Section3_PackID,Section4_MinNum,Section4_PackID,Section5_MinNum,Section5_PackID
+1,0,39207,3880,100,60,60,60,60,5,0,11001,6,11002,11,11003,16,11004,21,11005
+===== f35 usize=405
+养殖场等级,可养殖动物数量,升级需要家园等级,升级消耗类型（0=免费，1=迷你币，2=家园币，3=迷你豆，4=迷你点）,升级消耗花费,升级消耗道具ID,升级消耗道具数量,场景文件
+PastureLv,RaiseNum,NeedHomeLv,CostType,CostNum,CostItemID,CostItemNum,ScenePath
+1,2,1,0,,,,
+===== f39 usize=4269
+图标ID,分类（1=状态图标bufficons  2=技能图标itemskillicons  3=行为图标aiicons  4=表情图标animact）,文件路径,状态编辑开放（1=开放  不填不开放）
+ID,Classification,FilePath,BuffEditing
+1001,1,addhpbuff_add,1
+===== f40 usize=1748
+﻿道具ID,名称/只用作备注,皮肤ID,类型/1是7天，2是30天，3是永久，4是1天,补偿迷你豆/已永久解锁，则获得迷你豆
+ItemID,,SkinID,ExpireTimeType,MiniBean
+12981,胖哒（1天）,1,4,10
+===== f41 usize=972
+����ID,��ID��0=�������ܣ�����=�ӹ���ID��,����LITE���ֶ�����LITE+�����ţ�Ŀǰ�������������ģ�0=������Դ��1=ȥ����Դ��,������LITE��ͬ��,���Ӱ�LITE��ͬ��,��������,�ӹ�������
+FunctionID,SubID,LITE375,LITE501,LITE406,��ע��,��ע��
+1,0,,,,������Ϸ����,
+===== f42 usize=35181
+��ԴID,��Դ���ࣨ0=���1=��ɫ��2=װ�磬3=���飬4=���ߣ�,����ID,��������,��Դ·��,ͼƬ����ͼ,��׺,����ģʽ,����LITE���ֶ�����LITE+�����ţ�Ŀǰ�������������ģ�0=������Դ��1=ȥ����Դ��,������LITE��ͬ��,���Ӱ�LITE��ͬ��
+ResourceID,ResourceType,TargetID,��ע��,ResourcePath,Encode,Ext,DownloadMode,LITE375,LITE501,LITE406
+1,4,,,res/entity,2,.png|.ktx|.omod,1,,,
+===== f43 usize=7785
+资源ID,资源分类（0=生物，1=角色，2=装扮，3=方块，4=道具）,对象ID,中文名称,资源路径,图片缩略图,后缀,下载模式,海外LITE（字段名：LITE+渠道号，目前的数字是随便填的，0=保留资源，1=去除资源）,教育版LITE（同左）,盒子版LITE（同左）
+ResourceID,ResourceType,TargetID,备注用,ResourcePath,Encode,Ext,DownloadMode,LITE375,LITE501,LITE406
+1,2,1,胖哒,,2,,1,,,
+===== f44 usize=869
+渠道ID,"外面入口1
+(1=FB,2=Google,3=Appple ID,4=预留，5=预留）",外面入口2,外面入口3,内部入口1,内部入口2,内部入口3,内部入口4,内部入口5,内部入口6,简中,英语,繁中,泰文,西班牙,葡萄牙,法文,日文,阿拉伯文,韩语,越南,俄语,土耳其,意大利,德语,印尼语,马来语
+apiid,out_1,out_2,out_3,in_1,in_2,in_3,in_4,in_5,in_6,Language,ENLanguage,TWLanguage,THALanguage,ESNLanguage,PTBLanguage,FRALanguage,JPNLanguage,ARALanguage,KORLanguage,VIELanguage,RUSLanguage,TURLanguage,ITALanguage,GERLanguage,INDLanguage,MALLanguage
+===== f45 usize=2614
+序号,乐器名称,Icon名称
+id,Name,Icon
+0,大钢琴,
+===== f48 usize=1930
+事件ID,类型（0好1坏2特殊）,类型图标（填文件夹.文件名 ui目录下）,通过后显示图标,描述,关卡效果数量,关卡效果,效果值1,效果值2,效果值3,效果值4,关卡效果数量,通过事件效果,效果值1,效果值2,效果值3,效果值4
+EventID,Type,Icon,Icon1,Desc,MissionFunctionNum,MissionFunction1_ID,MissionFunction1_Val1,MissionFunction1_Val2,MissionFunction1_Val3,MissionFunction1_Val4,PassFunctionNum,PassFunction1_ID,PassFunction1_Val1,PassFunction1_Val2,PassFunction1_Val3,PassFunction1_Val4
+1,0,aiicons.1001,aiicons.1002,35011,1,1,,10,,,,,,,,
+===== f49 usize=598
+�¼���ID,�¼�1,�¼�1Ȩ��,�¼�2,�¼�2Ȩ��,�¼�3,�¼�3Ȩ��,�¼�4,�¼�4Ȩ��,�¼�5,�¼�5Ȩ��,�¼�6,�¼�6Ȩ��,�¼�7,�¼�7Ȩ��,�¼�8,�¼�8Ȩ��,�¼�9,�¼�9Ȩ��,�¼�10,�¼�10Ȩ��
+EventPackID,Event1_ID,Event1_Odds,Event2_ID,Event2_Odds,Event3_ID,Event3_Odds,Event4_ID,Event4_Odds,Event5_ID,Event5_Odds,Event6_ID,Event6_Odds,Event7_ID,Event7_Odds,Event8_ID,Event8_Odds,Event9_ID,Event9_Odds,Event10_ID,Event10_Odds
+100,1,2000,2,2000,11,2000,12,2000,13,2000,,,,,,,,,,
+===== f51 usize=110
+ID,�����������ͣ�0=��ѣ�1=����ң�2=��԰�ң�3=���㶹��4=����㣩,������������
+ID,CostType,CostNum
+1,2,100
+===== f52 usize=1288
+特性ID,名称（仅备注用）,特性名称,图标（填文件夹.文件名）,描述,类型（0普通，1特殊）,使用类型（0加属性，1冒险时触发）,特性等级,特性效果数量,特性效果,效果值1,效果值2,效果值2,效果值2
+SkillID,Name,SkillName,Icon,Desc,Type,UseType,SkillLv,SkillFunctionNum,Function1_ID,Function1_Val1,Function1_Val2,Function1_Val3,Function1_Val4
+1,负重1,41760,itemskillicons.1001,41762,0,1,0,1,1,15,,,
+===== f55 usize=518
+材质ID,材质名称,动摩擦力,静摩擦力,弹力,阻力倍数,声音,硬度,开放选择,材质名称ID,作为模板
+MaterialID,,DynamicFriction,StaticFriction,Bouncyness,DragScale,Sound,Hardness,Selectable,NameStringID,IsTemplate
+1,标准的,0.5,0.5,0.5,1,,20,,,
+===== f57 usize=1181
+控制端名称,控制端,子类,执行端,子类,执行端名称,控制关系类型[0=UI通电激活，1=UI2态使用，2=UI3态使用，3=通电激活，4特殊处理],默认连接[0=否，1=是],开放编辑[0=否，1=是]
+,ControlPortPartsType,ControlPortSubType,WorkPortPartsType,WorkPortSubType,,ControlRelationType,DefaultConnect,CanEdit
+驾驶座,3,1,1,1,车轮,2,1,0
+===== f58 usize=1567
+部件类型（0=框架，1=移动装置[2=车轮]，2=动力装置[2=引擎]，3=座位，4=武器，5=辅助装置，6=关节部件）,子类型（根据部件类型不同有不同含义，1=全部）,图标路径（图标地址）,类型名称（stringID）,数量限制（-1表示不限制数量）,名称（备注）,最大连出数,最大连入数
+PartsType,SubType,Icon,NameID,NumLimit,,MaxOutNum,MaxInNum
+0,0,vehicle/ico_ve_cate05,12051,1500,结构部件,,
+===== f59 usize=148
+特效ID,特效路径
+ID,Path
+1,particles/item_qipao.ent
+===== f61 usize=58210
+接口ID,类型ID,类型名,类型备注,函数名-不用翻译,函数标题-不用翻译,描述1参数及类型,描述2返回值及类型-不用翻译,描述3该方法的主要作用,描述4具体使用案例如下-不用翻译
+ID,Type,TypeName,,FunctionName,FunctionDesc,Desc1,Desc2,Desc3,Desc4
+10001,1,游戏管理,Game,doGameEnd,Game:doGameEnd(),nil,ErrorCode.OK,结束比赛,local result = Game:doGameEnd()
+===== f62 usize=52279
+id,音效名,备注,插件库开放[0代表不开放，1=开放 ],触发器开放[0代表不开放，1=开放 ],分类（1=脚步，2=行为，3=受击，4=待机，5=技能，6=环境，7=背景音乐，8=提示，9=其它）,音效路径,图标名字
+ID,Name,,AtkEffectTypeSID,TriggerType,Type,SoundPath,IconName
+10000,cloth1,,0,0,2,blockd.cloth1,sounds02
+===== f65 usize=11419
+枚举ID,枚举名称,枚举类型,枚举类型名,触发器显示（0=默认全部可见 1=仅开发者可见 2=仅999渠道可见）,,
+ID,EnumName,Type,,Display,,
+10001,晴雨交错,1,天气,0,,
+===== f69 usize=913
+参数ID,素材库类型:（1方块类型 2道具类型 3投掷物类型 4生物类型 5状态 6动画表情 7特效）,"分类(1,2,3...连续)",类名(对应stringdef表的id),备注1,分类备注
+ID,Type,Class,NameId,,
+1,1,1,15351,方块,植物方块
+===== f71 usize=2249
+AI id,����,��������,Ӣ������,ͼ��,���ͣ�1���� 2���ԣ�,����,����StringID,����,����,��������,Ӣ������
+ID,Name,TWName,ENName,Icon,Type,Class,ClassStringID,Content,Desc,TWDesc,ENDesc
+1001,��ȼ,�cȼ,Ignite,1001,1,1,4821,"{""name"":""projectile_attack"", ""priority"":1, ""speed"":1.0, ""min_atktime"":80, ""max_atktime"":60, ""atkrange"":1500, ""projectileid"":12051, ""power"":0.8, ""buffid"":33002, ""count"":1, ""id"":1001}",����������ҹ���������ȼЧ����ÿ�����10���˺�������4��,����������ҹ��������cȼЧ����ÿ�����10�c���������m4��,Archery Attack with ignition effect. 10 points of damage per second. lasting for 4 sec
+===== f73 usize=1855
+����ID,��ע,"������(��1,��0,Ĭ��1)","ʵ����֤(��1,��0,Ĭ��0)","ǿ����֤(������1,��������2,Ĭ��1)","��֤��ʽ(����1,��Ѷ��2,Ĭ��1)","��֤����(ǰһ��Ϊ50000ʱ�Ŷ�,�����������ܺ�)"
+ApiID,Name,AntiAddiction,Auth,ForceAuth,AuthType,AuthNum
+1,�����ƶ�,1,1,1,2,50000
+===== f74 usize=113
+avatarId,avatar名称,名称图标,关联皮肤ID
+ID,Name,nameIcon,relateSkin
+1980,格兰妮,avatarIcon01,327
+===== f78 usize=7889
+序列ID,物品ID,物品名称,系列ID,大类ID,大类名称
+ID,ItemID,ItemName,SeriesID,TypeID,TypeName
+1,862,象牙白玻璃灯,1,1,家具
+===== f79 usize=1264
+序列ID,系列名称,系列奖励类型（0不奖励1道具2迷你豆3迷你币）,奖励ID/道具/迷你币/迷你豆/经验，填道具ID,数量
+ID,Name,RewardType,RewardID,RewardNum
+1,灯具一,1,20060,20
+===== f80 usize=54080
+id编号,标题,内容,作者,是否匿名
+Id,Title,Context,Author,ShouldAnonymity
+1,大海啊大海,啊~~大海~~都是水~~~啊~~沙漠~~都是沙~~~,沙漠商人,
+===== f84 usize=6141
+颜料瓶id,名称,颜色,红,黄,蓝,橙,紫,绿,白,黑,灰,红橙,黄橙,红紫,蓝紫,黄绿,蓝绿,浅红,浅黄,浅蓝,浅橙,浅紫,浅绿,深红,深黄,深蓝,深橙,深紫,深绿,淡灰
+ID,Name,RGB,mix11514,mix11504,mix11532,mix11501,mix11510,mix11513,mix11500,mix11515,mix11507,mix11536,mix11537,mix11502,mix11538,mix11539,mix11509,mix11506,mix11540,mix11503,mix11541,mix11542,mix11505,mix11512,mix11543,mix11544,mix11545,mix11546,mix11547,mix11508
+11514,红（赫赤红）,d50000,11514,11501,11510,11536,11502,11515,11506,11512,11514,11514,11501,11514,11510,11543,11544,11514,11541,11542,11536,11502,11507,11512,11545,11546,11536,11502,11515,11506
+===== f86 usize=406
+������ID,��Ʒ1,��Ʒ����1,����1,��Ʒ2,��Ʒ����2,����2,��Ʒ3,��Ʒ����3,����3,��Ʒ4,��Ʒ����4,����4,��Ʒ5,��Ʒ����5,����5,��Ʒ6,��Ʒ����6,����6,
+ID,Item1,ItemNum1,Prob1,Item2,ItemNum2,Prob2,Item3,ItemNum3,Prob3,Item4,ItemNum4,Prob4,Item5,ItemNum5,Prob5,Item6,ItemNum6,Prob6,
+20001,11001,1,50,200,10,20,,,,,,,,,,,,,
+===== f89 usize=233
+序号ID,名称,达成条件类型（36NPC交易37生存天数）,对象ID,条件数值,获得分数
+ID,Name,Type,GoalID,Num,Score
+1,贸易,36,3010,1,25
+===== f90 usize=551899
+"敏感词（第3行=无效汉字过滤，第4行=无效数字过滤，第5行=汉字拆分）
+[通配符过滤：词间加%=过滤最多128个任意单字；词间加若干.=过滤n个任意单字（n=.数量）]","中文特殊检测[0=不额外增加特殊检测，1=乱序检测，2=同音字检测，4=字母检测(如xjp/习近平），8=社交检测，单字过滤=16,32=不屏蔽自身的社交检测]（多种检测则将数字相加，命中几个加几个）",
+FilterString,filtertype,filternum
+===== f91 usize=13278
+鱼的id,中文名称,稀有度（0~4递增）,咬饵时间tick,基础全生态权重（biomedef.csv）,加成生态权重（biomedef.csv）,暴风雨权重加成,彩虹0假动作概率,普通鱼竿,角珊瑚鱼竿,气泡珊瑚鱼竿,圆盘珊瑚鱼竿,树珊瑚鱼竿,举鱼动作
+ID,name,rarity,time,biome,biome2,waittime,feint,12721,12722,12723,12724,12725,up
+27,远方的漂流瓶,3,20,0,OCEAN|200;RIVER|200;FROZEN_OCEAN|200;FROZEN_RIVER|200;BEACH|300;BIOME_DESERT_LAKE|100;DEEPOCEAN|300;ISLAND_SHORE_DESERT|300;ISLAND_LAND_DESERT|300;ISLAND_SHORE_REDSOIL|300;ISLAND_LAND_REDSOIL|300;ISLAND_SHORE_REEF|300;ISLAND_LAND_REEF|300;REDSOIL|100;REDSOIL_SHORE|100;PLAINS|10;FOREST|10,0,100,1.2,1.5,1.5,1.5,1.5,
+===== f93 usize=1026
+果实ID,名称,图标,描述1,开启花费,成熟花费1（立即成熟每10分钟需要的迷你豆数量）,成熟花费2
+ID,Name,Icon,Desc,OpCost,RipeCost1,RipeCost2
+1,金果实,fruit_gold,成熟后可能获得#cf7770f珍贵#n坐骑碎片，#cd972ff贵重#n特长/装扮/方块碎片。【收获10个！】必出#cd972ff贵重#n奖励 【收获1个】必出#c03ddda稀有#n奖励。,288,,
+===== f94 usize=2793
+渠道ID,备注,分享获取迷你豆,帐号切换,帐号加密,短信充值,SDK充值,家园,问题反馈,分享预约,手机绑定,邮箱绑定,安全绑定,QQ钱包支付,插件地图上传
+ID,,Share,AccSwitch,AccEncode,SmsPay,SdkPay,HomeChest,FeedBack,Reservation,MobileBinding,EmailBinding,SecurityBinding,QQWalletPay,
+1,官网,1,1,1,1,1,1,1,0,0,0,0,1,1
+===== f96 usize=12039
+规则ID,排序ID/从小到大，相等则按规则ID,规则名称,繁体规则名称,英文规则名称,规则描述,繁体规则描述,英文规则描述,大类ID,大类名称,繁体大类名称,英文大类名称,缺省option,跑酷option,对战option,吃鸡option,选项ID1,选项ID2,选项ID3,选项ID4,选项ID5,选项ID6,选项ID7,选项ID8,选项ID9,选项ID10
+ID,OrderID,Name,TWName,ENName,Desc,TWDesc,ENDesc,TypeID,TypeName,TWTypeName,ENTypeName,DefOption1,DefOption2,DefOption3,DefOption4,OptionID1,OptionID2,OptionID3,OptionID4,OptionID5,OptionID6,OptionID7,OptionID8,OptionID9,OptionID10
+1,11,地图当前时间,地圖當前時間,Current time,设置当前地图的时间点,設置當前地圖的時間點,Set the time of current map,1,场景基本设定,場景基本設定,General,5,3,3,4,3,4,5,6,7,8,,,,
+===== f98 usize=780
+头像ID,头像图标ID,头像名称,头像名称颜色（1蓝2紫3金）,头像系列ID,头像系列名称,头像描述,头像解锁道具,解锁道具数量
+ID,IconID,Name,Color,SeriesID,SeriesName,Desc,UnlockID,UnlockNum
+1,100,妮妮大冒险,1,1,大冒险家,原始人化身为大冒险家！,,
+===== f100 usize=21083
+能力ID,能力名称,图标,描述,效果ID,效果值1,效果值2,效果值3,效果值4,效果值5,效果值6,效果值7,特效,备注,
+ID,Name,Icon,Desc,EffectID,Effect1,Effect2,Effect3,Effect4,Effect5,Effect6,Effect7,EffectName,,
+1,坐骑宝宝,8,拥有这个技能的坐骑，在地图中玩一段时间后，会产出1个坐骑宝宝，可以送给房间中的其他小伙伴。,1,,,,,,,,,,
+===== f101 usize=851
+方块ID,孵化时间(游戏刻),加速价格(一天),需要地形,孵化坐骑1,概率1,孵化坐骑2,概率2,孵化坐骑3,概率3,孵化坐骑4,概率4,孵化坐骑5,概率5
+ID,BroodAge,SpeedPrice,Terrain,Horse1,HorseProb1,Horse2,HorseProb2,Horse3,HorseProb3,Horse4,HorseProb4,Horse5,HorseProb5
+950,108000,10,,3430,1000,,,,,,,,
+===== f102 usize=1641
+序号,热键名,热键功能名（程序用来检索）,热键类型（1移动2道具栏3多人游戏4功能）,类型名称,默认code,
+ID,Name,FuncName,Type,TypeName,DefaultCode,
+1,向前,ForwardKey,1,移动,119,87
+===== f105 usize=824
+键值,键名
+Code,Name
+8,退格
+===== f106 usize=1719
+迷你币ID,名称,繁体名称,英文名称,图标,迷你币数量,限购后的获得数量,购买价格,描述,繁体描述,英文描述,推荐/折扣显示（1推荐 2折扣）,限购ID/与storeprop同字段不可重复,购买次数,是否隐藏（1隐藏）,排序
+ID,Name,TWName,ENName,IconId,Num,MiniCoinWithLimit,Cost,Desc,TWDesc,ENDesc,Tag,PurchaseLimitID,BuyNum,IsHide,Sort
+12,100迷你币,100迷你幣,100 Mini Coins,14101,200,100,10,#c00FF00赠送100迷你币(限购1次)#n,,,1,4,1,,1
+===== f107 usize=808
+迷你币ID,名称,图标,迷你币数量,限购后的获得数量,购买价格,显示顺序仅海外在用,描述,推荐/折扣显示（1推荐 2折扣）,限购ID/与storeprop同字段不可重复,购买次数,是否隐藏（1隐藏）
+ID,Name,IconId,Num,MiniCoinWithLimit,Cost,Order,Desc,Tag,PurchaseLimitID,BuyNum,IsHide
+1,50迷你币,14100,50,,0.99,,,,,,
+===== f108 usize=859
+迷你币ID,名称,图标,迷你币数量,限购后的获得数量,购买价格,显示顺序仅海外在用,描述,推荐/折扣显示（1推荐 2折扣）,限购ID/与storeprop同字段不可重复,购买次数,是否隐藏（1隐藏）,排序
+ID,Name,IconId,Num,MiniCoinWithLimit,Cost,Order,Desc,Tag,PurchaseLimitID,BuyNum,IsHide,Sort
+8,930迷你币,14106,1860,930,93,2,#c00FF00赠送930迷你币(限购1次)#n,1,5,1,,1
+===== f109 usize=808
+迷你币ID,名称,图标,迷你币数量,限购后的获得数量,购买价格,显示顺序仅海外在用,描述,推荐/折扣显示（1推荐 2折扣）,限购ID/与storeprop同字段不可重复,购买次数,是否隐藏（1隐藏）
+ID,Name,IconId,Num,MiniCoinWithLimit,Cost,Order,Desc,Tag,PurchaseLimitID,BuyNum,IsHide
+1,50迷你币,14100,50,,0.99,,,,,,
+===== f110 usize=490
+迷你币ID,名称,图标,迷你币数量,购买价格,描述,推荐/折扣显示（1推荐 2折扣）,限购ID/与storeprop同字段不可重复,购买次数,是否隐藏（1隐藏）
+ID,Name,IconId,Num,Cost,Desc,Tag,PurchaseLimitID,BuyNum,IsHide
+14,10迷你币,14100,10,1,充值后获得10迷你币,,,,
+===== f111 usize=485
+计费点ID,商品名,华为商品ID,苹果,官方
+ID,Name,HuaweiID,AppleID,MiniOfficialID
+10001,星萌会员-月,111,com.minitech.miniworld.monthly1,
+===== f112 usize=1024
+iD(方块ID),怪物ID,耐久度,刷怪时间下限/0.05s,刷怪时间上限/0.05s,一次刷怪数量,范围内同种怪最大数量,无视光亮规则:1是0否,地牢出现几率/万分率，权重式,
+ID,MobResID,Duration,MinSpawnDelay,MaxSpawnDelay,SpawnCount,MaxSameMob,ForceSpawn,DungeonOdds,
+810,3101,,100,300,4,6,1,,测试用
+===== f113 usize=23299
+序号,"类型[1道具,2生物,3投射物,4方块]",关联的ID,子分类[类型=生物时，1=生物，2=角色],子分类[类型=生物时，1=生物，2=角色；类型=道具时，1=工具，2=武器，3=其他，4=装备],分类名称StringID,名称备注,形状ID[0=球体，1=立方体，2=胶囊体],形状参数1,形状参数2,形状参数3
+ID,Type,RelevantID,Class,ClassEX,ClassNameID,,ShapeID,ShapeVal1,ShapeVal2,ShapeVal3
+1,1,817,1,1,4130,火炬,2,6,28,1
+===== f120 usize=6061
+索引,矿编号,出现地图/0迷拉星 1烈焰星 2萌眼星,名字,最小高度,最大高度,最小高度Falloff,最大高度Falloff,产生方式,（无效字段）出现概率（万分之),矿脉最大矿石数量(最小填3）,矿脉生成次数,替换方块,"生态生成（生态名+英文逗号分隔,MAX_BIOME_TYPE：全部生态）"
+Index,ID,MapID,Name,MinHeight,MaxHeight,MinFalloff,MaxFalloff,GenMethod,Odds,MaxNum,Lode,ReplaceBlock,Genbiome
+1,598,0,掩埋的机械,0,21,3,2,0,15,3,5,104,MAX_BIOME_TYPE
+===== f121 usize=522
+渠道id,名称,最小版本,最大版本,简中,英语,繁中,泰文,西班牙,葡萄牙,法文,日文,阿拉伯文,韩语,越南,俄语,土耳其,意大利,德语,印尼语
+ApiID,Name,MinVersion,MaxVersion,Language,ENLanguage,TWLanguage,THALanguage,ESNLanguage,PTBLanguage,FRALanguage,JPNLanguage,ARALanguage,KORLanguage,VIELanguage,RUSLanguage,TURLanguage,ITALanguage,GERLanguage,INDLanguage
+999,测试服,0.49.2,0.55.0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1
+===== f123 usize=25758
+id,name
+ID,filename
+1,particles/item_1043_break.ent
+===== f124 usize=823
+,,,注意：该值=地表最低高度 -空岛最低的高度/2 + 30,,,,,,,,,
+地表最低高度,地表地形的最大高度,空岛最低的高度,空岛的基础高度,空岛生成的噪声值,地表生成的噪声值,空岛底部生成的噪声值,图腾生成的CHUNK间隔,图腾生成的随机数范围（越大概率越小，1为50%，2为33%）,每棵太空树的氧气果生成概率,宇宙商人生成的CHUNK间隔,宇宙商人生成的随机数范围,宇宙商人出现的最低高度
+BOTTOM_BASE_HEIGHT_Y,BOTTOM_BASE_MAX_HEIGHT_Y,AIRLAND_MIN_HEIGHT,AIRLAND_BASE_HEIGHT_Y,AIRLAND_NOISE_DATA,BOTTOM_NOISE_DATA,AIRLAND_BOTTOM_NOISE_DATA,TOTEMGEN_CHUNK_MOD_NUM,TOTEMGEN_MAX_LOOP_NUM,TOTEMGEN_OXYGEN_FRUIT_PROB,COMMICSSHOP_CHUNK_MOD_NUM,COMMICSHOP_MAX_LOOP_NUM,COMMICSHOP_MIN_Y
+===== f125 usize=1518
+等级ID,模型,需要经验,最大存档数,好友数,解锁存档外观ID,解锁房间外观ID,解锁头像边框ID,升级奖励物品ID1,升级奖励物品数量1,升级奖励物品ID2,升级奖励物品数量2,升级奖励物品ID3,升级奖励物品数量3,升级奖励物品ID4,升级奖励物品数量4,升级奖励物品ID5,升级奖励物品数量5
+ID,ModelID,Exp,ArchiveNum,BuddyNum,,,,RewardID1,RewardNum1,RewardID2,RewardNum2,RewardID3,RewardNum3,RewardID4,RewardNum4,RewardID5,RewardNum5
+1,150001,0,4,30,,,,,,,,,,,,,
+===== f126 usize=4017
+位置ID,x坐标,y坐标,z坐标
+ID,x,y,z
+1,-3,69,6
+===== f127 usize=533
+id,剧情ID,剧情对白,半身像,表情,位置,音效
+ID,PlotID,PlotDialog,Icon,Face,Position,SoundIdx
+1,1,喂，喂，@name，你在看哪里呢？,160315.png,,,24
+===== f129 usize=16913
+姓,男人名字,女人名字
+Surname,Male,Female
+呆萌的,小七,小夜
+===== f131 usize=17701
+回收物品ID,名称,0级关联物品ID,类型（0普通物品1解锁型道具2角色3皮肤4坐骑5头像6特长碎片）,获得物品ID1,获得物品数量1,获得物品ID2,获得物品数量2
+ID,,InvolvedID,Type,GetID1,GetNum1,GetID2,GetNum2
+12950,原始护腕,1,2,10000,2,10001,1
+===== f132 usize=274608
+分类,资源ID,文件路径
+,ID,strPathName
+装扮屏蔽先遣服,100061,res/entity/140073/body.omod
+===== f133 usize=165346
+分类,资源ID,文件路径,是否询问后下载[0=手动下载，1=询问后下载，2=用到再下载]
+,ID,strPathName,IsAsk
+装扮,1,res/entity/140001/body.omod,1
+===== f135 usize=5935
+编号,皮肤名称,皮肤ID,角色ID,动作ID（窗口显示）,对应动作ID（实际使用的动作）,对应模型ID,版本是否开放（0不开放，1开放）,动作名,类型（0显示在官方动作列表，1-8分别为动作分类列表筛选）,动作名（备注使用）
+ID,Name,SkinID,ActionID,CharacterID,Toaction,Tomodel,Close,StringID,Type,表格备注：
+1,兔美美,3,,100131,300100,,1,15256,0,感谢
+===== f137 usize=2772
+选项ID,选项类型：0选项，1整数和小数，2只允许整数,初始描述,选后描述,最小值,最大值
+ID,Type,DefaultDesc,AfterDesc,MinVal,MaxVal
+1,0,是,,1,
+===== f138 usize=159
+id,曲子名称,资源路径（bin\res\sounds\PlayMusical下的文件名）,备注
+Id,Name,Location,
+10001,预设曲目1,test1,
+===== f139 usize=1906
+签到类型/1七天 2每周 3国庆活动,天数/周几,奖励名称,奖励图标,奖励类型/0道具，1迷你币,奖励物品ID,奖励数量,奖励存放提示,活跃度
+SignInType,WhatDay,RewardName,RewardIcon,RewardType,RewardID,RewardNum,RewardTips,RewardIntegral
+1,1,晴雨烟花,,1,12833,2,已存入仓库,5
+===== f140 usize=1475
+皮肤id,动作id,动作名称,动作特效,播放次数,还原时间,预览高度,预览位置,模型偏转角度,取消特效
+ID,SeqId,SeqName,SeqEffect,ShowTime,RestoreTime,Height,Location,Angle,StopEffect
+251,100100,站立动作,,1,10,,-180,,
+===== f141 usize=35885
+id,name
+ID,filename
+1,storehorse.horse4526
+===== f143 usize=32118
+喷漆ID,喷漆显示时间(s),喷漆贴图信息
+ID,ShowTime,PaintInfo
+1,30,"[{""TexName"":""#spray_001_1"", ""Left"":1,""Up"":0},{""TexName"":""#spray_001_2"", ""Left"":0,""Up"":0},{""TexName"":""#spray_001_3"", ""Left"":1,""Up"":-1},{""TexName"":""#spray_001_4"", ""Left"":0,""Up"":-1}]"
+===== f145 usize=1909
+购买ID,道具ID,道具数量,货币类型(STAR星星 JEWEL迷你币),购买价格,描述,推荐/折扣显示（1推荐 2折扣）,限购ID(1000起）,购买次数,成功返回飘字
+ProductID,ID,Num,CurrencyType,Cost,Desc,Tag,PurchaseLimitID,BuyNum,StringID
+1,24601,1,JEWEL,188,购买后可以获得大部分定制装扮的免费使用权，有效期30天，购买后立即生效,1,,,30260
+===== f146 usize=1294379
+id,备注,中文简体,翻译标记（示例）：0407更新待译,,,,,,,,,,
+ID,,Desc,,,,,,,,,,,
+1,,当前状态不能睡觉,,,,,,,,,,,
+===== f147 usize=669
+召唤物id,召唤物名称,召唤物模型,周身特效,召唤动作,召唤特效,召唤提示,召唤效果buff,详情页位置,召唤音效
+SummonID,Name,Model,Effect,SummonAction,SummonEffect,SummonTip,SummonBuff,DetailLocation,SummonSound
+4901,迷乱,110132,,100928,,成功召唤迷乱，移动速度提升了！,2002002,"120,30,0",summon1
+===== f148 usize=325
+任务ID,任务图标,任务名字,任务目标数量,任务奖励1,奖励数量1,任务奖励2,奖励数量2,任务奖励3,奖励数量3
+ID,Icon,Name,TargetNum,Reward1,RewardNum1,Reward2,RewardNum2,Reward3,RewardNum3
+1,icon415.png,收集星能块,1,817,1,12502,1,200,5
+===== f150 usize=8131
+序号,动作名称,动作ID,关联序号（关联animact的序号）,图标(没填不会出现在表情动作库里),特效,表情,触发器开放（1=人物动作 2=怪物动作 3=通用动作）,stringID
+ID,Name,ActID,LinkID,icon,Effect,FaceID,TriggerType,stringID
+1,打招呼,,1,icon100140,,,1,15250
+===== f152 usize=788
+����ID,��������,��������
+ID,Type,Num
+20000,5,
+===== f153 usize=1042
+608,607,641,640,408,113,113,113
+611,644,678,200,409,667,675,101
+613,646,682,201,410,506,113,104
+===== f154 usize=1056
+608,608,607,607,607,615,615,615
+611,611,611,615,615,600,600,608
+613,613,615,611,611,611,611,611
+===== f155 usize=1056
+641,641,640,640,640,648,648,648
+644,644,644,648,648,633,633,641
+646,646,648,644,644,644,644,644
+===== f156 usize=1056
+675,675,674,674,674,682,682,682
+678,678,678,682,682,667,667,675
+680,680,682,678,678,678,678,678
+===== f157 usize=536
+964,,,,,,,100,,
+586,,,,,,,100,,
+,,,,,,,100,,
+===== f4743 usize=1603
+CommonModule = {}
+
+function CommonModule.Clone(object)
+===== f4750 usize=2089
+local BaseCamera = require(script.Parent.BaseCamera)
+local WorkSpace = game:GetService("WorkSpace")
+local Players = game:GetService('Players')
+===== f4753 usize=1154
+local WorldService = game:GetService("WorldService")
+local RunService = game:GetService("RunService")
+local State = CommonModule.GetRegisterClass("State")
+===== f4754 usize=3488
+local RunService = game:GetService("RunService")
+local WorldService = game:GetService("WorldService")
+local BlockService = game:GetService("BlockService")
+===== f4755 usize=958
+local State = CommonModule.GetRegisterClass("State")
+local IdleState = CommonModule.Class("IdleState", State)
+local MouseService = game:GetService("MouseService")
+===== f4756 usize=292
+local State = CommonModule.GetRegisterClass("State")
+local SitState = CommonModule.Class("SitState", State)
+
+===== f4757 usize=1507
+
+
+local function cameraTrackUpdate()
+===== f6629 usize=136961
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<Ui>
+	<Script file="ui/mobile/terrainedit.lua"/>
+===== f6655 usize=63988
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<Ui>
+
+===== f6680 usize=3084
+# Max2Obj Version 4.0 Mar 10th, 2001
+#
+# object base to come ...
+===== f6727 usize=28946
+# Max2Obj Version 4.0 Mar 10th, 2001
+#
+# object base1 to come ...
+===== f6732 usize=49748
+# Max2Obj Version 4.0 Mar 10th, 2001
+#
+# object base to come ...
+===== f6734 usize=45809
+# Max2Obj Version 4.0 Mar 10th, 2001
+#
+# object base to come ...
+===== f6739 usize=40249
+# Max2Obj Version 4.0 Mar 10th, 2001
+#
+# object base to come ...
+===== f6741 usize=71566
+# Max2Obj Version 4.0 Mar 10th, 2001
+#
+# object base to come ...
+===== f6767 usize=37930
+# Max2Obj Version 4.0 Mar 10th, 2001
+#
+# object anvil to come ...
+===== f6780 usize=58772
+# Max2Obj Version 4.0 Mar 10th, 2001
+#
+# object base to come ...
+===== f6787 usize=1766
+# Max2Obj Version 4.0 Mar 10th, 2001
+#
+# object base to come ...
+===== f6789 usize=10213
+# Max2Obj Version 4.0 Mar 10th, 2001
+#
+# object base to come ...
+===== f6790 usize=28525
+# Max2Obj Version 4.0 Mar 10th, 2001
+#
+# object up to come ...
+===== f6810 usize=49595
+# Max2Obj Version 4.0 Mar 10th, 2001
+#
+# object tou to come ...
+===== f6812 usize=52083
+# Max2Obj Version 4.0 Mar 10th, 2001
+#
+# object wei to come ...
+===== f6814 usize=204136
+# Max2Obj Version 4.0 Mar 10th, 2001
+#
+# object wei to come ...
+===== f6816 usize=145334
+# Max2Obj Version 4.0 Mar 10th, 2001
+#
+# object wei to come ...
+===== f6835 usize=59405
+# Max2Obj Version 4.0 Mar 10th, 2001
+#
+# object base to come ...
+===== f6863 usize=32560
+# Max2Obj Version 4.0 Mar 10th, 2001
+#
+# object base to come ...
+===== f6865 usize=82550
+# Max2Obj Version 4.0 Mar 10th, 2001
+#
+# object base to come ...
+===== f6872 usize=16468
+# Max2Obj Version 4.0 Mar 10th, 2001
+#
+# object base to come ...
+===== f6873 usize=16460
+# Max2Obj Version 4.0 Mar 10th, 2001
+#
+# object base to come ...
+===== f6874 usize=71830
+# Max2Obj Version 4.0 Mar 10th, 2001
+#
+# object base to come ...
+===== f6875 usize=71919
+# Max2Obj Version 4.0 Mar 10th, 2001
+#
+# object base to come ...
+===== f6882 usize=137723
+# Max2Obj Version 4.0 Mar 10th, 2001
+#
+# object base2 to come ...
+===== f6887 usize=148653
+# Max2Obj Version 4.0 Mar 10th, 2001
+#
+# object close to come ...
+===== f6940 usize=19433
+# Max2Obj Version 4.0 Mar 10th, 2001
+#
+# object pressed to come ...
+===== f6951 usize=89614
+# Max2Obj Version 4.0 Mar 10th, 2001
+#
+# object piece1 to come ...
+===== f6954 usize=7978
+# Max2Obj Version 4.0 Mar 10th, 2001
+#
+# object base to come ...
+===== f6968 usize=69208
+# Max2Obj Version 4.0 Mar 10th, 2001
+#
+# object base to come ...
+===== f6985 usize=80276
+# Max2Obj Version 4.0 Mar 10th, 2001
+#
+# object base to come ...
+===== f6989 usize=52027
+# Max2Obj Version 4.0 Mar 10th, 2001
+#
+# object base to come ...
+===== f7090 usize=40220
+# Max2Obj Version 4.0 Mar 10th, 2001
+#
+# object base to come ...
+===== f7091 usize=8529
+# Max2Obj Version 4.0 Mar 10th, 2001
+#
+# object base to come ...
+===== f7092 usize=41604
+# Max2Obj Version 4.0 Mar 10th, 2001
+#
+# object box1 to come ...
+===== f7096 usize=67864
+# Max2Obj Version 4.0 Mar 10th, 2001
+#
+# object up to come ...
+===== f7111 usize=44548
+# Max2Obj Version 4.0 Mar 10th, 2001
+#
+# object open to come ...
+===== f7142 usize=46427
+# Max2Obj Version 4.0 Mar 10th, 2001
+#
+mtllib ./cocoa.mtl
+===== f7199 usize=22489
+# Max2Obj Version 4.0 Mar 10th, 2001
+#
+# object base to come ...
+===== f7249 usize=16721
+# Max2Obj Version 4.0 Mar 10th, 2001
+#
+# object base to come ...
+===== f7269 usize=3053
+# Max2Obj Version 4.0 Mar 10th, 2001
+#
+# object upper to come ...
+===== f7298 usize=194797
+# Max2Obj Version 4.0 Mar 10th, 2001
+#
+# object top to come ...
+===== f7302 usize=56909
+# Max2Obj Version 4.0 Mar 10th, 2001
+#
+# object base to come ...
+===== f7304 usize=48889
+# Max2Obj Version 4.0 Mar 10th, 2001
+#
+# object base to come ...
+===== f7359 usize=95731
+# Max2Obj Version 4.0 Mar 10th, 2001
+#
+# object side to come ...
+===== f7362 usize=7372
+# Max2Obj Version 4.0 Mar 10th, 2001
+#
+mtllib ./enchanttable.mtl
+===== f7384 usize=53350
+# Max2Obj Version 4.0 Mar 10th, 2001
+#
+# object top to come ...
+===== f7481 usize=11518
+# Max2Obj Version 4.0 Mar 10th, 2001
+#
+# object piece0 to come ...
+===== f7488 usize=13119
+# Max2Obj Version 4.0 Mar 10th, 2001
+#
+# object bar to come ...
+===== f7490 usize=8337
+# Max2Obj Version 4.0 Mar 10th, 2001
+#
+# object pillow to come ...
+===== f7493 usize=14677
+# Max2Obj Version 4.0 Mar 10th, 2001
+#
+# object pillow to come ...
+===== f7498 usize=11581
+# Max2Obj Version 4.0 Mar 10th, 2001
+#
+# object bar to come ...
+===== f7500 usize=46982
+# Max2Obj Version 4.0 Mar 10th, 2001
+#
+# object open to come ...
+===== f7507 usize=8669
+# Max2Obj Version 4.0 Mar 10th, 2001
+#
+# object side to come ...
+===== f7509 usize=4777
+# Max2Obj Version 4.0 Mar 10th, 2001
+#
+# object base to come ...
+===== f7513 usize=23953
+# Max2Obj Version 4.0 Mar 10th, 2001
+#
+# object base to come ...
+===== f7539 usize=54552
+# Max2Obj Version 4.0 Mar 10th, 2001
+#
+# object base to come ...
+===== f7546 usize=7404
+# Max2Obj Version 4.0 Mar 10th, 2001
+#
+# object base to come ...
+===== f7547 usize=9195
+# Max2Obj Version 4.0 Mar 10th, 2001
+#
+# object base to come ...
+===== f7548 usize=8830
+# Max2Obj Version 4.0 Mar 10th, 2001
+#
+# object base to come ...
+===== f7550 usize=10599
+# Max2Obj Version 4.0 Mar 10th, 2001
+#
+# object base to come ...
+===== f7552 usize=10599
+# Max2Obj Version 4.0 Mar 10th, 2001
+#
+# object base to come ...
+===== f7567 usize=157270
+# Max2Obj Version 4.0 Mar 10th, 2001
+#
+# object top_off to come ...
+===== f7569 usize=74523
+# Max2Obj Version 4.0 Mar 10th, 2001
+#
+# object base to come ...
+===== f7725 usize=13845
+# Max2Obj Version 4.0 Mar 10th, 2001
+#
+mtllib ./glasspane.mtl
+===== f7750 usize=1747
+# Max2Obj Version 4.0 Mar 10th, 2001
+#
+# object base to come ...
+===== f7798 usize=168514
+# Max2Obj Version 4.0 Mar 10th, 2001
+#
+# object close1 to come ...
+===== f7854 usize=10123
+# Max2Obj Version 4.0 Mar 10th, 2001
+#
+# object up to come ...
+===== f7911 usize=29641
+# Max2Obj Version 4.0 Mar 10th, 2001
+#
+# object base to come ...
+===== f7937 usize=344899
+# Max2Obj Version 4.0 Mar 10th, 2001
+#
+# object base_u to come ...
+===== f8035 usize=7081
+# Max2Obj Version 4.0 Mar 10th, 2001
+#
+# object pillow to come ...
+===== f8036 usize=10037
+# Max2Obj Version 4.0 Mar 10th, 2001
+#
+# object pillow to come ...
+===== f8062 usize=10468
+# Max2Obj Version 4.0 Mar 10th, 2001
+#
+# object base to come ...
+===== f8075 usize=50025
+# Max2Obj Version 4.0 Mar 10th, 2001
+#
+# object base to come ...
+===== f8078 usize=22932
+# Max2Obj Version 4.0 Mar 10th, 2001
+#
+# object base to come ...
+===== f8081 usize=27476
+# Max2Obj Version 4.0 Mar 10th, 2001
+#
+# object base to come ...
+===== f8084 usize=18106
+# Max2Obj Version 4.0 Mar 10th, 2001
+#
+# object base to come ...
+===== f8087 usize=19501
+# Max2Obj Version 4.0 Mar 10th, 2001
+#
+# object base to come ...
+===== f8176 usize=110538
+# Max2Obj Version 4.0 Mar 10th, 2001
+#
+# object close to come ...
+===== f8361 usize=25212
+# Max2Obj Version 4.0 Mar 10th, 2001
+#
+# object base to come ...
+===== f8364 usize=39466
+# Max2Obj Version 4.0 Mar 10th, 2001
+#
+# object base to come ...
+===== f8514 usize=1753
+# Max2Obj Version 4.0 Mar 10th, 2001
+#
+# object base to come ...
+===== f8516 usize=25881
+# Max2Obj Version 4.0 Mar 10th, 2001
+#
+# object base to come ...
+===== f8575 usize=78680
+# Max2Obj Version 4.0 Mar 10th, 2001
+#
+# object stage2 to come ...
+===== f8627 usize=43552
+# Max2Obj Version 4.0 Mar 10th, 2001
+#
+# object stage2 to come ...
+===== f8634 usize=95999
+# Max2Obj Version 4.0 Mar 10th, 2001
+#
+# object pressed1 to come ...
+===== f8740 usize=3505
+# Max2Obj Version 4.0 Mar 10th, 2001
+#
+# object base to come ...
+===== f8749 usize=56766
+# Max2Obj Version 4.0 Mar 10th, 2001
+#
+# object lower1 to come ...
+===== f8765 usize=16896
+# Max2Obj Version 4.0 Mar 10th, 2001
+#
+# object normal to come ...
+===== f8868 usize=1520
+# Max2Obj Version 4.0 Mar 10th, 2001
+#
+# object base to come ...
+===== f8880 usize=5503
+# Max2Obj Version 4.0 Mar 10th, 2001
+#
+# object base to come ...
+===== f8885 usize=82474
+# Max2Obj Version 4.0 Mar 10th, 2001
+#
+# object base to come ...
+===== f8917 usize=7251
+# Max2Obj Version 4.0 Mar 10th, 2001
+#
+# object base to come ...
+===== f8931 usize=28474
+# Max2Obj Version 4.0 Mar 10th, 2001
+#
+# object base to come ...
+===== f8939 usize=2747
+# Max2Obj Version 4.0 Mar 10th, 2001
+#
+# object base to come ...
+===== f9007 usize=9101
+# Max2Obj Version 4.0 Mar 10th, 2001
+#
+# object bar2 to come ...
+===== f9160 usize=2081
+# Max2Obj Version 4.0 Mar 10th, 2001
+#
+# object up to come ...
+===== f9312 usize=37696
+# Max2Obj Version 4.0 Mar 10th, 2001
+#
+# object base to come ...
+===== f9314 usize=118957
+# Max2Obj Version 4.0 Mar 10th, 2001
+#
+# object base1 to come ...
+===== f10004 usize=8933
+# Max2Obj Version 4.0 Mar 10th, 2001
+#
+# object stair2 to come ...
+===== f10008 usize=50602
+# Max2Obj Version 4.0 Mar 10th, 2001
+#
+# object base to come ...
+===== f10059 usize=54681
+# Max2Obj Version 4.0 Mar 10th, 2001
+#
+# object base to come ...
+===== f10083 usize=5960
+# Max2Obj Version 4.0 Mar 10th, 2001
+#
+# object base to come ...
+===== f10102 usize=24270
+# Max2Obj Version 4.0 Mar 10th, 2001
+#
+# object up to come ...
+===== f10104 usize=23594
+# Max2Obj Version 4.0 Mar 10th, 2001
+#
+# object base to come ...
+===== f10109 usize=32892
+# Max2Obj Version 4.0 Mar 10th, 2001
+#
+# object switchon_side to come ...
+===== f10128 usize=17088
+# Max2Obj Version 4.0 Mar 10th, 2001
+#
+# object base to come ...
+===== f10131 usize=55612
+# Max2Obj Version 4.0 Mar 10th, 2001
+#
+# object base to come ...
+===== f10216 usize=5503
+# Max2Obj Version 4.0 Mar 10th, 2001
+#
+# object base to come ...
+===== f10224 usize=13375
+# Max2Obj Version 4.0 Mar 10th, 2001
+#
+# object base to come ...
+===== f10248 usize=13012
+# Max2Obj Version 4.0 Mar 10th, 2001
+#
+# object _top to come ...
+===== f10256 usize=22404
+# Max2Obj Version 4.0 Mar 10th, 2001
+#
+# object base to come ...
+===== f10260 usize=15436
+# Max2Obj Version 4.0 Mar 10th, 2001
+#
+# object side to come ...
+===== f10263 usize=56972
+# Max2Obj Version 4.0 Mar 10th, 2001
+#
+# object base to come ...
+===== f10267 usize=22488
+# Max2Obj Version 4.0 Mar 10th, 2001
+#
+# object base to come ...
+===== f10299 usize=22214
+# Max2Obj Version 4.0 Mar 10th, 2001
+#
+mtllib ./tripwire.mtl
+===== f10363 usize=9101
+# Max2Obj Version 4.0 Mar 10th, 2001
+#
+# object bar2 to come ...
+===== f10364 usize=22654
+# Max2Obj Version 4.0 Mar 10th, 2001
+#
+# object base to come ...
+===== f10365 usize=29732
+# Max2Obj Version 4.0 Mar 10th, 2001
+#
+# object base to come ...
+===== f10386 usize=6909
+# Max2Obj Version 4.0 Mar 10th, 2001
+#
+# object base to come ...
+===== f10493 usize=42845
+# Max2Obj Version 4.0 Mar 10th, 2001
+#
+# object open2 to come ...
+===== f10499 usize=2362
+# Max2Obj Version 4.0 Mar 10th, 2001
+#
+mtllib ./wire.mtl
+===== f10521 usize=12439
+# Max2Obj Version 4.0 Mar 10th, 2001
+#
+# object base to come ...
+===== f10523 usize=12439
+# Max2Obj Version 4.0 Mar 10th, 2001
+#
+# object base to come ...
+===== f10541 usize=3704
+$      <          , 8          �
+  �   �   ,   <   ���;L   ���   ����	         L      33888292036829     魔法少女笑笑     bp10000713891688542877     建筑图纸1       m   $
+  
+===== f10546 usize=8576
+$      <          , 8          �  �   �   ,   <   ���;L                
+      L      54164832641245     魔法少女笑笑     bp10000713891689593349              #  @  (    �  �  �  �  �  �  h  P  8       �  �  �  �  �  l  T  <  $    �  �  �  �  �  |  d  L  4      �  �  �  �  �  t  \  D  ,    �  �  �  �  �  �  l  T  <  $    �  �  �  �  �  |  d  L  4      �  �  �  �  �  t  \  D  ,    �  �  �  �  �  �  l  T  <  $    �  �  �  �  �  |  d  L  4      �  �  �  �  �  t  \  D  ,    �  �  �  �  �  �  l  T  <  $    �  �  �  �  �  |  d  L  4      �  �  �  �  �  t  \  D  ,    �  �  �  �  �  �  l  T  <  $    �  �  �  �  �  |  d  L  4      �  �  �  �  �  t  \  D  ,    �
+  �
+===== f10547 usize=5640
+$      <          , 8            �   �   ,   <   ���;L   ����   ����   
+      L      54164832641245     魔法少女笑笑     bp10000713891689593571     123123      �   t  \  D  ,    �  �  �  �  �  �  l  T  <  $    �  �  �  �  �  |  d  L  4      �  �  �  �  �  t  \  D  ,    �  �  �  �  �  �  l  T  <  $    �  �  �  �  �  |  d  L  4      �  �  �  �  �  t  \  D  ,    �
+  �
+===== f10548 usize=2396
+$      <          , 8            �   �   ,   <   ���;L   ����   ����
+      	   L      54164832641245     魔法少女笑笑     bp10000713891689594032              P   l  T  <  $    �  �  �  �  �  |  d  L  4      �  �  �  �  �  t  \  D  ,    �  �  �  �  �  �  l  T  <  $    �  �  �  �  �  |  d  L  4      �  �  �  �  �  t  \  D  ,    �  �  �  �  �  �  l  T  <  $    �   �   �   �   �   |   d   L   4         ����  �         ����           ����  5         ����  5         
+���           ���  ;U	         2���  "         F���  "         Z���           n���  %         ����  %         ����           ����  �4         ����  �4         ����  C5         ����  e         ����  �          ���           "���           6���  �          J���           ^���  �         r���  u         ����  �          ����           ����           ����  �$         ����  �$         ����  C%         ����  �4         ���  �4         &���  C5         :���  �d         N���  D5         b���  C5         v���  C         ����  �          ����  �         ����  ,S         ����           ����  �          ����  �         ���  �t         ���  ��         *���  D%         >���  C%         R���  �$         f���  �$         z���  C%         ����  �4          ����  C5          ����  C5          ����  �d          ����  D5          ����  C5          ���  C          ���  D          .���  �           B���  C          V���  ,          j���  ��          ~���            ����             ����  �           ����  ��          ����  C          ����  ��          ����  ��          
+===== f10550 usize=6168
+$      <          , 8          ,  d  �   ,   <   ���;L         ����         L      54164832641245     魔法少女笑笑     bp10000713891689594318                                              ,$      $                       l         ������WD      $                                                                   
+      
+   $      ����C      G   �  �  |  d  L  4    �  �  �  �  �  t  \  D  ,    �  �  �  �  �  �  l  T  <  $    �  �  �  �  �  |  d  L  4      �  �  �  �  �  t  \  D  ,    �  �  �  �  �  �  l  T  <  $    �   �   �   �   �   |   d   L   4         ���� '�         ���� '�         ��� '�         ��� '�         .��� '�         B��� '�         V��� '�         j��� '�         ~��� '�         ���� '�      	   ���� '�      	   ���� '�      	   ���� '�         ���� '�         ���� '�         
+===== f10552 usize=27588
+       @         $ 0 <        �  �   �   ,   <   �  H   �      '      	      H      95572612274639     迷你队长       bp10000040471611632806     简约别墅        v   �
+  �
+  �
+===== f10553 usize=37168
+       @         $ 0 <        �  �   �   ,   <   �  H   N     "            H      95572612274639     迷你队长       bp10000040471611632864     小狗主题乐园      *   �  �  �  �  |  d  L  4      �  �  �  �  �  t  \  D  ,    �  �  �  �  �  �  l  T  <  $    �   �   �   �   �   |   d   L   4         Xp��  x         lp��  x
+         �p��  x	         �p��  x         �p��  x
+         �p��  x	         �p��  x         �p��  x
+===== f10561 usize=552
+CUST���+������!x���+���׫���!h���/���ǫu=	
+D������ǫ�D�|��ƱdP���ǫy|���3���ǫE]f��z+b����ǫImg��t+~��&UKBz�!|���3���ǫ,��!���W���ǫ���!H������ǫ���!�������ǫd��!���Ɨ�Z�ǫ$��!���W���ǫ���!H������ǫ���!�)193�-��ëL>�|�i�9��6(8T��f#u���7M���`����!l(193���ë�>�|�i�9���)8T��f#w���M���`����!<(193���ë�>�|�i�:���)8T��f#v���WM���`����!(193���ī�>�|�i�8��F)8T��f#w��ƧM���`����!�(193���«>�|�i�:��v)8T��f#u����M���`����!�(193���ë|>�|�i�9��&)8T��f#w����M���`����!t���5���ǫ��f#w���
+===== f10571 usize=18656
+CUST���+��������!x���+���׫���!h���/���ǫu=	
+H���w���ǫ�s�&|����,����ǫ!D|���:�+r`OT$�����?�+lRC].��2Au3���ǫ���!��������ǫ���!h���7��:�ǫD��!�������z�ǫ��!��Ʒ����ǫľ�!(���w����ǫ���!h���7��:�ǫD��!�������z�ǫ��!��Ʒ����ǫĿ�!(���w����ǫ���!h���7��:�ǫD��!�������z�ǫ��!��Ʒ����ǫļ�!(���w����ǫ���!h���7��:�ǫD��!�������z�ǫ��!��Ʒ����ǫĽ�!(���w����ǫ���!h���7��:�ǫD��!�������z�ǫ��!��Ʒ����ǫĺ�!(���w����ǫ���!h���7��:�ǫD��!�������z�ǫ��!��Ʒ����ǫĻ�!(���w����ǫ���!h���7��:�ǫD��!�������z�ǫ��!��Ʒ����ǫĸ�!(���w����ǫ���!h���7��:�ǫD��!�������z�ǫ��!��Ʒ����ǫĹ�!(���w����ǫ���!h���7��:�ǫD��!�����Ͳz�ǫ��!���ƷͲ��ǫ���!(���wͲ��ǫ���!h���7Ͳ:�ǫD��!�����̲z�ǫ��!���Ʒ̲��ǫ���!(���w̲��ǫ���!h���7̲:�ǫD��!�����ϲz�ǫ��!���Ʒϲ��ǫ���!(���wϲ��ǫ���!h���7ϲ:�ǫD��!�����βz�ǫ��!���Ʒβ��ǫ���!(���wβ��ǫ���!h���7β:�ǫD��!�����ɲz�ǫ��!���Ʒɲ��ǫ���!(���wɲ��ǫ���!h���7ɲ:�ǫD��!�����Ȳz�ǫ��!���ƷȲ��ǫ���!(���wȲ��ǫ���!h���7Ȳ:�ǫD��!�����˲z�ǫ��!���Ʒ˲��ǫ���!(���w˲��ǫ���!h���7˲:�ǫD��!�����ʲz�ǫ��!���Ʒʲ��ǫ���!(���wʲ��ǫ���!h���7ʲ:�ǫD��!�����Ųz�ǫ��!���ƷŲ��ǫ���!(���wŲ��ǫ���!h���7Ų:�ǫD��!�����Ĳz�ǫ��!���ƷĲ��ǫ���!(���wĲ��ǫ���!h���7Ĳ:�ǫD��!�����ǲz�ǫ��!���Ʒǲ��ǫ���!(���wǲ��ǫ���!h���7ǲ:�ǫD��!�����Ʋz�ǫ��!���ƷƲ��ǫ���!(���wƲ��ǫ���!h���7Ʋ:�ǫD��!�������z�ǫ��!���Ʒ����ǫ���!(���w����ǫ���!h���7��:�ǫD��!�������z�ǫ��!���Ʒ����ǫ���!(���w����ǫ���!h���7��:�ǫD��!�����òz�ǫ��!���Ʒò��ǫ���!(���wò��ǫ���!h���7ò:�ǫD��!�����²z�ǫ��!���Ʒ²��ǫ���!(���w²��ǫ���!h���7²:�ǫD��!�����ݲz�ǫ��!���Ʒݲ��ǫ���!(���wݲ��ǫ���!h���7ݲ:�ǫD��!�����ܲz�ǫ��!���Ʒܲ��ǫ���!(���wܲ��ǫ���!h���7ܲ:�ǫD��!�����߲z�ǫ��!���Ʒ߲��ǫ���!(���w߲��ǫ���!h���7߲:�ǫD��!�����޲z�ǫ��!���Ʒ޲��ǫ���!(���w޲��ǫ���!h���7޲:�ǫD��!�����ٲz�ǫ��!���Ʒٲ��ǫ���!(���wٲ��ǫ���!h���7ٲ:�ǫD��!�����زz�ǫ��!���Ʒز��ǫ���!(���wز��ǫ���!h���7ز:�ǫD��!�����۲z�ǫ��!���Ʒ۲��ǫ���!(���w۲��ǫ���!h���7۲:�ǫD��!�����ڲz�ǫ��!���Ʒڲ��ǫ���!(���wڲ��ǫ���!h���7ڲ:�ǫD��!�����ղz�ǫ��!���Ʒղ��ǫ���!(���wղ��ǫ���!h���7ղ:�ǫD��!�����Բz�ǫ��!���ƷԲ��ǫ���!(���wԲ��ǫ���!h���7Բ:�ǫD��!�����ײz�ǫ��!���Ʒײ��ǫ���!(���wײ��ǫ���!h���7ײ:�ǫD��!�����ֲz�ǫ��!���Ʒֲ��ǫ���!(���wֲ��ǫ���!h���7ֲ:�ǫD��!�����Ѳz�ǫ��!���ƷѲ��ǫ���!(���wѲ��ǫ���!h���7Ѳ:�ǫD��!�����вz�ǫ��!���Ʒв��ǫ���!(���wв��ǫ���!h���7в:�ǫD��!�����Ӳz�ǫ��!���ƷӲ��ǫ���!(���wӲ��ǫ���!h���7Ӳ:�ǫD��!�����Ҳz�ǫ��!���ƷҲ��ǫ���!(���wҲ��ǫ���!h���7Ҳ:�ǫD��!�������z�ǫ��!���Ʒ����ǫ���!(���w����ǫ���!h���7��:�ǫD��!������z�ǫ��!���Ʒ���ǫ���!(���w���ǫ���!h���7�:�ǫD��!������z�ǫ��!���Ʒ���ǫ���!(���w���ǫ���!h���7�:�ǫD��!������z�ǫ��!���Ʒ���ǫ���!(���w���ǫ���!h���7�:�ǫD��!������z�ǫ��!���Ʒ���ǫ���!(���w���ǫ���!h���7�:�ǫD��!������z�ǫ��!���Ʒ���ǫ���!(���w���ǫ���!h���7�:�ǫD��!������z�ǫ��!���Ʒ���ǫ���!(���w���ǫ���!h���7�:�ǫD��!������z�ǫ��!���Ʒ���ǫ���!(���w���ǫ���!h���7�:�ǫD��!������z�ǫ��!���Ʒ���ǫ���!(���w���ǫ���!h���7�:�ǫD��!������z�ǫ��!���Ʒ���ǫ���!(���w���ǫ���!h���7�:�ǫD��!������z�ǫ��!���Ʒ���ǫ���!(���w���ǫ���!h���7�:�ǫD��!������z�ǫ��!���Ʒ���ǫ���!(���w���ǫ���!h���7�:�ǫD��!������z�ǫ��!���Ʒ���ǫ���!(���w���ǫ���!h���7�:�ǫD��!������z�ǫ��!���Ʒ���ǫ���!(���w���ǫ���!h���7�:�ǫD��!������z�ǫ��!���Ʒ���ǫ���!(���w���ǫ���!h���7�:�ǫD��!������z�ǫ��!���Ʒ���ǫ���!(���w���ǫ���!h���7�:�ǫD��!�������z�ǫ��!���Ʒ����ǫ���!(���w����ǫ���!h���7��:�ǫD��!�������z�ǫ��!���Ʒ����ǫ���!(���w����ǫ���!h���7��:�ǫD��!�������z�ǫ��!���Ʒ����ǫ���!(���w����ǫ���!h���7��:�ǫD��!�������z�ǫ��!���Ʒ����ǫ���!(���w����ǫ���!h���7��:�ǫ
+===== f10579 usize=2152
+CUST���+��������!x���+���׫���!h���/���ǫu=	
+H������ǫ��DO|��ƴj�,��ǫ_�|���:�+r`OT$�����4�(\cC'{�!|���3���ǫ|��!���Ƈ��j�ǫ4��!����G����ǫ���!8�������ǫ���!x������*�ǫt��!���Ƈ��j�ǫ4��!����G����ǫ���!8�������ǫ���!x������*�ǫt��!���Ƈ��j�ǫ4��!����G����ǫ���!8�������ǫ���!x������*�ǫt��!���Ƈ��j�ǫ4��!����G����ǫ���!8�������ǫ���!x�����*�ǫt��!���Ƈ�j�ǫ4��!����G���ǫ���!8������ǫ���!x�����*�ǫt��!���Ƈ�j�ǫ4��!����G���ǫ���!8������ǫ���!x�����*�ǫt��!���Ƈ�j�ǫ4��!����G���ǫ���!8������ǫ���!x�����*�ǫt��!���Ƈ�j�ǫ4��!����G���ǫ���!8������ǫ���!x���M���G����!L-193�)���˫�>�|�U$;���,8T��Z�t���gM���\I���!-193�2��ϫ�>�|�U$:���,8T��Z�u��ƷM���\I���!�-193�(��ɫ<>�|�T�9��f,8T��Z�v��ƇM���n����!�-193���«l>�|�N�;��,8T��Z�t����M���\I���!�-193�)���ͫ\>�|�U$;���-8T��A!t���'	M���\I���!\,193�)������>�|�U$9���-8T��[#v���w	M���]����!,,193�)������>�|�g�8���-8T��h#w���G	M���G����!�,193�2��˫,>�|�U$;��V-8T��Z�t��Ɨ	M���G����!�,193�2��ϫ>�|�N�:��-8T��A!u����	M���n����!�,193�2��ɫL>�|�N�9��6-8T��h#v���7M���n����!l+193���«�>�|�N�;���*8T��A!t���M���G����!<+193�2��ͫ�>�|�N�;���*8T��A!t���WM���G����!+193�2�����>�|�g�9��F*8T��A!v��ƧM���G����!�+193�����>�|�g�8��v*8T��h#w����M���G����!�+193�2��˫|>�|�U$;��&*8T��Z�t����M���G����!|*193�2��ϫ�>�|�N�:���+8T��A!u���M���n����!L*193�2��ɫ�>�|�N�9���+8T��h#v���gM���n����!*193���«�>�|�N�;���+8T��Z�t��ƷM���\I���!�*193�)���ͫ<>�|�U$;��f+8T��A!t��ƇM���\I���!�*193�)�����l>�|�U$9��+8T��[#v����M���]����!�*193�)�����\>�|�g�8���(8T��h#w���'M���G����!\)193�)���˫�>�|�U$;���(8T��Z�t���wM���\I���!,)193�2��ϫ�>�|�U$:���(8T��Z�u���GM���\I���!�)193�(��ɫ,>�|�T�9��V(8T��Z�v��ƗM���n����!�)193���«>�|�N�;��(8T��A!t����M���\I���!�)193�)���ͫL>�|�N�;��6(8T��A!t���7M���G����!l(193�2�����>�|�g�9���)8T��A!v���M���G����!<(193������>�|�g�8���)8T��h#w���WM���n����!(193���˫�>�|�g�;��F)8T��h#t��ƧM���n����!�(193���ϫ>�|�g�:��v)8T��h#u����M���n����!�(193���ɫ|>�|�g�9��&)8T��h#v����M���n����!t���5���ǫ��h#w���
+===== f10582 usize=4376
+CUST���+��������!x���+���׫���!h���/���ǫu=	
+H������ǫ�|��ƫ��%��ǫ�t|���:�+r`OT$�����5�+^GN^�!|���3���ǫ,��!���W���ǫ���!H������ǫ���!��������ǫd��!���Ɨ��Z�ǫ$��!���W����ǫ���!H�������ǫ���!��������ǫd��!���Ɨ��Z�ǫ$��!���W����ǫ���!H�������ǫ���!��������ǫd��!���Ɨ��Z�ǫ$��!���W����ǫ���!H�������ǫ���!��������ǫd��!���Ɨ��Z�ǫ$��!���W����ǫ���!H�������ǫ���!��������ǫd��!���Ɨ��Z�ǫ$��!���W����ǫ���!H�������ǫ���!��������ǫd��!���Ɨ��Z�ǫ$��!���W����ǫ���!H�������ǫ���!��������ǫd��!���Ɨ��Z�ǫ$��!���W����ǫ���!H�������ǫ���!��������ǫd��!���Ɨ��Z�ǫ$��!���W����ǫ���!H�������ǫ���!��������ǫd��!���Ɨ��Z�ǫ$��!���W����ǫ���!H�������ǫ���!��������ǫd��!���Ɨ��Z�ǫ$��!���W����ǫ���!H�������ǫ���!��������ǫd��!���Ɨ��Z�ǫ$��!���W����ǫ���!H�������ǫ���!��������ǫd��!���Ɨ��Z�ǫ$��!���W����ǫ���!H�������ǫ���!�������ǫd��!���Ɨ�Z�ǫ$��!���W���ǫ���!H������ǫ���!�������ǫd��!���Ɨ�Z�ǫ$��!���W���ǫ���!H������ǫ���!�������ǫd��!���Ɨ�Z�ǫ$��!���W���ǫ���!H������ǫ���!�������ǫd��!���Ɨ�Z�ǫ$��!���W���ǫ���!H������ǫ���!�$193����ϫ
+>�|�lD:��v%8T��c�u����M���e)���!�$193������|
+===== f10585 usize=1912
+$          0     $            e  (   4   ���+�   8   |   �   F��^        	   锦衣帽   	   大中天   B   自定义模型可使用为方块、道具、生物插件的外观     7345778771590031430        (   $ @       
+ $ ( 4 8        < $     L���L�4   @   D     �A  �B      �?            ,   ,     �?	   锦衣帽                          �  <        ����4   D   P     �  ��  ��  �?            H   L     �?   前鬃（右    	   锦衣帽      7345778771590029856           ����  �      t   X   <          ����  �  �  ��  ��  �?�������  �  ��      �?����  �  �  ��  ��  �?�����   �  ��   �  �?����  �  ��  ��  �?����4   D   P     �  ��  �B  �?            H   L     �?   前鬃（左    	   锦衣帽      7345778771590029856           ����  �      t   X   <          ����  �  �  ��  �B  �?�������  �  ��  �B  �?����  �  �  ��  �B  �?�����   �  ��  pB  �?����  �  ��  �B  �?����4   <   H     �B  \�  �A  �?            @   D     �?   后鬃  	   锦衣帽      7345778771590029785             
+      
+===== f10586 usize=2176
+       0     (      $ 
+      e  ��$   ,   ���+�   0   t   �   �s�^       裤裙  	   大中天   B   自定义模型可使用为方块、道具、生物插件的外观     7345778771590457343        (   $ @       
+ $ ( 4 8        < $     L���L�4   <   @     ��  �B  �@  �?            (   (     �?   主体                         �  T     P���    4   <   D         �B   �  �?            ,   ,     �?   底裤     主体                 x      (���4   <   D         ��  p�  �?            <   <     �?   底裤2    底裤     7345778771590148481         ����4   <   D         ��      �?            <   <     �?   底裤1    底裤     7345778771590148466         ����    4   D   L     ��  x�  ��  �?            4   4     �?   绳子主体       主体                 �      |���4   <   L     ��  �B  \B  �?            D   D     �?   绳子2    绳子主体       7345778771590377715         ����4   <   L         �B      �?            D   D     �?   绳子     绳子主体       7345778771590377708         $ <             $ 0 4        8 $       4   <   D     8�          �?            ,   ,     �?   裙摆     主体                 h  �  ,  �  (   $ @        
+===== f10587 usize=368
+       0     (      $ 
+      e  ��$   ,   ���+�   0   t   �   �}�^       靴子  	   大中天   B   自定义模型可使用为方块、道具、生物插件的外观     7345778771590459839        (   $ @       
+ $ ( 4 8         < $     L���L�4   <   @     B  �B  �A���?            8   8     �?   鞋子             7345778771590033343         
+===== f10588 usize=1416
+       0     (      $ 
+      e  ��$   ,   ���+�   0   t   �   ���^       上衣  	   大中天   B   自定义模型可使用为方块、道具、生物插件的外观     7345778771590461353        (   $ @       
+ $ ( 4 8        < $     � ��� 4   <   @     B  �B      �?            (   (     �?   上衣                         �     l���    4   <   D                 �?            ,   ,     �?   垫肩     上衣                   (   $ <           $ 0 4         8 $   g�M�4   <   D         �A  ���̌?            <   <     �?   垫肩2    垫肩     7345778771590393242           ���  ��4   @   H         �  A�̌?            @   @     �?	   臂甲右      垫肩2    7345778771590459391         ����  ��4   <   D         �A  �B�̌?            <   <     �?   垫肩1    垫肩     7345778771590393242        (   $ <            $ 0 4         8 $     ��4   @   H         �  A�̌?            @   @     �?	   臂甲左      垫肩1    7345778771590459391         $ <             $ 0 4        8 $       4   <   D                 �?            ,   ,     �?   衣服     上衣                 �      ����4   8   @             �  �?            8   8     �?   右    衣服     7345778771590118603         $ 8              , 0         4 $   4   8   @             �A  �?            8   8     �?   左    衣服     7345778771590118597         
