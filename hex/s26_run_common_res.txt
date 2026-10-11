@@ -1,0 +1,16 @@
+header: ver=0x18b unk=17 index@839753515+1607646
+index: 2975805 bytes
+Traceback (most recent call last):
+  File "/home/runner/work/MiniWorldPkgUnpacker/MiniWorldPkgUnpacker/w26/up/unpack_common_res.py", line 540, in <module>
+    sys.exit(main())
+             ^^^^^^
+  File "/home/runner/work/MiniWorldPkgUnpacker/MiniWorldPkgUnpacker/w26/up/unpack_common_res.py", line 198, in main
+    return main_v1(pkg, out)
+           ^^^^^^^^^^^^^^^^^
+  File "/home/runner/work/MiniWorldPkgUnpacker/MiniWorldPkgUnpacker/w26/up/unpack_common_res.py", line 308, in main_v1
+    recA, recB, paths, pos = parse_v1_index(idx)
+                             ^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/work/MiniWorldPkgUnpacker/MiniWorldPkgUnpacker/w26/up/unpack_common_res.py", line 84, in parse_v1_index
+    X, Y, Z = struct.unpack_from("<III", idx, pos); pos += 12
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+struct.error: unpack_from requires a buffer of at least 2975816 bytes for unpacking 12 bytes at offset 2975804 (actual buffer size is 2975805)
