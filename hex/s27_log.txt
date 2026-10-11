@@ -1,0 +1,14 @@
+intl 1011MB entries=3414 (17s)
+pkgs: common_res.pkg=636MB, first_res.pkg=11MB, game_language.pkg=1MB, game_res.pkg=199MB, material_ogles2.pkg=11MB, material_ogles3.pkg=16MB, remote_res.pkg=1MB, script_res.pkg=53MB
+assets/remote_res.pkg -> 21530
+  cfg chars=593
+assets/game_language.pkg -> 0
+assets/material_ogles2.pkg -> 2928
+  cfg chars=96506
+assets/first_res.pkg -> 2457
+  cfg chars=72935
+assets/material_ogles3.pkg -> 3713
+  cfg chars=96506
+assets/script_res.pkg -> 8174
+  cfg chars=4016919
+assets/game_res.pkg -> 0
