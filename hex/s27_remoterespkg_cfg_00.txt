@@ -1,0 +1,55 @@
+===== _unpack_report.json (561)
+{
+ "pkg": "assets/remote_res.pkg",
+ "format": "v2 (0x130ba)",
+ "records": 21528,
+ "records_28b": 0,
+ "records_44b": 21528,
+ "paths": 21528,
+ "files_extracted": 21528,
+ "orphans": 0,
+ "md5_ok": 0,
+ "md5_bad": 21528,
+ "errors": [
+  [
+   0,
+   "md5 mismatch"
+  ],
+  [
+   1,
+   "md5 mismatch"
+  ],
+  [
+   2,
+   "md5 mismatch"
+  ],
+  [
+   3,
+   "md5 mismatch"
+  ],
+  [
+   4,
+   "md5 mismatch"
+  ],
+  [
+   5,
+   "md5 mismatch"
+  ],
+  [
+   6,
+   "md5 mismatch"
+  ],
+  [
+   7,
+   "md5 mismatch"
+  ],
+  [
+   8,
+   "md5 mismatch"
+  ],
+  [
+   9,
+   "md5 mismatch"
+  ]
+ ]
+}
