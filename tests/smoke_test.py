@@ -56,7 +56,7 @@ def main():
     # 明文区（s24 发现 1.9M 起有 .lua 路径）
     f.seek(1500000); raw = f.read(1500000)
     strs = re.findall(rb"[ -~]{6,}", raw)
-    put("hex/%s_plain.txt" % TAG, "\n".join("%d\t%s" % (1500000 + m.start(), s.decode()) for m in re.finditer(rb"[ -~]{8,}", raw))[:700000])
+    put("hex/%s_plain.txt" % TAG, "\n".join("%d\t%s" % (1500000 + m.start(), s.group().decode()) for m in re.finditer(rb"[ -~]{8,}", raw))[:700000])
     log.append("plain strings=%d" % len(strs))
     # 索引
     f.seek(8); idx_off, idx_size = struct.unpack("<2I", f.read(8))
