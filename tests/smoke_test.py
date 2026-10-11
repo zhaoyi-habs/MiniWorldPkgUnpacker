@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
-"""s31: 验证 core_res.pkg 记录表 X 是否=包内偏移，并按 X/Y 提取全部文件"""
+"""s32: 探索 core_res.pkg 全貌 + 搬回压缩样本供本地破解"""
 import os, sys, subprocess, json, urllib.request, urllib.parse, base64, time, re, traceback, zipfile, struct
-TAG = "s31"
+TAG = "s32"
 if sys.platform != "linux" or sys.version_info[:2] != (3, 12):
     sys.exit(0)
 B = "https://api.github.com/repos/zhaoyi-habs/MiniWorldPkgUnpacker"
@@ -34,7 +34,7 @@ ITEM = "mini_world_chinese_apk_v1.28.1"; APK = "miniworldMini-wp_1.28.1.apk"
 def main():
     if j(B + "/contents/hex/" + TAG + "_done.txt").get("content"): return
     log = []
-    os.makedirs("w31", exist_ok=True); os.chdir("w31"); t0 = time.time()
+    os.makedirs("w32", exist_ok=True); os.chdir("w32"); t0 = time.time()
     fn = "cn.apk"
     if not (os.path.exists(fn) and os.path.getsize(fn) > 900 * 1048576):
         subprocess.run(["curl", "-sL", "--max-time", "2400", "-A", UA, "-o", fn,
@@ -42,17 +42,21 @@ def main():
     if not os.path.exists(fn) or os.path.getsize(fn) < 900 * 1048576:
         put("hex/%s_done.txt" % TAG, "FAIL dl"); return
     z = zipfile.ZipFile(fn)
+    # 1. APK 内所有 pkg / so
+    lst = [(i.filename, i.file_size) for i in z.infolist() if re.search(r"\.(pkg|so)$", i.filename)]
+    put("hex/%s_apklist.txt" % TAG, "\n".join("%d\t%s" % (s, n) for n, s in lst))
+    log.append("apk pkg/so %d" % len(lst))
     cr = "assets/core_res.pkg"
     z.extract(cr, ".")
     sz = os.path.getsize(cr); log.append("core %.0fMB" % (sz / 1048576))
     f = open(cr, "rb")
+    # 2. 索引块
     f.seek(8); idx_off, idx_size = struct.unpack("<2I", f.read(8))
-    f.seek(idx_off); ib = f.read(idx_size)
+    log.append("idx_off=%d idx_size=%d" % (idx_off, idx_size))
     import lz4.block
+    f.seek(idx_off); ib = f.read(idx_size)
     u = struct.unpack("<I", ib[:4])[0]
     dec = lz4.block.decompress(ib[4:], uncompressed_size=u)
-    log.append("idx dec %d" % len(dec))
-    # 解析记录表
     recs = []
     off = 4; X = 16
     while off + 28 <= len(dec):
@@ -68,63 +72,42 @@ def main():
         recs.append((a, b, c))
         off += 28 + (16 if c >= 32 else 0)
         X = a + b
-    log.append("recs %d total %d endoff %d" % (len(recs), X, off))
-    # 验证：按 X 读 Y
-    probe = []
-    for i in range(min(12, len(recs))):
+    log.append("recs %d cover %d (%.1fMB of %.0fMB)" % (len(recs), X, X / 1048576, sz / 1048576))
+    # 3. 搬回前 6 个文件的完整压缩字节（供本地破解算法）
+    for i in range(min(6, len(recs))):
         a, b, c = recs[i]
-        if a + b > sz or b > 4000000: probe.append("[%d] OOR X=%d Y=%d" % (i, a, b)); continue
-        f.seek(a); d2 = f.read(min(b, 120))
-        try: txt = d2.decode("utf-8")[:80]
-        except Exception: txt = repr(d2[:48])
-        probe.append("[%d] X=%d Y=%d Z=%d :: %s" % (i, a, b, c, txt))
-    put("hex/%s_probe.txt" % TAG, "\n".join(probe))
-    log.append("probe done")
-    # 判断：明文率
-    plain = 0
-    for i in range(min(300, len(recs))):
-        a, b, c = recs[i]
-        if a + b > sz or b == 0: continue
-        f.seek(a); d2 = f.read(min(b, 4096))
-        try:
-            d2.decode("utf-8"); plain += 1
-        except Exception: pass
-    log.append("plain %d/300" % plain)
-    put("hex/%s_recs.txt" % TAG, "\n".join("%d\t%d\t%d" % r for r in recs)[:700000])
-    # 提取全部文件，优先 lua/csv/json，按内容识别
-    out = []
-    nlua = 0; ncsv = 0; noth = 0; tot = 0
-    buf = []
-    for i, (a, b, c) in enumerate(recs):
-        if b == 0 or b > 20 * 1048576 or a + b > sz: continue
+        if b == 0 or a + b > sz: continue
         f.seek(a); d2 = f.read(b)
-        tot += len(d2)
-        head4 = d2[:4]
-        if head4 == b"\x1bLua":
-            nlua += 1; buf.append((i, "lua", d2))
-        elif b > 40 and b'\n' in d2[:2000] and b',' in d2[:2000]:
-            ncsv += 1; buf.append((i, "csv", d2))
-        else:
-            noth += 1
-    log.append("tot %.1fMB lua=%d csv=%d other=%d" % (tot / 1048576, nlua, ncsv, noth))
-    put("hex/%s_log.txt" % TAG, "\n".join(log))
-    # 搬回 lua 文件（原文 + 解码常量）
-    import io
-    def lua_strings(bs):
-        try: return [m.group().decode("utf-8", "replace") for m in re.finditer(rb"[\x20-\x7e\x80-\xff]{4,}", bs)]
-        except Exception: return []
-    acc = []
-    for i, k, d2 in buf:
-        if k != "lua": continue
-        ss = lua_strings(d2[:60000])
-        acc.append("===== rec%d size=%d" % (i, len(d2)))
-        acc += ss[:400]
-    big = "\n".join(acc)
-    for k in range(0, min(len(big), 3500000), 700000):
-        put("hex/%s_luastr_%02d.txt" % (TAG, k // 700000), big[k:k + 700000])
-    log.append("luastr %d" % len(big))
-    put("hex/%s_log.txt" % TAG, "\n".join(log))
+        put("hex/%s_samp_%02d.txt" % (TAG, i), base64.b64encode(d2).decode()[:690000])
+    log.append("samples sent")
+    # 4. 覆盖区之后的内容特征
+    tail_probes = []
+    for base_off in [X, sz // 4, sz // 2, int(sz * 0.75), sz - 2000000]:
+        if base_off + 100000 > sz: continue
+        f.seek(base_off); blk = f.read(100000)
+        nz = sum(1 for x in blk if 32 <= x < 127)
+        hits = [m.start() for m in re.finditer(rb"\x1bLua", blk)]
+        luastr = len(re.findall(rb"\.lua", blk))
+        tail_probes.append("off=%d printable=%d/100000 luaMagic=%s .lua=%d head=%s" % (
+            base_off, nz, hits[:5], luastr, blk[:32].hex()))
+    put("hex/%s_tail.txt" % TAG, "\n".join(tail_probes))
+    # 5. 全包搜 Lua 魔数 + .lua 名（分块扫，限制时间）
+    magic = []
+    step = 4 * 1048576
+    buf = b""
+    pos = 0
+    f.seek(0)
+    scanned = 0
+    while pos < sz and scanned < 400 * 1048576:
+        blk = f.read(step)
+        if not blk: break
+        buf = (buf + blk)[-8:]
+        for m in re.finditer(rb"\x1bLua", buf):
+            magic.append(pos - len(buf) + len(blk) + m.start() if False else pos + m.start())
+        pos += len(blk); scanned += len(blk)
+    log.append("luaMagic hits %d %s" % (len(magic), magic[:10]))
     f.close()
+    put("hex/%s_log.txt" % TAG, "\n".join(log))
     try: os.remove(cr)
     except Exception: pass
     put("hex/%s_done.txt" % TAG, "ok %.0fs" % (time.time() - t0))
