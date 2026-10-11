@@ -1,0 +1,14 @@
+mini_world_chinese_apk_v1.28.1	miniworldMini-wp_1.28.1.apk	1015057301
+mini_world_chinese_apk_v1.16.0	miniworldMini-wp-1.16.0.apk	666543768
+mini_world_chinese_apk_v1.16.1-scb	miniworld-MiniScb-1.16.1.apk	663756504
+mini_world_chinese_apk_v1.20.10	miniworldMini-wp-1.20.10.apk	662420387
+mini_world_chinese_apk_v1.20.5	miniworldMini-wp-1.20.5.apk	648303457
+mini_world_chinese_apk_v1.15.1-scb	miniworld-MiniScb-1.15.1.apk	628242511
+mini_world_chinese_apk_v1.13.3-scb	miniworld-MiniScb-1.13.3.apk	597054818
+mini_world_chinese_apk_v1.9.0	miniworldMini-wp-1.9.0.apk	546227137
+mini_world_chinese_apk_v1.8.0	miniworldMini-wp-1.8.0.apk	526940375
+mini_world_chinese_apk_v1.2.1_202307	miniworldMini-wp-1.4.0.apk	415464719
+mini_world_chinese_apk_v1.2.1	miniworldMini-wp-1.2.1.apk	382532224
+mini_world_chinese_apk_v0.21.10	miniworld-0.21.10.apk	97652706
+mini_world_chinese_apk_v0.21.3	miniworld-0.21.3.apk	96524525
+mini_world_chinese_apk_v0.8.2	miniworld_0-8-2.apk	46637888
