@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
-"""s33: 全量解压 core_res.pkg 77.5MB + 探索第二段索引"""
-import os, sys, subprocess, json, urllib.request, urllib.parse, base64, time, re, traceback, zipfile, struct
-TAG = "s33"
+"""s34: 全量解压 6023 个 Lua，undump 提取源路径/常量/函数名，tar.gz 回传"""
+import os, sys, subprocess, json, urllib.request, urllib.parse, base64, time, re, traceback, zipfile, struct, io, tarfile, gzip
+TAG = "s34"
 if sys.platform != "linux" or sys.version_info[:2] != (3, 12):
     sys.exit(0)
 B = "https://api.github.com/repos/zhaoyi-habs/MiniWorldPkgUnpacker"
@@ -32,29 +32,75 @@ def put(p, t):
 UA = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
 ITEM = "mini_world_chinese_apk_v1.28.1"; APK = "miniworldMini-wp_1.28.1.apk"
 def chunk_put(pref, s, n=680000):
-    for k in range(0, len(s), n):
-        put("%s%02d.txt" % (pref, k // n), s[k:k + n])
+    k = 0
+    for i in range(0, len(s), n):
+        put("%s%02d.txt" % (pref, k), s[i:i + n]); k += 1
+    return k
+
+class R:
+    def __init__(s, b): s.b = b; s.p = 0
+    def u8(s):
+        v = s.b[s.p]; s.p += 1; return v
+    def u32(s):
+        v = struct.unpack_from("<I", s.b, s.p)[0]; s.p += 4; return v
+    def u64(s):
+        v = struct.unpack_from("<Q", s.b, s.p)[0]; s.p += 8; return v
+    def sz(s):
+        v = struct.unpack_from("<I", s.b, s.p)[0]; s.p += 4; return v
+    def bytes(s, n):
+        v = s.b[s.p:s.p + n]; s.p += n; return v
+
+def undump_strings(b):
+    """Lua5.1 undump: 收集常量表里的字符串"""
+    out = []
+    try:
+        if b[:4] != b"\x1bLua": return None
+        r = R(b); r.p = 4
+        ver = r.u8()
+        if ver != 0x51: return ("ver%d" % ver, [])
+        r.u8()  # format
+        r.u8()  # endian
+        r.u8(); r.u8(); r.u8(); r.u8(); r.u8()  # sizes
+        stack = [0]
+        # 只解析顶层 + 嵌套（有限深度）
+        def func(depth):
+            if depth > 3: return
+            ln = r.sz()
+            src = r.bytes(ln) if ln else b""
+            out.append(src.decode("utf-8", "replace"))
+            r.u32(); r.u32(); r.u8(); r.u8(); r.u8(); r.u8()
+            ncode = r.u32(); r.p += ncode * 4
+            nk = r.u32()
+            for _ in range(nk):
+                t = r.u8()
+                if t == 4:
+                    l = r.sz(); out.append(r.bytes(l).decode("utf-8", "replace"))
+                elif t == 3: r.p += 8
+                elif t == 1: r.p += 1
+            nsub = r.u32()
+            for _ in range(nsub): func(depth + 1)
+        func(0)
+        return ("ok", out)
+    except Exception as e:
+        return ("err:" + str(e)[:40], out)
+
 def main():
     if j(B + "/contents/hex/" + TAG + "_done.txt").get("content"): return
     log = []
-    os.makedirs("w33", exist_ok=True); os.chdir("w33"); t0 = time.time()
+    os.makedirs("w34", exist_ok=True); os.chdir("w34"); t0 = time.time()
     fn = "cn.apk"
     if not (os.path.exists(fn) and os.path.getsize(fn) > 900 * 1048576):
         subprocess.run(["curl", "-sL", "--max-time", "2400", "-A", UA, "-o", fn,
                         "https://archive.org/download/%s/%s" % (ITEM, urllib.parse.quote(APK))], timeout=2500)
     if not os.path.exists(fn) or os.path.getsize(fn) < 900 * 1048576:
         put("hex/%s_done.txt" % TAG, "FAIL dl"); return
-    z = zipfile.ZipFile(fn)
-    cr = "assets/core_res.pkg"
-    z.extract(cr, ".")
-    sz = os.path.getsize(cr); log.append("core %.0fMB" % (sz / 1048576))
+    z = zipfile.ZipFile(fn); cr = "assets/core_res.pkg"; z.extract(cr, ".")
+    sz = os.path.getsize(cr)
     f = open(cr, "rb")
     f.seek(8); idx_off, idx_size = struct.unpack("<2I", f.read(8))
     f.seek(idx_off); ib = f.read(idx_size)
     import lz4.block
     dec = lz4.block.decompress(ib[4:], uncompressed_size=struct.unpack("<I", ib[:4])[0])
-    # 第二段索引区 hex（供本地分析）
-    chunk_put("hex/%s_idxmid_hex_" % TAG, dec[359288:359288 + 120000].hex())
     recs = []
     off = 4; X = 16
     while off + 28 <= len(dec):
@@ -70,60 +116,46 @@ def main():
         recs.append((a, b, c))
         off += 28 + (16 if c >= 32 else 0)
         X = a + b
-    log.append("recs %d cover %.1fMB" % (len(recs), X / 1048576))
-    # 全量解压
-    nok = 0; nfail = 0; entries = []
-    types = {}
+    log.append("recs %d" % len(recs))
+    paths = []; consts = []; stats = {}
+    nlua = 0; nuok = 0
     for i, (a, b, c) in enumerate(recs):
         if b < 8 or a + b > sz: continue
         f.seek(a); raw = f.read(b)
         u = struct.unpack("<I", raw[:4])[0]
-        if u == 0 or u > 200 * 1048576: continue
-        try:
-            d2 = lz4.block.decompress(raw[4:], uncompressed_size=u)
-        except Exception:
-            nfail += 1; continue
-        nok += 1
-        head = d2[:4]
-        if head == b"\x1bLua": t = "lua"
-        elif d2[:2] in (b"PK", b"{\""): t = "zip/json"
-        elif b"," in d2[:400] and b"\n" in d2[:400]: t = "csv"
-        else: t = "bin"
-        types[t] = types.get(t, 0) + 1
-        entries.append((i, a, b, u, t, d2))
-    log.append("dec ok=%d fail=%d types=%s" % (nok, nfail, types))
-    # 1) 全部 CSV 的表头（前 3 行）
-    heads = []
-    for i, a, b, u, t, d2 in entries:
-        if t != "csv": continue
-        txt = d2[:4000].decode("utf-8", "replace")
-        lines = [x for x in txt.split("\n")[:3]]
-        heads.append("===== f%d usize=%d\n%s" % (i, u, "\n".join(lines)))
-    big = "\n".join(heads)
-    chunk_put("hex/%s_csvhead_" % TAG, big[:4200000])
-    log.append("csvhead %d chars %d files" % (len(big), len(heads)))
-    # 2) 含关键词的 CSV 完整内容
-    KW = re.compile(r"(api|event|trigger|component|block|actor|player|creature|item|buff|skill|ui|codeblock|var|team|task|ai)", re.I)
-    full = []
-    nf = 0
-    for i, a, b, u, t, d2 in entries:
-        if t != "csv": continue
-        if u > 400000: continue
-        txt = d2.decode("utf-8", "replace")
-        if not KW.search(txt[:2000]): continue
-        nf += 1
-        full.append("===== f%d usize=%d\n%s" % (i, u, txt[:20000]))
-        if len("\n".join(full)) > 4000000: break
-    chunk_put("hex/%s_csvfull_" % TAG, "\n".join(full)[:4200000])
-    log.append("csvfull %d files" % nf)
-    # 3) 非 CSV 的头部特征
-    oth = []
-    for i, a, b, u, t, d2 in entries:
-        if t == "csv": continue
-        oth.append("f%d usize=%d type=%s head=%s" % (i, u, t, d2[:60].hex()))
-    chunk_put("hex/%s_other_" % TAG, "\n".join(oth)[:2000000])
-    log.append("other %d" % len(oth))
+        if u < 8 or u > 60 * 1048576: continue
+        try: d2 = lz4.block.decompress(raw[4:], uncompressed_size=u)
+        except Exception: continue
+        if d2[:4] != b"\x1bLua": continue
+        nlua += 1
+        res = undump_strings(d2)
+        if res is None: continue
+        st, lst = res
+        stats[st.split(":")[0]] = stats.get(st.split(":")[0], 0) + 1
+        if st == "ok": nuok += 1
+        if lst:
+            paths.append("%d\t%s" % (i, lst[0]))
+            seen = set(); keep = []
+            for s in lst[1:]:
+                if s and s not in seen and len(s) < 300:
+                    seen.add(s); keep.append(s)
+            consts.append("===== f%d %s\n%s" % (i, lst[0][:120], "\n".join(keep[:250])))
     f.close()
+    log.append("lua=%d undump_ok=%d stats=%s" % (nlua, nuok, stats))
+    big_paths = "\n".join(paths)
+    big_const = "\n".join(consts)
+    # tar.gz 打包
+    buf = io.BytesIO()
+    tf = tarfile.open(fileobj=buf, mode="w:gz")
+    for name, data in [("paths.txt", big_paths), ("consts.txt", big_const)]:
+        bb = data.encode("utf-8")
+        ti = tarfile.TarInfo(name); ti.size = len(bb)
+        tf.addfile(ti, io.BytesIO(bb))
+    tf.close()
+    enc = base64.b64encode(buf.getvalue()).decode()
+    log.append("tar %.1fMB b64 %.1fMB" % (len(buf.getvalue()) / 1048576, len(enc) / 1048576))
+    n = chunk_put("hex/%s_tar_" % TAG, enc)
+    log.append("chunks %d" % n)
     put("hex/%s_log.txt" % TAG, "\n".join(log))
     try: os.remove(cr)
     except Exception: pass
@@ -131,5 +163,5 @@ def main():
 try:
     main()
 except Exception:
-    try: put("hex/%s_done.txt" % TAG, "EXC " + traceback.format_exc()[:800])
+    try: put("hex/%s_done.txt" % TAG, "EXC " + traceback.format_exc()[:900])
     except Exception: pass
