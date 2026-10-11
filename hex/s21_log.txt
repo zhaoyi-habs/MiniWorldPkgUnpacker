@@ -1,0 +1,5 @@
+diag done (16s)
+reachable(21): ['https://apkpure.com/', 'https://d.apkpure.com/', 'https://www.apkmirror.com/', 'https://archive.org/', 'https://web.archive.org/', 'https://github.com/', 'https://api.github.com/', 'https://raw.githubusercontent.com/', 'https://pypi.org/', 'https://sourceforge.net/', 'https://www.mini1.cn/', 'https://www.miniworldstory.com/', 'https://sj.qq.com/', 'https://appgallery.huawei.com/', 'https://apkpure.net/', 'https://apkpure.io/', 'https://apkpure.de/', 'https://m.apkpure.com/', 'https://apk.support/', 'https://www.androidfreeware.net/']
+IA identifiers: 54
+ia: mini-world-block-art size=97090778 name=mini-world-block-art.apk url=https://archive.org/download/mini-world-block-art/mini-world-block-art.apk
+zip ok 3938 entries
