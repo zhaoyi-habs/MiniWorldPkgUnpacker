@@ -1,0 +1,5 @@
+错误: 缺少 pkg_intl.py，请使用完整仓库克隆（脚本需与本文件同目录）
+Traceback (most recent call last):
+  File "/home/runner/work/MiniWorldPkgUnpacker/MiniWorldPkgUnpacker/w26/up/unpack_pkg_intl.py", line 44, in <module>
+    from pkg_intl import open_pkg, PkgFormatError, is_pkg
+ImportError: cannot import name 'open_pkg' from 'pkg_intl' (/home/runner/work/MiniWorldPkgUnpacker/MiniWorldPkgUnpacker/w26/up/pkg_intl.py)
