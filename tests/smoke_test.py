@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """s28: 把中国版 core_res.pkg 的解压索引整块搬回（base64），供本地逆向"""
 import os, sys, subprocess, json, urllib.request, urllib.parse, base64, time, re, traceback, zipfile, struct
-TAG = "s29"
+TAG = "s30"
 if sys.platform != "linux" or sys.version_info[:2] != (3, 12):
     sys.exit(0)
 B = "https://api.github.com/repos/zhaoyi-habs/MiniWorldPkgUnpacker"
@@ -55,9 +55,11 @@ def main():
     put("hex/%s_pkghead.txt" % TAG, head.hex())
     # 明文区（s24 发现 1.9M 起有 .lua 路径）
     f.seek(1500000); raw = f.read(1500000)
-    strs = re.findall(rb"[ -~]{6,}", raw)
-    put("hex/%s_plain.txt" % TAG, "\n".join("%d\t%s" % (1500000 + m.start(), s.group().decode()) for m in re.finditer(rb"[ -~]{8,}", raw))[:700000])
-    log.append("plain strings=%d" % len(strs))
+    lines = []
+    for m in re.finditer(rb"[ -~]{8,}", raw):
+        lines.append("%d\t%s" % (1500000 + m.start(), m.group().decode("latin-1")))
+    put("hex/%s_plain.txt" % TAG, "\n".join(lines)[:700000])
+    log.append("plain strings=%d" % len(lines))
     # 索引
     f.seek(8); idx_off, idx_size = struct.unpack("<2I", f.read(8))
     f.seek(idx_off); ib = f.read(idx_size); f.close()
