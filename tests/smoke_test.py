@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """s28: 把中国版 core_res.pkg 的解压索引整块搬回（base64），供本地逆向"""
 import os, sys, subprocess, json, urllib.request, urllib.parse, base64, time, re, traceback, zipfile, struct
-TAG = "s28"
+TAG = "s29"
 if sys.platform != "linux" or sys.version_info[:2] != (3, 12):
     sys.exit(0)
 B = "https://api.github.com/repos/zhaoyi-habs/MiniWorldPkgUnpacker"
