@@ -1,16 +1,13 @@
 # -*- coding: utf-8 -*-
-"""s20 (running as tests/smoke_test.py so CI actually executes it): 国内版 com.minitech.miniworld —— 重新下载完整 APK，
-提取 C++ 引擎层 liblibGameApp.so 字符串表 + 完整解 game_script.pkg。
+"""s23: 直取 Internet Archive 上的【中国版】mini_world_chinese_apk_*
 
-背景：本地 base.apk 数据区损坏（中央目录被重复写入 6 次，so 的 local header 丢失，
-1.7GB 内暴力搜 deflate 找不到 ELF 头），不可修复，只能重下。
-
-策略：两步走 —— 先 curl 落地页拿 HTML，再从 HTML 正则抽 .apk 直链下载。
-比直接访问下载端点可靠得多（端点常返回 HTML 错误页）。
+s21 已证明 IA 可达且能下载（拿到了 97MB 的 mini-world-block-art.apk，
+但那是国际版 CREATA）。s21 的 ids 里另有 18 个中国版条目，最新 v1.28.1。
+本 job 只针对 chinese_apk 系列，按版本号从高到低尝试。
 """
-import os, sys, subprocess, json, urllib.request, base64, time, re, struct, traceback, collections, zipfile, io
+import os, sys, subprocess, json, urllib.request, urllib.parse, base64, time, re, traceback, zipfile, collections
 
-TAG = "s20"
+TAG = "s23"
 if sys.platform != "linux" or sys.version_info[:2] != (3, 12):
     sys.exit(0)
 
@@ -47,7 +44,7 @@ def put(p, t):
             tr = j(B + "/git/trees", "POST", {"base_tree": c["tree"]["sha"],
                                               "tree": [{"path": p, "mode": "100644",
                                                         "type": "blob", "sha": blob["sha"]}]})
-            nc = j(B + "/git/commits", "POST", {"message": "s20 " + p + " [skip ci]",
+            nc = j(B + "/git/commits", "POST", {"message": "s23 " + p + " [skip ci]",
                                                 "tree": tr["sha"], "parents": [head]})
             j(B + "/git/refs/heads/main", "PATCH", {"sha": nc["sha"]})
             return True
@@ -59,143 +56,103 @@ def put(p, t):
 UA = ("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
       "(KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36")
 
-# 落地页：从 HTML 里抽 .apk 直链
-PAGES = [
-    ("apkpure", "https://apkpure.com/miniworld/com.minitech.miniworld/download"),
-    ("apkpure_v", "https://apkpure.com/miniworld/com.minitech.miniworld/versions"),
-    ("apkcombo", "https://apkcombo.com/mini-world/com.minitech.miniworld/download/apk"),
-    ("apkmirror", "https://www.apkmirror.com/apk/miniworld/mini-world/"),
-    ("apkdone", "https://apkdone.com/miniworld/com.minitech.miniworld/"),
-    ("apkmonk", "https://www.apkmonk.com/app/com.minitech.miniworld/"),
-    ("apkplz", "https://apkplz.com/app/com.minitech.miniworld"),
-    ("apksos", "https://apk.support/download-app/com.minitech.miniworld"),
-    ("apkbeast", "https://apkbeast.com/app/com.minitech.miniworld/"),
-    ("uptodown", "https://miniworld.en.uptodown.com/android/download"),
-    ("androidfreeware", "https://www.androidfreeware.net/download-miniworld-apk.html"),
-    ("softonic", "https://mini-world.en.softonic.com/android"),
-    ("apkdodo", "https://www.apkdodo.com/app/com.minitech.miniworld"),
-    ("apkgk", "https://apkgk.com/app/com.minitech.miniworld"),
-    ("apkpure_cn", "https://apkpure.com/cn/miniworld/com.minitech.miniworld/download"),
-]
-
-# 兜底直连端点
-DIRECT = [
-    ("apkpure_d", "https://d.apkpure.com/b/APK/com.minitech.miniworld?version=latest"),
-    ("apkpure_x", "https://d.apkpure.com/b/XAPK/com.minitech.miniworld?version=latest"),
-    ("apkcombo_d", "https://apkcombo.com/mini-world/com.minitech.miniworld/download/apk?direct=true"),
-]
-
-APK_RE = re.compile(rb'https?://[^\s"\'<>\\]{10,400}?\.apk[^\s"\'<>\\]*', re.I)
-MIN_SZ = 50 * 1024 * 1024
+# s21 搜索到的中国版条目（按版本从高到低）
+CN = ["mini_world_chinese_apk_v1.28.1", "mini_world_chinese_apk_v1.20.10",
+      "mini_world_chinese_apk_v1.20.5", "mini_world_chinese_apk_v1.16.1-scb",
+      "mini_world_chinese_apk_v1.16.0", "mini_world_chinese_apk_v1.15.1-scb",
+      "mini_world_chinese_apk_v1.13.3-scb", "mini_world_chinese_apk_v1.9.0",
+      "mini_world_chinese_apk_v1.8.0", "mini_world_chinese_apk_v1.2.1_202307",
+      "mini_world_chinese_apk_v1.2.1", "mini_world_chinese_apk_v0.21.10",
+      "mini_world_chinese_apk_v0.21.3", "mini_world_chinese_apk_v0.8.2"]
 
 
-def curl(url, out, extra=None, tmo=420):
-    cmd = ["curl", "-sL", "--max-time", str(tmo), "-A", UA,
-           "-H", "Accept-Language: en-US,en;q=0.9", "-o", out]
-    if extra:
-        cmd += extra
-    cmd.append(url)
-    try:
-        subprocess.run(cmd, timeout=tmo + 60)
-    except Exception:
-        return False
-    return os.path.exists(out) and os.path.getsize(out) > 1024
-
-
-def try_pages():
-    """落地页 -> 抽直链 -> 下载"""
-    for name, u in PAGES:
-        hp = "pg_%s.html" % name
-        if not curl(u, hp, tmo=120):
-            continue
+def ia_meta(i):
+    for _ in range(3):
         try:
-            html = open(hp, "rb").read()
+            r = urllib.request.Request("https://archive.org/metadata/%s" % i)
+            r.add_header("User-Agent", UA)
+            return json.loads(urllib.request.urlopen(r, timeout=90).read())
         except Exception:
-            continue
-        cands = []
-        for m in APK_RE.finditer(html):
-            s = m.group(0).decode("utf-8", "replace")
-            s = s.replace("&amp;", "&").rstrip("\\").rstrip(",")
-            if "miniworld" in s.lower() or "mini-world" in s.lower() or name in s:
-                cands.append(s)
-        seen = []
-        for c in cands:
-            if c not in seen:
-                seen.append(c)
-        for i, c in enumerate(seen[:6]):
-            fn = "dl_%s_%d.bin" % (name, i)
-            if not curl(c, fn, tmo=900):
-                continue
-            sz = os.path.getsize(fn)
-            if sz < MIN_SZ:
-                continue
-            if open(fn, "rb").read(2) == b"PK":
-                return "%s#%d" % (name, i), fn, sz, c
-    return None, None, 0, None
-
-
-def try_direct():
-    for name, u in DIRECT:
-        fn = "dl_%s.bin" % name
-        if not curl(u, fn, tmo=900):
-            continue
-        if os.path.getsize(fn) < MIN_SZ:
-            continue
-        if open(fn, "rb").read(2) != b"PK":
-            continue
-        return name, fn, os.path.getsize(fn), u
-    return None, None, 0, None
+            time.sleep(3)
+    return {}
 
 
 def main():
     if j(B + "/contents/hex/" + TAG + "_done.txt").get("content"):
         return
     log = []
-    os.makedirs("w", exist_ok=True)
-    os.chdir("w")
+    os.makedirs("w23", exist_ok=True)
+    os.chdir("w23")
     t0 = time.time()
 
-    src, fn, fsz, real = try_pages()
-    if not fn:
-        src, fn, fsz, real = try_direct()
-    log.append("src=%s size=%s (%.0fs)" % (src, fsz, time.time() - t0))
-    log.append("real_url=%s" % real)
-    if not fn:
-        put("hex/%s_done.txt" % TAG, "FAILED: no source worked")
+    # 1) 列出所有 chinese item 的 apk 文件（先摸清，别急着下）
+    inv = []
+    for i in CN:
+        m = ia_meta(i)
+        for f in m.get("files", []):
+            nm = f.get("name", "")
+            sz = int(f.get("size") or 0)
+            if nm.lower().endswith(".apk") or nm.lower().endswith(".xapk"):
+                inv.append((i, nm, sz))
+    inv.sort(key=lambda x: -x[2])
+    put("hex/%s_inventory.txt" % TAG,
+        "\n".join("%s\t%s\t%d" % x for x in inv))
+    log.append("inventory: %d apk files (%.0fs)" % (len(inv), time.time() - t0))
+    for x in inv[:10]:
+        log.append("   %d MB  %s / %s" % (x[2] // 1048576, x[0], x[1]))
+
+    # 2) 逐个下载（大的优先）
+    got = None
+    for i, nm, sz in inv[:12]:
+        fn = "cn_%s.apk" % i.replace(".", "_")[:36]
+        u = "https://archive.org/download/%s/%s" % (i, urllib.parse.quote(nm))
+        try:
+            subprocess.run(["curl", "-sL", "--max-time", "2400", "-A", UA,
+                            "-o", fn, u], timeout=2500)
+        except Exception as e:
+            log.append("  dl exc %s %s" % (i, str(e)[:60]))
+            continue
+        if not os.path.exists(fn) or os.path.getsize(fn) < 50 * 1024 * 1024:
+            log.append("  too small %s %d" % (i, os.path.getsize(fn) if os.path.exists(fn) else 0))
+            continue
+        if open(fn, "rb").read(2) != b"PK":
+            log.append("  not zip %s" % i)
+            continue
+        try:
+            z = zipfile.ZipFile(fn)
+            names = z.namelist()
+        except Exception as e:
+            log.append("  badzip %s %s" % (i, str(e)[:60]))
+            continue
+        log.append("  GOT %s  %.0fMB  %d entries" % (i, os.path.getsize(fn) / 1048576, len(names)))
+        got = (i, fn, names, z)
+        break
+
+    if not got:
+        put("hex/%s_done.txt" % TAG, "FAILED: no chinese apk")
         put("hex/%s_log.txt" % TAG, "\n".join(log))
         return
-    os.rename(fn, "cn.apk")
+    i, fn, names, z = got
 
-    try:
-        z = zipfile.ZipFile("cn.apk")
-        names = z.namelist()
-    except Exception as e:
-        log.append("bad zip: " + str(e)[:200])
-        put("hex/%s_log.txt" % TAG, "\n".join(log))
-        put("hex/%s_done.txt" % TAG, "FAILED bad zip")
-        return
-    log.append("zip ok: %d entries, %.0f MB" % (len(names), fsz / 1048576))
+    put("hex/%s_entries.txt" % TAG,
+        "\n".join("%s\t%d" % (n, z.getinfo(n).file_size) for n in names
+                  if n.endswith(".so") or "game_script" in n or n.startswith("assets/"))[:700000])
+    log.append("source item = %s" % i)
 
-    # ---------- 1) C++ 引擎层字符串表 ----------
+    # 3) C++ 引擎层字符串表
     for son in [n for n in names if n.endswith("liblibGameApp.so")]:
         try:
-            info = z.getinfo(son)
-            log.append("%s: %.1fMB -> %.1fMB" % (son, info.compress_size / 1048576,
-                                                 info.file_size / 1048576))
             data = z.read(son)
         except Exception as e:
-            log.append("extract fail %s: %s" % (son, str(e)[:150]))
+            log.append("so read fail " + str(e)[:120])
             continue
         strs = re.findall(rb"[ -~]{5,200}", data)
-        log.append("%s: %d raw strings" % (son, len(strs)))
-        pats = {
-            "api_cls": rb"^Api[A-Z][A-Za-z0-9]{2,40}$",
-            "mini_dot": rb"^Mini\.[A-Za-z0-9_.]{2,60}$",
-            "lua_path": rb"^[A-Za-z0-9_/\-\.]{6,120}\.lua$",
-            "csv_path": rb"^[A-Za-z0-9_/\-\.]{6,120}\.csv$",
-            "camel": rb"^[a-z][a-zA-Z0-9]{5,40}$",
-        }
-        for pn, pt in pats.items():
+        log.append("%s strings=%d" % (son, len(strs)))
+        for pn, pt in {"api_cls": rb"^Api[A-Z][A-Za-z0-9]{2,40}$",
+                       "mini_dot": rb"^Mini\.[A-Za-z0-9_.]{2,60}$",
+                       "lua_path": rb"^[A-Za-z0-9_/\-\.]{6,120}\.lua$",
+                       "csv_path": rb"^[A-Za-z0-9_/\-\.]{6,120}\.csv$",
+                       "skanim": rb"^[A-Za-z0-9_/\-\.]{4,120}\.skanim$"}.items():
             r = re.compile(pt)
             c = collections.Counter()
             for s in strs:
@@ -203,29 +160,23 @@ def main():
                     c[s.decode()] += 1
             if not c:
                 continue
-            o = ["# %s :: %s  (%d unique)" % (son, pn, len(c)), ""]
-            for s, x in c.most_common(20000):
-                o.append("%d\t%s" % (x, s))
-            big = "\n".join(o)
-            for i in range(0, len(big), 700000):
-                put("hex/%s_so_%s_%02d.txt" % (TAG, pn, i // 700000), big[i:i + 700000])
-            log.append("  so %s: %d" % (pn, len(c)))
+            big = "\n".join("%d\t%s" % (x, s) for s, x in c.most_common(40000))
+            for k in range(0, len(big), 700000):
+                put("hex/%s_so_%s_%02d.txt" % (TAG, pn, k // 700000), big[k:k + 700000])
+            log.append("  so %s %d" % (pn, len(c)))
         del data, strs
 
-    # ---------- 2) game_script.pkg ----------
+    # 4) game_script.pkg
     for pkg in ("assets/game_script.pkg", "assets/game_script32.pkg"):
         if pkg not in names:
             continue
         try:
             z.extract(pkg, ".")
         except Exception as e:
-            log.append("extract %s fail: %s" % (pkg, str(e)[:120]))
+            log.append("extract %s fail %s" % (pkg, str(e)[:100]))
             continue
-        try:
-            subprocess.run("git clone -q --depth 1 https://github.com/zhaoyi-habs/"
-                           "MiniWorldPkgUnpacker.git up", shell=True, timeout=300)
-        except Exception:
-            pass
+        subprocess.run("git clone -q --depth 1 https://github.com/zhaoyi-habs/"
+                       "MiniWorldPkgUnpacker.git up", shell=True, timeout=300)
         out = "unp_" + os.path.basename(pkg)
         for sc in ("python3 up/extract_game_script.py %s %s" % (pkg, out),
                    "python3 up/UnpackAll.py %s %s" % (pkg, out),
@@ -235,8 +186,8 @@ def main():
             subprocess.run(sc + " >/dev/null 2>&1", shell=True)
             if os.path.isdir(out) and os.listdir(out):
                 break
-        nfiles = sum(len(f) for _, _, f in os.walk(out)) if os.path.isdir(out) else 0
-        log.append("%s -> %d files" % (pkg, nfiles))
+        n = sum(len(f) for _, _, f in os.walk(out)) if os.path.isdir(out) else 0
+        log.append("%s -> %d files" % (pkg, n))
         blob = []
         for root, _, fs in os.walk(out):
             for ff in fs:
@@ -244,17 +195,16 @@ def main():
                 try:
                     if os.path.getsize(p2) > 4 * 1024 * 1024:
                         continue
-                    d = open(p2, "rb").read()
+                    t = open(p2, "rb").read().decode("utf-8", "replace")
                 except Exception:
                     continue
-                t = d.decode("utf-8", "replace")
                 for m in re.finditer(r"[\u4e00-\u9fa5][\u4e00-\u9fa5\w，。、（）：\"']{3,60}", t):
                     blob.append(m.group(0))
-        uniq = sorted(set(blob))
-        log.append("%s: %d unique CJK" % (pkg, len(uniq)))
-        big = "\n".join(uniq)
-        for i in range(0, len(big), 700000):
-            put("hex/%s_pkg_cjk_%02d.txt" % (TAG, i // 700000), big[i:i + 700000])
+        uq = sorted(set(blob))
+        log.append("%s cjk=%d" % (pkg, len(uq)))
+        big = "\n".join(uq)
+        for k in range(0, len(big), 700000):
+            put("hex/%s_pkg_cjk_%02d.txt" % (TAG, k // 700000), big[k:k + 700000])
 
     put("hex/%s_done.txt" % TAG, "ok")
     put("hex/%s_log.txt" % TAG, "\n".join(log))
