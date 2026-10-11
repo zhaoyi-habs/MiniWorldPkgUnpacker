@@ -1,0 +1,22 @@
+apk 968MB entries=2454 (461s)
+so size 108MB
+ascii strings=277982
+  so apicls   2
+  so method   146
+  so luafile  23
+  so csvfile  1
+  so jsonfile 30
+  so pkgfile  222
+  so event    99
+  so luaapi   146
+  so setter   6988
+  so all kept=125065
+  so cjk=1090
+assets/material_ogles2.pkg (2.8MB) -> 0 files
+assets/engine_res.pkg (9.2MB) -> 0 files
+assets/first_res.pkg (0.9MB) -> 0 files
+assets/material_ogles3.pkg (3.0MB) -> 0 files
+core_res.pkg 802MB
+core head=8b010000110000002b9f0d32de871800
+core idx_off=839753515 idx_size=1607646
+core scan done
