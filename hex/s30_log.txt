@@ -1,0 +1,6 @@
+apk ok 16s
+core 802MB
+plain strings=4412
+idx dec 2975805
+idx strings=43043
+paths=17899
