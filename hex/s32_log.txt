@@ -1,0 +1,6 @@
+apk pkg/so 115
+core 802MB
+idx_off=839753515 idx_size=1607646
+recs 10591 cover 81235640 (77.5MB of 802MB)
+samples sent
+luaMagic hits 0 []
