@@ -1,0 +1,6 @@
+core 802MB
+recs 10591 cover 77.5MB
+dec ok=7509 fail=1 types={'csv': 247, 'bin': 1238, 'lua': 6023, 'zip/json': 1}
+csvhead 51980 chars 247 files
+csvfull 50 files
+other 7262
