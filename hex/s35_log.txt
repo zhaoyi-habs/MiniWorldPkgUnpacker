@@ -1,0 +1,4 @@
+recs 10591
+lua=6023 undump_ok=0 stats={'brute': 5804, 'ok4': 219}
+tar 1.8MB b64 2.4MB
+chunks 4
