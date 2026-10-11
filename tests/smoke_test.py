@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """s34: 全量解压 6023 个 Lua，undump 提取源路径/常量/函数名，tar.gz 回传"""
 import os, sys, subprocess, json, urllib.request, urllib.parse, base64, time, re, traceback, zipfile, struct, io, tarfile, gzip
-TAG = "s34"
+TAG = "s35"
 if sys.platform != "linux" or sys.version_info[:2] != (3, 12):
     sys.exit(0)
 B = "https://api.github.com/repos/zhaoyi-habs/MiniWorldPkgUnpacker"
@@ -38,56 +38,66 @@ def chunk_put(pref, s, n=680000):
     return k
 
 class R:
-    def __init__(s, b): s.b = b; s.p = 0
+    def __init__(s, b, sz8=False): s.b = b; s.p = 0; s.sz8 = sz8
     def u8(s):
         v = s.b[s.p]; s.p += 1; return v
     def u32(s):
         v = struct.unpack_from("<I", s.b, s.p)[0]; s.p += 4; return v
-    def u64(s):
-        v = struct.unpack_from("<Q", s.b, s.p)[0]; s.p += 8; return v
     def sz(s):
-        v = struct.unpack_from("<I", s.b, s.p)[0]; s.p += 4; return v
+        if s.sz8:
+            v = struct.unpack_from("<Q", s.b, s.p)[0]; s.p += 8
+        else:
+            v = struct.unpack_from("<I", s.b, s.p)[0]; s.p += 4
+        return v
     def bytes(s, n):
         v = s.b[s.p:s.p + n]; s.p += n; return v
 
-def undump_strings(b):
-    """Lua5.1 undump: 收集常量表里的字符串"""
+def _undump(b, sz8):
     out = []
+    r = R(b, sz8); r.p = 4
+    if r.u8() != 0x51: return None
+    r.u8(); r.u8(); r.u8()
+    szt = r.u8(); r.u8(); r.u8(); r.u8()
+    r.sz8 = (szt == 8)
+    def func(depth):
+        if depth > 4: return
+        ln = r.sz()
+        src = r.bytes(ln) if ln else b""
+        out.append(src.decode("utf-8", "replace"))
+        r.u32(); r.u32(); r.u8(); r.u8(); r.u8(); r.u8()
+        ncode = r.u32(); r.p += ncode * 4
+        nk = r.u32()
+        for _ in range(nk):
+            t = r.u8()
+            if t == 4:
+                l = r.sz(); out.append(r.bytes(l).decode("utf-8", "replace"))
+            elif t == 3: r.p += 8
+            elif t == 1: r.p += 1
+        nsub = r.u32()
+        for _ in range(nsub): func(depth + 1)
+    func(0)
+    return out
+
+def undump_strings(b):
+    if b[:4] != b"\x1bLua": return None
+    for sz8 in (False, True):
+        try:
+            o = _undump(b, sz8)
+            if o: return ("ok%d" % (8 if sz8 else 4), o)
+        except Exception:
+            pass
+    # 暴力兜底
     try:
-        if b[:4] != b"\x1bLua": return None
-        r = R(b); r.p = 4
-        ver = r.u8()
-        if ver != 0x51: return ("ver%d" % ver, [])
-        r.u8()  # format
-        r.u8()  # endian
-        r.u8(); r.u8(); r.u8(); r.u8(); r.u8()  # sizes
-        stack = [0]
-        # 只解析顶层 + 嵌套（有限深度）
-        def func(depth):
-            if depth > 3: return
-            ln = r.sz()
-            src = r.bytes(ln) if ln else b""
-            out.append(src.decode("utf-8", "replace"))
-            r.u32(); r.u32(); r.u8(); r.u8(); r.u8(); r.u8()
-            ncode = r.u32(); r.p += ncode * 4
-            nk = r.u32()
-            for _ in range(nk):
-                t = r.u8()
-                if t == 4:
-                    l = r.sz(); out.append(r.bytes(l).decode("utf-8", "replace"))
-                elif t == 3: r.p += 8
-                elif t == 1: r.p += 1
-            nsub = r.u32()
-            for _ in range(nsub): func(depth + 1)
-        func(0)
-        return ("ok", out)
-    except Exception as e:
-        return ("err:" + str(e)[:40], out)
+        ss = [m.group().decode("utf-8", "replace") for m in re.finditer(
+            rb"[\x20-\x7e\xc2-\xef][\x20-\x7e\x80-\xbf]{3,80}", b)]
+        return ("brute", ss)
+    except Exception:
+        return ("fail", [])
 
 def main():
     if j(B + "/contents/hex/" + TAG + "_done.txt").get("content"): return
     log = []
-    os.makedirs("w34", exist_ok=True); os.chdir("w34"); t0 = time.time()
+    os.makedirs("w35", exist_ok=True); os.chdir("w35"); t0 = time.time()
     fn = "cn.apk"
     if not (os.path.exists(fn) and os.path.getsize(fn) > 900 * 1048576):
         subprocess.run(["curl", "-sL", "--max-time", "2400", "-A", UA, "-o", fn,
