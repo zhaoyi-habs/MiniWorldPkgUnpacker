@@ -1,0 +1,783 @@
+===== _unpack_report.json (230)
+{
+ "pkg": "assets/material_ogles2.pkg",
+ "format": "v2 (0x130ba)",
+ "records": 2926,
+ "records_28b": 2926,
+ "records_44b": 0,
+ "paths": 2926,
+ "files_extracted": 2926,
+ "orphans": 0,
+ "md5_ok": 2926,
+ "md5_bad": 0,
+ "errors": []
+}
+===== _containers/manifest.json (448933)
+{"records": [{"index": 0, "X": 16, "Y": 20, "Z": 0, "md5": "cd6980b8b522e9eed6e8b91e9010b4b8", "paths": ["blitcubemapfaceps"]}, {"index": 1, "X": 36, "Y": 20, "Z": 0, "md5": "cd6980b8b522e9eed6e8b91e9010b4b8", "paths": ["blitcubemapfacevs"]}, {"index": 2, "X": 56, "Y": 20, "Z": 0, "md5": "cd6980b8b522e9eed6e8b91e9010b4b8", "paths": ["blitps"]}, {"index": 3, "X": 76, "Y": 20, "Z": 0, "md5": "cd6980b8b522e9eed6e8b91e9010b4b8", "paths": ["blitvs"]}, {"index": 4, "X": 96, "Y": 20, "Z": 0, "md5": "c4f4467a6be0704596a3218b7922f0e1", "paths": ["bloomdownsampleps"]}, {"index": 5, "X": 116, "Y": 20, "Z": 0, "md5": "c4f4467a6be0704596a3218b7922f0e1", "paths": ["bloomdownsamplevs"]}, {"index": 6, "X": 136, "Y": 20, "Z": 0, "md5": "c4f4467a6be0704596a3218b7922f0e1", "paths": ["bloommergeps"]}, {"index": 7, "X": 156, "Y": 20, "Z": 0, "md5": "c4f4467a6be0704596a3218b7922f0e1", "paths": ["bloommergevs"]}, {"index": 8, "X": 176, "Y": 20, "Z": 0, "md5": "c4f4467a6be0704596a3218b7922f0e1", "paths": ["bloomupscaleps"]}, {"index": 9, "X": 196, "Y": 20, "Z": 0, "md5": "c4f4467a6be0704596a3218b7922f0e1", "paths": ["bloomupscalevs"]}, {"index": 10, "X": 216, "Y": 20, "Z": 0, "md5": "edc67cdc8100b7f6b5b735ecb8af3bbf", "paths": ["fxaaps"]}, {"index": 11, "X": 236, "Y": 20, "Z": 0, "md5": "fab6782052a5dd47300e8932bcba0dd9", "paths": ["forwardshadingmainps"]}, {"index": 12, "X": 256, "Y": 20, "Z": 0, "md5": "28f537973616529628da21c49be5dfc3", "paths": ["forwardshadingmainvs"]}, {"index": 13, "X": 276, "Y": 20, "Z": 0, "md5": "c8c0cd5d8c359d0d85e0cd2cdb9a0aef", "paths": ["fullscreenvs"]}, {"index": 14, "X": 296, "Y": 20, "Z": 0, "md5": "48be76213a9fa95436538f71cb4d7fa9", "paths": ["gtaohorizonsearchintegralps"]}, {"index": 15, "X": 316, "Y": 20, "Z": 0, "md5": "48be76213a9fa95436538f71cb4d7fa9", "paths": ["gtaohorizonsearchintegralvs"]}, {"index": 16, "X": 336, "Y": 20, "Z": 0, "md5": "48be76213a9fa95436538f71cb4d7fa9", "paths": ["gtaospatialfilterps"]}, {"index": 17, "X": 356, "Y": 20, "Z": 0, "md5": "48be76213a9fa95436538f71cb4d7fa9", "paths": ["gtaospatialfilterlvs"]}, {"index": 18, "X": 376, "Y": 20, "Z": 0, "md5": "db5f2ca337375edb73fabe2604881575", "paths": ["guimainps"]}, {"index": 19, "X": 396, "Y": 20, "Z": 0, "md5": "db5f2ca337375edb73fabe2604881575", "paths": ["guimainvs"]}, {"index": 20, "X": 416, "Y": 20, "Z": 0, "md5": "db5f2ca337375edb73fabe2604881575", "paths": ["guitexmainps"]}, {"index": 21, "X": 436, "Y": 20, "Z": 0, "md5": "db5f2ca337375edb73fabe2604881575", "paths": ["guitexmainvs"]}, {"index": 22, "X": 456, "Y": 20, "Z": 0, "md5": "d88f03528482fd253586e9252426d589", "paths": ["gizemorendericon2dmainps"]}, {"index": 23, "X": 476, "Y": 20, "Z": 0, "md5": "d88f03528482fd253586e9252426d589", "paths": ["gizemorendericon2dmainvs"]}, {"index": 24, "X": 496, "Y": 20, "Z": 0, "md5": "1eaa0825aab29f8e65b62af9ed778130", "paths": ["gizmorendercolormainps"]}, {"index": 25, "X": 516, "Y": 20, "Z": 0, "md5": "1eaa0825aab29f8e65b62af9ed778130", "paths": ["gizmorendercolormainvs"]}, {"index": 26, "X": 536, "Y": 20, "Z": 0, "md5": "1eaa0825aab29f8e65b62af9ed778130", "paths": ["gizmorendercolorocclusionmainps"]}, {"index": 27, "X": 556, "Y": 20, "Z": 0, "md5": "1eaa0825aab29f8e65b62af9ed778130", "paths": ["gizmorendercolorocclusionmainvs"]}, {"index": 28, "X": 576, "Y": 20, "Z": 0, "md5": "1eaa0825aab29f8e65b62af9ed778130", "paths": ["gizmorenderlitmainps"]}, {"index": 29, "X": 596, "Y": 20, "Z": 0, "md5": "1eaa0825aab29f8e65b62af9ed778130", "paths": ["gizmorenderlitmainvs"]}, {"index": 30, "X": 616, "Y": 20, "Z": 0, "md5": "1eaa0825aab29f8e65b62af9ed778130", "paths": ["gizmorendertextmainps"]}, {"index": 31, "X": 636, "Y": 20, "Z": 0, "md5": "1eaa0825aab29f8e65b62af9ed778130", "paths": ["gizmorendertextmainvs"]}, {"index": 32, "X": 656, "Y": 20, "Z": 0, "md5": "b9ec9662d2f8f9876f93c706b949e976", "paths": ["gizmorendertexturemainps"]}, {"index": 33, "X": 676, "Y": 20, "Z": 0, "md5": "b9ec9662d2f8f9876f93c706b949e976", "paths": ["gizmorendertexturemainvs"]}, {"index": 34, "X": 696, "Y": 20, "Z": 0, "md5": "1eaa0825aab29f8e65b62af9ed778130", "paths": ["gizmorenderwiremainps"]}, {"index": 35, "X": 716, "Y": 20, "Z": 0, "md5": "1eaa0825aab29f8e65b62af9ed778130", "paths": ["gizmorenderwiremainvs"]}, {"index": 36, "X": 736, "Y": 20, "Z": 0, "md5": "daa57f60d9c1ce3d6342c4a140e2ed26", "paths": ["godrayradialblurps"]}, {"index": 37, "X": 756, "Y": 20, "Z": 0, "md5": "8010229fd484f0ef927b56b97cba60fc", "paths": ["hzbbuildps"]}, {"index": 38, "X": 776, "Y": 20, "Z": 0, "md5": "8010229fd484f0ef927b56b97cba60fc", "paths": ["hzbtestps"]}, {"index": 39, "X": 796, "Y": 20, "Z": 0, "md5": "b8ed8256f270470a138fe24a697e1b0b", "paths": ["legacyparticlemainps"]}, {"index": 40, "X": 816, "Y": 20, "Z": 0, "md5": "0c57701fa4a25514b370674e8662a1fd", "paths": ["legacyparticlemainvs"]}, {"index": 41, "X": 836, "Y": 20, "Z": 0, "md5": "9253ea19f980d90a16db03c836a8eaba", "paths": ["outlineps"]}, {"index": 42, "X": 856, "Y": 20, "Z": 0, "md5": "9253ea19f980d90a16db03c836a8eaba", "paths": ["outlinevs"]}, {"index": 43, "X": 876, "Y": 20, "Z": 0, "md5": "1b788e895c3f59cc284b59e54a2c7ca7", "paths": ["passthroughps"]}, {"index": 44, "X": 896, "Y": 20, "Z": 0, "md5": "8073b4697444f9cc6ff67b9d1124bcb3", "paths": ["positiononlyvs"]}, {"index": 45, "X": 916, "Y": 20, "Z": 0, "md5": "ce1ddfe6b272df2cfaba0108d2342ac9", "paths": ["postprocessdofblurps"]}, {"index": 46, "X": 936, "Y": 20, "Z": 0, "md5": "ce1ddfe6b272df2cfaba0108d2342ac9", "paths": ["postprocessdofblurvs"]}, {"index": 47, "X": 956, "Y": 20, "Z": 0, "md5": "ce1ddfe6b272df2cfaba0108d2342ac9", "paths": ["postprocessdofdownps"]}, {"index": 48, "X": 976, "Y": 20, "Z": 0, "md5": "ce1ddfe6b272df2cfaba0108d2342ac9", "paths": ["postprocessdofdownvs"]}, {"index": 49, "X": 996, "Y": 20, "Z": 0, "md5": "ce1ddfe6b272df2cfaba0108d2342ac9", "paths": ["postprocessdofnearps"]}, {"index": 50, "X": 1016, "Y": 20, "Z": 0, "md5": "ce1ddfe6b272df2cfaba0108d2342ac9", "paths": ["postprocessdofnearvs"]}, {"index": 51, "X": 1036, "Y": 20, "Z": 0, "md5": "b4c938a940bc872e18253f1bfda4724a", "paths": ["postprocessdownsamplesetupps"]}, {"index": 52, "X": 1056, "Y": 20, "Z": 0, "md5": "9f6ea903a6d4b8bc26fd1f86ad117e54", "paths": ["postprocesslutsps"]}, {"index": 53, "X": 1076, "Y": 20, "Z": 0, "md5": "0c71f3bb1e76dc8fe6b787c5d5677a3e", "paths": ["postprocessmaterialps"]}, {"index": 54, "X": 1096, "Y": 20, "Z": 0, "md5": "3c1aece7013e307970357bfd1cd41c52", "paths": ["postprocessresolveps"]}, {"index": 55, "X": 1116, "Y": 20, "Z": 0, "md5": "3c1aece7013e307970357bfd1cd41c52", "paths": ["postprocessresolvevs"]}, {"index": 56, "X": 1136, "Y": 20, "Z": 0, "md5": "b4c938a940bc872e18253f1bfda4724a", "paths": ["postprocesssetupps"]}, {"index": 57, "X": 1156, "Y": 20, "Z": 0, "md5": "d2327465524c5d0e0deac818c527969b", "paths": ["prezpassps"]}, {"index": 58, "X": 1176, "Y": 20, "Z": 0, "md5": "c23ca5370a3d3e806456ad8d8a0c3f12", "paths": ["prezpassvs"]}, {"index": 59, "X": 1196, "Y": 20, "Z": 0, "md5": "837013f1f9c4fad3663ccab9818ab104", "paths": ["smaablendps"]}, {"index": 60, "X": 1216, "Y": 20, "Z": 0, "md5": "837013f1f9c4fad3663ccab9818ab104", "paths": ["smaablendvs"]}, {"index": 61, "X": 1236, "Y": 20, "Z": 0, "md5": "837013f1f9c4fad3663ccab9818ab104", "paths": ["smaaedgeps"]}, {"index": 62, "X": 1256, "Y": 20, "Z": 0, "md5": "837013f1f9c4fad3663ccab9818ab104", "paths": ["smaaedgevs"]}, {"index": 63, "X": 1276, "Y": 20, "Z": 0, "md5": "837013f1f9c4fad3663ccab9818ab104", "paths": ["smaaneighborps"]}, {"index": 64, "X": 1296, "Y": 20, "Z": 0, "md5": "837013f1f9c4fad3663ccab9818ab104", "paths": ["smaaneighborvs"]}, {"index": 65, "X": 1316, "Y": 20, "Z": 0, "md5": "c8c0cd5d8c359d0d85e0cd2cdb9a0aef", "paths": ["screenboxsamplevs"]}, {"index": 66, "X": 1336, "Y": 20, "Z": 0, "md5": "c8c0cd5d8c359d0d85e0cd2cdb9a0aef", "paths": ["screenps"]}, {"index": 67, "X": 1356, "Y": 20, "Z": 0, "md5": "c8c0cd5d8c359d0d85e0cd2cdb9a0aef", "paths": ["screenvs"]}, {"index": 68, "X": 1376, "Y": 20, "Z": 0, "md5": "2c30d5083e15597ebbe5cd69bd25aa2e", "paths": ["shadowdepthps"]}, {"index": 69, "X": 1396, "Y": 20, "Z": 0, "md5": "f153ac7355d692289ac12f35d3d03007", "paths": ["shadowdepthpositiononlyvs"]}, {"index": 70, "X": 1416, "Y": 20, "Z": 0, "md5": "bd967e41a04c5059dffbcfb6a6ad6bd7", "paths": ["shadowdepthvs"]}, {"index": 71, "X": 1436, "Y": 20, "Z": 0, "md5": "b8ed8256f270470a138fe24a697e1b0b", "paths": ["uimainps"]}, {"index": 72, "X": 1456, "Y": 20, "Z": 0, "md5": "0c57701fa4a25514b370674e8662a1fd", "paths": ["uimainvs"]}, {"index": 73, "X": 1476, "Y": 20, "Z": 0, "md5": "494fb18260db525f568a4af2ad342b50", "paths": ["blockvertexlayout"]}, {"index": 74, "X": 1496, "Y": 20, "Z": 0, "md5": "a2e2252dc7d442f2db2e56748883580d", "paths": ["meshvertexlayout"]}, {"index": 75, "X": 1516, "Y": 20, "Z": 0, "md5": "494fb18260db525f568a4af2ad342b50", "paths": ["microvertexlayout"]}, {"index": 76, "X": 1536, "Y": 20, "Z": 0, "md5": "5a860e6d13e8790b4811c8f0aaeb5e11", "paths": ["particlesystemvertexlayout"]}, {"index": 77, "X": 1556, "Y": 20, "Z": 0, "md5": "a2e2252dc7d442f2db2e56748883580d", "paths": ["skinmeshvertexlayout"]}, {"index": 78, "X": 1576, "Y": 10136, "Z": 0, "md5": "e35e3695a147e67ff72a5c88667c5f94", "paths": ["effectshaderpipelinemap.bin"]}, {"index": 79, "X": 11712, "Y": 1075, "Z": 1, "md5": "24ce8ec79bff4c269360cbf7bf82f064", "paths": ["materialpathlist.bin"]}, {"index": 80, "X": 12787, "Y": 741, "Z": 1, "md5": "5d0235d4ab91aea6f9ed4b1cbd25d40b", "paths": ["../commonresource/assets/materials/minigame/block/block_additive.xml"]}, {"index": 81, "X": 13528, "Y": 1190, "Z": 1, "md5": "19c83fe39537ee27e6d7a55e97081633", "paths": ["../commonresource/assets/materials/minigame/block/block_atlas_mask.xml"]}, {"index": 82, "X": 14718, "Y": 842, "Z": 1, "md5": "1b1c05b71145cccdbe381cf125df8ae7", "paths": ["../commonresource/assets/materials/minigame/block/block_atlas_modulate2x.xml"]}, {"index": 83, "X": 15560, "Y": 1452, "Z": 1, "md5": "90d925a31b0265d0ac29d6da0c2ea20c", "paths": ["../commonresource/assets/materials/minigame/block/block_atlas_opaque.xml"]}, {"index": 84, "X": 17012, "Y": 1458, "Z": 1, "md5": "cbc95db426660f13c61545c7a6b3b9e2", "paths": ["../commonresource/assets/materials/minigame/block/block_atlas_translucent.xml"]}, {"index": 85, "X": 18470, "Y": 1550, "Z": 1, "md5": "3d31c44d7b7d5ae02f40836c44a231e5", "paths": ["../commonresource/assets/materials/minigame/block/block_bilinear_ice.xml"]}, {"index": 86, "X": 20020, "Y": 1182, "Z": 1, "md5": "2128e59ac0b3da9db3f5d87f3ad4f051", "paths": ["../commonresource/assets/materials/minigame/block/block_bilinear_snow.xml"]}, {"index": 87, "X": 21202, "Y": 2173, "Z": 1, "md5": "095ae6b94916316dea52d4e2e60c54b2", "paths": ["../commonresource/assets/materials/minigame/block/block_bilinear_water.xml"]}, {"index": 88, "X": 23375, "Y": 1003, "Z": 1, "md5": "2fa01a5b1f2f008b3e0f4a80b85d7b89", "paths": ["../commonresource/assets/materials/minigame/block/block_grass.xml"]}, {"index": 89, "X": 24378, "Y": 934, "Z": 1, "md5": "8c873adb913be04e20b2e91c230df42e", "paths": ["../commonresource/assets/materials/minigame/block/block_item_grass.xml"]}, {"index": 90, "X": 25312, "Y": 1485, "Z": 1, "md5": "1bb94d9ecd786658ffa301c8891a32f4", "paths": ["../commonresource/assets/materials/minigame/block/block_item_matcap.xml"]}, {"index": 91, "X": 26797, "Y": 934, "Z": 1, "md5": "afea32771fa403bb23e919b09bc043f7", "paths": ["../commonresource/assets/materials/minigame/block/block_item_opaque.xml"]}, {"index": 92, "X": 27731, "Y": 967, "Z": 1, "md5": "83c35359e8ae0903c43ab708243332f8", "paths": ["../commonresource/assets/materials/minigame/block/block_item_translucent.xml"]}, {"index": 93, "X": 28698, "Y": 936, "Z": 1, "md5": "28bbc210defed6bdc52209369c4bf510", "paths": ["../commonresource/assets/materials/minigame/block/block_item_xparent.xml"]}, {"index": 94, "X": 29634, "Y": 1003, "Z": 1, "md5": "915ac65d560aa4f1cde21d2e8169df7c", "paths": ["../commonresource/assets/materials/minigame/block/block_mask.xml"]}, {"index": 95, "X": 30637, "Y": 809, "Z": 1, "md5": "0c89c46ddd478d9a2b48eede6d79a1e2", "paths": ["../commonresource/assets/materials/minigame/block/block_modulate2x.xml"]}, {"index": 96, "X": 31446, "Y": 733, "Z": 1, "md5": "a1bd80b475e9ab232feba1fd7453ff81", "paths": ["../commonresource/assets/materials/minigame/block/block_opaque.xml"]}, {"index": 97, "X": 32179, "Y": 705, "Z": 1, "md5": "647a0e234fbd0c7293f4d951a61c6c7f", "paths": ["../commonresource/assets/materials/minigame/block/block_opaque_matcap.xml"]}, {"index": 98, "X": 32884, "Y": 883, "Z": 1, "md5": "1905baacc2e130bad762857c60dd1619", "paths": ["../commonresource/assets/materials/minigame/block/block_rainbowgrass.xml"]}, {"index": 99, "X": 33767, "Y": 751, "Z": 1, "md5": "7c6607b0d35d53f7fcff90fc14ed1a6c", "paths": ["../commonresource/assets/materials/minigame/block/block_translucent.xml"]}, {"index": 100, "X": 34518, "Y": 620, "Z": 1, "md5": "2a8fb0cfc6b3eb718aae4886751431da", "paths": ["../commonresource/assets/materials/minigame/block/block_uvanim.xml"]}, {"index": 101, "X": 35138, "Y": 677, "Z": 1, "md5": "4ccd5c3fc21298ac47b1a5599fa87770", "paths": ["../commonresource/assets/materials/minigame/block/block_uvanim_blend.xml"]}, {"index": 102, "X": 35815, "Y": 810, "Z": 1, "md5": "dbe27cd2bfdce567d89e6ee1ed63e081", "paths": ["../commonresource/assets/materials/minigame/block/block_uvanim_mask.xml"]}, {"index": 103, "X": 36625, "Y": 428, "Z": 1, "md5": "9ceacd37dd5803f383a38a35bd62645a", "paths": ["../commonresource/assets/materials/minigame/legacyparticle/legacy_particle_add.xml"]}, {"index": 104, "X": 37053, "Y": 448, "Z": 1, "md5": "9fc338ba08509d98fe888fb1d2251128", "paths": ["../commonresource/assets/materials/minigame/legacyparticle/legacy_particle_alphablend.xml"]}, {"index": 105, "X": 37501, "Y": 550, "Z": 1, "md5": "a216fdf2e37227ffa7f8f88f90e7d4cf", "paths": ["../commonresource/assets/materials/minigame/legacyparticle/legacy_particle_mask.xml"]}, {"index": 106, "X": 38051, "Y": 423, "Z": 1, "md5": "359e1706aa8da0a6fbc56258bd1388c1", "paths": ["../commonresource/assets/materials/minigame/legacyparticle/legacy_particle_opaque.xml"]}, {"index": 107, "X": 38474, "Y": 808, "Z": 1, "md5": "1691ffe6fe3e0784d8ddbdd1e90939ce", "paths": ["../commonresource/assets/materials/minigame/legacyparticle/warning_particle_add.xml"]}, {"index": 108, "X": 39282, "Y": 520, "Z": 1, "md5": "e2ca131505fdd81f7d0b55191c05bdf6", "paths": ["../commonresource/assets/materials/minigame/spine.xml"]}, {"index": 109, "X": 39802, "Y": 530, "Z": 1, "md5": "d65917a4e4d495c7f868e5e5805f34af", "paths": ["../commonresource/assets/materials/minigame/spine_additive.xml"]}, {"index": 110, "X": 40332, "Y": 543, "Z": 1, "md5": "99315f7b6382d420669d5bb0432a53b2", "paths": ["../commonresource/assets/materials/minigame/fairgui_font_effect.xml"]}, {"index": 111, "X": 40875, "Y": 842, "Z": 1, "md5": "65cbe0aabbb9b87509767358f9bc1381", "paths": ["../commonresource/assets/materials/minigame/legacy/nlegacy_stdmtl_opaque.xml"]}, {"index": 112, "X": 41717, "Y": 530, "Z": 1, "md5": "858810bb56c7ab44cb0536aa023528d9", "paths": ["../commonresource/assets/materials/minigame/legacy/uitile.xml"]}, {"index": 113, "X": 42247, "Y": 754, "Z": 1, "md5": "5ef85b10641d2b2d4c6d8f9fc84ce394", "paths": ["../commonresource/assets/materials/minigame/legacy/block_curveface.xml"]}, {"index": 114, "X": 43001, "Y": 943, "Z": 1, "md5": "40b1078895ecae9c433f0cdb0baa2547", "paths": ["../commonresource/assets/materials/minigame/legacy/dynamicskybox.xml"]}, {"index": 115, "X": 43944, "Y": 1130, "Z": 1, "md5": "556a6f2266e90df9016582d79c6618c7", "paths": ["../commonresource/assets/materials/minigame/legacy/legacy_aurora_lod0.xml"]}, {"index": 116, "X": 45074, "Y": 1229, "Z": 1, "md5": "108e9817db531eafd1b4434ff86cdcc2", "paths": ["../commonresource/assets/materials/minigame/legacy/legacy_aurora_lod0_1.xml"]}, {"index": 117, "X": 46303, "Y": 467, "Z": 1, "md5": "dda41fab9615ea0da78971375342702d", "paths": ["../commonresource/assets/materials/minigame/legacy/legacy_cloudplane_lod0.xml"]}, {"index": 118, "X": 46770, "Y": 464, "Z": 1, "md5": "df83ae5fda0598c1f96ac1d1c1916e72", "paths": ["../commonresource/assets/materials/minigame/legacy/legacy_decal_blend.xml"]}, {"index": 119, "X": 47234, "Y": 555, "Z": 1, "md5": "ed04dd05d72e115add3555ba2264a508", "paths": ["../commonresource/assets/materials/minigame/legacy/legacy_full_screen.xml"]}, {"index": 120, "X": 47789, "Y": 537, "Z": 1, "md5": "a8db59f1609a589eb118c3e8242021b3", "paths": ["../commonresource/assets/materials/minigame/legacy/legacy_line_face_additive.xml"]}, {"index": 121, "X": 48326, "Y": 534, "Z": 1, "md5": "c587939368eb7e8f8c619f3414f0b5e2", "paths": ["../commonresource/assets/materials/minigame/legacy/legacy_line_face_opaque.xml"]}, {"index": 122, "X": 48860, "Y": 541, "Z": 1, "md5": "206fe60a75b374700288e28f825db9e6", "paths": ["../commonresource/assets/materials/minigame/legacy/legacy_line_face_translucent.xml"]}, {"index": 123, "X": 49401, "Y": 446, "Z": 1, "md5": "721d959619fd52c3e31bb71e15278151", "paths": ["../commonresource/assets/materials/minigame/legacy/legacy_particle_2dparticle.xml"]}, {"index": 124, "X": 49847, "Y": 448, "Z": 1, "md5": "8a891e2a235b265731cf3f9045c659a2", "paths": ["../commonresource/assets/materials/minigame/legacy/legacy_particle_2dparticle_add.xml"]}, {"index": 125, "X": 50295, "Y": 449, "Z": 1, "md5": "dbda69c843a4d2266752c847eb9750d3", "paths": ["../commonresource/assets/materials/minigame/legacy/legacy_particle_2dparticle_opaque.xml"]}, {"index": 126, "X": 50744, "Y": 455, "Z": 1, "md5": "63dad545641b6603de2179a427cbfeb7", "paths": ["../commonresource/assets/materials/minigame/legacy/legacy_particle_2dparticle_transparent.xml"]}, {"index": 127, "X": 51199, "Y": 446, "Z": 1, "md5": "179024fc0b2d3d6c41421f2809317278", "paths": ["../commonresource/assets/materials/minigame/legacy/legacy_particle_3dparticle.xml"]}, {"index": 128, "X": 51645, "Y": 447, "Z": 1, "md5": "9517d3d6658fb99f3ab229d2f0d0f634", "paths": ["../commonresource/assets/materials/minigame/legacy/legacy_particle_distort.xml"]}, {"index": 129, "X": 52092, "Y": 529, "Z": 1, "md5": "cbb5a3a4fe9e5f27c2a54982fdaebc4d", "paths": ["../commonresource/assets/materials/minigame/legacy/legacy_rainbow.xml"]}, {"index": 130, "X": 52621, "Y": 415, "Z": 1, "md5": "692a49aec08476bff31425b5faebc82c", "paths": ["../commonresource/assets/materials/minigame/legacy/legacy_skyplane_flare_lod0.xml"]}, {"index": 131, "X": 53036, "Y": 483, "Z": 1, "md5": "646faabbcf475608884f33b0acd15bfb", "paths": ["../commonresource/assets/materials/minigame/legacy/legacy_skyplane_lod0.xml"]}, {"index": 132, "X": 53519, "Y": 481, "Z": 1, "md5": "63c29688ed4b829c758dd8723584f0dd", "paths": ["../commonresource/assets/materials/minigame/legacy/legacy_skyplane_mix_lod0.xml"]}, {"index": 133, "X": 54000, "Y": 1160, "Z": 1, "md5": "4a8d8b96fa462897fa9717e4b9a0a48d", "paths": ["../commonresource/assets/materials/minigame/legacy/legacy_stdmtl_alphatest.xml"]}, {"index": 134, "X": 55160, "Y": 1164, "Z": 1, "md5": "f4bca771c3239eea9ed2516884274554", "paths": ["../commonresource/assets/materials/minigame/legacy/legacy_stdmtl_blend.xml"]}, {"index": 135, "X": 56324, "Y": 913, "Z": 1, "md5": "bf3c29a9af6371db876d7947932edd5c", "paths": ["../commonresource/assets/materials/minigame/legacy/legacy_stdmtl_brush.xml"]}, {"index": 136, "X": 57237, "Y": 1190, "Z": 1, "md5": "409911b0b01890de7e1a9ddc224a16cd", "paths": ["../commonresource/assets/materials/minigame/legacy/legacy_stdmtl_cartoon_matcap_opaque.xml"]}, {"index": 137, "X": 58427, "Y": 1171, "Z": 1, "md5": "c7eff183facdd76910752083affd347d", "paths": ["../commonresource/assets/materials/minigame/legacy/legacy_stdmtl_cartoon_opaque.xml"]}, {"index": 138, "X": 59598, "Y": 1218, "Z": 1, "md5": "6ed7f755aff0e5a2a7bef64b280f945b", "paths": ["../commonresource/assets/materials/minigame/legacy/legacy_stdmtl_matcap_opaque.xml"]}, {"index": 139, "X": 60816, "Y": 1157, "Z": 1, "md5": "ab8b314e7b118b59d98ed5083aa6e6d6", "paths": ["../commonresource/assets/materials/minigame/legacy/legacy_stdmtl_opaque.xml"]}, {"index": 140, "X": 61973, "Y": 528, "Z": 1, "md5": "01987b2b63c11f7b0b9b2e1949b76cb0", "paths": ["../commonresource/assets/materials/minigame/legacy/legacy_sun_lod0.xml"]}, {"index": 141, "X": 62501, "Y": 272, "Z": 1, "md5": "e257b82d80672e64a8447faaa55cc189", "paths": ["../commonresource/assets/materials/minigame/legacy/legacy_toolline_lod0.xml"]}, {"index": 142, "X": 62773, "Y": 275, "Z": 1, "md5": "8a46ba4c14c8b07845eadc91e9fd7c15", "paths": ["../commonresource/assets/materials/minigame/legacy/legacy_triangle_lod0.xml"]}, {"index": 143, "X": 63048, "Y": 673, "Z": 1, "md5": "397edc2be26775d9a81c27809fc8dd1a", "paths": ["../commonresource/assets/materials/minigame/legacy/legacy_ui_element_2delement.xml"]}, {"index": 144, "X": 63721, "Y": 676, "Z": 1, "md5": "848b17e0bfc4b476d5d44ba10aba9cb2", "paths": ["../commonresource/assets/materials/minigame/legacy/legacy_ui_element_2delement_add.xml"]}, {"index": 145, "X": 64397, "Y": 834, "Z": 1, "md5": "d4dd2a263eee1f08e2b42cffdb0e7714", "paths": ["../commonresource/assets/materials/minigame/legacy/legacy_ui_element_3delement.xml"]}, {"index": 146, "X": 65231, "Y": 840, "Z": 1, "md5": "06a89598367e57ea1673f2bfc770a979", "paths": ["../commonresource/assets/materials/minigame/legacy/legacy_ui_element_3delement_depthtest.xml"]}, {"index": 147, "X": 66071, "Y": 506, "Z": 1, "md5": "5e7dba39f54594e8cd37314a1f70c99f", "paths": ["../commonresource/assets/materials/minigame/legacy/legacy_uvanim_blend.xml"]}, {"index": 148, "X": 66577, "Y": 511, "Z": 1, "md5": "2d43c43c91b966dfb2e1a4f10770c1df", "paths": ["../commonresource/assets/materials/minigame/legacy/legacy_uvanim_selfillum.xml"]}, {"index": 149, "X": 67088, "Y": 1001, "Z": 1, "md5": "eef61bca0d2d3fcf3bf8f560fed55d67", "paths": ["../commonresource/assets/materials/minigame/legacy/line_grid.xml"]}, {"index": 150, "X": 68089, "Y": 1084, "Z": 1, "md5": "130c924d01981c1476011575ea431d75", "paths": ["../commonresource/assets/materials/minigame/legacy/line_grid_plane.xml"]}, {"index": 151, "X": 69173, "Y": 942, "Z": 1, "md5": "a921ac2f8bd1231cb7f4a05ca188a655", "paths": ["../commonresource/assets/materials/minigame/legacy/line_uv_grid.xml"]}, {"index": 152, "X": 70115, "Y": 811, "Z": 1, "md5": "5e6045f84714d76490676a57e9059b08", "paths": ["../commonresource/assets/materials/minigame/legacy/plannar_shdow.xml"]}, {"index": 153, "X": 70926, "Y": 609, "Z": 1, "md5": "79b68287972a4f2c26848808f096703f", "paths": ["../commonresource/assets/materials/minigame/legacy/shadowface.xml"]}, {"index": 154, "X": 71535, "Y": 1093, "Z": 1, "md5": "2df4a473ddda2b591374b5eb6e197ef8", "paths": ["../commonresource/assets/materials/minigame/legacy/ugc_ground_linegird.xml"]}, {"index": 155, "X": 72628, "Y": 310, "Z": 1, "md5": "af82cc8d2530c099fb19549985c29aa8", "paths": ["materials/error.xml"]}, {"index": 156, "X": 72938, "Y": 3162808, "Z": 0, "md5": "7879d2f41bfd647cbb58f5e85b25367a", "paths": ["gles2/shaderidlist.bin"]}, {"index": 157, "X": 3235746, "Y": 588, "Z": 0, "md5": "a0848740eea7ba275076b9456a2e3718", "paths": ["gles2/0000a27dcd5712b8baad8753e7f02e97836e662a"]}, {"index": 158, "X": 3236334, "Y": 3592, "Z": 0, "md5": "013abdda8c4ddc05cdaf0ce336c999e7", "paths": ["gles2/002dc114be727d4efd1e8db3ffbf7745f20b00a6"]}, {"index": 159, "X": 3239926, "Y": 3372, "Z": 0, "md5": "e10728cb342eb2e9018bc8662a2b39a2", "paths": ["gles2/00317d0992117962583c939f3cee5c2daf6d3989"]}, {"index": 160, "X": 3243298, "Y": 3196, "Z": 0, "md5": "c926383377f5bd3fcc5e761d3c9f5ec5", "paths": ["gles2/007df32c1966aadbe144b7ba93450fe8768f2b8e"]}, {"index": 161, "X": 3246494, "Y": 4144, "Z": 0, "md5": "c46ec224d4db723e841662a263212c21", "paths": ["gles2/0089d136945cad4839680cb7f8860202a90813dd"]}, {"index": 162, "X": 3250638, "Y": 3888, "Z": 0, "md5": "0f6a85d128ba9ec56e591b6402a4c20e", "paths": ["gles2/009cd914f084384db59152c8af8c22c93a5b8f44"]}, {"index": 163, "X": 3254526, "Y": 4904, "Z": 0, "md5": "a9f53558d2547fecf618afbc22b52ab3", "paths": ["gles2/00b5c7647f9e2473e42c0298dd994c1de4801af4"]}, {"index": 164, "X": 3259430, "Y": 1680, "Z": 0, "md5": "cb06e77ec226617df9a32ebb69a45f9f", "paths": ["gles2/00b6d911d2f11acc04e09d402ff9cf9071fa72b9"]}, {"index": 165, "X": 3261110, "Y": 3088, "Z": 0, "md5": "10c148387f95da7748dd03e7341cb3c6", "paths": ["gles2/00ca7af6cbf7aebb1a68e3c7d7457ac69d3f2b9d"]}, {"index": 166, "X": 3264198, "Y": 2156, "Z": 0, "md5": "24ba431d88f988e13f283cc3be7c4018", "paths": ["gles2/00dace5c2be0bbcbef6d44ea1ee66ca79c444196"]}, {"index": 167, "X": 3266354, "Y": 964, "Z": 0, "md5": "ae45a5ec2e2ea87bf2a19db8be61cd3c", "paths": ["gles2/00e144d24cc22d00ccf2a01bda27ba44645ddca8"]}, {"index": 168, "X": 3267318, "Y": 3164, "Z": 0, "md5": "e52bc3fcde9510b6c47eefc3056aa432", "paths": ["gles2/00e67e9e294e338a7eecd9c610240a7590d55ac8"]}, {"index": 169, "X": 3270482, "Y": 2408, "Z": 0, "md5": "a76ab7dfb27477bcf5720949c688791f", "paths": ["gles2/00f3e5a95cb7745f89b3ae1709dd677f07e8433b"]}, {"index": 170, "X": 3272890, "Y": 2968, "Z": 0, "md5": "6f36dfeaf79faccee8b63e52780003a9", "paths": ["gles2/00faf1e219a7af3dd93bfa9d9536ab6a3af09952"]}, {"index": 171, "X": 3275858, "Y": 4184, "Z": 0, "md5": "180d393b55fa3a601c9863c653d6b052", "paths": ["gles2/00ffeca9a2275c18fa97b28ca319620dd8c833f7"]}, {"index": 172, "X": 3280042, "Y": 2532, "Z": 0, "md5": "9215f6fcc34602f17bce85d8bc9237af", "paths": ["gles2/0110a14e100fb22a8091591b5bee3906ecdbd106"]}, {"index": 173, "X": 3282574, "Y": 1708, "Z": 0, "md5": "eda7217663c33c6b48af0bd2b9a811f6", "paths": ["gles2/0117a33f0ec401f1d8aa9fb27cfffaf3a7088322"]}, {"index": 174, "X": 3284282, "Y": 2944, "Z": 0, "md5": "5688736df52415d38e2f6b7483d7ed8e", "paths": ["gles2/012084e2fbae55c18e9826dc46e8e37809952129"]}, {"index": 175, "X": 3287226, "Y": 2072, "Z": 0, "md5": "3234b7be929d918c54200c410cb0709d", "paths": ["gles2/0146dd222b984f744e4833d7d65b016f3a3e49d9"]}, {"index": 176, "X": 3289298, "Y": 4724, "Z": 0, "md5": "9f91ca997fca30774ae68dc86a8490d5", "paths": ["gles2/01612873b31de442c4d95841da2d107935529217"]}, {"index": 177, "X": 3294022, "Y": 2460, "Z": 0, "md5": "cd025d514c952c89ac884eb0b60bd019", "paths": ["gles2/016f9edc5785c3addb683463ba0d00798fbed57a"]}, {"index": 178, "X": 3296482, "Y": 3968, "Z": 0, "md5": "74ca1963dcb0e644956cf2f3a1bc370a", "paths": ["gles2/0192b4920ea34fb104876dd3bc9a74605048aaf0"]}, {"index": 179, "X": 3300450, "Y": 5256, "Z": 0, "md5": "a50eb792520a4cd2f8992ed12d3abccc", "paths": ["gles2/01e6181bc8fcf73e9172077102094c4ec12810e2"]}, {"index": 180, "X": 3305706, "Y": 6776, "Z": 0, "md5": "cc613f9f99865973e52fd74c517fce9c", "paths": ["gles2/0220eaffadee340a1e133df01ce9a7497011909d"]}, {"index": 181, "X": 3312482, "Y": 2320, "Z": 0, "md5": "e30a2eee1f46abe74304093fff796231", "paths": ["gles2/022d82ccb0a5b6d212f36e7a23eef308a8d48578"]}, {"index": 182, "X": 3314802, "Y": 3204, "Z": 0, "md5": "37fbe35510c8829ff6130331ff265e8a", "paths": ["gles2/0237d42160fe7f7aec7a874e02b8be2b3cde4bd5"]}, {"index": 183, "X": 3318006, "Y": 2572, "Z": 0, "md5": "2417a61c057944a0865bca3b01ebba6c", "paths": ["gles2/023accd9e98ee74776f3fa0126ff507e738b9152"]}, {"index": 184, "X": 3320578, "Y": 2876, "Z": 0, "md5": "b6950c49f86c3c1ffd45313ba752e324", "paths": ["gles2/024426b09674c001ed7826e1d33ff83e97949362"]}, {"index": 185, "X": 3323454, "Y": 2960, "Z": 0, "md5": "ae1dcee995e360aed40e0055f192f338", "paths": ["gles2/02695256e77d2d4b68340a4028e2e427170485f6"]}, {"index": 186, "X": 3326414, "Y": 4024, "Z": 0, "md5": "0bdcf6bee56b9c91c793c401cfd3055c", "paths": ["gles2/02762f38d9f88772330630177b8e2ee6cd97b02a"]}, {"index": 187, "X": 3330438, "Y": 3584, "Z": 0, "md5": "09ad06786d76bab1259c761737e2b87b", "paths": ["gles2/02772f47637b895e048c20f9d2d02fe171d14a3a"]}, {"index": 188, "X": 3334022, "Y": 588, "Z": 0, "md5": "32f2cef9676c56246a81bc9a45a6abf6", "paths": ["gles2/02775bcc33ee04ce223d1b8e66dd220ee6b9a416"]}, {"index": 189, "X": 3334610, "Y": 1552, "Z": 0, "md5": "de91b585865c6a90fd6d27f7a40706c2", "paths": ["gles2/027ae5c141074b56bad6d65f8b08f7505a7f5fa8"]}, {"index": 190, "X": 3336162, "Y": 5904, "Z": 0, "md5": "dee16d6f97223448014fbfd503bcebb4", "paths": ["gles2/0286dddef8c58423d8eb95de469829bbaea282ed"]}, {"index": 191, "X": 3342066, "Y": 776, "Z": 0, "md5": "9b7e7dd880b5b7f9f8b0ce4b096cb700", "paths": ["gles2/02acca6cf6584d540bf11a34aa071c6934d379dd"]}, {"index": 192, "X": 3342842, "Y": 4484, "Z": 0, "md5": "f4978135745bcf37611d3a78d9332eb6", "paths": ["gles2/02b997d5810a258b8af9099d9be995c3e8d305a0"]}, {"index": 193, "X": 3347326, "Y": 1716, "Z": 0, "md5": "648b568ca14b44888f9316cdb74139f0", "paths": ["gles2/02c3818b15090897931796aebfacbffbbac52e57"]}, {"index": 194, "X": 3349042, "Y": 5032, "Z": 0, "md5": "836ee49b8a1232a53c048614919ad900", "paths": ["gles2/02c6e5740c47b35edab87663c006ba4d154c210a"]}, {"index": 195, "X": 3354074, "Y": 3092, "Z": 0, "md5": "315c5167049f336ba299e9d642357511", "paths": ["gles2/02c87c0f02412fefd3fe824e46086e47a9556996"]}, {"index": 196, "X": 3357166, "Y": 2256, "Z": 0, "md5": "976d5b39038a1abd625913414d4594df", "paths": ["gles2/02d4b84a4b14c705c00d935c8d374e1f1960bd6a"]}, {"index": 197, "X": 3359422, "Y": 2096, "Z": 0, "md5": "e353a71dbcc5ba7fbdae3784bbb01bd9", "paths": ["gles2/02e9ac2d80930c06b0e349063610fa0f14a03914"]}, {"index": 198, "X": 3361518, "Y": 3056, "Z": 0, "md5": "4af76000a6586c5ececadf876d90a9f0", "paths": ["gles2/03537ef7026a0cefe33bcd9f82791b8ba93f4dfb"]}, {"index": 199, "X": 3364574, "Y": 1264, "Z": 0, "md5": "a56bd8d3fd020ba816cc33e81dce0f22", "paths": ["gles2/0356e68f21172fc111d139e8db9bb11416902fe0"]}, {"index": 200, "X": 3365838, "Y": 880, "Z": 0, "md5": "d4b3399cd8a9f403758fc988a44d5f71", "paths": ["gles2/03a089717f7c9bfcfecde06bb9260ff0daec868b"]}, {"index": 201, "X": 3366718, "Y": 764, "Z": 0, "md5": "731ee2610703bc5d34d442742a7e0ad1", "paths": ["gles2/03b8729edd7199836c981bc412face17a645fb6b"]}, {"index": 202, "X": 3367482, "Y": 532, "Z": 0, "md5": "7dc81bb2ea2c0c41f9
+===== commonresource/assets/materials/minigame/fairgui_font_effect.xml (541)
+x  �	   fairgui_font_effect  � <�� @    �_MainTex: ? # U/ ��ՂBJE�-��u���2`�� a  
+  �DECLARE_TEX2D(k #); tfloat4  S_ST;
+ �void ProcessMaterialFragment(in  � mf, inout �Property mp)V �{
+		half4 texColor = SAMPL� �, mf.uv0);
+		�  �uAlpha =? &.a  }outline# 4r;
+$ 34 cu 08 �	if(mf.custom0.x>=0.1)
+		� 	* 9 ) O Egb,  9a *x �* (1.0 -� )� \}else[ \ G F  � �mp.emissive_J ? ;! eopaque a�1}
+	$O   �  �   NoLight    SHADING_MODEL_NO_LIGHT  ' �hadingModels/ B �.hlsli ���~�>    �       
+===== commonresource/assets/materials/minigame/spine.xml (520)
+8  �   Spine  � <�� @    �_MainTex5 U �Qx��d��lh*���7��-�� ��  
+		DECLARE_TEX2D(g �);
+		float4  �_ST;
+
+		void ProcessMaterialFragment(in  � mf, inout �Property mp)
+		{
+	n �2 uv = mf.uv2� �	uv.y = 1.0 -   �half4 texColor = SAMPL� W, uv)0 �v_dark =  (f S0.x, 
+ y
+ 1 :1.yA Rlight� c{  �mp.opaque =� D.a *0 $.a' �emissive_c� '((1 -� 3) *� C.a +� % 7rgb! Yrgb + u 0rgbw @}
+
+	�O   �p   NoL;   ��	HADING_MODEL_NO_LIGHT  ' �hadingModels/ B �.hlsli l��~�>    �        
+===== commonresource/assets/materials/minigame/spine_additive.xml (526)
+@  �   Spine_Additive  � <�� @    �_MainTex5 U ��hQ0܁�x�盎��/�� ��  
+		DECLARE_TEX2D(g �);
+		float4  �_ST;
+
+		void ProcessMaterialFragment(in  � mf, inout �Property mp)
+		{
+	n �2 uv = mf.uv2� �	uv.y = 1.0 -   �half4 texColor = SAMPL� W, uv)0 �v_dark =  (f S0.x, 
+ y
+ 1 :1.yA Rlight� c{  �mp.opaque =� D.a *0 $.a' �emissive_c� '((1 -� 3) *� C.a +� % 7rgb! Yrgb + u 0rgbw @}
+
+	�O   �p   NoL;   ��	HADING_MODEL_NO_LIGHT  ' �hadingModels/ B �.hlsli l��~�>    �        
+===== commonresource/assets/materials/minigame/legacyparticle/legacy_particle_add.xml (428)
+h  �   Particle_Add  � <�� @    �_MainTex: ? # �   	   g_Mask# $    ( �fBlendMode  �^�6g^W���P�q��/�� H  � �ARTICLE_MASK_TEXTURE( ��   
+			#include "MiniGame/Legacy-�/legecy_p=�main.hlsli"
+B �void ProcessVertex(inout Material @ mv)/ 1{
+  �			mv.uv0.y = 1.0 -  4;
+	 1 `1.y;  ! `}
+		 � } �   Custom     SHADING_MODEL_CUSTOM& `hadingo8ls/ > � P  X S�~�> �            
+===== commonresource/assets/materials/minigame/legacyparticle/legacy_particle_alphablend.xml (448)
+�  �	   Particle_Alphablend  � <�� @    �_MainTex: ? # �   	   g_Mask# $    (  fB� DMode  �ud��_o9��[ �������� H � � �ARTICLE_MASK_TEXTURE     ENABLE_FROZEN< ��   
+			#include "MiniGame/LegacyI�/legecy_pY�main.hlsli"
+B �void ProcessVertex(inout Material @ mv)/ 1{
+  �			mv.uv0.y = 1.0 -  4;
+	 1 `1.y;  ! A}
+		� 	}  �   Custom     SHADING_MODEL_CUSTOM& `hading�8ls/ > � P [ #?	 �            
+===== commonresource/assets/materials/minigame/legacyparticle/legacy_particle_mask.xml (548)
+$  �   Particle_Mask  �  ;��% P�    �_MainTex: ? : Q	   g} # $    ( �fBlendMode  �d�3k+3���FV�|�� H  � �ARTICLE_MASK_TEXTURE( �i  
+		#include "MiniGame/Legacy0�/legecy_p@�main.hlsli"
+		
+
+		void ProcessMaterial(in  �Fragment mf, inout �Property mp)
+		{		
+			half4 color = SAMPLE� 42D(e�, mf.uv0);1 �mp.opaque =7 @.a *"   % ,}
+� zVertex(�  1 mv� 0
+  _ vk �.y = 1.0 -  $;
+ 1 a1.y;  x 	��x F    8��   Custom     SHADING_MODEL_CUSTOM& `hading'8ls/ > �P #?	 �           
+===== commonresource/assets/materials/minigame/legacyparticle/legacy_particle_opaque.xml (421)
+d  �   Particle_Opaque  � <�� @    �_MainTex: ? # �   	   g_Mask# $    ( �fBlendMod� �9��ƽ�I�ri�-��J��Ѵ H  � �ARTICLE_MASK_TEXTURE( ��   
+		#include "MiniGame/Legacy0�/legecy_p@�!main.hlsli"
+
+		void ProcessVertex(inout Material � mv)
+		{
+  			mv.uv0.y = 1.0 -  $;
+ 1 �1.y;  
+		}
+		  � w �   Custom     SHADING_MODEL_CUSTOM& `hadingg8ls/ > � P [ ��           
+===== commonresource/assets/materials/minigame/legacyparticle/warning_particle_add.xml (808)
+<  �   WarningParticle_Opaque  ^   � <��  * �	   _InnerTex: ? # @U   7 Q_Main!     P   
+( �TintColor� ��Z�A���m*�rI0P���  L   �	   INNER_TEXTURE_ENABLE( ��  
+		#include "MiniGame/legacy/ �Common.hlsli". �ConstantBuffers/EnvironmentCB1 pDECLARE� 42D(!);L /f � -
+	7 a8 �	float4 -N sendif
+
+ � getMod( 2a, 	 pb )
+		{F �return a - b *  �or(a / bf �!}
+		
+		half4 ProcessShadingModel(in MaterialFrag� � mf, inout �Property mpz  T �2 uv = mf.uv0�  �4 final_c� � = SAMPLAB, uvF	j a2 = uv0 	 A2 -   �(0.5,0.5);4 � scale_fact� M�GetTime() * 2.0, PI5 0 �saturate(1.0 - cos(" )6 �remap_value/ �,-1, 1,6,1.2)� *�  +�  � 04 iVhr i2� n*.a BrgbaW �(+=` ��|0 s��   Custom��SHADING_MODEL_CUSTOM& �(s/ > �P  X S�~�> 4�       
+===== commonresource/assets/materials/minigame/legacy/block_curveface.xml (753)
+�  �   legacy_block_curveface   �
+ P   	 ;��3 �4 �   g_DiffuseTex> ? '  > & tEmissiv' (  � �      _FlipY$ < `fUVMul  Ttime @ ��p��~�Ӑ�><����"��  �  V �EMISSIVE�  �    DIFFUSE_TEX� �  
+			#include "MiniGame/B` �Common.hlsli"			2 aDECLARL 82D(*");R $f � 0 41 cfloat 
+ #V Vendif P#;
+� �	void ProcessMaterial(in  �Fragment mf, inout �Property mp)K {R �	mp.opaque = SAMPL� �, mf.uv0).a�  }
+ Thalf4� �ShadingMode� &%
+	V �color = P �a (H �mp, PASS�n�!		S �.rgb += GetV �C (T �% *�,�q �r	return� 0�zVertex( 7 mv mvw �.y = (1.0 -  3) *$ +    & 3;
+
+� �	 0   mP#  ��Custom     SHADING_MODEL_CUSTOM& �(s/ > TP  �D�~�>� ��      
+===== commonresource/assets/materials/minigame/legacy/dynamicskybox.xml (941)
+H  �   dynamicSkybox   Y   �   K ��4 �  b �_NoiseTexture   �? ' & Vstars& ( P   , �CloudAlpha(  �Speed1�p-@ j2�p�@ �Master   ���= �UVOffsetx 	 soverage� � UScaleH \�cBC� # �  2 h �Softness� 0L= �moonLight� Y)\? �Intensity 33�?4 1Pow� 9 A 3Siz�  4Rim. H���@ 1Ran� T���>	 C  � lashadow� V�k? � V
+ף= � T=
+�>
+0& A  � l 4�� !ry� � (su#h 
+�#< #�*su#�u#C    # `  #   ;  < �BottomColor[P4Mid �)\�=
+�#>�  4Top  ���u=��>�  
+�^ 
+8�" (�? �ADark$ ��z�>ff�>�+� &suc D �D��,N���,^���|TG 3� �LOW_SKYBOX � � CLOUD_ENABLE   USTART �F �
+		#include "MiniGame/legacy/�`.hlsl"1 �(half4 ProcessShadingModel(in MaterialFragment mf, inout �Property mp)
+		{
+			return PSMain(4 �mp);
+		}r Dvoidq �VertexData(W  5 mvU # VO vK |L dBpustom  ��SHADING_MODEL_CUSTOM& � (s/ > 1iP  X H�~�>�       
+===== commonresource/assets/materials/minigame/legacy/legacy_aurora_lod0.xml (1130)
+�  �   legacy_aurora_lod0  � <�� �      g_Aa 2Tex> ? '  
+* �Strength( �  ��Fzs�t�����{��,��� �t  
+    #include "MiniGame/�  �_common.hlsl"2 RBlock C/ i0 �float GetGradient( �offset2,! �uvProportion D2 uv �moveSpeed) V { ^ �color = (smoothstep(0, 0.7, sin((uv.x -t ( +P �* 3.1415926 /�  )) Q(1 - S <1 *� ?rac] 	3));� breturn�  !}
+ �DECLARE_TEX2D(');@� �(half4 ProcessShadingModel(in MaterialFragment mf, inout  � �erty mp)Q s� � = 3.0f;
+	 �_loop = 0.0625 4� 31 = `(0.22f�8 �63f, 1.0f)7  27 !331 !25 /728 % _g� = g_Time *� *� 302 1 �mf.uv0.x +=7  L�ca = SAMPL� ,C # *��(2.1, 1) +  
+� �frequency = �'.3�� [)R , $ +�x gjw  5?- _*))�ol = pow(ca.x, 3.5/ �+ Uy, 10 ;2;
+D `orFinaK  Q *#*� *�,
+	@C 	EDvoid�VertexData(� : mv��mv.local_posi� .y(5�///"  I"mvHB*25)v&1;X Eclip5 s = mul(�T 1xyz� ),.�TranslatedViewProjec' pMatrix(�h �#if defined(SHADER_API_GLES) || 3� ^.zw = $ww� _#else?  !, Cndif�M   ���   Custom     � �ING_MODEL_CUSTOM& �(s/ > �P  X S�~�> �           
+===== commonresource/assets/materials/minigame/legacy/legacy_aurora_lod0_1.xml (1228)
+l	  �   legacy_aurora_lod0  � <�� �      g_Aa 2Tex> ? '  
+* �Strength( �  ��03�3S>����t�V��� ��  
+    #include "MiniGame/�  �_common.hlsl"2 RBlock C/ i0 �float GetGradient( � blendTimeStart, 3End �offset2,I �uvProportion D2 uv �moveSpeed) ~ { � �color = (smoothstep(� 
+� � sin((uv.x -� ( +f �* 3.1415926 /�  )) Q(1 - i <1 *� ?rac] 	3));� breturn�  !}
+ �DECLARE_TEX2D(A');~/ �(half4 ProcessShadingModel(in MaterialFragment mf, inout  � �erty mp)g%
+	t 4� 31 = �(0.22f, 0.7 �8f, 1.0f);6 �; 2; !335 "25B 2= ��timeMultiple = 0.125;)� 0colY _SAMPL7 �, mf.uv0 *\�(0.5, 1) + 1 y P @pow( p.x, 3.5� 5+ ( Gy, 6 I2);
+� g# 62q0,0.7,07� _, 0);> 2> 21.2> 1> 3> A,0.6~
+> 
+�  � W-80B0(g_S* *�+�G - 0I� * 0.6666)) ,.5� 2j )1j 3j )2j %
+ 4$//�Pefficx' =*_+�*+�A* g3II 8 e a C *B�DvoidI�VertexData(/ 9 mv-� mv.local_posi�.y += 7.2;"  -~!1.6v�q.x * 6)o1F EclipE s = mul(\d 1xyz^ ),	�TranslatedViewProjec' �Matrix()��#if defined(SHADER_API_GLES) || 3� ^.zw = $ww� _#else?  , Cndif�}      �$�   Custom     � �ING_MODEL_CUSTOM& @(s/ > P  X S�~�> �           
+===== commonresource/assets/materials/minigame/legacy/legacy_cloudplane_lod0.xml (466)
+�  �   legacy_cloudplane_lod0  ^   � <��  * p   g_Ce �LightTex "�? U 
+* % $   Q   , QLocal1 �ScatterColor� , /un( ( oSkyMod! �   ����2���K*����yF!<(��   
+
+			#include "MiniGame/|/|�Main.hlsl"4 �(half4 ProcessShadingModel(in MaterialFragment mf, inout �Property mp)P { �	return PSn (6 @mp); }v Dvoidu �VertexData([  7 mvY # VS vO M   L  �   Custom��SHADING_MODEL_CUSTOM& � (s/ > 6iP  X C�~�>+�            
+===== commonresource/assets/materials/minigame/legacy/legacy_decal_blend.xml (464)
+�  �	   legacy_decal_opaque  ^   � <�� �      g_DiffuseTex "�? ' 3 �r��"�B�A���i\������ �w  
+		#include "MiniGame/� /� �5Main.hlsl"
+		half4 ProcessShadingModel(in MaterialFragment mf, inout �Property mp)
+		{
+			return PSj (4 �mp);
+		}
+
+		voidq F m $	n 2mp.�� = SAMPLE_TEX2D(e�, mf.uv0.xy).a� �VertexData(v  5 mv� V� v� ]    I F    � ��   Custom     SHADING_MODEL_CUSTOM& �(s/ > �iP  S�~�> L�      
+===== commonresource/assets/materials/minigame/legacy/legacy_full_screen.xml (555)
+X  �   legacy_full_screen  U   �  K ��) ��      g_DiffuseTex "�? ' B * �ModelAlphaTransparent4 	  qPotency: D ����nD�����u�z�%Hv�� ��  
+			DECLARE_TEX2D(�  );  efloat n 	 � " �half4 ProcessShading. �(in MaterialFragment mf, inout �Property mp)P { �	//just blend texture color
+	� � 2 uv = mf.uv0.x� � + � = SAMPL� B, uv� 	, V.a *=� / *� 
+r	returng  } Dvoid�VertexData(�  7 mv� �mv.clip_position� uv.local g M   e ��   Custom     SHADING_MODEL_CUSTOM& �(s/ > c.hlsli�t   �~�> ��     
+===== commonresource/assets/materials/minigame/legacy/legacy_line_face_additive.xml (536)
+L  �   legacy_line_face_additive  �  ;��% ��      g_AlphaTexDI> ? ( & �DiffuseTex$ $ rEmissiv% L OverlayL Q   	( sfUV0MulL   2�? 6tim�2�͝uvPu�?�(l^_�Sgk(�H  
+
+			#include "MiniGame/�/�c.hlsl". �fndef USE_BLOCK_VERTEX_LIGHT" �	#define# ! 0G QendifR �(half4 ProcessShadingModel(in MaterialFragment mf, inout �Property mp)P {� �return PSMain(6 @mp); }v Dvoidu �VertexData([  7 mvY # VS vO M   L l�   Custom     SHADING_MODEL_CUSTOM& � (s/ > �iP  X S�~�>  4�       
+===== commonresource/assets/materials/minigame/legacy/legacy_line_face_opaque.xml (534)
+H  �   legacy_line_face_opaque  �  ;��% ��      g_AlphaTexDI> ? ( & �DiffuseTex$ $ rEmissiv% L OverlayL Q   	( sfUV0MulL   2�? 6tim��$>OpgxL?�����(�H  
+
+			#include "MiniGame/�/�c.hlsl". �fndef USE_BLOCK_VERTEX_LIGHT" �	#define# ! 0G QendifR �(half4 ProcessShadingModel(in MaterialFragment mf, inout �Property mp)P {� �return PSMain(6 @mp); }v Dvoidu �VertexData([  7 mvY # VS vO M   L l�   Custom     SHADING_MODEL_CUSTOM& � (s/ > �iP  X D�~�>d  4�       
+===== commonresource/assets/materials/minigame/legacy/legacy_line_face_translucent.xml (539)
+L  �   legacy_line_face_translucent  �  ;��% ��      g_AlphaTexDI> ? ( & �DiffuseTex$ $ rEmissiv% L OverlayL Q   	( sfUV0MulL   2�? Etime? �7?�	gh�٩���_y��׸/(�H  
+
+			#include "MiniGame/�/�c.hlsl". �fndef USE_BLOCK_VERTEX_LIGHT" �	#define# ! 0G QendifR �(half4 ProcessShadingModel(in MaterialFragment mf, inout �Property mp)P {� �return PSMain(6 @mp); }v Dvoidu �VertexData([  7 mvY # VS vO M   L l�   Custom     SHADING_MODEL_CUSTOM& � (s/ > �iP  X S�~�>  4�       
+===== commonresource/assets/materials/minigame/legacy/legacy_particle_2dparticle.xml (446)
+�  �   legacy_particle_2DP   � <�� �      g_DiffuseTex> ? ( A  	& CMask# $  N �fBlendMod� �5��>)�N�G8�`�K *w�  J �USE_MASK_TEX  ��   
+		#include "MiniGame/2/2�Main.hlsl"
+		half4 ProcessShading� �l(in MaterialFragment mf, inout �Property mp)
+		{
+			return PSj (4 �mp);
+		}
+
+		voidq �VertexData(W  5 mvU # VO vK }	     J 4�   Custom     SHADING_MODEL_CUSTOM& � (s/ > .iP  X D�~�>d �`    
+===== commonresource/assets/materials/minigame/legacy/legacy_particle_2dparticle_add.xml (447)
+�  �   legacy_particle_2DP Oadd  �  ;��% � �   g_DiffuseTex> ? ? 	& CMask# $  N �fBlendMode ����Q�_m�.�n�T�����  J �USE_MASK_TEX  ��   
+
+		#include "MiniGame/7/7�Main.hlsl"
+		half4 ProcessShading� �l(in MaterialFragment mf, inout �Property mp)
+		{
+			return PSj (4 �mp);
+		}� Dvoidq �VertexData(W  5 mvU # VO vK M   I 4�   Custom     SHADING_MODEL_CUSTOM& � (s/ > -iP  X S�~�> �`    
+===== commonresource/assets/materials/minigame/legacy/legacy_particle_2dparticle_opaque.xml (449)
+�  �!   legacy_particle_2DP opaque  �  ;��% � �   g_DiffuseTex> ? ? 	& CMask# $  N �fBlendMod� ��SR.�7:��sR�j��7���  J �USE_MASK_TEX  ��   
+
+		#include "MiniGame/;/;�Main.hlsl"
+		half4 ProcessShading� �l(in MaterialFragment mf, inout �Property mp)
+		{
+			return PSj (4 �mp);
+		}� Dvoidq �VertexData(W  5 mvU # VO vK M   I 4�   Custom     SHADING_MODEL_CUSTOM& � (s/ > -iP  X D�~�>d �`    
+===== commonresource/assets/materials/minigame/legacy/legacy_particle_2dparticle_transparent.xml (452)
+�  �&   legacy_particle_2DP �transparent  �  ;��% � �   g_DiffuseTex> ? ? 	& CMask# $  N �fBlendMode �A�\�n˓&ξ���^��7�  J �USE_MASK_TEX  ��   
+
+		#include "MiniGame/?/?�Main.hlsl"
+		half4 ProcessShading� �l(in MaterialFragment mf, inout �Property mp)
+		{
+			return PSj (4 �mp);
+		}� Dvoidq �VertexData(W  5 mvU # VO vK M   I 4�   Custom     SHADING_MODEL_CUSTOM`� (s/ > -iP  X S�~�> �`    
+===== commonresource/assets/materials/minigame/legacy/legacy_particle_3dparticle.xml (445)
+�  �   legacy_particle_3DP   � <�� �      g_DiffuseTex> ? ( A  	& CMask# $  N �fBlendMod� ���Og�P4�/f����5p�x�  J �USE_MASK_TEX  ��   
+		#include "MiniGame/2/2�Main.hlsl"
+		half4 ProcessShading� �l(in MaterialFragment mf, inout �Property mp)
+		{
+			return PSj (4 �mp);
+		}
+
+		voidq �VertexData(W  5 mvU # VO vK }	     J 4�   Custom     SHADING_MODEL_CUSTOM& � (s/ > .iP  X D�~�>d �`    
+===== commonresource/assets/materials/minigame/legacy/legacy_particle_distort.xml (446)
+�  �   legacy_particle_distort  � <�� �      g_DiffuseTex> ? ( A  	& CMask# $  N �fBlendMode �<ȓ"�G�56�C���?��X�  J �USE_MASK_TE. ��   
+		#include "MiniGame/./.�Main.hlsl"
+		half4 ProcessShading� �l(in MaterialFragment mf, inout �Property mp)
+		{
+			return PSj (4 �mp);
+		}
+
+		voidq �VertexData(W  5 mvU # VO vK }	     J 4�   Custom     SHADING_MODEL_CUSTOM& � (s/ > .iP  X D�~�>d �`    
+===== commonresource/assets/materials/minigame/legacy/legacy_rainbow.xml (529)
+0  �   legacy_rainbow  � <�� �      g_AnotherTex> ? ( A  & 1Sun"    J $ �IntensityL 	 sfAmount3 �   
+   _ScaleSize�  P �_ViewTargetPos$ \ �LocalSunColor$ 
+�  � �����b����8��� '�T #� �BLEND_TEXTURE2  �l �
+		#include "MiniGame/�� /sun_Main.hlsl", �(half4 ProcessShadingModel(in MaterialFragment mf, inout �Property mp)
+		{
+			return PSk (4 �mp);
+		}r Dvoidq �VertexData(W  5 mvU # VO vK M   I 0�   Custom     SHADING_MODEL_CUSTOM& � (s/ > .iP  X S�~�> �      
+===== commonresource/assets/materials/minigame/legacy/legacy_skyplane_flare_lod0.xml (415)
+l  �   legacy_skyplane_flare_lod0  ]   � K ��) P�    �g_SkyTex "�? #  	& wfAmountC �0�3jX���-_,X\�#���� ��   
+
+			#include "MiniGame/� /� F� a.hlsl"3 �(half4 ProcessShadingModel(in MaterialFragment mf, inout �Property mp)P { � 	return PSMain(6 @mp); }v Dvoidu �VertexData([  7 mvY # VS vO ]    M  �   Custom     SHADING_MODEL_CUSTOM& � (s/ > 7iP  X W�~�>��      
+===== commonresource/assets/materials/minigame/legacy/legacy_skyplane_lod0.xml (483)
+�  �
+   legacy_skyplane_lod0  ]   � K ��) ��      g_AnotherTex "�? ? & 1Sky"   	  $taC D  $ H �fSpeed   \ �ModColor�  �T{��vV������^�hN'�  P   �   BLEND_TEXTURE2  ��   
+
+		#include "MiniGame/k/k�Main.hlsl"1 �(half4 ProcessShadingModel(in MaterialFragment mf, inout �Property mp)
+		{
+			return PSk (4 �mp);
+		}r Dvoidq �VertexData(W  5 mvU # VO vK }      L 8�   Custom  x�SHADING_MODEL_CUSTOM& � (s/ > 1iP  X H�~�>��      
+===== commonresource/assets/materials/minigame/legacy/legacy_skyplane_mix_lod0.xml (480)
+�  �   legacy_skyplane_mix_lod0  ]   � K ��) � �   g_AnotherTex "�? ? & 1Sky"   Q   	$ sfAmount   < �ModColor�  ��k�g��
+�5�_�Ц�$�  P   �   BLEND_TEXTURE2  ��   
+
+			#include "MiniGame/P/P�Mix.hlsl"1 �(half4 ProcessShadingModel(in MaterialFragment mf, inout �Property mp)P { � 	return PSMain(6 @mp); }v Dvoidu �VertexData([  7 mvY # VS vO }      O @�   Custom     SHADING_MODEL_CUSTOM& (s/ > 9iP  X W�~�>��      
+===== commonresource/assets/materials/minigame/legacy/legacy_stdmtl_alphatest.xml (1159)
+P  �   legacy_stdmtl_alphaTest  � <�� �      g_A^ 1xDI> ? ( & �DiffuseTex$ Q   $ rEmissiv% L ~OverlayL $ L �SpecSelfL  t Q   , �FrozenAmount,  �GlitterPower8 	 RSpeed0  RModel�ranspareQ 6�?  RHeigh�6HC JRGBA7 A �?
+  5Rim� 2 A AotUVF � PcaleU4  V � $�hiness  L � U m  3Use�CColo$   wQillum : t `fUVMul� � dftime �  4 (�?�	�W 
+$ � �InstanceAmbien( NData<PHMask� D ! �� '  �7elf}A � #�
+�΂���~��yn�e4���#f�EMISSIVE      OVERLAY_MODE_TEX�� ENABLE_FROZEN  L   �SELFILLUM: 
+ 2ALLL �  
+		#include "MiniGame/�/��Common.hlsl"0 
+!Co��tBuffers/L �GlobalCBA iB �
+		half �; �#;
+ �4 ProcessShading$ �(in MaterialFragment mf, inout �Property mp)
+		{
+	T mF  _c�2 = � `Charac\ S(L 0mp)� Y	#if v#
+	H 03 l� �ing = GetB � L (H �	return Lerp! bEffectm � ,V ,+,$� Helse` K ! �ndif
+		}TDvoidS(O$ ��	mp.opaque = SAMPL�82D(_� , mf.uv0.xy).a;� `Vertex�(v  5 mv��float2 uv = mvX � �uv.y = 1.0 -   _ �n tmv, uv)� �� F    9P�   Custom  saHADING��L_CUSTOM& �(s/ > )P  �W�~�>4�      
+===== commonresource/assets/materials/minigame/legacy/legacy_stdmtl_blend.xml (1163)
+L  �	   legacy_stdmtl_blend   <�� �      g_AlphaTexDI "�? ( & �DiffuseTex$ Q   $ rEmissiv% L ~OverlayL $ L �SpecSelfL  t  $, �FrozenAmount,  �GlitterPower8 	 RSpeed0  RModel�ranspareQ 6�?  QHeighg F HC JRGBA7 A �?
+  5Rim� 2 A AotUVF � PcaleU4  V � $�hiness  L � U m  3Use�CColo$   wQillum : t `fUVMul� � dftime �  4 (�?�	�W 
+$ � �InstanceAmbic�( NData<PHMask� D ! �� '  �7elf}A ���u��oކs���ALP�s��#f�EMISSIVE      OVERLAY_MODE_TEX�� ENABLE_FROZEN  L   �SELFILLUM: 
+ 2ALLL �  
+		#include "MiniGame/�/��Common.hlsl"0 
+!Co��tBuffers/L �GlobalCBA iB �
+		half �; �#;
+ �4 ProcessShading$ �(in MaterialFragment mf, inout �Property mp)
+		{
+	T mF  _c�2 = � `Charac\ S(L 0mp)� Y	#if v#
+	H 03 l� �ing = GetB � L (H �	return Lerp! bEffectm � ,V ,+,$� Helse` K ! �ndif
+		}TDvoidS(O$ ��	mp.opaque = SAMPL�82D(_� , mf.uv0.xy).a;� `Vertex�(v  5 mv��float2 uv = mvX � �uv.y = 1.0 -   _ �n tmv, uv)� �� F    9P�   Custom  saHADING��L_CUSTOM& �(s/ > )P  �S�~�>  l�      
+===== commonresource/assets/materials/minigame/legacy/legacy_stdmtl_brush.xml (912)
+`  �	   legacy_stdmtl_brush  � <�� �      g_AlphaTexDI> ? ( & �DiffuseTex$ Q   $ rEmissiv% L ~OverlayL $ L �SpecSelfL  t Q   , RModel� �ransparent4   JRGBA A �?
+  �RimPower 2 A AotUVl � PcaleU4  V � E � �hiness  L � U m  3Use#SColor<   Qillum�  : t `fUVMul� � dftime   4 (�?p� �InstanceAmbi?x( NData�,HMask� D �  �  d �6elf�A ��G\'D��r�F�]���
+�KmHh#B�EMISSIVE      OVERLAY_MODE_TEX�#��SELFILLUM 
+ 2ALL0 ��  
+		#include "MiniGame/�/��Common.hlsl"
+		half4 ProcessShading��(in MaterialFragment mf, inout �Property mp)
+		{
+			return Lx �CharacterPS(? �mp);
+		}
+
+		void| Q x $	y �mp.opaque = SAMPLQ82D(u�, mf.uv0.xy).a� `Vertexx(v  5 mv� �float2 uv = mvX  R �	uv.y = 1.0 -   _ n emv, uv! 0� �7�   Custom  'aHADING[�L_CUSTOM& �(s/ > iP  �S�~�> ��      
+===== commonresource/assets/materials/minigame/legacy/legacy_stdmtl_cartoon_matcap_opaque.xml (1190)
+�  �#   legacy_stdmtl_cartoon_matcap_opaque  � <�� �      g_AlphaTexDI> ? ( & �DiffuseTex$ Q   $ rEmissiv% L ( M� & L p ~Overlayp H p �SpecSelfp  L ( �UVAnimation� Q   , �FrozenAmountT  �GlitterPower8 	 RSpeed0 � Bodel[�ranspareQ 6�?  QHeighg F HC JRGBA7 A �?
+  5Rim� 2 A AotUVF PcaleU4  V 8� L�hiness  L � U m \#se�CColo$   �Qillum : t `fUVMul� � dftime �  4 (�?�	�W 
+$ � �InstanceAmbicH( NDatad�(sk� D ! �� '  �7elf}A ��X���cp��KvR��o	F���UVANIM_ENABLE#��EMISSIVEA�OVERLAY_MODE_TEX8L E r_FROZENT�
+  
+		#include "MiniGame/�/��Common.hlsl"
+		DECLARe 72D()�);
+		half � Q   �4 ProcessShading& �(in MaterialFragment mf, inout �Property mp)
+		{
+
+	U mG  _c�B = C�� `Charac+ S(T �mp, PASS�  � Y	#if B#
+	h 03 l� �ing = Get[ L (H �	return Lerp! bEffect� � ,V ,N,G� Helse` K ! �ndif
+		}!DvoidtIp$ �B	mp.�� = SAMPL�� , mf.uv0.xy).a;� `Vertex�(v  2 mv��			float2 uv = mvX � �uv.y = 1.0 -   � 7cape tmv, uv)� x� F    1D�   Custom     SHADING��L_CUSTOM& �(s/ > ^iP  �H�~�>�      
+===== commonresource/assets/materials/minigame/legacy/legacy_stdmtl_cartoon_opaque.xml (1171)
+`  �   legacy_stdmtl_cartoon_opaque  � <�� �      g_AlphaTexDI> ? ( & �DiffuseTex$ Q   $ rEmissiv% L ~OverlayL $ L �SpecSelfL  t ( �UVAnimation� Q   , �FrozenAmountT  �GlitterPower8 	 RSpeed0  RModel7�ranspareQ 6�?  QHeighg F HC JRGBA7 A �?
+  5Rim� 2 A AotUVF PcaleU4  V 8� L�hiness  L � U m \#se�CColo$   �Qillum : t `fUVMul� � dftime �  4 (�?�	�W 
+$ � �InstanceAmbic$( NDatadPHMask� D ! �� '  �7elf}���_��h`T��k���zz=������UVANIM_ENABLE#��EMISSIVEA�OVERLAY_MODE_TEX8L E q_FROZEN �  
+		#include "MiniGame/�/��Common.hlsl"0 
+!Co��tBuffers/L �GlobalCBA iB Zhalf �; u#;
+ �4 ProcessShading$ �(in MaterialFragment mf, inout �Property mp)
+		{T U mG  _c�B = C�`CharacG S(N 0mp)� Y	#if E#
+	I 03 l� �ing = GetB � L (H �	return Lerp! bEffectm � ,V ,-,&� Helse` K ! �ndif
+		}DvoidU*Q$	^ 2mp.�� = SAMPL�82D(r� , mf.uv0.xy).a;� `Vertex�(v  2 mv��			float2 uv = mvX � �uv.y = 1.0 -   _ �f tmv, uv)� |� F    2H ��Custom     SHADING��L_CUSTOM& �(s/ > !P  �H�~�>�      
+===== commonresource/assets/materials/minigame/legacy/legacy_stdmtl_matcap_opaque.xml (1217)
+�  �   legacy_stdmtl_matcap_opaque  � <�� �      g_AlphaTexDI> ? ( & �DiffuseTex$ Q   $ rEmissiv% L ( M� & L p ~Overlayp H p �SpecSelfp  L ( �UVAnimation� Q   , �FrozenAmountT  �GlitterPower8 	 RSpeed0 � Bodel[�ranspareQ 6�?  QHeighg F HC JRGBA7 A �?
+  5Rim� 2 A AotUVF PcaleU4  V 8� L�hiness  L � U m \#se�CColo$   �Qillum : t `fUVMul� � dftime �  4 (�?�	�W 
+$ � �InstanceAmbicH( NDatad�(sk� D ! �� '  �7elf}A ���w�tm�(�|k�P��BC���UVANIM_ENABLE#��EMISSIVEA�OVERLAY_MODE_TEX8L E q_FROZEN �W  
+		#include "MiniGame/�/��Common.hlsl"0 
+!Co��tBuffers/L �GlobalCBA iB aDECLAR� 72D(k�);
+		half � �C;
+
+    �4 ProcessShading* �(in MaterialFragment mf, inout �Property mp)U 2{
+	w 04 mL  _c�2 = � `Characo S(R �mp, PASS�  � Y	#if �#
+	a 03 l� �ing = Get[ L (H �	return Lerp! bEffect� � ,V ,P,I� Helse` K ! Endif�}
+
+		voidxMt!@		{	d 2mp.F� = SAMPL&��, mf.uv0.xy).a� � `Vertex(v  1 mvt  s �float2 uv = mvX � �uv.y = 1.0 -   � 7cape tmv, uv)� �� F    /��   Custom     SHADING��L_CUSTOM& �(s/ > eP   H�~�>\�      
+===== commonresource/assets/materials/minigame/legacy/legacy_stdmtl_opaque.xml (1157)
+L  �
+   legacy_stdmtl_opaque  � <�� �      g_AlphaTexDI> ? ( & �DiffuseTex$ Q   $ rEmissiv% L ~OverlayL $ L �SpecSelfL  t Q   , �FrozenAmount,  �GlitterPower8 	 RSpeed0  RModel�ranspareQ 6�?  QHeighg F HC JRGBA7 A �?
+  5Rim� 2 A AotUVF � PcaleU4  V � $�hiness  L � U m  3Use�CColo$   wQillum : t `fUVMul� � dftime �  4 (�?�	�W 
+$ � �InstanceAmbic�( NData<PHMask� D ! �� '  �7elf}A �j�����[o�:<��.�;�/���#f�EMISSIVE      OVERLAY_MODE_TEX�� ENABLE_FROZEN  L   �SELFILLUM: 
+ 2ALLL �  
+		#include "MiniGame/�/��Common.hlsl"0 
+!Co��tBuffers/L �GlobalCBA iB �
+		half �; �#;
+ �4 ProcessShading$ �(in MaterialFragment mf, inout �Property mp)
+		{
+	T mF  _c�2 = � `Charac\ S(L 0mp)� Y	#if v#
+	H 03 l� �ing = GetB � L (H �	return Lerp! bEffectm � ,V ,+,$� Helse` K ! �ndif
+		}TDvoidS(O$ �B	mp.�� = SAMPL�82D(_� , mf.uv0.xy).a;� `Vertex�(v  5 mv��float2 uv = mvX � �uv.y = 1.0 -   _ �n tmv, uv)� �� F    9P�   Custom  �qSHADING��L_CUSTOM& �(s/ > )P  �H�~�>4�      
+===== commonresource/assets/materials/minigame/legacy/legacy_sun_lod0.xml (528)
+0  �   legacy_sun_lod0  � <�� �      g_AnotherTex> ? ( A  & 1Sun"    J $ �IntensityL 	 sfAmount3 �   
+   _ScaleSize�  P �_ViewTargetPos$ \ �LocalSunColor$ 
+�  � 91�"r�\����Re��'
+t>T #� �BLEND_TEXTURE2  �l �
+		#include "MiniGame/�/��Main.hlsl", �(half4 ProcessShadingModel(in MaterialFragment mf, inout �Property mp)
+		{
+			return PSk (4 �mp);
+		}r Dvoidq �VertexData(W  5 mvU # VO vK M   I 0�   Custom     SHADING_MODEL_CUSTOM& � (s/ > .iP  X S�~�> �      
+===== commonresource/assets/materials/minigame/legacy/legacy_toolline_lod0.xml (272)
+�  �
+   legacy_toolLine_lod0  � <��  ����D�D�p7##�l�}` �/m   
+		half4 ProcessShadingModel(in MaterialFragment mf, inout �Property mp)
+		{
+			return mf.color;
+		}
+	� �   Custom  (�SHADING_MODEL_CUSTOM& � (s/ > b.hlsliP  X D�~�>d �           
+===== commonresource/assets/materials/minigame/legacy/legacy_triangle_lod0.xml (275)
+�  �
+   legacy_triangle_lod0  ^   � <��  �o{n|��� �{�X� ��d �/v   
+		half4 ProcessShadingModel(in MaterialFragment mf, inout �Property mp)
+		{
+			return [ C(1,  �);
+		}
+	� �   Custom  0�SHADING_MODEL_CUSTOM& � (s/ > b.hlsliP  X D�~�>d T�      
+===== commonresource/assets/materials/minigame/legacy/legacy_ui_element_2delement.xml (672)
+�  �
+   legacy_ui_element_2DE
+   $ �
+ P   	 ;��2 ��      _WatermarkTex> ? + �   g_Diffuse% 
+$ QU   	$ 3MasF H C  L �_TextureRate$ � �Number   @T QAlphaP  � h ]Color	  �UVTransle  $�
+ ����k��?�sM2�$��-��zY � 3,� TRANSFORM_XYZ  � �ENABLE_WATERMARK9 #� �MASK_TEXTURE_NONE  =1   2H  6rRGB_MODC (  SGRAY �  RCOLORC �  
+
+		#include "MiniGame/k/k�Main.hlsl"
+		half4 ProcessShadingModel(in M�pialFrag; � mf, inout �Property mp)
+		{
+			return PSj (4 �mp);
+		}� Dvoidq �VertexData(W  5 mvU �mv.uv0.y = 1.0 -   Y #	Vl vh �g ��   Custom     SHADING[�EL_CUSTOM& (s/ > KiP  X T�~�>� ��        
+===== commonresource/assets/materials/minigame/legacy/legacy_ui_element_2delement_add.xml (676)
+   �
+   legacy_ui_element_2DE
+ Oadd  $ �
+ P   	 ;��2 ��      _WatermarkTex> ? + �   g_Diffuse% 
+$ QU   	$ 3MasF H C  L �_TextureRate$ � �Number   @T QAlphaP  � h ]Color	  �UVTransle  $�
+ ��K�m<�h�<��f#$�/�Y � 3,� TRANSFORM_XYZ  � �ENABLE_WATERMARK9 #� �MASK_TEXTURE_NONE  =1   2H  6rRGB_MODC (  SGRAY �  RCOLORC �  
+
+		#include "MiniGame/o/o�Main.hlsl"
+		half4 ProcessShadingModel(in M�pialFrag; � mf, inout �Property mp)
+		{
+			return PSj (4 �mp);
+		}� Dvoidq �VertexData(W  5 mvU �mv.uv0.y = 1.0 -   Y #	Vl vh �g ��   Custom     SHADING[�EL_CUSTOM& (s/ > KiP  X T�~�>� ��        
+===== commonresource/assets/materials/minigame/legacy/legacy_ui_element_3delement.xml (833)
+X  �
+   legacy_ui_element_3DE
+    �
+ 	 ;��2 ��      g_DiffuseTex> ? ( A  	& CMask# $  N �_ClipZOffse�  RFlipY8 L QAlpha  � ` ]Color�   �UVTranslate $�
+ �u�	W5}�UCW�ڐo}�~- �  �   TRANSFORM_XYZ7v �MASK_TEXTURE_NONE  =1   2H  rRGB_MODC (  1GRA RCOLORC ��  
+
+		#include "MiniGame/'/'�Main.hlsl"
+		float �; �  �half4 ProcessShadingModel(in MaterialFraga � mf, inout �Property mp)
+		{
+			return PS� (4 0mp)m }� Dvoidq �VertexData(W  5 mvU � mbias =� �	mv.clip_position = mul(mv.t1ud_world# U, GetO�dViewProjec �Matrix()� �	#if ENG_REVERSED_Zt  .zv  +� I Oelse< -< Dndif=  )#.a5  #* Z0 �//mv.uv0.y = 1.0 -  3 ( 3) *"$ +    	E 3//V�v�:�� �Custom     SHADING��EL_CUSTOM& �(s/ > �iP  X W�~�>��       
+===== commonresource/assets/materials/minigame/legacy/legacy_ui_element_3delement_depthtest.xml (839)
+d  �
+&   legacy_ui_element_3DE
+ �depthwrite   �
+  K ��3 ��      g_DiffuseTex> ? ( A  	& CMask# $  N �_ClipZOffset  RFlipY8 L QAlpha  � ` ]Color�   �UVTransla$�
+ �]�u�\�4�O2�G<��!s. �  �   TRANSFORM_XYZ7v �MASK_TEXTURE_NONE  =1   2H  rRGB_MODC (  1GRA RCOLORC ��  
+
+		#include "MiniGame/3/3�Main.hlsl"
+		float �; �  �half4 ProcessShadingModel(in MaterialFraga � mf, inout �Property mp)
+		{
+			return PS� (4 0mp)m }� Dvoidq �VertexData(W  5 mvU � mbias =� �	mv.clip_position = mul(mv.t1ud_world# U, GetO�dViewProjec �Matrix()� �	#if ENG_REVERSED_Zt  .zv  +� I Oelse< -< Dndif=  )#.a5  #* Z0 �//mv.uv0.y = 1.0 -  3 ( 3) *"$ +    	E 3//V�v�:�� �Custom     SHADING��EL_CUSTOM�(s/ > �iP  X Z�~�>��     
+===== commonresource/assets/materials/minigame/legacy/legacy_uvanim_blend.xml (506)
+�  �	   legacy_uvanim_blend   �  <�� �      g_DiffuseTex> ? ( A  	& CMask# $  Q   ( QRotUV  `ScaleU0  V fTransU0  V[ ��$w;��lU��B�Y�P�H��� �USE_MASK_TEX     RECEIVE_LIGHTING8 ��   
+		#include "MiniGame/~/~�5Main.hlsl"
+		half4 ProcessShadingModel(in MaterialFragment mf, inout �Property mp)
+		{
+			return PSj (4 �mp);
+		}
+
+		voidq �VertexData(W  5 mvU # VO vK ]    H H�   Custom     SHADING_MODEL_CUSTOM& � (s/ > ,iP  X D�~�>d  ,�        
+===== commonresource/assets/materials/minigame/legacy/legacy_uvanim_selfillum.xml (510)
+�  �   legacy_uvanim_selfillum   �  <�� �      g_DiffuseTex> ? ( A  	& CMask# $  Q   ( QRotUV  `ScaleU0  V fTransU0  V[ ������-���jw+V��I?w� �USE_MASK_TEX     RECEIVE_LIGHTING8 ��   
+		#include "MiniGame/�/��5Main.hlsl"
+		half4 ProcessShadingModel(in MaterialFragment mf, inout �Property mp)
+		{
+			return PSj (4 �mp);
+		}
+
+		voidq �VertexData(W  5 mvU # VO vK ]    H H�   Custom     SHADING_MODEL_CUSTOM& � (s/ > ,iP  X S�~�>  ,�        
+===== commonresource/assets/materials/minigame/legacy/line_grid.xml (1000)
+�  �	   line_grid  �  ;��% �   �GridSize ��B   Outw �Widtho�:   	* RColorF ? S���>  FLine$ &�? '  \ #   ��?4�X�2�H��|t��b���B� �D  
+
+
+			float4 � ; �  �   �  #G;
+
+   rgetMod( #a, 9b ), ;{
+  �return a - b *7 �or(a / b);- }� �(half4 ProcessShadingModel(in MaterialFragment mf, inout �Property mp)P { 4	
+	� �3 world_position = mf. V.xyz;3 B2 uv' 7uv0 y x = 0. y b3 abs_a �normal = �(mf.tangent_to! 0[2]| 6);
+@ �4 final_c� ^ \ 
+i<if(j M.x > o.y && + z��  //xface  '[frac(f$z/q/);9 y9 y9 5 J } Oelse/yx/y/*x%L� e
+��  
+�aif(x >X5�0x < 9 y y �	S	La(T0.rg�Dmf.c ,r/.a�  }X K 	 g �	7 .  
+Dvoid	�VertexData(� 7 mv�Tconst�2ias�1y ymv.clip �ul(mv.translated_�e, GetT �ViewProjec �Matrix())_ �#if ENG_REVERSED_Zv  .zx  +� K U> -> cndif
+
+lM   Lh�   Custom     SHADING_MODEL_CUSTOM& �(s/ > b.hlsliP  X S�~�>  `�      
+===== commonresource/assets/materials/minigame/legacy/line_grid_plane.xml (1084)
+�
+  �   line_grid_plane  �  ;��% � �      Outi �Width  ��L=   	   GridColor6 ? S���>  FLine$ &�? 	^ #   ��?��m���R�^e��v����� �	  
+
+
+			float4 � ; �  �   � G;
+
+  ! rgetMod( #a, 9b ), ;{
+  �return a - b *7 �or(a / b);- }� �(half4 ProcessShadingModel(in MaterialFragment mf, inout �Property mp)P { 4	
+	� �3 world_position = mf. V.xyz;3 B2 uv' 7uv0 y x = 0. y b3 abs_a �normal = �(mf.tangent_to! 0[2]| 6);
+@ �4 final_c� ^ \ 
+i<if(j M.x > o.y && + z��  //xface  '[frac(fz/100);4 y4 y4 0 E } Oelse%y� x%y%*	x	 =� � `��  
+�yif(x >=� ��x <= (1 - ) y0 y0 �	a	Zo(O0.rg�Dmf.c ,m/.a }X m 	 g �c		/*
+		h�uv.x, 1) <� '
+	Y Z <OutY � 	�] y] I � �� El J: �; 6*/
+ = - �Dvoid��VertexData(� 7 mv�Tconst�2iasy1� ymv.clip��ul(mv.translated_�e, GetT �ViewProjec �Matrix())_ �#if ENG_REVERSED_Zv  .zx  +� K f> -> cndif
+
+l]    M<	�   Custom     SHADING_MODEL_CUSTOM& y(s/ > b.hlsliP  X S�~�>  4
+�      
+===== commonresource/assets/materials/minigame/legacy/line_uv_grid.xml (941)
+�  �   line_uv_grid  �  ;��% � @   b 0Oute �Width  ��L= �Color  �? f �?	   ScaleSize $ � Aǰ���SLX�u�J����w� �%  
+
+			float4 x ;  �  %3 � G;
+
+  6 rgetMod( #a, 9b ), ;{
+  �return a - b *7 �or(a / b);- }� �(half4 ProcessShadingModel(in MaterialFragment mf, inout �Property mp)P 6{
+	� �world_position = mf. V.xyz;3 B2 uv' 7uv0 �4 final_c[8 =  @ x_w[. =j" y" b3 abs_� �normal = �(mf.tangent_to! 0[2]� !);@L	if(< M.x >Q o.y && + zKL�	//xface� � & /U.X/	y+ y� } _else � y� x� y� y� � x� +z;� 
+x zx E!y;* } #��uv.x, 1) <�	
+�O�T yT yT 8 � % -� � @% -� � .6 �1(0, )8 */  Dvoid�VertexData(� 7 mv�Tconst�0ias�2.01y ymv.clip�ul(mv.translated_"e, GetT �ViewProjec �Matrix()� �#if ENG_REVERSED_Zv  .zx  +� K V> -> cndif
+
+l}      OL�   Custom  ��HADING_MODEL_CUSTOM& �(s/ > c.hlsliBt   �~�> >�    
+===== commonresource/assets/materials/minigame/legacy/nlegacy_stdmtl_opaque.xml (842)
+�  �   Nlegacy_stdmtl_opaque  � <�� �      g_AlphaTexDI> ? ( & �DiffuseTex$ Q   $ rEmissiv% L ~OverlayL $ L �SpecSelfL  t Q   , RModel� �ransparent4   JRGBA A �?
+  �RimPower 2 A AotUVl � PcaleU4  V � E � �hiness  L � U m  3Use#SColor<   Qillum�  : t `fUVMul� � Qftimex �InstanceAmbi#\( NData�HMask� D �  �  d t6elftA �5�M&(O�������fZgV���,L#&�EMISSIVE      OVERLAY_MODE_TEX|#��SELFILLUM 
+ 2ALL0 �~  
+		#include "MiniGame/�/��MainNormal.hlsl"
+		half4 ProcessShading��(in MaterialFragment mf, inout �Property mp)
+		{
+			return PSp (4 �mp);
+		}
+
+		voidq F m $	n 2mp.�� = SAMPLJ82D(R�, mf.uv0.xy).a� `Vertexq(v  5 mv� V� v� �J D� � �Custom  �aHADING�L_CUSTOM& �(s/ > �iP  <D�~�>|L�      
+===== commonresource/assets/materials/minigame/legacy/plannar_shdow.xml (806)
+�  �   plannar_shadow  ]   � K ��) � �      S^ �Falloff o�;6  [ColorA 5�?  �Params   ? �
+�  cÝ�@�>D*�3늵�
+4u�㦹 �   
+
+			float4 X ; ghalf4 � ;.  � ;G 
+4 pProcess% �ingModel(in MaterialFragment mf, inout �Property mp)P { �	return mf.c� }p Dvoido �VertexData(U  7 mvS  � �3 light_dir = U.xyz;( � floor_he. * w( $
+	"3 :�_pos = 0; s4 world �mv.translated_ Rition5 I  .y1 5in(' 9.y,� )3 Fxz =q   -�   �* max(0,% :y -V ' /4 y��	mv.clip�  � 2ul(� (� 6yz,] �w), GetT� �ViewProjecF �Matrix());
+3�x4 localToWI   =C �PrimitiveL @ ;�4vie�8 et � ;ion/ Pcente ({ u[3].x +S *.x�,, . z. zj " f;�	 = 1 - saturate(distanceE,� :) *w)� - =� x.a *= f��}
+		   >#�   Custom  |�HADING_MODEL_CUSTOM&��(s/ > c.hlslit   �~�>  �    
+===== commonresource/assets/materials/minigame/legacy/shadowface.xml (608)
+�  � 
+   shadowface  ]   � K ��) ��      g_DiffuseTex "�? ' T3 ��Ƿ���~[3PuO�XQz� �|  
+			DECLARE_TEX2D(l  );  �(half4 ProcessShadingModel(in MaterialFragment mf, inout �Property mp)P { �	float2 sample_uv = mf.uv0t u �color = SAMPL� ,A � 	3 �.rgb = lerp( ,a  [a);
+  breturn� Y  }
+ Dvoid�VertexData(�  7 mv� aconst � � bias = 0.01� �mv.clip_position�ul(mv.translated_world# e, GetT �ViewProjec �Matrix()�#if ENG_REVERSED_Zv  .zx  +� K Oelse> -> BndifNm		   K��   Custom     SHADING_MODEL_CUSTOM& �(s/ > c.hlslif�   �~�>   �       
+===== commonresource/assets/materials/minigame/legacy/ugc_ground_linegird.xml (1092)
+�  �	   ugc_ground_linegird  �  ;��% � �      Outb �Width  o�:   	   GridColor6 ? S���>  FLine$ &�? 	^ #   ��? ����s��9�;�~[��GC� �&>  
+			#include "MiniGame/legacy/stdmtl_Common.hlsl"1 ufloat4 � ; �  �   +G;
+
+  ! rgetMod( #a, 9b ), ;{
+  �return a - b *7 �or(a / b);- &}
+� �CalTranslates 4posu w� `Radio)3 5{
+	9 �t = 1.0;L �	if(pos <2 . 	)   } Selse 3 �- 0.5 < 0.00015 <0.55 	 S  � 5t;
+ �(half4 ProcessShadingModel(in MaterialFragment mf, inout �Property mp� �3 world_position = mf. V.xyz;3 B2 uv' 7uv0 ( x�  y b3 abs_a �normal = �(mf.tangent_to! 0[2]| )? �4 final_c�" =�y4(0.0,  5 � originH = 70� h �GetViewP� d().y -9 	M   K # +�Ph / 4 2) * -;
+� "\frac(a" /W -);4 y4 z4 L   
+� �~1�  } Vstep(  0, x�  s1.0 - x� y9 y9 #y)S�.�-1; g�  b aE C = (� " *�  ;]	 gDvoidf�VertexData(L 7 mvJTconst�9iasrymv.clip]tul(mv.t�*d_�U, Get�d�Projec �Matrix())_  .za  -� � �		     � d�   Custom     SHADING_MODEL_CUSTOM& �(s/ > }iP  X S�~�>  \�      
+===== commonresource/assets/materials/minigame/legacy/uitile.xml (529)
+$  �   legacy/UITile  � <�� �      g_DiffuseTex> ? (  Q   . �MaskColore   �RegionPositionAnd� >Siz� 
+0   DRect $� ����9�^B����2�B=:\NU�  �  �  2� TRANSFORM_XYZ    � �TEXTURE_TILE< �%  
+
+		#include "MiniGame/{�1.hlsl"
+		half4 ProcessShadingModel(in MaterialFragment mf, inout �Property mp)
+		{
+			mf.uv0.y = 1.0 -  ; 1 1 �return PSMain(p 0mp) }� Dvoid� �VertexData(�  5 mv� # VO vK }      L ��   Custom     SHADING_MODEL_CUSTOM& 6(s/ > liP  X V�~�>��        
+===== commonresource/assets/materials/minigame/block/block_additive.xml (741)
+�  �   block_additive   �  ;��3 �4 �   g_DiffuseTex> ? > & tEmissiv' (  � �      _FlipY$ < `fUVMul  Ttime @ �P��Z*����	�Lj:��s�  �  V �EMISSIVE�  �    DIFFUSE_TEX� �  
+			#include "MiniGame/B_ �Common.hlsli"			2 aDECLARL 82D(*");R $f � 0 41 cfloat 
+ #V Vendif P#;
+� �	void ProcessMaterial(in  �Fragment mf, inout �Property mp)K {R �	mp.opaque = SAMPL� �, mf.uv0).a�  }
+ Thalf4� �ShadingMode� &%
+	V �color = P �a (H �mp, PASS�n�!		S �.rgb += GetV �C (T �% *�,�q �r	return� 0�zVertex( 7 mv mvw �.y = (1.0 -  3) *$ +    & 3;
+
+� �	 F    P#  ��Custom     SHADING_MODEL_CUSTOM& �(s/ > TP  �S�~�>  ��      
+===== commonresource/assets/materials/minigame/block/block_atlas_mask.xml (1147)
+�  �   block_atlas_mask  � <�� �      g_DiffuseTex> ? '  & Q   * �CausticsSpeed !@ � LeavesLerpTime Z � NoisePower  �@ @Rang# @ @Scal 3�@8 �_WaveControl� R?  �@  5ind  � � � UColor< D $ ISnowE ��  $ �UVtilling ���=��>n �A�f�2��~���J?�8��J�DF *�VERTEX_ANIMATIONd*  �SNOWCOVER      LEAVES_CHANGE_COLO �
+ �  
+
+    DECLARE_TEX2D(�!);! �#include "MiniGame/BZ �Common.hlsli"0 �	legacy/ConstantBuffers/L �GlobalCBD ,f �  xfloat4 �;  � �endif
+
+		# 	�;  �,;
+� [ ,//: VTrans<s 2
+�   �void ProcessVertexData(inout Material A mv)4 {(N 4GraS �Animation(mv,A,6)�   }� Thalf4Y � ShadingModel(in� �Fragment mf, � �Property mp� IZ c�� = Sample]�TexturePoint(R �mp, PASS�� �//mp.opaque =U $.a  �rgb *= Getf  � cow(mf)�
+� � � � C�2 uv = mf.uv0� �uv.y =  1-  � '= �Y�ver( uv,j,5 )6 E �*= clamp(mf. J,0,1 �!
+//树叶变色需求，用原来的贴图的绿$ ���道作为灰度图
+� l (��>g *�	Vlerp(� F  �8);
+~creturn�;����'  ��&��}
+     :t� 0�   Custom     SHADING_MODEL_CUSTOM& �(s/ > �P  �S���>  /�      
+===== commonresource/assets/materials/minigame/block/block_atlas_modulate2x.xml (842)
+  �   block_atlas_modulate2x  ]   � K ��) � �    g_DiffuseTe` "�? + & �MapPacked(   V �_WaveControl( R?  �@  5ind  > T p �OverlayColor� ��l'�
+�J��S:9����  �   VERTEX_ANIMATION$ ��  
+			#include "MiniGame/B� �Common.hlsli"/ �ConstantBuffers/ViewCB+ Z TUtils. / �undef BLOCK_PA !GE ldefine A 1		: �DECLARE_TEX2D(�/);  �");} <if (  xfloat4 �; � w#endif
+# 
+�% �	void ProcessMaterial(in  �Fragment mf, inout �Property mp)K 4{
+	k �2 sample_uv = GetgBV(mf�	mp.opaque = SAMPL,I 1).a; }� Thalf4� �ShadingMode� +Vclip(� S- 0.5� � bmf.uv0$ � c]� 
+� 9 3 v.rgb =  +�  ;;
+  breturn7 !��VertexData( 7 mv#		N 4GraS �Animation(mv,�,�� �� �		     � F    �(�   Custom     SHADING_MODEL_CUSTOM& (s/ > ��	  ��       
+===== commonresource/assets/materials/minigame/block/block_atlas_opaque.xml (1391)
+x	  �   block_atlas_opaque  
+ ^   �! <��  4 �   g_DiffuseTex "�? Z Q   * �CausticsSpeed @B � NoisePower  �@ @Rang� @ @Scal  �@T  �UVtilling ���=��>x �����R�(��
+	�oa���� 3R �DIFFUSE_TEX  � �UV_NOISE # �RAIN_RIPPL �f  
+		#include "MiniGame/B~ �Common.hlsli"
+
+		DECLARh 82D(B!);N $f x �
+			float '; '2 ;. 	m	 K	 m{ Pendif� �(half4 ProcessShadingModel(in MaterialFragment mf, inout �Property mp)
+		{
+	T Bcolo� 
+ 1 = &d `Point(P �mp, PASS' );� 
+*$
+	� �3 uvw = mf.custom0.xyz;! �normal =	 �ize(mf.t�nt_to_world[2]: 1); < �6//下面的两句话 注释上面一句 关掉法线平均的效果
+	`2 uv =� �.xy * abs(� �.z) * 0.35 +  z  #y) y  x)8 305;� h I    �根据距离和深度递减,� disFact��1 - clamp( length(� �z -GetViewPosition()/100)/60, 0,1)y L *�w� z 42 fx qcos(sin Duv *�� + g_Time *�#))t  J  $ *A +  P 00.9oN B0.01@ 1 O3��Effect = SAMPL� �Texture,Y �w).rgb *P*�e ;    n 3 &=  + *� ;8 ��� �4 ripple = GetRainR o( mf);�  #+=2   ;f � freturn�} Dvoid@<(2mp.� wQample6/".a�  �  )  � �VertexData(�  5 mv� �//mv.clip_p� j�ul(mv.translated@# ,jT )Projec sMatrix(��8	mv� m uv.local^    n;0 y�@pow(%	 �) , 0.8 )4  9�saturate((l Py -48�S(6300 ));~}	� � cz / 32� N �}
+	     �\h�Q   Co �     SHADING_MODEL_CUSTOM& �(s/ > �P  45�~�h #�      
+===== commonresource/assets/materials/minigame/block/block_atlas_translucent.xml (1398)
+|	  �   block_atlas_translucent  	 ^   �  <��  3 �   g_DiffuseTex "�? Y Q   * �CausticsSpeed @B � NoisePower  �@ PRange#  @Scal  �@T  �UVtilling ���=��>x �|Z\�S��^��6�ls��Q�8� 3R �DIFFUSE_TEX  � �UV_NOISE # �RAIN_RIPPL �f  
+		#include "MiniGame/B� �Common.hlsli"
+
+		DECLARh 82D(B!);N $f x �
+			float '; '2 ;. 	m	 K	 m{ Pendif� �(half4 ProcessShadingModel(in MaterialFragment mf, inout �Property mp)
+		{
+	T Bcolo� 
+ 1 = &d `Point(P �mp, PASS' );� 
+*$
+	� �3 uvw = mf.custom0.xyz;! �normal =	 �ize(mf.t�nt_to_world[2]: 1); < �6//下面的两句话 注释上面一句 关掉法线平均的效果
+	`2 uv =� �.xy * abs(� �.z) * 0.35 +  z  #y) y  x)8 305;� h I    �根据距离和深度递减,� disFact��1 - clamp( length(� �z -GetViewPosition()/100)/60, 0,1)y L *�w� z 42 fx qcos(sin Duv *�� + g_Time *�#))t  J  $ *A +  P 00.9oN B0.01@ 1 O3��Effect = SAMPL� �Texture,Y �w).rgb *P*�e ;    n 3 &=  + *� ;8 ��� �4 ripple = GetRainR o( mf);�  #+=2   ;f � freturn�} Dvoid@<(�mp.opaqu� aSample6/".a�  �  )  � �VertexData(�  5 mv� �//mv.clip_p� jbul(mv.kBated@# ,jT )Projec sMatrix(��8	mv� m uv.local^    n;0 y�@pow(%	 �) , 0.8 )4  9�saturate((l Py -48�S(6300 ));~}	� � cz / 32� N �}
+	     �\h�Q   Co �     SHADING_MODEL_CUSTOM& �(s/ > �P  4S�~�>  #�      
+===== commonresource/assets/materials/minigame/block/block_bilinear_ice.xml (1420)
+\
+  �   block_bilinear_ice  Y   �  ;��) �* �   g_DiffuseTex "�? > & bNormal% $  �߸X%�Y���"X��3~i� ��  
+			#include "MiniGame/B�  �Common.hlsli"/ �	legacy/ConstantBuffers/L �GlobalCBC    �  DECLARE_TEX2D(� �);  //声明一个2DTEX  （法线TEX）
+	H U I K �（albedoG )
+ � !// �着色流程  �in  材质片段  3out# `资产<�%half4 ProcessShadingModel(in MaterialFragment mf, inH  �Property mp)P {� L�float3 nC� = UnpackUo(SAMPLk �, mf.uv0));L � �color = : ]; & +w {.xy ) ;Q 
+� CWS = �ize(mul(I �,mf.tangent_to_world)Z � i3 vDirE �gViewPosition.xyz -� @ '_p )K � �//fresnel 效果�   2= F
+ pEffect(� ,� *);6 47 CRApow(d( , �1) ,100) * 0.07;� 5128Y �)+=[ -;
+� 
+� �cubemap 反射7
+��1[2]:�� 45 ;9�UV  扰动   +�( c� tReflectqC a_��	传进来的当前时间 В一化到0-1 ���数   只把白天的3 ���作继承 p��待  v	�daytime = Get��DayTime();��//0-0.45 is0 ` other rnight   2是� �，其他是夜晚p  *� Ice_powe�(1 - step(? ,� )�Q max(! (� �+ 0.1)), 0.2;�V*=  (r *A  �=r强度  ,8
+�T �	� //高光 )� NdotH = BlinnPhonekp`SunDir !),,mZ, 84)+�4 speculaC}c , ")*� � b.rgb,1�N4 ; �[ � � Z��影� bshadowHtS 5(mfH �  �1 k   b R��着�`变化V���造明暗 Eqertex_l�(= � ;�
+� / �  breturn3 d  Q @}
+		 DvoidVV ZData(� 2 mv�  1	mvy�= clamp( �, 0, 1);b M   ] 	�   Custom     SHADING_MODEL_CUSTOM& �(s/ > �P  X D�~�>d  �	�       
+===== commonresource/assets/materials/minigame/block/block_bilinear_snow.xml (1114)
+�  �	   block_bilinear_snow  Y   �  ;��) �* �   g_DiffuseTex "�? > & bNormal% $  �����s�C��s��ޓO� �w  
+			#include "MiniGame/B�  �Common.hlsli"/ �	legacy/ConstantBuffers/L �GlobalCBC 0
+	  �DECLARE_TEX2D( );  �//声明一个2DTEX （albedo）
+  H (/);E  F �法线TEXI J  !// �着色流程  �in  材质片段  3out# `资产6�%half4 ProcessShadingModel(in MaterialFragment mf, inH  �Property mp)P {� � _ �color = SAMPL[�, mf.uv0 ) ;; �float3 n8� = UnpackJ(M `L T)); 
+= 
+_ CWS = �ize(mul(x �,mf.tangent_to_world)� Z ///\ 
+N 7[2]P 4i3 vDir9 �gViewPosition.xyz -� B '_p )K 
+� �resnel 效果	  2= F
+ pEffect(� ,� *);6 47 C�Apow(�( , �1) ,100) * 0.07;� 5128Y ,)+=[ x 
+�  U高�y�� NdotH = BlinnPhone� 2Get `SunDir !),n,� , � 
+��4 specula� � d , ")* �� c.rgb,1� N8 ; � \ ;= � Z��影� �shadow = GetS w(mf);
+	Y  x 4 *=1 E  b ���着时间变化，制造明暗 ��ertex_light = � ;� / �  breturn3 �  Q @}
+		 Dvoid�VV ZData(� 2 mv�  1	mva�= clamp( �, 0, 1);b ]    ^ ��   Custom     SHADING_MODEL_CUSTOM& J(s/ > uP  X D�~�>d  ��       
+===== commonresource/assets/materials/minigame/block/block_bilinear_water.xml (2152)
+�  �
+   block_bilinear_water  ]   ~ K ��) � �   g_DiffuseTex "�? ' Q   & bNormal% $ R   ( �umTexRepeat !A @fAmp 2@@ �Speed���= ���C�:�ϻ7���T�:Ger�  l   �   WATER_REFLECTION$ ��  
+			#include "MiniGame/BS �Common.hlsli"/ �	legacy/ConstantBuffers/L �GlobalCBC �ShadingModels/MobileGGX, - ,f �   �DECLARE_TEX2D(y ); jfloat h	 Y
+ 1Amp `#endif
+ j 	!);� �half GetSpecular( �roughness,  2noh
+ %3 	  n)@ 4{
+	F sC �_term = (F � * 0.25 + �) * GGX_3(l g 2, n	R � sqrt(max(1e-4h,r )5 jreturn  }'
+  � �Fresnel4(� �viewVector� Rworld�4biaipower)V { h `facing� �aturate(1.0 - � Hdot(y s `), 0.0� V � T![  � 3 + c    vBpow(� ,� W  @Y 
+$ A} 		J?�4 ProcessP(in M��ialFragment mf, inout �Property mpO8���2 screen_uv = DeviceToUV(mf. �position.xy /   wE�uvmove =a �"etaTime()�(3;� boffset� �mf.custom1.xy& n�f_uv1 =3  � *�c B8 + : (�  _1);		U 2U -V 4U  � _SAMPL� ,� /);=  2= 2= #//t| +;
+�3 % =c �.rgb * 2 -7  � �2 reflect_!$ =6 S.xz *@&0� `++=E 	7`daytim8-#Da0� �0-0.45 is. ` other Snight# �晚上水面的反射会越来 &��l*_� j�1 - step(g ,� Q)) + `! (� +�Y�
+P G '�]color�R �ionTexture,� DW 	V  T �,iUuv0);< �3 vertex_lS� H  7_ +=6 ;q �E_dirsEize(�X0.xyz� alpha =s? .� B5#35A #//n� �tangent_� � bUnpackR(� � )2)'ZU �TransformTo � oW'  � � 1to_; ,� 	] G5BgDir0alL   ;6 h� D +8i.�6  =�1 ,�  �j5, 5);n# *;�#  ��V� no�  �
+s >h);	) =l	F0.06�� 	 � 	s5.b;*VHDR
+	��� HDR_intensity =	U - \ J
+U	}  =+= 4`$+=�;�2nolqDefault~	Q(0,1,�0 t l:;/)Wlerp(} ,, �:489
+B (� ,�)o#else
+^	�Uample>uv0� �
+A � �� & 	� �
+
+�Dvoid�	VB ZData(�	 7 mv�	 mv� � = clamp( T, 0, $�	Epeye_vecVViewP�	z�@mv.t�Rlated`*_p$ `GetPre= T* Sion() k d E $);� ��4"  H � 'mv�	 �wv.local� �z / 9216V" =91(-1-0^ NZ[0] => ,;
+} �}      �8 �C�    Y�SHADING_MODEL_CUSTOM& 	� > �P  X S�~�>  ��      
+===== commonresource/assets/materials/minigame/block/block_grass.xml (1003)
+�  �   block_grass  �  ;��% ��      g_DiffuseTex> ? > & tEmissiv' ( �         _FlipY$ < `fUVMul  Atime  � �_WaveControlX R?  �@  5ind  � � � ISnow! T�  �@ ��!Nk�t���
+)^_�H��7g< �  �  � �EMISSIVE �   VERTEX_ANIMATION  �SNOWCOVER  �  
+    #include "MiniGame/B� �Common.hlsli"0 �	legacy/ConstantBuffers/L �GlobalCBD E �DECLARE_TEX2D(�#);f $f � 2 3 cfloat � �Z eendif
+f ?9 (4 �; "	W v y;i � ,//�  ;[Trans� )4 W� �	void ProcessMaterial(in  �Fragment mf, inout �Property mp)L { �mp.opaque = SAMPL��, mf.uv0).a� }� Thalf4� �ShadingMode� (X �color = R qTexture�j (Q �mp, PASSgO);
+
+j[ �.rgb += GetW oC (U �% *v,�))� GgbVertex�Bver(b ,,4 +);� �*= clamp6  J,0,1� 
+breturn@ �\� (� 8 mv@_J � �Animation(mv,x,mE mv�.y = (1.0 - 3) *�$ +    & %;
+�  �	� F    U#  \�Custom     SHADING_MODEL_CUSTOM& �(s/ > P  �S�~�>  ��      
+===== commonresource/assets/materials/minigame/block/block_item_grass.xml (933)
+,  �   block_item_grass  �  ;��% ��      g_DiffuseTex> ? ( A  & tEmissiv' (  Q   , �FrozenAmount,  � ItemColorMask  0 �LightMul "�?t pModelHe . 1HC �UseOverlayN �  `fUVMulD  AtimeT �   
+   GI9 (�? � �InstanceData  � � � 
+L � �UVTranslate� ��-Y��NFJ-&ھ��T�3{� �`   �USE_CUSTOM_MODEL� �EMISSIVE  ��ENABLE_FROZENH �/  
+
+		#include "MiniGame/Bk/qp�Main.hlsl"0 `fndef z �BLOCK_VERTEX_LIGHT
+			#define"   0E RendifN  �  A Zhalf <; (;	M �
+		void ProcessMaterial(in  �Fragment mf, inout �Property mp)
+		{		� !e � �
+mp.opaque = SAMPLE_TEX2D(F�, mf.uv0).a;� <lse= H1.0;� 2}
+
+� 4� qShading� � $>04 mF  _c�P = PS�(A 1mp)e�= 03 lt�ing = Get' !�L 2(mfJ �	return Lerp# bEffecto � ,X ,�,�� F` K ! KL`Vertex�(1 5 mv/# V3v);K  tJ 0   �ud�   Custom     SHADINGFS& �(s/ > }iP  W���>��      
+===== commonresource/assets/materials/minigame/block/block_item_matcap.xml (1484)
+�
+  �   block_item_matcap  Y   �  ;��) ��      g_DiffuseTex "�? Q & tEmissiv' (  ( M� & 
+$  � �
+      � �_brightness# '@ �intensity   ��L?8 �proportion� | �FrozenAmount  �ItemColorMaski 0 L} 4Mul "�?� pModelHe . 1HC �UseOverlayN �  `fUVMulD  AtimeT � UGrass9 (�?  � �_specular_c% 1�p} 1��5 � �InstanceData  �� � 
+p � �UVTranslateL ��~
+�,��Il�c%�e�X�~t �3
+�EMISSIVE 9�ENABLE_FROZEN0 �_  
+
+		#include "MiniGame/B�/���Main.hlsl"0 �fndef USE_BLOCK_VERTEX_LIGHT
+			#define"   0E RendifN  �  A Zhalf H; (;	M  � �DECLARE_TEX2D(	'); �UVTILING!  c +4   ,B,;�  �void Processz �VS(inout MaterialVertex mv)
+		{� �float3 view_space_posiZ � = normalize(' �4(-mul(mv.tUud_world5 U, Gets�dViewMatrix()).xyz, 1.0 ; E o 0 = b �angent_tob <[2]5 � 9pos� �  )5 X � $3(P �.z, 0.0, - )x)E &biG Ucross< ,a )� � @ul((�V3x3)g#, � E #2 �Ruv =  S(dot(p ,e 0),  /bi �) * 0.5 + b � mv.custom1.xy =k   }[5(inVPFragm2mf,p��j   � = SAMPLI��, mf.uv0)�4� < Qlerp( k, pow(L �K � .),c 
+�> , e();�  +� )&,". ��Property mp75�mp.opaque9".a�q� qShading�� $� F � PS�(A "mp,
+,7mf,2 " �_ 03 l�Ping =O3 �L 2(mfJ �	return Lerp# bEffect� � ,X ,,�� Helse` K ! n�h ��V=Wv);
+  �! "		n 0
+	 �n 0   h~�Q   C�     SHADING_MODEL_CUSTOM& ((s/ > �iP  W�~�> (	�      
+===== commonresource/assets/materials/minigame/block/block_item_opaque.xml (933)
+0  �   block_item_opaque  Y   �  ;��) �* �   g_DiffuseTex "�? Q & tEmissiv' (  Q   , �FrozenAmount,  � ItemColorMask  0 �LightMul "�?t pModelHe . 1HC �UseOverlayN �  `fUVMulD  AtimeT �   
+   Grass9 (�? � �InstanceData  � � � 
+L � �UVTranslat����*���%v�\��~ΐk6�c� ��      USE_CUSTOM_MODEL� �EMISSIVE  ��ENABLE_FROZENH �/  
+
+		#include "MiniGame/Bo/ut�Main.hlsl"0 `fndef z �BLOCK_VERTEX_LIGHT
+			#define"   0E RendifN  �  A Zhalf <; (;	M �
+		void ProcessMaterial(in  �Fragment mf, inout �Property mp)
+		{		� !e � 2mp.�� = SAMPLE_TEX2D(F�, mf.uv0).a;� <lse= H1.0;� 2}
+
+� 4� qShading� � $>04 mF  _c�P = PS�(A 1mp)e�= 03 lt�ing = Get' !�L 2(mfJ �	return Lerp# bEffecto � ,X ,�,�� F` K ! KL`Vertex�(1 5 mv/# V3v);K  tJ 0   �ud�   Custom     SHADINGFS& �(s/ > }iP  W�~�> ��      
+===== commonresource/assets/materials/minigame/block/block_item_translucent.xml (967)
+L  �   block_item_translucent  �  ;��% ��      g_DiffuseTex> ? ( A  & tEmissiv' (  Q   , �FrozenAmou� "�?D �ModelHeigh� 1HC � UseOverlayColorS  `fUVMulD  AtimeT �   
+   Grass9 (�? � ] 
+$ � 1UVTi?ateT ��U�{3�x�2m	7 P�R�| n � �   USE_CUSTOM_MODEL� �EMISSIVE  ]�ENABLE_FROZENH ��  
+
+		#include "MiniGame/B/! �Main.hlsl"0 �	legacy/ConstantBuffers/L �GlobalCBA "i"s `fndef � �BLOCK_VERTEX_LIGHT
+			#define"   0E PendifO Zhalf ; A;		
+ �	void ProcessMaterial(in  �Fragment mf, inout �Property mp)
+		{		� , !� � �
+mp.opaque = SAMPLE_TEX2D(�, mf.uv0).a;� <lse= F1.0;� 4		}� 4� qShading� � $$
+	T mF  _c�P = PS(A 0mp)� � 	U#
+	= 03 ll�ing = GetMBItem�L 2(mfJ �	return Lerp# bEffecto � ,X ,�,�� F` K ! K�VertexData(0 5 mv.# Vv@    ��v.custom0.z = mv.local_position.y�    �� F    ��Q   Cg �     SHADING��& ,(s/ > �P  tW�~�>4�      
+===== commonresource/assets/materials/minigame/block/block_item_xparent.xml (935)
+0  �   block_item_xparent  ]   � K ��) � �   g_DiffuseTex "�? ? & tEmissiv' (  Q   , �FrozenAmou� 1�? � ItemColorMask  0 �LightMul "�?t pModelHe . 1HC �UseOverlayN �  `fUVMulD  AtimeT �   
+   Grass9 (�? � �InstanceData  � � � 
+L � �UVTranslate� ���7L< �ߜ���ry�j��� �
+      USE_CUSTOM_MODEL� �EMISSIVE  ��ENABLE_FROZENH �/  
+
+		#include "MiniGame/Bo/ut�Main.hlsl"0 `fndef z �BLOCK_VERTEX_LIGHT
+			#define"   0E RendifN  �  A Zhalf <; (;	M �
+		void ProcessMaterial(in  �Fragment mf, inout �Property mp)
+		{		� !e � �
+mp.opaque = SAMPLE_TEX2D(F�, mf.uv0).a;� <lse= H1.0;� 2}
+
+� 4� qShading� � $>04 mF  _c�P = PS�(A 1mp)e�= 03 lt�ing = Get' !�L 2(mfJ �	return Lerp# bEffecto � ,X ,�,�� F` K ! KL`Vertex�(1 5 mv/# V3v);K  tJ 0   �ud�   Custom     SHADINGFS& �(s/ > }iP  W�~�>��      
+===== commonresource/assets/materials/minigame/block/block_mask.xml (1000)
+�  � 
+   block_mask  �  ;��% ��      g_DiffuseTex> ? > & tEmissiv' ( �         _FlipY$ < `fUVMul  Atime  � �_WaveControlX R?  �@  5ind  � � � ISnow! T�  �@ �YN˼��j�Ռ��	��y��< �  �  � �EMISSIVE �   VERTEX_ANIMATION  �SNOWCOVER  �  
+    #include "MiniGame/B� �Common.hlsli"0 �	legacy/ConstantBuffers/L �GlobalCBD E �DECLARE_TEX2D(�#);f $f � 2 3 cfloat � �Z eendif
+f ?9 (4 �; "	W v y;i � ,//�  ;[Trans� )4 W� �	void ProcessMaterial(in  �Fragment mf, inout �Property mp)L { �mp.opaque = SAMPL��, mf.uv0).a� }� Thalf4� �ShadingMode� (X �color = R qTexture�j (Q �mp, PASSgO);
+
+j[ �.rgb += GetW oC (U �% *v,�))� �GrassVertex�Bver(b ,,4 +);� �*= clamp6  J,0,1� 
+breturn@ �\� (� 8 mv@_J � �Animation(mv,x,mE mv�.y = (1.0 - 3) *�$ +    & %;
+�  �	� F    U#  \�Custom     SHADING_MODEL_CUSTOM& �(s/ > P  �S�~�>  ��      
+===== commonresource/assets/materials/minigame/block/block_modulate2x.xml (809)
+�  �   block_modulate2x  ]   � K ��) � �    g_DiffuseTe^ "�? + & �MapPacked(   V �_WaveControl( R?  �@  5ind  > T p �OverlayColor� ���lq���l"	�!ZOcy��w   N�VERTEX_ANIMATION$ ��  
+			#include "MiniGame/B �Common.hlsli"/ �ConstantBuffers/ViewCB+ Z TUtils.  / �DECLARE_TEX2D(�/);  �2);
+r ,f �   xfloat4 ; � w#endif
+# 
+�n �	void ProcessMaterial(in  �Fragment mf, inout �Property mp)K 4{
+	l �2 sample_uv = mf.uv0� �	mp.opaque = SAMPL,A 2).a� } Thalf4� �ShadingMode� +Vclip(� p- 0.5); � � cV� � 9 3 v.rgb =  +�  ;;
+  breturn7 ; ��VertexData( 7 mvy#		N 4GraS �Animation(mv,�,�� �v8�.y = 1.0 -  � �		      � F    ��   Custom     SHADING_MODEL_CUSTOM& 0(s/ > �z�	  ��       
+===== commonresource/assets/materials/minigame/block/block_opaque.xml (733)
+�  �   block_opaque   �  ;��1 �*  ^ �g_DiffuseTex "�? > & tEmissiv' (  y �      _FlipY$ < `fUVMul  Ttime @ �3RZ9y�[�ADY<�bA�KYk�  �  V �EMISSIVE�  �    DIFFUSE_TEX� �  
+			#include "MiniGame/B[ �Common.hlsli"			2 aDECLARL 82D(*");R $f � 0 41 cfloat 
+ #V Vendif P#;
+� �	void ProcessMaterial(in  �Fragment mf, inout �Property mp)K {R B	mp._� = SAMPL� �, mf.uv0).a�  }
+ Thalf4� �ShadingMode� &%
+	V �color = P �a (H �mp, PASS�n�!		S �.rgb += GetV �C (T �% *�,�q �r	return� 0�zVertex( 7 mv mvw �.y = (1.0 -  3) *$ +    & 3;
+
+� �	 F    P#  ��Custom     SHADING_MODEL_CUSTOM& �(s/ > TP  �D�~�>� ��      
+===== commonresource/assets/materials/minigame/block/block_opaque_matcap.xml (704)
+�  �	   block_opaque_matcap  Y   �  ;��) ��      g_DiffuseTex "�? > & tEmissiv' (  ( M� & $  v �   _FlipYH  � �_intensity3 '@ �proportion �   �color   �p}x 1��5 � ą��N�T����x�-iq2< P    -�EMISSIVE ��  
+
+		DECLARE_TEX2D(</);   S  ]half 
+  )4   bfloat g  �#include "MiniGame/B` �Common.hlsli"U �"ProcessShadingModel(in MaterialFragment mf, inout �Property mp)
+		{S � A =  w �Shaidng(G �mp, PASSa \ W,O,G,?�ureturn P}�Dvoid�VertexData(�  4 mv� 1 � 7 !mvj �
+		mv.uv0.y = (1.0 -  3) *�$ +    & #;
+�  L� � |�Custom     SHADING_MODEL_CUSTOM& �(s/ > +P  X D�~�>d  >�      
+===== commonresource/assets/materials/minigame/block/block_rainbowgrass.xml (883)
+�  �   block_rainbowgrass   �  ;��3 �4 �   g_DiffuseTex> ? > & tEmissiv' (  � �      _FlipY$ < `fUVMul  Atime   ` 4 � RandomOffsetHSB� ��^$Vjjj#�c���*�3��
+ V  z �EMISSIVE�  �    DIFFUSE_TEX� c�  
+  �#include "MiniGame/B� �Common.hlsli"4 	�	legacy/ConstantBuffers/L �GlobalCBH I aDECLAR� 82D(�');n $f �  > �));* cfloat � �v jendif
+' �% lhalf3 �&;
+� �	void ProcessMaterial(in  �Fragment mf, inout �Property mp)P {� �mp.opaque = SAMPLK�, mf.uv0).a� )}
+� 4� �ShadingMode� 8(�vertex_light =� �color.rgb� �2 sample_uv =� ;V !4 D  I  b = Get�@HSBC ( ,�H )*=� 
+' �
+D +� � � OPASS��% *�,�� �  breturn� 9�V� ( ? mv�v� �.y = (1.0 - 3) *m$ +    & 
+� �	� F    #  ��Custom     SHADING_MODEL_CUSTOM& (s/ > �P  �S�~�>  ��      
+===== commonresource/assets/materials/minigame/block/block_translucent.xml (750)
+   �   block_translucent   � ;��4 � �   g_DiffuseTex "�? ' Q   & tEmissiv' (  g �      _FlipY$ < `fUVMul  Ttime @ �.U6w��(ւ�?3�oUK��  �  V �EMISSIVE�  �    DIFFUSE_TEX� �  
+			#include "MiniGame/Bc �Common.hlsli"			2 aDECLARL 82D(*");R $f � 0 41 cfloat 
+ #V Vendif P#;
+� �	void ProcessMaterial(in  �Fragment mf, inout �Property mp)K {R �	mp.opaque = SAMPL� �, mf.uv0).a�  }
+ Thalf4� �ShadingMode� &%
+	V �color = P qTexture�h (O �mp, PASS�u�!		Z �.rgb += GetV �C (T �% *�,�q �r	return� 7�zVertex( 7 mv mvw �.y = (1.0 -  3) *&$ +    & 3;
+
+� �	� F    X#  ��Custom     SHADING_MODEL_CUSTOM& �(s/ > \P  �D�~�>� ��      
+===== commonresource/assets/materials/minigame/block/block_uvanim.xml (620)
+$  �   block_uvanim  �  ;��% �  ^ �g_DiffuseTex> ? >  . �UVTranslate 0 $�0 �y8{i���7��G��i�P���� ��  
+			#include "MiniGame/B�  �Common.hlsli"/ �DECLARE_TEX2D(�  );  yfloat2 �  ;
+ �	void ProcessMaterial(in  �Fragment mf, inout �Property mp)K 0{		 �	mp.opaque = SAMPL� �, mf.uv0).a� }� Thalf4� �ShadingMode� &%
+	V Qcolorl �sample_uv =�  * � ; 6);
+4 a.rgb *M    greturn�  }
+   �zVertex(�  E mv)4 � @  mv� � = clamp( �, 0, 1);$ �.y = 1.0 - ;E 	 ++E.xy;y A}
+		�	� F    J��   Custom     SHADING_MODEL_CUSTOM& �(s/ > �P  ,D�~�>8 ��       
+===== commonresource/assets/materials/minigame/block/block_uvanim_blend.xml (675)
+p  �   block_uvanim_blend  �  ;��% ��      g_DiffuseTex> ? '  . �UVTranslate 0 $�0 �r`��[���/Ԁ^�LdZU�nߨ ��  
+			#include "MiniGame/B�  �Common.hlsli"/ �fndef USE_BLOCK_VERTEX_LIGHT" �	#define# ! 0G `endif
+   �DECLARE_TEX2D( );  yfloat2  !;
+? �	void ProcessMaterial(in  �Fragment mf, inout �Property mp)K {� �	mp.opaque = SAMPL� �, mf.uv0).a� }� Thalf4� �ShadingMode� &$
+	� �4 color; �2 sample_uv =�  * � ; 6);
+4 a.rgb *M    greturn� }�zVertex(�  6 mv� @  mv� � = clamp( �, 0, 1);# �.y = 1.0 - ;C 	 +3.xy�  		<	� F    7�   Custom     SHADING_MODEL_CUSTOM& �(s/ > 4P  pS�~�>  �       
+===== commonresource/assets/materials/minigame/block/block_uvanim_mask.xml (810)
+�  �   block_uvanim_mask  �  ;��% � �   g_DiffuseTex> ? > �      . �TextureTillig T@  �0 $ �UVTranslate T $ �OEL����~������O�7m�� �  
+			#include "MiniGame/B �Common.hlsli"/ �DECLARE_TEX2D(� A);
+  {float2 �  ;
+? �	void ProcessMaterial(in  �Fragment mf, inout �Property mp)K 0{		 �	mp.opaque = SAMPL� �, mf.uv0).a;6 }� Thalf4� �ShadingMode� &%
+	V Qcolorl 	�sample_uv =�  * � ; 6);
+4 a.rgb *M    greturn�  }
+ ��zVertex(�  E mv)4 � @  mv� � = clamp( �, 0, 1);$ �.y = 1.0 - "&� uv_scal�+1/2..x0 1val��g_Time * 3.5& �int index =, -: 2or( =/ (f � * 2)) *  t
+b Drow_f ^  -/ B ,) � 5col=  -Q /* ~	 *A+y(a  ,c  %);�A}
+		d	��@�   Custom     SHADING_MODEL_CUSTOM& W(s/ > \P  �D���> [�       
+===== materials/error.xml (309)
+�  �   Internal/Error  � <��  ����
+̹���)0��O!����L` a�   
+  �void ProcessMaterialFragment(in  � mf, inout �Property mp)V { �  mp.emissive_color = float3(1, 0, 1);- �opaque = 1.0f 1}
+	� O   �   �   NoLight    SHADING_MODEL_NO_LIGHT  ' �hadingModels/ B �.hlsli 4F�~�>�
+ `    
