@@ -1,0 +1,6 @@
+错误: 以下 Python 依赖在当前解释器中不可用: astc_encoder_py
+当前解释器: /opt/hostedtoolcache/Python/3.12.15/x64/bin/python3
+请用【同一个解释器】安装（注意: `pip` 可能属于另一个 Python，务必用 python -m pip 形式）:
+  "/opt/hostedtoolcache/Python/3.12.15/x64/bin/python3" -m pip install astc_encoder_py
+导入失败的具体原因:
+  astc_encoder_py: ModuleNotFoundError: No module named 'astc_encoder'
