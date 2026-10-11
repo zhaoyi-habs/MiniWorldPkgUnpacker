@@ -1,0 +1,21 @@
+inventory: 14 apk files (20s)
+   968 MB  mini_world_chinese_apk_v1.28.1 / miniworldMini-wp_1.28.1.apk
+   635 MB  mini_world_chinese_apk_v1.16.0 / miniworldMini-wp-1.16.0.apk
+   633 MB  mini_world_chinese_apk_v1.16.1-scb / miniworld-MiniScb-1.16.1.apk
+   631 MB  mini_world_chinese_apk_v1.20.10 / miniworldMini-wp-1.20.10.apk
+   618 MB  mini_world_chinese_apk_v1.20.5 / miniworldMini-wp-1.20.5.apk
+   599 MB  mini_world_chinese_apk_v1.15.1-scb / miniworld-MiniScb-1.15.1.apk
+   569 MB  mini_world_chinese_apk_v1.13.3-scb / miniworld-MiniScb-1.13.3.apk
+   520 MB  mini_world_chinese_apk_v1.9.0 / miniworldMini-wp-1.9.0.apk
+   502 MB  mini_world_chinese_apk_v1.8.0 / miniworldMini-wp-1.8.0.apk
+   396 MB  mini_world_chinese_apk_v1.2.1_202307 / miniworldMini-wp-1.4.0.apk
+  GOT mini_world_chinese_apk_v1.28.1  968MB  2454 entries
+source item = mini_world_chinese_apk_v1.28.1
+lib/arm64-v8a/liblibGameApp.so strings=159699
+  so api_cls 1
+  so lua_path 23
+  so csv_path 1
+lib/armeabi-v7a/liblibGameApp.so strings=139477
+  so api_cls 1
+  so lua_path 26
+  so csv_path 1
