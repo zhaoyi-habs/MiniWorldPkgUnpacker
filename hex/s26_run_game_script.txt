@@ -1,0 +1,10 @@
+Traceback (most recent call last):
+  File "/home/runner/work/MiniWorldPkgUnpacker/MiniWorldPkgUnpacker/w26/up/extract_game_script.py", line 92, in <module>
+    main()
+  File "/home/runner/work/MiniWorldPkgUnpacker/MiniWorldPkgUnpacker/w26/up/extract_game_script.py", line 49, in main
+    recs, paths, chunks = parse_index(idx)
+                          ^^^^^^^^^^^^^^^^
+  File "/home/runner/work/MiniWorldPkgUnpacker/MiniWorldPkgUnpacker/w26/up/extract_game_script.py", line 23, in parse_index
+    assert N == 0, f"expected N=0, got {N}"
+           ^^^^^^
+AssertionError: expected N=0, got 31638
