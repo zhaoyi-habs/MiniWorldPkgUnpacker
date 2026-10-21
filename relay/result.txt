@@ -83,3 +83,4 @@ activity: com.tencent.tmgp.minitech.miniworld/com.minitech.miniworld.StartupActi
   shot8 回传 3 片
   shot9 focus=
   shot9 raw=536375
+  PIL: No module named 'PIL'
