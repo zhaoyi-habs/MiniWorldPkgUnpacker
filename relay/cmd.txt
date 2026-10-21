@@ -1,2 +1,0 @@
-# t=1792552702209
-CMD> curl -sI -m 30 -A Mozilla/5.0 http://imtt2.dd.qq.com/sjy.00009/sjy.00002/16891/apk/0F94B1CB324EE4F471C95BA1127CE377.apk?fsname=com.tencent.tmgp.minitech.miniworld_80640.apk
