@@ -1,1 +1,1 @@
-shell /home/runner/android-sdk/platform-tools/adb shell uiautomator dump /sdcard/g1.xml >/dev/null 2>&1; /home/runner/android-sdk/platform-tools/adb shell cat /sdcard/g1.xml 2>/dev/null | tr '<' '\n' | grep -E 'content-desc|text=' | grep -o -E '(text|content-desc)="[^"]*"|bounds="[^"]*"' | head -40
+shot
