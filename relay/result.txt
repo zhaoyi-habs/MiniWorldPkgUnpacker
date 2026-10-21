@@ -1,7 +1,11 @@
-cmd=curl -s -m 15 https://api.ipify.org; echo; uname -a
+cmd=curl -s -o /dev/null -w 'cloudflare=%{http_code}' -m 15 https://api.cloudflare.com/cdn-cgi/trace; echo; curl -s -m 15 https://1.1.1.1/cdn-cgi/trace | head -5
 exit=0
 host=runnervmxehtw
 ip=57.151.91.162
 ---
-57.151.91.162
-Linux runnervmxehtw 7.0.0-1017-azure #17~24.04.1-Ubuntu SMP PREEMPT Thu Sep 24 18:46:57 UTC 2026 x86_64 x86_64 x86_64 GNU/Linux
+cloudflare=200
+fl=1025f113
+h=1.1.1.1
+ip=57.151.91.162
+ts=1792550278.000
+visit_scheme=https
