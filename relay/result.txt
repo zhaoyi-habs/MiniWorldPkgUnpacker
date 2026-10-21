@@ -1,2 +1,3 @@
 === STEP 1: SDK ===
 sdkmanager: False
+/bin/sh: 1: /home/runner/android-sdk/cmdline-tools/latest/bin/sdkmanager: not found
