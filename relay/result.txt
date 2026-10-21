@@ -35,3 +35,4 @@ Success
   proc: u0_a154        6153    303 27066840 2486416 0                 0 S com.tencent.tmgp.minitech.miniworld
   act: 
   tomb: (无)
+  shot: 色数=1512 主色=(99, 99, 99) 变化0.00%
