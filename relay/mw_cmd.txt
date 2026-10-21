@@ -1,1 +1,1 @@
-shot
+shell /home/runner/android-sdk/platform-tools/adb logcat -d -t 600 2>/dev/null | grep -iE 'mobileqq|login|auth|verify|captcha|安全' | tail -25
