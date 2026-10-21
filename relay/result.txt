@@ -1,3 +1,6 @@
-runner_online
-ip=20.163.39.228
+cmd=echo T1
+exit=0
 host=runnervmxehtw
+ip=20.169.98.150
+---
+T1
