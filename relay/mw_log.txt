@@ -7,3 +7,4 @@ READY
 === 常驻监听 ===
 CMD: ui
 CMD: shot
+CMD: ui
