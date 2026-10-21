@@ -38,3 +38,4 @@ apk=1772758908 in 298s
 [-r -t] in 14s: Performing Streamed Install
 Success
 ✅ 安装成功
+已装: package:com.tencent.tmgp.minitech.miniworld
