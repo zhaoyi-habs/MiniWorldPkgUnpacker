@@ -2,3 +2,4 @@
   sd30: /home/runner/android-sdk/system-images/android-30/google_apis_playstore/x86_64/
   PIL OK
 === STEP2 AVD ===
+=== STEP3 启动 ===
