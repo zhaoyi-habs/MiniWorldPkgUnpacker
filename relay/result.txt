@@ -1,6 +1,6 @@
-cmd=echo FINAL2
+cmd=echo FINAL3
 exit=0
 host=runnervmxehtw
-ip=57.151.91.162
+ip=20.169.98.150
 ---
-FINAL2
+FINAL3
