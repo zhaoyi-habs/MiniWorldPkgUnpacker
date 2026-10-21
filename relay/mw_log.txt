@@ -22,3 +22,4 @@ CMD: shot
 CMD: ui
 CMD: shot
 CMD: ui
+CMD: shell adb shell pm list packages | grep -i tencent
