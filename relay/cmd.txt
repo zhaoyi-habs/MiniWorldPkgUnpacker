@@ -1,2 +1,2 @@
-# t=1792552538143
-CMD> curl -sL -m 25 -A 'Mozilla/5.0 (iPhone)' 'https://sj.qq.com/myapp/detail.htm?apkName=com.minitech.miniworld' -o /tmp/a.html -w 'yingyongbao=%{http_code} size=%{size_download}\n'; grep -oE 'verName[^,]{0,25}' /tmp/a.html 2>/dev/null|head -2; curl -s -m 30 -A 'Mozilla/5.0' 'https://apps.evozi.com/downloader?package=com.minitech.miniworld&fetch=true' -o /tmp/e.json -w 'evozi=%{http_code} size=%{size_download}\n'; head -c 300 /tmp/e.json
+# t=1792552554761
+CMD> echo '=== 版本号 ==='; grep -oE '[0-9]+\.[0-9]+\.[0-9]+' /tmp/a.html | sort -u | head -10; echo '=== apk 链接 ==='; grep -oE 'https?://[^"'\'' ]*\.apk[^"'\'' ]*' /tmp/a.html | sort -u | head -5; echo '=== download 相关 ==='; grep -oE '"(apkUrl|downloadUrl|url)":"[^"]{0,120}' /tmp/a.html | head -5
