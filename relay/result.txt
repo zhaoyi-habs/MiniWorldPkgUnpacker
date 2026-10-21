@@ -1,18 +1,8 @@
-cmd=curl -s -m 30 -A 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/120' 'https://www.apkmirror.com/?s=mini+world' > /tmp/s.html; echo "size=$(stat -c%s /tmp/s.html)"; grep -oE 'href="[^"]*apkmirror[^"]*"' /tmp/s.html | sort -u | head -12
+cmd=grep -B12 'Mini World: CREATA' /tmp/s.html | grep -oE 'href="[^"]+"' | sort -u | head -8; echo '--- 直接看 appRow ---'; grep -oE '<a[^>]{0,200}appRowTitle[^>]{0,200}' /tmp/s.html | head -3
 exit=0
 host=runnervmxehtw
 ip=20.169.98.150
 ---
-size=327685
-href="/apkmirror-com-privacy-policy/"
-href="/premium?utm_source=apkmirror&utm_medium=banner&utm_campaign=site_promo&utm_content=No+ads%2C+dark+mode%2C+and+more+with+APKMirror+Premium"
-href="https://github.com/illogical-robot/apkmirror-public/issues"
-href="https://mastodon.social/@apkmirror"
-href="https://t.me/apkmirror_official"
-href="https://twitter.com/apkmirror"
-href="https://www.apkmirror.com/"
-href="https://www.apkmirror.com/?memberful_endpoint=auth"
-href="https://www.apkmirror.com/feed/"
-href="https://www.apkmirror.com/premium"
-href="https://www.apkmirror.com/wp-content/themes/APKMirror/images/apple-touch-icon-114x114.png"
-href="https://www.apkmirror.com/wp-content/themes/APKMirror/images/apple-touch-icon-120x120.png"
+href="/apk/minovate-hong-kong-limited/mini-world-block-art/mini-world-block-art-1-7-15-release/"
+href="/apk/minovate-hong-kong-limited/mini-world-block-art/mini-world-block-art-1-7-15-release/#disqus_thread"
+--- 直接看 appRow ---
