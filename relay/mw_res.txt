@@ -1,1 +1,1 @@
-READY|0
+OK|shot|163028|4479ms
