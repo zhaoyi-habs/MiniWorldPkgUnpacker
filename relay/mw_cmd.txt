@@ -1,1 +1,1 @@
-tap 540 782
+shell \$ANDROID_SDK_ROOT/platform-tools/adb shell input text 0987poiu
