@@ -26,3 +26,4 @@ CMD: shell adb shell pm list packages | grep -i tencent
 CMD: shell $ANDROID_SDK_ROOT/platform-tools/adb shell pm list packages | grep -i -E 'qq|tencent'
 CMD: shell $ANDROID_SDK_ROOT/platform-tools/adb shell monkey -p com.tencent.mobileqq -c android.intent.category.LAUNCHER 1
 CMD: shot
+CMD: ui
