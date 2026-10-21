@@ -105,3 +105,4 @@ qemu 进程: 1
   (PIL 不可用: No module named 'PIL')
   shot2 已回传 6 片
   focus: topResumedActivity=ActivityRecord{79574eb u0 com.google.android.apps.nexuslauncher/.NexusLauncherActivity} t8}
+  shot3: 1235537 bytes
