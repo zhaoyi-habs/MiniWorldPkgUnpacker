@@ -33,3 +33,4 @@ Success
   回传1片
 --- 8分钟 ---
   proc: u0_a154        6153    303 27066840 2486416 0                 0 S com.tencent.tmgp.minitech.miniworld
+  act: 
