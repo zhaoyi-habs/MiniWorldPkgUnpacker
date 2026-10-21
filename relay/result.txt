@@ -9,3 +9,4 @@ No VM guests are running outdated hypervisor (qemu) binaries on this host.
 
 
 kvm: crw-rw---- 1 root kvm 10, 232 Oct 21 04:50 /dev/kvm
+groups: uid=1001(runner) gid=1001(runner) groups=1001(runner),4(adm),100(users),118(docker),999(systemd-journal)
