@@ -13,3 +13,4 @@ groups: uid=1001(runner) gid=1001(runner) groups=1001(runner),4(adm),100(users),
 
 
 kvm after chmod: crw-rw-rw- 1 root kvm 10, 232 Oct 21 04:50 /dev/kvm
+=== STEP 2: 下载 Android SDK cmdline-tools ===
