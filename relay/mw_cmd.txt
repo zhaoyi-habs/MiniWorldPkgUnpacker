@@ -1,1 +1,1 @@
-inst https://d.apkpure.net/b/APK/com.tencent.mobileqq?version=latest
+start
