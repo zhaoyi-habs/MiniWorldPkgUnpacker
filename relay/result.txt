@@ -79,3 +79,15 @@ adb: failed to install /home/runner/mw.apk: Failure [INSTALL_FAILED_NO_MATCHING_
 installed: 
 activity: No activity found
 已发起启动
+emu.log 尾部: d:0, 1080x1920
+INFO         | emulatorSetupEnvironment: Environment scene is not required
+USER_INFO    | Emulator is performing a full startup. This may take upto two minutes, or more.
+WARNING      | Failed to process .ini file /home/runner/.android/emu-update-last-check.ini for reading.
+WARNING      | Failed to process .ini file /home/runner/.android/emu-update-last-check.ini for reading.
+INFO         | Boot completed in 31933 ms
+INFO         | Increasing screen off timeout, logcat buffer size to 2M.
+ERROR        | Unable to connect to adb daemon on port: 5037
+WARNING      | adb command '/usr/local/lib/android/sdk/platform-tools/adb -s emulator-5554 shell settings put system screen_off_timeout 2147483647 ' failed: '* daemon not running; starting now at tcp:5037
+* daemon started successfully
+adb: device offline'
+WARNING      | adb command '/home/runner/android-sdk/platform-tools/adb -s emulator-5554 shell settings put system screen_off_timeout 2147483647 ' failed: 'adb: device offline'
