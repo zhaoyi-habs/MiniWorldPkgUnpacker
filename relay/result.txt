@@ -1,6 +1,6 @@
-cmd=echo R6
+cmd=df -h / | tail -1
 exit=0
 host=runnervmxehtw
-ip=57.151.91.162
+ip=20.169.98.150
 ---
-R6
+/dev/root       145G   60G   86G  42% /
