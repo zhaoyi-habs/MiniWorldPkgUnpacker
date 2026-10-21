@@ -11,3 +11,4 @@
   booted 40s
   android: 11
   GPU 模式: 
+  GLES 版本: 196609
