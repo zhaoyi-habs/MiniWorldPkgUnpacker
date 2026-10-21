@@ -19,3 +19,4 @@
      B_http_imtt2 + android + ref2 -> 200:983
   ✅ C_dd_myapp + chrome + ref0 -> 206:1048576
   ✅ C_dd_myapp + chrome + ref1 -> 206:1048576
+  ✅ C_dd_myapp + chrome + ref2 -> 206:1048576
