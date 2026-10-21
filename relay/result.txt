@@ -1,1 +1,4 @@
 === STEP 1: 环境准备 ===
+openjdk version "17.0.20.1" 2026-08-18
+OpenJDK Runtime Environment Temurin-17.0.20.1+1 (build 17.0.20.1+1)
+
