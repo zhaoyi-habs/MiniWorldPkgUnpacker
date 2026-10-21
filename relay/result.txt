@@ -1,6 +1,6 @@
 cmd=curl -s -m 30 -A 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/120' 'https://www.apkmirror.com/?s=mini+world' | grep -oE 'href="https://www.apkmirror.com/apk/[^"]*mini-world[^"]*"' | head -5; echo '=== 搜索国内版 ==='; curl -s -m 30 -A 'Mozilla/5.0' 'https://www.apkmirror.com/?s=%E8%BF%B7%E4%BD%A0%E4%B8%96%E7%95%8C' | grep -oE 'href="https://www.apkmirror.com/apk/[^"]*"' | head -3
 exit=0
 host=runnervmxehtw
-ip=20.169.98.150
+ip=57.151.91.162
 ---
 === 搜索国内版 ===
