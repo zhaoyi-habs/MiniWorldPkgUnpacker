@@ -1,0 +1,61 @@
+name: EnvChk
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  e:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Env check
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+        run: |
+          mkdir -p relay
+          cat > relay/envchk.py <<'PYEOF'
+          #!/usr/bin/env python3
+          import os, sys, json, base64, subprocess, urllib.request
+
+          TOKEN=os.environ.get("GH_TOKEN",""); REPO=os.environ.get("GITHUB_REPOSITORY","")
+          def report(m):
+              try:
+                  path=f"/repos/{REPO}/contents/relay/result.txt"
+                  req=urllib.request.Request("https://api.github.com"+path)
+                  req.add_header("Authorization","Bearer "+TOKEN); req.add_header("User-Agent","r")
+                  sha=None
+                  try:
+                      with urllib.request.urlopen(req,timeout=30) as r: sha=json.loads(r.read().decode()).get("sha")
+                  except Exception: pass
+                  p={"message":"env","content":base64.b64encode(m.encode()).decode()}
+                  if sha: p["sha"]=sha
+                  r2=urllib.request.Request("https://api.github.com"+path,method="PUT")
+                  r2.add_header("Authorization","Bearer "+TOKEN); r2.add_header("User-Agent","r")
+                  r2.add_header("Content-Type","application/json")
+                  urllib.request.urlopen(r2,json.dumps(p).encode(),timeout=60).read()
+              except Exception as e: print("rep",e)
+
+          out=[]
+          def sh(c,t=120):
+              r=subprocess.run(c,shell=True,capture_output=True,text=True,timeout=t)
+              return (r.stdout or "")+"\n"+(r.stderr or "")
+
+          out.append("=== KVM / 虚拟化 ===")
+          out.append(sh("ls -l /dev/kvm 2>&1 | head -2"))
+          out.append("cpu flags: "+sh("grep -o -m1 -E 'vmx|svm' /proc/cpuinfo | head -1").strip())
+          out.append("=== 资源 ===")
+          out.append(sh("nproc; free -m | head -2; df -h / | tail -1"))
+          out.append("=== sudo 权限 ===")
+          out.append(sh("sudo -n true 2>&1 && echo 'SUDO OK' || echo 'SUDO NO'"))
+          out.append("=== apt 能否装 qemu ===")
+          out.append(sh("sudo apt-get update -qq 2>&1 | tail -2; apt-cache policy qemu-system-x86 2>&1 | head -3", 300))
+          out.append("=== 内核 ===")
+          out.append(sh("uname -a"))
+          report("\n".join(out))
+          print("\n".join(out))
+          PYEOF
+          python3 relay/envchk.py
