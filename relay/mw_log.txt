@@ -1,4 +1,3 @@
-CMD: tap 540 572
 CMD: shell /home/runner/android-sdk/platform-tools/adb shell input text 3928657028
 CMD: tap 540 782
 CMD: shell /home/runner/android-sdk/platform-tools/adb shell input text 0987poiu
@@ -78,3 +77,4 @@ CMD: ui
 CMD: tap 540 977
 CMD: ui
 CMD: shell /home/runner/android-sdk/platform-tools/adb shell am force-stop com.tencent.mobileqq
+CMD: shell /home/runner/android-sdk/platform-tools/adb shell monkey -p com.tencent.mobileqq -c android.intent.category.LAUNCHER 1
