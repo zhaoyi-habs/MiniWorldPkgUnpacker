@@ -1,0 +1,118 @@
+name: Parse
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  p:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - name: Parse version
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+        run: |
+          mkdir -p relay
+          cat > relay/parse.py <<'PYEOF'
+          #!/usr/bin/env python3
+          """下载 APK -> 解析版本号"""
+          import os, sys, json, time, base64, subprocess, urllib.request, re
+          from concurrent.futures import ThreadPoolExecutor, as_completed
+
+          TOKEN=os.environ.get("GH_TOKEN",""); REPO=os.environ.get("GITHUB_REPOSITORY","")
+          URL=("https://imtt.dd.qq.com/sjy.00009/sjy.00002/16891/apk/"
+               "0F94B1CB324EE4F471C95BA1127CE377.apk"
+               "?fsname=com.tencent.tmgp.minitech.miniworld_80640.apk")
+          UA=("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
+              "(KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36")
+          SRC="/tmp/mw.apk"; PDIR="/tmp/parts"; NWORK=24; NCHUNK=48
+
+          def report(msg):
+              try:
+                  path=f"/repos/{REPO}/contents/relay/result.txt"
+                  req=urllib.request.Request("https://api.github.com"+path)
+                  req.add_header("Authorization","Bearer "+TOKEN); req.add_header("User-Agent","r")
+                  sha=None
+                  try:
+                      with urllib.request.urlopen(req,timeout=30) as r: sha=json.loads(r.read().decode()).get("sha")
+                  except Exception: pass
+                  p={"message":"parse","content":base64.b64encode(msg.encode()).decode()}
+                  if sha: p["sha"]=sha
+                  r2=urllib.request.Request("https://api.github.com"+path,method="PUT")
+                  r2.add_header("Authorization","Bearer "+TOKEN); r2.add_header("User-Agent","r")
+                  r2.add_header("Content-Type","application/json")
+                  urllib.request.urlopen(r2,json.dumps(p).encode(),timeout=90).read()
+              except Exception as e: print("rep fail",e)
+
+          out=[]
+          # 只下载前 60MB（manifest 通常在开头附近）+ 尝试解析
+          out.append("=== 下载前 80MB 用于解析 ===")
+          subprocess.run(["curl","-s","-m","300","-A",UA,"-r","0-83886079","-o","/tmp/head.bin",URL],timeout=320)
+          out.append(f"head={os.path.getsize('/tmp/head.bin') if os.path.exists('/tmp/head.bin') else 0}")
+          report("\n".join(out))
+
+          # 方法1：安装 pyaxmlparser 解析（需要完整 APK，先试 head 不行则全量）
+          out.append("=== 尝试 pip 安装解析库 ===")
+          r=subprocess.run([sys.executable,"-m","pip","install","-q","pyaxmlparser"],capture_output=True,text=True,timeout=300)
+          out.append("pip rc="+str(r.returncode))
+          report("\n".join(out))
+
+          # 全量下载（并发，很快）
+          size=None
+          rr=subprocess.run(["curl","-sI","-m","40","-A",UA,URL],capture_output=True,text=True)
+          for l in (rr.stdout or "").splitlines():
+              if l.lower().startswith("content-length:"): size=int(l.split(":")[1].strip())
+          os.makedirs(PDIR,exist_ok=True)
+          if size:
+              step=(size+NCHUNK-1)//NCHUNK
+              tasks=[];pos=0;i=0
+              while pos<size:
+                  e=min(pos+step-1,size-1); tasks.append((i,pos,e)); pos=e+1; i+=1
+              def cp(i): return os.path.join(PDIR,"p%03d"%i)
+              def fetch(t):
+                  i,s,e=t; exp=e-s+1
+                  for a in range(5):
+                      try: subprocess.run(["curl","-s","-m","900","-A",UA,"-r",f"{s}-{e}","-o",cp(i),URL],timeout=920)
+                      except Exception: pass
+                      if os.path.exists(cp(i)) and os.path.getsize(cp(i))==exp: return i
+                      time.sleep(2)
+                  return i
+              with ThreadPoolExecutor(max_workers=NWORK) as ex:
+                  list(ex.map(fetch,tasks))
+              with open(SRC,"wb") as o:
+                  for j,s,e in tasks:
+                      with open(cp(j),"rb") as f:
+                          while True:
+                              b=f.read(1<<20)
+                              if not b: break
+                              o.write(b)
+              out.append(f"full={os.path.getsize(SRC)}")
+          report("\n".join(out))
+
+          out.append("=== 解析 ===")
+          try:
+              from pyaxmlparser import APK
+              a=APK(SRC)
+              out.append(f"package  = {a.package}")
+              out.append(f"version  = {a.version_name}")
+              out.append(f"vercode  = {a.version_code}")
+              out.append(f"app_name = {a.application_info_label if hasattr(a,'application_info_label') else '?'}")
+          except Exception as e:
+              out.append(f"pyaxmlparser 失败: {type(e).__name__}: {e}")
+              # 回退：strings 搜索
+              subprocess.run(["unzip","-o","-q",SRC,"AndroidManifest.xml","-d","/tmp/x"],capture_output=True,timeout=300)
+              p="/tmp/x/AndroidManifest.xml"
+              if os.path.exists(p):
+                  s=subprocess.run(["strings","-n","4",p],capture_output=True,text=True).stdout
+                  cands=set(re.findall(r"\b\d+\.\d+\.\d+\b",s))
+                  out.append("manifest 中版本号候选: "+str(sorted(cands)[:10]))
+                  out.append("UTF16 候选: "+str(sorted(set(re.findall(r"[0-9]\.[0-9]+\.[0-9]+",
+                      subprocess.run(["strings","-e","l","-n","4",p],capture_output=True,text=True).stdout)))[:10]))
+          report("\n".join(out))
+          print("\n".join(out))
+          PYEOF
+          python3 relay/parse.py
