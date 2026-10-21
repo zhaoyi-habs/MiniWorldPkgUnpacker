@@ -1,7 +1,7 @@
 cmd=for u in https://mnw.cn https://www.miniworld.cn https://miniworld.cn https://sj.qq.com https://app.mi.com; do echo -n "  $u -> "; curl -s -o /dev/null -m 15 -w '%{http_code}' -A 'Mozilla/5.0' "$u"; echo; done
 exit=0
 host=runnervmxehtw
-ip=20.169.98.150
+ip=57.151.91.162
 ---
   https://mnw.cn -> 000
   https://www.miniworld.cn -> 000
