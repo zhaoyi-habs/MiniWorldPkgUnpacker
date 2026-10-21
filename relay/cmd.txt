@@ -1,9 +1,2 @@
-# t=1792552571602
-CMD> U='http://imtt2.dd.qq.com/sjy.00009/sjy.00002/16891/apk/0F94B1CB324EE4F471C95BA1127CE377.apk?fsname=com.tencent.tmgp.minitech.miniworld_80640.apk'; echo '=== HEAD ==='; curl -sI -m 30 -A 'Mozilla/5.0' "$U" | grep -iE 'content-length|content-type|HTTP'; echo '=== 下载前100KB探测版本 ==='; curl -s -m 40 -A 'Mozilla/5.0' -r 0-200000 "$U" -o /tmp/head.apk -w 'partial=%{size_download}\n'; file /tmp/head.apk 2>/dev/null; python3 -c "
-import zipfile
-try:
-    z=zipfile.ZipFile('/tmp/head.apk')
-    print('zip ok, entries:', len(z.namelist())[:5] if False else len(z.namelist()))
-except Exception as e:
-    print('not complete zip (partial):', type(e).__name__)
-"
+# t=1792552702209
+CMD> curl -sI -m 30 -A Mozilla/5.0 http://imtt2.dd.qq.com/sjy.00009/sjy.00002/16891/apk/0F94B1CB324EE4F471C95BA1127CE377.apk?fsname=com.tencent.tmgp.minitech.miniworld_80640.apk
