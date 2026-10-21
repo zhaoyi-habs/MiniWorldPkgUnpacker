@@ -1,1 +1,1 @@
-shell /home/runner/android-sdk/platform-tools/adb logcat -d -t 1500 2>/dev/null | grep -iE 'playmini|unity|FATAL|AndroidRuntime|error' | tail -20
+tap 960 540
