@@ -67,3 +67,4 @@ android.hardware.camera.provider-V1-ndk.so
 model: sdk_gphone64_x86_64
 android: 13
 === STEP 7: 下载 APK ===
+apk=1772758908 (1690.6MB) in 293s
