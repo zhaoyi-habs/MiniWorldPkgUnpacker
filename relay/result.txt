@@ -21,3 +21,4 @@ KVM 修复前: crw-rw---- 1 root kvm 10, 232 Oct 21 06:03 /dev/kvm
 KVM 修复后: crw-rw-rw- 1 root kvm 10, 232 Oct 21 06:03 /dev/kvm
 groups: uid=1001(runner) gid=1001(runner) groups=1001(runner),4(adm),100(users),118(docker),999(systemd-journal)
 API30 boot=True in 40s
+android: 11
