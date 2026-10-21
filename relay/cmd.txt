@@ -1,2 +1,2 @@
-# t=1792551875806
-CMD> curl -s -m 30 -A 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/120' 'https://www.apkmirror.com/?s=mini+world' > /tmp/s.html; echo "size=$(stat -c%s /tmp/s.html)"; grep -oE 'href="[^"]*apkmirror[^"]*"' /tmp/s.html | sort -u | head -12
+# t=1792551886951
+CMD> grep -B12 'Mini World: CREATA' /tmp/s.html | grep -oE 'href="[^"]+"' | sort -u | head -8; echo '--- 直接看 appRow ---'; grep -oE '<a[^>]{0,200}appRowTitle[^>]{0,200}' /tmp/s.html | head -3
