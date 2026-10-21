@@ -1,1 +1,1 @@
-ui
+shell adb shell pm list packages | grep -i tencent
