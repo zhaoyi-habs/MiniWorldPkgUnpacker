@@ -75,3 +75,4 @@ adb: failed to install /home/runner/mw.apk: Failure [INSTALL_FAILED_NO_MATCHING_
 重试 install --no-incremental
 Performing Streamed Install
 adb: failed to install /home/runner/mw.apk: Failure [INSTALL_FAILED_NO_MATCHING_ABIS: INSTALL_FAILED_NO_MATCHING_ABIS: Failed to extract native libraries, res=-113]
+=== STEP 9: 启动游戏 ===
