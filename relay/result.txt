@@ -1,3 +1,10 @@
-runner_online
-ip=20.168.157.84
-host=runnervm8k3b6
+=== 1. HEAD ===
+HTTP/1.1 302 Found
+Location: https://imtt2.dd.qq.com/sjy.00009/sjy.00002/16891/apk/0F94B1CB324EE4F471C95BA1127CE377.apk?fsname=com.tencent.tmgp.minitech.miniworld_80640.apk
+Content-Length: 0
+Connection: keep-alive
+Server: Lego Server
+Date: Wed, 21 Oct 2026 03:20:15 GMT
+Content-Disposition: attachment;filename=com.tencent.tmgp.minitech.miniworld_80640.apk
+EO-LOG-UUID: 7192738363587247642
+
