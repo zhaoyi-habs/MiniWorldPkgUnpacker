@@ -4,3 +4,5 @@ size=1772758908
   36/48 93%
   48/48 100%
 dl 48/48 in 0.5min
+merged=1772758908 match=True
+zip OK 5631
