@@ -1,1 +1,1 @@
-ui
+shell /home/runner/android-sdk/platform-tools/adb shell pm list packages | grep -i -E 'qq|mobileqq'
