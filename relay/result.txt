@@ -11,3 +11,4 @@ nzipping... platform-tools/lib64/
 [====================================   ] 91% Unzipping... platform-tools/sqlite
 [=======================================] 100% Unzipping... platform-tools/sqlit
 emulator: True
+adb: True
