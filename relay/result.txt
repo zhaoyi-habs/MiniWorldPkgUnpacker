@@ -1,3 +1,0 @@
-=== 单个 range 测试 (前 2MB) ===
-result: 567 7351
-file: -rw-r--r-- 1 runner runner 7351 Oct 21 03:40 /tmp/t1
