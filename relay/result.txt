@@ -16,3 +16,4 @@ m-tools/make_f
 [===================================    ] 88% Unzipping... platform-tools/sqlite
 [===================================    ] 89% Unzipping... platform-tools/sqlite
 [=======================================] 100% Unzipping... platform-tools/sqlit
+=== STEP 2: AVD ===
