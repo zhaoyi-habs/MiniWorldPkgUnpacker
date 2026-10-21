@@ -28,3 +28,4 @@ CMD: shell $ANDROID_SDK_ROOT/platform-tools/adb shell monkey -p com.tencent.mobi
 CMD: shot
 CMD: ui
 CMD: tap 1154 813
+CMD: shot
