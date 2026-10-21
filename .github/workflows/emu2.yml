@@ -15,12 +15,12 @@ jobs:
         uses: actions/cache@v4
         with:
           path: /home/runner/android-sdk
-          key: android-sdk-v1
+          key: android-sdk-v2
       - name: Cache AVD
         uses: actions/cache@v4
         with:
           path: /home/runner/.android/avd
-          key: android-avd-v3
+          key: android-avd-v4
       - name: Run
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -80,10 +80,26 @@ jobs:
           sm=f"{SDK}/cmdline-tools/latest/bin/sdkmanager"
 
           log("=== STEP 1: SDK ===")
-          if not os.path.exists(f"{SDK}/cmdline-tools/latest/bin/sdkmanager"):
-              os.makedirs(SDK,exist_ok=True); os.chdir(HOME)
-              sh("curl -sL -m 900 -o cmdtools.zip 'https://dl.google.com/android/repository/commandlinetools-linux-11076708_latest.zip'",900)
-              sh(f"mkdir -p {SDK}/cmdline-tools/latest && unzip -q -o cmdtools.zip -d {SDK}/cmdline-tools/latest")
+          CT=f"{HOME}/cmdtools.zip"
+          for attempt in range(3):
+              if os.path.exists(f"{SDK}/cmdline-tools/latest/bin/sdkmanager"): break
+              log(f"下载 cmdline-tools 尝试 {attempt+1}")
+              sh(f"rm -f {CT}",60)
+              r=sh(f"curl -sL -m 900 -A 'Mozilla/5.0' -o {CT} "
+                   f"'https://dl.google.com/android/repository/commandlinetools-linux-11076708_latest.zip'",900)
+              sz=os.path.getsize(CT) if os.path.exists(CT) else 0
+              ft=sh(f"file {CT} 2>/dev/null").strip()[:80]
+              log(f"  size={sz} type={ft}")
+              if sz < 5*1024*1024:
+                  log("  太小，重试"); continue
+              os.makedirs(SDK,exist_ok=True)
+              sh(f"mkdir -p {SDK}/cmdline-tools/latest && unzip -q -o {CT} -d {SDK}/cmdline-tools/latest",300)
+              # 处理 cmdline-tools/bin 嵌套
+              if os.path.isdir(f"{SDK}/cmdline-tools/latest/cmdline-tools"):
+                  sh(f"cp -r {SDK}/cmdline-tools/latest/cmdline-tools/* {SDK}/cmdline-tools/latest/ 2>/dev/null")
+              log("  sdkmanager exists: "+str(os.path.exists(f"{SDK}/cmdline-tools/latest/bin/sdkmanager")))
+          log("最终 sdkmanager: "+str(os.path.exists(f"{SDK}/cmdline-tools/latest/bin/sdkmanager")))
+          log("ls latest: "+sh(f"ls {SDK}/cmdline-tools/latest 2>&1|head -5").strip()[:200])
           log("sdkmanager: "+str(os.path.exists(sm)))
           sh(f"yes | {sm} --sdk_root={SDK} --licenses > /dev/null 2>&1",900)
           log(sh(f"{sm} --sdk_root={SDK} --install 'platform-tools' 'emulator' 'platforms;android-{API}' '{IMG}' 2>&1 | tail -4",2400).strip()[-500:])
