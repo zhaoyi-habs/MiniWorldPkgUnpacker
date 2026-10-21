@@ -1,1 +1,1 @@
-shell for i in $(seq 1 30); do /home/runner/android-sdk/platform-tools/adb shell input keyevent 67; sleep 0.3; done
+shell /home/runner/android-sdk/platform-tools/adb shell input text 0987poiu
