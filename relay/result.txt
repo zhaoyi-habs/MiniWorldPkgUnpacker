@@ -1,30 +1,14 @@
-=== 跟随重定向 HEAD ===
-HTTP/1.1 302 Found
-Location: https://imtt2.dd.qq.com/sjy.00009/sjy.00002/16891/apk/0F94B1CB324EE4F471C95BA1127CE377.apk?fsname=com.tencent.tmgp.minitech.miniworld_80640.apk
-Content-Length: 0
-Connection: keep-alive
-Server: Lego Server
-Date: Wed, 21 Oct 2026 03:30:58 GMT
-Content-Disposition: attachment;filename=com.tencent.tmgp.minitech.miniworld_80640.apk
-EO-LOG-UUID: 17539977339498618782
+=== 1. 下载到 runner ===
+curl: 200 56425877
+size_bytes=56425877
+size_mb=53.8
+elapsed=600.5s
+=== 2. 文件类型 ===
+/tmp/mw.apk: Zip archive data, at least v2.0 to extract, compression method=deflate
 
-HTTP/2 200 
-server: NWSs
-date: Wed, 21 Oct 2026 03:30:59 GMT
-ip: 21.88.13.171
-created: Tue, 22 Sep 2026 02:08:54 GMT
-size: 1772758908
-etag: "b3d480b01d6f89853a654b577555dada-51"
-x-request-type: head
-x-cos-content-sha1: b3d480b01d6f89853a654b577555dada-51
-x-cos-hash-crc64ecma: 2276772565599395646
-x-cos-storage-class: Standard_IA
-forbid: 0
-x-cos-object-type: multipart
-last-modified: Tue, 22 Sep 2026 02:09:41 GMT
-content-length: 0
-content-disposition: attachment;filename=com.tencent.tmgp.minitech.miniworld_80640.apk
-eo-log-uuid: 3716085329094648083
-eo-cache-status: MISS
-cache-control: max-age=31536000
-
+=== 3. 解析版本 ===
+Traceback (most recent call last):
+  File "<string>", line 1, in <module>
+  File "/usr/lib/python3.12/zipfile/__init__.py", line 1365, in __init__
+    self._RealGetContents()
+  File "/usr/lib/python3.
