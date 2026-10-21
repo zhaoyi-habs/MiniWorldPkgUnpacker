@@ -7,6 +7,10 @@ on:
         description: 'how long to stay resident'
         required: false
         default: '30'
+      poll:
+        description: 'poll interval seconds'
+        required: false
+        default: '0.4'
 
 permissions:
   contents: write
@@ -21,6 +25,7 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GITHUB_REPOSITORY: ${{ github.repository }}
           MINUTES: ${{ github.event.inputs.minutes }}
+          POLL: ${{ github.event.inputs.poll }}
         run: |
           mkdir -p relay
           cat > relay/resident.py <<'PYEOF'
@@ -32,6 +37,7 @@ jobs:
           TOKEN = os.environ.get("GH_TOKEN", "")
           REPO = os.environ.get("GITHUB_REPOSITORY", "")
           MINUTES = int(os.environ.get("MINUTES", "30"))
+          POLL = float(os.environ.get("POLL", "0.4"))
           API = "https://api.github.com"
 
 
@@ -107,7 +113,7 @@ jobs:
                           res = f"cmd={cur}\nexit={p.returncode}\nhost={os.uname().nodename}\nip={ip}\n---\n{out}"
                           write_file("relay/result.txt", res, "result")
                           print(f"[{time.strftime('%H:%M:%S')}] result written", flush=True)
-                  time.sleep(3)
+                  time.sleep(POLL)
               print("loop finished", flush=True)
               return 0
 
