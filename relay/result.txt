@@ -39,3 +39,4 @@ apk=1772758908 in 298s
 Success
 ✅ 安装成功
 已装: package:com.tencent.tmgp.minitech.miniworld
+=== 启动游戏 ===
