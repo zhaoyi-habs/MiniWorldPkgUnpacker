@@ -1,3 +1,4 @@
 === STEP 1: SDK ===
 下载 cmdline-tools 尝试 1
   size=153607504 type=/home/runner/cmdtools.zip: Zip archive data, at least v1.0 to extract, compressi
+  sdkmanager exists: True
