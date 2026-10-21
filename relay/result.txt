@@ -24,3 +24,4 @@
   ✅ C_dd_myapp + qqdown + ref1 -> 206:1048576
   ✅ C_dd_myapp + qqdown + ref2 -> 206:1048576
   ✅ C_dd_myapp + android + ref0 -> 206:1048576
+  ✅ C_dd_myapp + android + ref1 -> 206:1048576
