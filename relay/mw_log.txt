@@ -1,4 +1,3 @@
-CMD: shell /home/runner/android-sdk/platform-tools/adb shell input keyevent KEYCODE_DEL; /home/runner/android-sdk/platform-tools/adb shell input keyevent KEYCODE_DEL; /home/runner/android-sdk/platform-tools/adb shell input keyevent KEYCODE_DEL; /home/runner/android-sdk/platform-tools/adb shell input keyevent KEYCODE_DEL; /home/runner/android-sdk/platform-tools/adb shell input keyevent KEYCODE_DEL; /home/runner/android-sdk/platform-tools/adb shell input keyevent KEYCODE_DEL; /home/runner/android-sdk/platform-tools/adb shell input keyevent KEYCODE_DEL; /home/runner/android-sdk/platform-tools/adb shell input keyevent KEYCODE_DEL; /home/runner/android-sdk/platform-tools/adb shell input keyevent KEYCODE_DEL; /home/runner/android-sdk/platform-tools/adb shell input keyevent KEYCODE_DEL; /home/runner/android-sdk/platform-tools/adb shell input keyevent KEYCODE_DEL; /home/runner/android-sdk/platform-tools/adb shell input keyevent KEYCODE_DEL; /home/runner/android-sdk/platform-tools/adb shell input keyevent KEYCODE_DEL; /home/runner/android-sdk/platform-tools/adb shell input keyevent KEYCODE_DEL; /home/runner/android-sdk/platform-tools/adb shell input keyevent KEYCODE_DEL
 CMD: shell /home/runner/android-sdk/platform-tools/adb shell input text 0987poiu
 CMD: ui
 CMD: tap 540 782
@@ -78,3 +77,4 @@ CMD: tap 540 782
 CMD: shell /home/runner/android-sdk/platform-tools/adb shell input text 0987poiu
 CMD: ui
 CMD: shot
+CMD: tap 50 1101
