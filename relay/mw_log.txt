@@ -1,4 +1,3 @@
-CMD: ui
 CMD: tap 192 1100
 CMD: shot
 CMD: shell /home/runner/android-sdk/platform-tools/adb shell getprop ro.product.cpu.abi; /home/runner/android-sdk/platform-tools/adb shell ping -c 2 -W 3 119.147.19.43 2>&1 | tail -3
@@ -78,3 +77,4 @@ CMD: ui
 CMD: start
 CMD: shell /home/runner/android-sdk/platform-tools/adb shell uiautomator dump /sdcard/g1.xml >/dev/null 2>&1; /home/runner/android-sdk/platform-tools/adb shell cat /sdcard/g1.xml 2>/dev/null | tr '<' '\n' | grep -E 'content-desc|text=' | grep -o -E '(text|content-desc)="[^"]*"|bounds="[^"]*"' | head -40
 CMD: shot
+CMD: ui
