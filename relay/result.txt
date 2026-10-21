@@ -43,3 +43,4 @@ Loading local repository...
 Auto-selecting single ABI x86_64
 config 调整失败: [Errno 2] No such file or directory: '/home/runner/.android/avd/mw.avd/config.ini'
 === STEP 5: 启动模拟器（KVM + swiftshader）===
+已发起启动
