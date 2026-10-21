@@ -76,3 +76,4 @@ CMD: tap 500 796
 CMD: shot
 CMD: tap 520 796
 CMD: shot
+CMD: tap 540 796
