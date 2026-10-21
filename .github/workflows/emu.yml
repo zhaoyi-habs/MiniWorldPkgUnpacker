@@ -20,7 +20,7 @@ jobs:
         uses: actions/cache@v4
         with:
           path: /home/runner/.android/avd
-          key: android-avd-v1
+          key: android-avd-v2
       - name: Run emulator
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -114,28 +114,61 @@ jobs:
           r=sh(f"{sm} --sdk_root={SDK} --install 'platform-tools' 'emulator' 'platforms;android-{API}' '{IMG}' 2>&1 | tail -8",2400)
           log(r.strip()[-1200:])
 
-          log("=== STEP 4: 创建 AVD ===")
-          avdm=f"{SDK}/cmdline-tools/latest/bin/avdmanager"
-          sh(f"mkdir -p {HOME}/.android/avd")
-          r=sh(f"printf 'no\\n' | {avdm} create avd -n {AVD_NAME} -k '{IMG}' --force 2>&1 | tail -8",600)
-          log(r.strip()[-800:])
-          log("avd list: "+sh(f"{SDK}/emulator/emulator -list-avds 2>&1 | head -3").strip())
-          # 调大数据分区（APK 1.65GB + 数据）
-          cfg=None
-          for cand in (f"{HOME}/.android/avd/{AVD_NAME}.avd/config.ini",
-                       f"{HOME}/.android/avd/{AVD_NAME}/config.ini"):
-              if os.path.exists(cand): cfg=cand; break
-          log("config.ini 路径: "+str(cfg))
-          try:
-              if not cfg: raise FileNotFoundError("no config.ini")
-              c=open(cfg).read()
-              c=c.replace("disk.dataPartition.size = 800M","disk.dataPartition.size = 12G")
-              if "disk.dataPartition.size" not in c: c+="\ndisk.dataPartition.size = 12G\n"
-              c=c.replace("hw.gpu.enabled = no","hw.gpu.enabled = yes")
-              open(cfg,"w").write(c)
-              log("config.ini 已调整: "+str([l for l in c.splitlines() if 'dataPartition' in l or 'gpu.mode' in l or 'hw.gpu' in l]))
-          except Exception as e:
-              log("config 调整失败: "+str(e))
+          log("=== STEP 4: 创建 AVD（手写配置，避免交互失败）===")
+          sysdir=None
+          for root,dirs,files in os.walk(f"{SDK}/system-images"):
+              if "build.prop" in files or "system.img" in files or "kernel-ranchu" in files:
+                  sysdir=root+"/"
+                  break
+          log("发现 sysdir: "+str(sysdir))
+          if not sysdir:
+              log("未找到系统镜像，重新安装")
+              log(sh(f"{sm} --sdk_root={SDK} --install 'system-images;android-{API};google_apis_playstore;x86_64' 2>&1 | tail -5",2400).strip()[-800:])
+              for root,dirs,files in os.walk(f"{SDK}/system-images"):
+                  if "build.prop" in files or "system.img" in files or "kernel-ranchu" in files:
+                      sysdir=root+"/"; break
+              log("重试后 sysdir: "+str(sysdir))
+          if not sysdir:
+              log("ABORT: 无系统镜像"); sys.exit(1)
+
+          avdd=f"{HOME}/.android/avd/{AVD_NAME}.avd"
+          os.makedirs(avdd,exist_ok=True)
+          open(f"{HOME}/.android/avd/{AVD_NAME}.ini","w").write(
+              f"avd.ini.encoding=UTF-8\npath={avdd}\npath.rel=avd/{AVD_NAME}.avd\ntarget=android-{API}\n")
+          cfg_txt=f"""AvdId={AVD_NAME}
+          PlayStore.enabled=false
+          abi.type=x86_64
+          avd.ini.displayname={AVD_NAME}
+          avd.ini.encoding=UTF-8
+          disk.dataPartition.size=12G
+          fastboot.forceColdBoot=no
+          hw.accelerometer=yes
+          hw.audioInput=no
+          hw.audioOutput=no
+          hw.cpu.arch=x86_64
+          hw.cpu.ncore=4
+          hw.gpu.enabled=yes
+          hw.gpu.mode=swiftshader_indirect
+          hw.keyboard=yes
+          hw.lcd.density=420
+          hw.lcd.height=1920
+          hw.lcd.width=1080
+          hw.mainKeys=no
+          hw.ramSize=4096
+          hw.sensors.orientation=yes
+          image.sysdir.1={sysdir}
+          runtime.network.latency=none
+          runtime.network.speed=full
+          showDeviceFrame=no
+          skin.dynamic=yes
+          tag.display=Google Play
+          tag.id=google_apis_playstore
+          """
+          open(f"{avdd}/config.ini","w").write(cfg_txt)
+          log("config.ini 已写入，sysdir="+sysdir)
+          log("avds: "+sh(f"{SDK}/emulator/emulator -list-avds 2>&1 | head -3").strip())
+          if not os.path.exists(f"{sysdir}system.img") and not os.path.exists(f"{sysdir}system-qemu.img"):
+              log("警告: sysdir 下未见 system.img，文件列表: "+str(os.listdir(sysdir))[:300])
 
           log("=== STEP 5: 启动模拟器（KVM + swiftshader）===")
           emu=f"{SDK}/emulator/emulator"
