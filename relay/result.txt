@@ -1,2 +1,3 @@
 === 环境 ===
 sdkmanager: False
+emulator: False
