@@ -1,13 +1,1 @@
 === STEP 1: SDK ===
-sdkmanager: False
-/bin/sh: 1: /home/runner/android-sdk/cmdline-tools/latest/bin/sdkmanager: not found
-=== STEP 2: AVD ===
-sysdir: None
-avds: /bin/sh: 1: /home/runner/android-sdk/emulator/emulator: not found
-=== STEP 3: 启动 ===
-  wait 20s: 'h: 1: /home/runner/android-sdk/platform-tools/adb: not found'
-  wait 80s: 'h: 1: /home/runner/android-sdk/platform-tools/adb: not found'
-  wait 140s: 'h: 1: /home/runner/android-sdk/platform-tools/adb: not found'
-  wait 200s: 'h: 1: /home/runner/android-sdk/platform-tools/adb: not found'
-  wait 260s: 'h: 1: /home/runner/android-sdk/platform-tools/adb: not found'
-  wait 320s: 'h: 1: /home/runner/android-sdk/platform-tools/adb: not found'
