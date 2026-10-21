@@ -1,0 +1,155 @@
+name: Emu2
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  e:
+    runs-on: ubuntu-latest
+    timeout-minutes: 340
+    steps:
+      - name: Cache SDK
+        uses: actions/cache@v4
+        with:
+          path: /home/runner/android-sdk
+          key: android-sdk-v1
+      - name: Cache AVD
+        uses: actions/cache@v4
+        with:
+          path: /home/runner/.android/avd
+          key: android-avd-v3
+      - name: Run
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+        run: |
+          mkdir -p relay
+          cat > relay/emu2.py <<'PYEOF'
+          #!/usr/bin/env python3
+          """Android 11 (API30) + ARM 翻译层，安装 ARM APK 并截图"""
+          import os, sys, json, time, base64, subprocess, urllib.request
+          from concurrent.futures import ThreadPoolExecutor, as_completed
+
+          TOKEN=os.environ.get("GH_TOKEN",""); REPO=os.environ.get("GITHUB_REPOSITORY","")
+          HOME=os.path.expanduser("~"); SDK=f"{HOME}/android-sdk"; AVD="mw30"
+          API="30"; IMG=f"system-images;android-{API};google_apis_playstore;x86_64"
+          PKG="com.tencent.tmgp.minitech.miniworld"
+
+          def rep(m):
+              try:
+                  path=f"/repos/{REPO}/contents/relay/result.txt"
+                  req=urllib.request.Request("https://api.github.com"+path)
+                  req.add_header("Authorization","Bearer "+TOKEN); req.add_header("User-Agent","r")
+                  sha=None
+                  try:
+                      with urllib.request.urlopen(req,timeout=30) as r: sha=json.loads(r.read().decode()).get("sha")
+                  except Exception: pass
+                  p={"message":"emu2","content":base64.b64encode(m.encode()).decode()}
+                  if sha: p["sha"]=sha
+                  r2=urllib.request.Request("https://api.github.com"+path,method="PUT")
+                  r2.add_header("Authorization","Bearer "+TOKEN); r2.add_header("User-Agent","r")
+                  r2.add_header("Content-Type","application/json")
+                  urllib.request.urlopen(r2,json.dumps(p).encode(),timeout=90).read()
+              except Exception as e: print("rep",e)
+          def sh(c,t=600):
+              try:
+                  r=subprocess.run(c,shell=True,capture_output=True,text=True,timeout=t)
+                  return (r.stdout or "")+"\n"+(r.stderr or "")
+              except subprocess.TimeoutExpired: return "TIMEOUT"
+          out=[]
+          def log(s): out.append(s); print(s,flush=True); rep("\n".join(out))
+          def put(path,b64,msg="x"):
+              req=urllib.request.Request(f"https://api.github.com/repos/{REPO}/contents/{path}")
+              req.add_header("Authorization","Bearer "+TOKEN); req.add_header("User-Agent","r")
+              sha=None
+              try:
+                  with urllib.request.urlopen(req,timeout=30) as r: sha=json.loads(r.read().decode()).get("sha")
+              except Exception: pass
+              p={"message":msg,"content":b64}
+              if sha: p["sha"]=sha
+              r2=urllib.request.Request(f"https://api.github.com/repos/{REPO}/contents/{path}",method="PUT")
+              r2.add_header("Authorization","Bearer "+TOKEN); r2.add_header("User-Agent","r")
+              r2.add_header("Content-Type","application/json")
+              try: urllib.request.urlopen(r2,json.dumps(p).encode(),timeout=120).read(); return True
+              except Exception: return False
+
+          env=dict(os.environ); env["ANDROID_SDK_ROOT"]=SDK; env["ANDROID_HOME"]=SDK
+          sm=f"{SDK}/cmdline-tools/latest/bin/sdkmanager"
+
+          log("=== STEP 1: SDK ===")
+          if not os.path.exists(f"{SDK}/cmdline-tools/latest/bin/sdkmanager"):
+              os.makedirs(SDK,exist_ok=True); os.chdir(HOME)
+              sh("curl -sL -m 900 -o cmdtools.zip 'https://dl.google.com/android/repository/commandlinetools-linux-11076708_latest.zip'",900)
+              sh(f"mkdir -p {SDK}/cmdline-tools/latest && unzip -q -o cmdtools.zip -d {SDK}/cmdline-tools/latest")
+          log("sdkmanager: "+str(os.path.exists(sm)))
+          sh(f"yes | {sm} --sdk_root={SDK} --licenses > /dev/null 2>&1",900)
+          log(sh(f"{sm} --sdk_root={SDK} --install 'platform-tools' 'emulator' 'platforms;android-{API}' '{IMG}' 2>&1 | tail -4",2400).strip()[-500:])
+
+          log("=== STEP 2: AVD ===")
+          sysdir=None
+          for root,dirs,files in os.walk(f"{SDK}/system-images"):
+              if "build.prop" in files or "kernel-ranchu" in files:
+                  if f"android-{API}" in root: sysdir=root+"/"; break
+          log("sysdir: "+str(sysdir))
+          avdd=f"{HOME}/.android/avd/{AVD}.avd"
+          os.makedirs(avdd,exist_ok=True)
+          open(f"{HOME}/.android/avd/{AVD}.ini","w").write(
+              f"avd.ini.encoding=UTF-8\\npath={avdd}\\npath.rel=avd/{AVD}.avd\\ntarget=android-{API}\\n")
+          open(f"{avdd}/config.ini","w").write(f"""AvdId={AVD}
+          PlayStore.enabled=false
+          abi.type=x86_64
+          avd.ini.displayname={AVD}
+          avd.ini.encoding=UTF-8
+          disk.dataPartition.size=12G
+          hw.audioInput=no
+          hw.audioOutput=no
+          hw.cpu.arch=x86_64
+          hw.cpu.ncore=4
+          hw.gpu.enabled=yes
+          hw.gpu.mode=swiftshader_indirect
+          hw.keyboard=yes
+          hw.lcd.density=420
+          hw.lcd.height=1920
+          hw.lcd.width=1080
+          hw.mainKeys=no
+          hw.ramSize=4096
+          image.sysdir.1={sysdir}
+          runtime.network.latency=none
+          runtime.network.speed=full
+          showDeviceFrame=no
+          tag.display=Google Play
+          tag.id=google_apis_playstore
+          """)
+          log("avds: "+sh(f"{SDK}/emulator/emulator -list-avds 2>&1|head -3").strip())
+
+          log("=== STEP 3: 启动 ===")
+          emu=f"{SDK}/emulator/emulator"
+          sh(f"nohup {emu} -avd {AVD} -no-window -no-audio -no-boot-anim -gpu swiftshader_indirect "
+             f"-no-snapshot -memory 4096 -cores 4 -partition-size 8192 -qemu -enable-kvm "
+             f"> {HOME}/emu30.log 2>&1 &",60)
+          adb=f"{SDK}/platform-tools/adb"
+          ok=False
+          for i in range(40):
+              time.sleep(20)
+              st=sh(f"{adb} shell getprop sys.boot_completed 2>&1|tr -d '\\r\\n'",60).strip()
+              if st=="1": ok=True; log(f"booted at {20*(i+1)}s"); break
+              if i%3==0: log(f"  wait {20*(i+1)}s: '{st[-60:]}'")
+          if not ok:
+              log("BOOT FAIL: "+sh(f"tail -25 {HOME}/emu30.log").strip()[-1200:]); sys.exit(1)
+
+          log("=== STEP 4: ARM 翻译检测 ===")
+          log("android: "+sh(f"{adb} shell getprop ro.build.version.release",60).strip())
+          log("abi: "+sh(f"{adb} shell getprop ro.product.cpu.abi",60).strip())
+          log("abilist: "+sh(f"{adb} shell getprop ro.product.cpu.abilist",60).strip())
+          log("native.bridge: "+sh(f"{adb} shell getprop ro.dalvik.vm.native.bridge",60).strip())
+          h1=sh(f"{adb} shell ls /system/lib64/ 2>/dev/null | grep -iE 'houdini|arm|ndk_translation'|head -8",60).strip()
+          log("lib64 houdini/arm: "+ (h1 or "(无)"))
+          h2=sh(f"{adb} shell ls /system/lib/arm* /system/lib64/arm* 2>/dev/null|head -5",60).strip()
+          log("arm dirs: "+(h2 or "(无)"))
+          h3=sh(f"{adb} shell getprop ro.enable.native.bridge.exec; {adb} shell getprop persist.sys.nativebridge",60).strip()
+          log("bridge props: "+h3)
+          PYEOF
+          python3 relay/emu2.py
