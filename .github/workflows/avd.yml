@@ -1,0 +1,76 @@
+name: AvdDiag
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  a:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - name: Diag
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+        run: |
+          mkdir -p relay
+          cat > relay/avd.py <<'PYEOF'
+          #!/usr/bin/env python3
+          import os, sys, json, base64, subprocess, urllib.request, shutil
+          TOKEN=os.environ.get("GH_TOKEN",""); REPO=os.environ.get("GITHUB_REPOSITORY","")
+          HOME=os.path.expanduser("~"); SDK=f"{HOME}/android-sdk"; AVD="mw"
+          API="33"; IMG=f"system-images;android-{API};google_apis_playstore;x86_64"
+          def rep(m):
+              try:
+                  path=f"/repos/{REPO}/contents/relay/result.txt"
+                  req=urllib.request.Request("https://api.github.com"+path)
+                  req.add_header("Authorization","Bearer "+TOKEN); req.add_header("User-Agent","r")
+                  sha=None
+                  try:
+                      with urllib.request.urlopen(req,timeout=30) as r: sha=json.loads(r.read().decode()).get("sha")
+                  except Exception: pass
+                  p={"message":"avd","content":base64.b64encode(m.encode()).decode()}
+                  if sha: p["sha"]=sha
+                  r2=urllib.request.Request("https://api.github.com"+path,method="PUT")
+                  r2.add_header("Authorization","Bearer "+TOKEN); r2.add_header("User-Agent","r")
+                  r2.add_header("Content-Type","application/json")
+                  urllib.request.urlopen(r2,json.dumps(p).encode(),timeout=90).read()
+              except Exception as e: print("rep",e)
+          def sh(c,t=600):
+              try:
+                  r=subprocess.run(c,shell=True,capture_output=True,text=True,timeout=t)
+                  return (r.stdout or "")+"\n"+(r.stderr or "")
+              except subprocess.TimeoutExpired: return "TIMEOUT"
+          out=[]
+          def log(s): out.append(s); print(s,flush=True); rep("\n".join(out))
+
+          log("=== SDK 现状 ===")
+          log(sh(f"ls {SDK} 2>&1 | head -20").strip())
+          log("system-images: "+sh(f"ls {SDK}/system-images 2>&1 | head").strip())
+          log(sh(f"find {SDK}/system-images -maxdepth 3 -name '*.img' -o -maxdepth 3 -name 'kernel-ranchu' 2>/dev/null | head -10").strip())
+          log("emulator bin: "+sh(f"ls -l {SDK}/emulator/emulator 2>&1 | head -2").strip())
+          log("avd dir: "+sh(f"ls -la {HOME}/.android/avd 2>&1 | head -10").strip())
+          log("cmdline-tools: "+sh(f"ls {SDK}/cmdline-tools/latest/bin 2>&1 | head -8").strip())
+
+          log("=== avdmanager list ===")
+          log(sh(f"ANDROID_SDK_ROOT={SDK} {SDK}/cmdline-tools/latest/bin/avdmanager list avd 2>&1 | head -20").strip()[:800])
+          log("=== emulator -list-avds ===")
+          log(sh(f"ANDROID_SDK_ROOT={SDK} {SDK}/emulator/emulator -list-avds 2>&1 | head -10").strip())
+
+          log("=== 重新创建 AVD（不带 -d，用默认）===")
+          r=sh(f"ANDROID_SDK_ROOT={SDK} {SDK}/cmdline-tools/latest/bin/avdmanager create avd -n {AVD} -k '{IMG}' --force --device 'pixel_2' 2>&1 | tail -15",600)
+          log(r.strip()[-1000:])
+          log("重跑后 avd dir: "+sh(f"ls {HOME}/.android/avd 2>&1 | head").strip())
+          cfg=f"{HOME}/.android/avd/{AVD}.avd/config.ini"
+          log("config.ini 存在: "+str(os.path.exists(cfg)))
+          if os.path.exists(cfg):
+              c=open(cfg).read()
+              log("--- config.ini 关键项 ---")
+              for l in c.splitlines():
+                  if any(k in l for k in ("image.sysdir","dataPartition","gpu","abi","hw.cpu")):
+                      log("  "+l)
+          PYEOF
+          python3 relay/avd.py
