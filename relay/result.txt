@@ -57,3 +57,4 @@ qemu 进程: 1
   wait 0 (20s): boot_completed='1' devices=emulator-5554	device
 === STEP 6: 环境探测 ===
 ABI: x86_64
+ABI list: x86_64
