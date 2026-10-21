@@ -12,3 +12,4 @@ nzipping... platform-tools/lib64/
 [=======================================] 100% Unzipping... platform-tools/sqlit
 emulator: True
 adb: True
+sysimages: android-30
