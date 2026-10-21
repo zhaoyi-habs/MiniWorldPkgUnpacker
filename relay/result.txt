@@ -1,6 +1,3 @@
-cmd=echo FAST
-exit=0
+runner_online
+ip=20.169.98.150
 host=runnervmxehtw
-ip=57.151.91.162
----
-FAST
