@@ -5,3 +5,4 @@ install: Performing Streamed Install
 Success
 READY
 === 常驻监听 ===
+CMD: ui
