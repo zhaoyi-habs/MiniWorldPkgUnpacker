@@ -1,0 +1,273 @@
+name: ResEmu
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  r:
+    runs-on: ubuntu-latest
+    timeout-minutes: 340
+    steps:
+      - name: Cache SDK
+        uses: actions/cache@v4
+        with:
+          path: /home/runner/android-sdk
+          key: android-sdk-v2
+      - name: Cache APK
+        uses: actions/cache@v4
+        with:
+          path: /home/runner/mw.apk
+          key: mw-apk-v1
+      - name: Resident
+        continue-on-error: true
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+        run: |
+          mkdir -p relay
+          cat > relay/resident_emu.py <<'PYEOF'
+          #!/usr/bin/env python3
+          """常驻：启动模拟器+游戏 → 循环接收命令（shot / tap x y / text / key）→ 秒级回传"""
+          import os, sys, json, time, base64, subprocess, urllib.request, re, traceback
+
+          TOKEN=os.environ.get("GH_TOKEN",""); REPO=os.environ.get("GITHUB_REPOSITORY","")
+          HOME=os.path.expanduser("~"); SDK=f"{HOME}/android-sdk"
+          PKG="com.tencent.tmgp.minitech.miniworld"
+          adb=f"{SDK}/platform-tools/adb"; emu=f"{SDK}/emulator/emulator"
+          sm=f"{SDK}/cmdline-tools/latest/bin/sdkmanager"
+          CMD_FILE="relay/cmd.txt"; OUT_FILE="relay/shot.txt"
+
+          def rep(m):
+              try:
+                  req=urllib.request.Request(f"https://api.github.com/repos/{REPO}/contents/relay/result.txt")
+                  req.add_header("Authorization","Bearer "+TOKEN); req.add_header("User-Agent","r")
+                  sha=None
+                  try:
+                      with urllib.request.urlopen(req,timeout=30) as r: sha=json.loads(r.read().decode()).get("sha")
+                  except Exception: pass
+                  p={"message":"res","content":base64.b64encode(m.encode()).decode()}
+                  if sha: p["sha"]=sha
+                  r2=urllib.request.Request(f"https://api.github.com/repos/{REPO}/contents/relay/result.txt",method="PUT")
+                  r2.add_header("Authorization","Bearer "+TOKEN); r2.add_header("User-Agent","r")
+                  r2.add_header("Content-Type","application/json")
+                  urllib.request.urlopen(r2,json.dumps(p).encode(),timeout=60).read()
+              except Exception as e: print("rep",e)
+
+          def wfile(path, b64, msg="x"):
+              req=urllib.request.Request(f"https://api.github.com/repos/{REPO}/contents/{path}")
+              req.add_header("Authorization","Bearer "+TOKEN); req.add_header("User-Agent","r")
+              sha=None
+              try:
+                  with urllib.request.urlopen(req,timeout=30) as r: sha=json.loads(r.read().decode()).get("sha")
+              except Exception: pass
+              p={"message":msg,"content":b64}
+              if sha: p["sha"]=sha
+              r2=urllib.request.Request(f"https://api.github.com/repos/{REPO}/contents/{path}",method="PUT")
+              r2.add_header("Authorization","Bearer "+TOKEN); r2.add_header("User-Agent","r")
+              r2.add_header("Content-Type","application/json")
+              urllib.request.urlopen(r2,json.dumps(p).encode(),timeout=60).read()
+
+          def rfile(path, cached_sha=None):
+              """条件请求，304 不计配额"""
+              req=urllib.request.Request(f"https://api.github.com/repos/{REPO}/contents/{path}")
+              req.add_header("Authorization","Bearer "+TOKEN); req.add_header("User-Agent","r")
+              try:
+                  with urllib.request.urlopen(req,timeout=30) as r:
+                      j=json.loads(r.read().decode())
+                      return base64.b64decode(j["content"]).decode("utf-8","replace"), j.get("sha"), r.headers.get("etag")
+              except Exception as e:
+                  return None, None, None
+
+          def sh(c,t=600):
+              try:
+                  r=subprocess.run(c,shell=True,capture_output=True,text=True,timeout=t)
+                  return (r.stdout or "")+"\n"+(r.stderr or "")
+              except subprocess.TimeoutExpired: return "TIMEOUT"
+
+          out=[]
+          def log(s):
+              out.append(s); print(s,flush=True); rep("\n".join(out)[-40000:])
+
+          def dump_ui():
+              sh(f"{adb} shell uiautomator dump /sdcard/ui.xml >/dev/null 2>&1",60)
+              xml=sh(f"{adb} shell cat /sdcard/ui.xml 2>/dev/null",60)
+              if "<node" not in xml: return []
+              items=[]
+              for m in re.finditer(r'<node[^>]*>', xml):
+                  tag=m.group(0)
+                  def g(k):
+                      mm=re.search(k+r'="([^"]*)"',tag); return mm.group(1) if mm else ""
+                  txt=g("text")
+                  if not txt or "&#10;" in txt or len(txt)>30: continue
+                  bm=re.match(r'\[(\d+),(\d+)\]\[(\d+),(\d+)\]', g("bounds"))
+                  if not bm: continue
+                  x1,y1,x2,y2=map(int,bm.groups())
+                  cls=g("class")
+                  items.append((txt,(x1+x2)//2,(y1+y2)//2,("Button" in cls) or g("clickable")=="true"))
+              return items
+
+          def do_shot(k=0, scale=360):
+              from PIL import Image
+              import io
+              png=f"{HOME}/rs.png"
+              sh(f"{adb} exec-out screencap -p > {png}",60)
+              if not os.path.exists(png) or os.path.getsize(png)<1000: return "截图失败"
+              im=Image.open(png).convert("RGB")
+              w,h=im.size
+              im=im.resize((scale,int(h*scale/w)))
+              b=io.BytesIO(); im.save(b,"JPEG",quality=70)
+              raw=b.getvalue()
+              wfile(OUT_FILE, base64.b64encode(raw).decode(), "shot")
+              return f"shot ok {len(raw)}B {w}x{h}"
+
+          def main():
+              log("=== 启动模拟器 ===")
+              if not os.path.exists(sm):
+                  CT=f"{HOME}/cmdtools.zip"
+                  for a in range(3):
+                      sh(f"rm -f {CT}",60)
+                      sh(f"curl -sL -m 900 -A 'Mozilla/5.0' -o {CT} 'https://dl.google.com/android/repository/commandlinetools-linux-11076708_latest.zip'",900)
+                      if os.path.getsize(CT) if os.path.exists(CT) else 0 < 5*1024*1024: continue
+                      os.makedirs(SDK,exist_ok=True)
+                      sh(f"mkdir -p {SDK}/cmdline-tools/latest && unzip -q -o {CT} -d {SDK}/cmdline-tools/latest",300)
+                      if os.path.isdir(f"{SDK}/cmdline-tools/latest/cmdline-tools"):
+                          sh(f"cp -r {SDK}/cmdline-tools/latest/cmdline-tools/* {SDK}/cmdline-tools/latest/ 2>/dev/null")
+                      if os.path.exists(sm): break
+              if os.path.exists(sm):
+                  sh(f"yes | {sm} --sdk_root={SDK} --licenses >/dev/null 2>&1",900)
+                  need=[]
+                  if not os.path.exists(f"{SDK}/platform-tools/adb"): need.append("'platform-tools'")
+                  if not os.path.exists(emu): need.append("'emulator'")
+                  sd0=None
+                  for root,dirs,files in os.walk(f"{SDK}/system-images"):
+                      if "android-30" in root and "kernel-ranchu" in files: sd0=root+"/"
+                  if not sd0: need.append("'system-images;android-30;google_apis_playstore;x86_64'")
+                  if need: sh(f"{sm} --sdk_root={SDK} --install "+" ".join(need)+" 2>&1|tail -2",2400)
+              sd=None
+              for root,dirs,files in os.walk(f"{SDK}/system-images"):
+                  if "android-30" in root and "kernel-ranchu" in files: sd=root+"/"; break
+              if not sd: log("ABORT 无镜像"); return
+
+              sh("sudo apt-get install -y -qq python3-pil 2>&1|tail -1",600)
+              from PIL import Image
+
+              AVD="mw30"; avdd=f"{HOME}/.android/avd/{AVD}.avd"
+              os.makedirs(avdd,exist_ok=True)
+              open(f"{HOME}/.android/avd/{AVD}.ini","w").write(
+                  f"avd.ini.encoding=UTF-8\npath={avdd}\npath.rel=avd/{AVD}.avd\ntarget=android-30\n")
+              open(f"{avdd}/config.ini","w").write(f"""AvdId={AVD}
+          PlayStore.enabled=false
+          abi.type=x86_64
+          avd.ini.displayname={AVD}
+          avd.ini.encoding=UTF-8
+          disk.dataPartition.size=14G
+          hw.audioInput=no
+          hw.audioOutput=no
+          hw.cpu.arch=x86_64
+          hw.cpu.ncore=4
+          hw.gpu.enabled=yes
+          hw.gpu.mode=angle_indirect
+          hw.keyboard=yes
+          hw.lcd.density=420
+          hw.lcd.height=1920
+          hw.lcd.width=1080
+          hw.mainKeys=no
+          hw.ramSize=8192
+          image.sysdir.1={sd}
+          runtime.network.latency=none
+          runtime.network.speed=full
+          showDeviceFrame=no
+          tag.id=google_apis_playstore
+          """)
+              sh("sudo chmod 666 /dev/kvm 2>&1||true",60)
+              sh("pkill -f qemu-system; sleep 3",60)
+              sh(f"rm -f {avdd}/*.lock 2>/dev/null",60)
+              sh(f"nohup {emu} -avd {AVD} -no-window -no-audio -no-boot-anim -gpu angle_indirect "
+                 f"-no-snapshot -memory 8192 -cores 4 -partition-size 8192 -qemu -enable-kvm "
+                 f"> {HOME}/res.log 2>&1 &",60)
+              ok=False
+              for i in range(45):
+                  time.sleep(20)
+                  if sh(f"{adb} shell getprop sys.boot_completed 2>&1|tr -d '\\r\\n'",60).strip()=="1":
+                      ok=True; log(f"booted {20*(i+1)}s"); break
+              if not ok: log("BOOT FAIL"); return
+              log("android "+sh(f"{adb} shell getprop ro.build.version.release",60).strip())
+
+              APK=f"{HOME}/mw.apk"
+              if PKG not in sh(f"{adb} shell pm list packages 2>&1",90):
+                  if not os.path.exists(APK) or os.path.getsize(APK)<1000000:
+                      sh(f"curl -sL -m 1800 -A 'Mozilla/5.0' -o {APK} 'https://imtt.dd.qq.com/sjy.00009/sjy.00002/16891/apk/0F94B1CB324EE4F471C95BA1127CE377.apk?fsname=com.tencent.tmgp.minitech.miniworld_80640.apk'",1800)
+                  log("install: "+sh(f"{adb} install -r -t {APK} 2>&1|tail -2",2400).strip()[-200:])
+              sh(f"{adb} shell am start -n {PKG}/com.minitech.miniworld.StartupActivity 2>&1|tail -1",180)
+              log("游戏已启动，进入常驻循环")
+
+              PRIO=["同意，继续使用","同意并继续","同意","确定","进入游戏","开始游戏","开始","登录","跳过","允许","好的","确认","游客登录","进入","继续"]
+              AVOID=["不同意","退出","取消"]
+              last=""
+              log("READY")
+              for i in range(4000):
+                  try:
+                      txt,_,_=rfile(CMD_FILE)
+                      if txt and txt.strip()!=last:
+                          last=txt.strip()
+                          cmd=last
+                          log(f"[{i}] 收到: {cmd[:60]}")
+                          if cmd.startswith("shot"):
+                              log("  "+do_shot())
+                          elif cmd.startswith("tap "):
+                              p=cmd.split()
+                              sh(f"{adb} shell input tap {p[1]} {p[2]} 2>&1",30)
+                              time.sleep(2); log("  "+do_shot())
+                          elif cmd=="ui":
+                              items=dump_ui()
+                              log("  UI: "+str([(t,x,y,b) for t,x,y,b in items][:15]))
+                              wfile("relay/ui.json", base64.b64encode(json.dumps(
+                                  [{"t":t,"x":x,"y":y,"btn":b} for t,x,y,b in items]).encode()).decode(),"ui")
+                          elif cmd.startswith("click "):
+                              want=cmd[6:].strip()
+                              items=dump_ui(); done=None
+                              for prefer in (True,False):
+                                  for t,x,y,b in items:
+                                      if b!=prefer: continue
+                                      if want==t or (want in t and len(t)<=len(want)+6):
+                                          if any(a in t for a in AVOID): continue
+                                          sh(f"{adb} shell input tap {x} {y} 2>&1",30); done=f"{t}@{x},{y}"; break
+                                  if done: break
+                              if not done:
+                                  for want2 in PRIO:
+                                      for t,x,y,b in items:
+                                          if want2 in t and not any(a in t for a in AVOID):
+                                              sh(f"{adb} shell input tap {x} {y} 2>&1",30); done=f"{t}@{x},{y}"; break
+                                      if done: break
+                              log("  点击: "+(done or "无匹配"))
+                              time.sleep(3); log("  "+do_shot())
+                          elif cmd.startswith("key "):
+                              sh(f"{adb} shell input keyevent {cmd.split()[1]} 2>&1",30)
+                              time.sleep(2); log("  "+do_shot())
+                          elif cmd=="auto":
+                              items=dump_ui(); done=None
+                              for want2 in PRIO:
+                                  for t,x,y,b in items:
+                                      if want2 in t and not any(a in t for a in AVOID):
+                                          sh(f"{adb} shell input tap {x} {y} 2>&1",30); done=f"{t}@{x},{y}"; break
+                                  if done: break
+                              log("  auto点击: "+(done or "无"))
+                              time.sleep(3); log("  "+do_shot())
+                          elif cmd=="ping":
+                              log("  pong")
+                          elif cmd=="stop":
+                              log("退出"); break
+                  except Exception as e:
+                      log("  循环异常: "+traceback.format_exc()[-200:])
+                  time.sleep(1.5)
+              log("循环结束")
+
+          try:
+              main()
+          except Exception:
+              log("致命:\n"+traceback.format_exc()[-1500:])
+          PYEOF
+          python3 relay/resident_emu.py || true
