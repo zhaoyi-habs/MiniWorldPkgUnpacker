@@ -1,4 +1,3 @@
-CMD: ui
 CMD: tap 540 977
 CMD: ui
 CMD: tap 566 1101
@@ -78,3 +77,4 @@ CMD: shot
 CMD: shell /home/runner/android-sdk/platform-tools/adb shell uiautomator dump /sdcard/ui2.xml >/dev/null 2>&1; /home/runner/android-sdk/platform-tools/adb shell cat /sdcard/ui2.xml 2>/dev/null | tr '<' '\n' | grep -E 'checkable="true"|clickable="true"' | grep -o 'bounds="[^"]*"' | head -20
 CMD: shell /home/runner/android-sdk/platform-tools/adb shell cat /sdcard/ui2.xml 2>/dev/null | tr '<' '\n' | grep '174,1080' | head -2
 CMD: tap 195 1101
+CMD: shell /home/runner/android-sdk/platform-tools/adb shell uiautomator dump /sdcard/ui3.xml >/dev/null 2>&1; /home/runner/android-sdk/platform-tools/adb shell cat /sdcard/ui3.xml 2>/dev/null | tr '<' '\n' | grep 'CheckBox' | head -2
