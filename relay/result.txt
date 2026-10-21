@@ -9,3 +9,4 @@
   /dev/kvm: crw-rw-rw- 1 root kvm 10, 232 Oct 21 07:44 /dev/kvm
   wait 20s: ' started successfullyadb: device offline'
   booted 40s
+  android: 11
