@@ -1,4 +1,3 @@
-CMD: tap 540 782
 CMD: shell for i in $(seq 1 30); do /home/runner/android-sdk/platform-tools/adb shell input keyevent 67; sleep 0.3; done
 CMD: shell /home/runner/android-sdk/platform-tools/adb shell input text 0987poiu
 CMD: ui
@@ -78,3 +77,4 @@ CMD: shell /home/runner/android-sdk/platform-tools/adb logcat -d -t 1500 2>/dev/
 CMD: tap 960 540
 CMD: shot
 CMD: ui
+CMD: tap 1322 847
