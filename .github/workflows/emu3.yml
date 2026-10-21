@@ -20,7 +20,7 @@ jobs:
         uses: actions/cache@v4
         with:
           path: /home/runner/.android/avd
-          key: android-avd-v6
+          key: android-avd-v7
       - name: Cache APK
         uses: actions/cache@v4
         with:
@@ -116,7 +116,16 @@ jobs:
           """)
               return avdd
 
+          def fix_kvm():
+              """关键：runner 上当前用户不在 kvm 组，导致 'requires hardware acceleration'"""
+              log("KVM 修复前: "+sh("ls -l /dev/kvm 2>&1|head -1").strip())
+              log(sh("sudo chmod 666 /dev/kvm 2>&1 || echo chmod_failed",60).strip())
+              sh("sudo usermod -aG kvm $(whoami) 2>&1 || true",60)
+              log("KVM 修复后: "+sh("ls -l /dev/kvm 2>&1|head -1").strip())
+              log("groups: "+sh("id",30).strip())
+
           def boot(name, logfile):
+              fix_kvm()
               sh(f"pkill -f qemu-system 2>/dev/null; sleep 3",60)
               sh(f"nohup {emu} -avd {name} -no-window -no-audio -no-boot-anim "
                  f"-gpu swiftshader_indirect -no-snapshot -memory 4096 -cores 4 "
