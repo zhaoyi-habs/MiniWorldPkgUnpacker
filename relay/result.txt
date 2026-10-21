@@ -19,3 +19,4 @@ NOTICE.txt
 bin
 lib
 source.properties
+=== STEP 3: 安装 SDK 组件 ===
