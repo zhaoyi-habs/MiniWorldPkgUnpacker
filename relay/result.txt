@@ -58,3 +58,4 @@ qemu 进程: 1
 === STEP 6: 环境探测 ===
 ABI: x86_64
 ABI list: x86_64
+native bridge: 0
