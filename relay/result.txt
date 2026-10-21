@@ -37,3 +37,4 @@ apk=1772758908 in 298s
 === 安装 ===
 [-r -t] in 14s: Performing Streamed Install
 Success
+✅ 安装成功
