@@ -49,3 +49,4 @@ CMD: shell for i in $(seq 1 20); do /home/runner/android-sdk/platform-tools/adb 
 CMD: ui
 CMD: tap 540 782
 CMD: shell /home/runner/android-sdk/platform-tools/adb shell input text 0987poiu
+CMD: ui
