@@ -8,3 +8,4 @@ READY
 CMD: shot
 CMD: ui
 CMD: tap 960 691
+CMD: shot
