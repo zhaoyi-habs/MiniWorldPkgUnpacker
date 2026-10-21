@@ -1,1 +1,1 @@
-OK|ui|[{"t": "Viewing full screen", "x": 960, "y": 232, "btn": false}, {"t": "Got it", "x": 1238, "y": 527, "btn": true}]
+WAIT|0
