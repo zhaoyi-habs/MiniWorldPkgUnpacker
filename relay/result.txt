@@ -16,3 +16,5 @@
 === STEP4 安装 ===
   install: Performing Streamed Install
 Success
+  已装: package:com.tencent.tmgp.minitech.miniworld
+=== STEP5 启动游戏 ===
