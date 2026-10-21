@@ -47,3 +47,8 @@ config.ini 路径: None
 config 调整失败: no config.ini
 === STEP 5: 启动模拟器（KVM + swiftshader）===
 已发起启动
+emu.log 尾部: INFO         | Android emulator version 37.2.12.0 (build_id 16428233) (CL:N/A)
+INFO         | Graphics backend: gfxstream
+ERROR        | Unknown AVD name [mw], use -list-avds to see valid list.
+ERROR        | HOME is defined but there is no file mw.ini in $HOME/.android/avd
+ERROR        | (Note: Directories are searched in the order $ANDROID_AVD_HOME, $ANDROID_SDK_HOME/avd and $HOME/.android/avd)
