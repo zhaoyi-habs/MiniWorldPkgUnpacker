@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 300
     steps:
-      - name: Download APK
+      - name: Probe APK
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GITHUB_REPOSITORY: ${{ github.repository }}
@@ -59,24 +59,10 @@ jobs:
                  "?fsname=com.tencent.tmgp.minitech.miniworld_80640.apk")
 
           out = []
-          out.append("=== 1. 下载到 runner ===")
-          t0 = time.time()
-          r = subprocess.run(["curl","-sL","-m","600","-A","Mozilla/5.0","-o","/tmp/mw.apk",
-                              "-w","%{http_code} %{size_download}", URL],
+          out.append("=== 跟随重定向 HEAD ===")
+          r = subprocess.run(["curl","-sIL","-m","40","-A","Mozilla/5.0",URL],
                              capture_output=True, text=True)
-          out.append("curl: " + (r.stdout or "")[:200])
-          sz = os.path.getsize("/tmp/mw.apk") if os.path.exists("/tmp/mw.apk") else 0
-          out.append(f"size_bytes={sz}")
-          out.append(f"size_mb={sz/1024/1024:.1f}")
-          out.append(f"elapsed={time.time()-t0:.1f}s")
-          out.append("=== 2. 文件类型 ===")
-          r2 = subprocess.run(["file","/tmp/mw.apk"], capture_output=True, text=True)
-          out.append((r2.stdout or "")[:300])
-          out.append("=== 3. 解析版本 ===")
-          r3 = subprocess.run(["python3","-c",
-            "import zipfile;z=zipfile.ZipFile('/tmp/mw.apk');print(len(z.namelist()),'entries');print(z.namelist()[:6])"],
-            capture_output=True, text=True)
-          out.append((r3.stdout or "")[:400] + (r3.stderr or "")[:200])
+          out.append((r.stdout or "")[:1500])
           write_file("relay/result.txt", "\n".join(out))
           print("\n".join(out))
           PYEOF
