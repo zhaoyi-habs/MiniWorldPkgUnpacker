@@ -1,19 +1,1 @@
 === STEP1 SDK ===
-  sdkmanager: True
-  sd30: /home/runner/android-sdk/system-images/android-30/google_apis_playstore/x86_64/
-=== STEP2 AVD ===
-  avds: mw30
-=== STEP3 启动 ===
-  /dev/kvm: crw-rw-rw- 1 root kvm 10, 232 Oct 21 07:33 /dev/kvm
-  wait 20s: '37* daemon started successfullyadb: device offline'
-  booted 40s
-  android: 11
-  abilist: x86_64,x86,arm64-v8a,armeabi-v7a,armeabi
-  bridge: libndk_translation.so
-=== STEP4 安装 ===
-  已装: (无)
-  install: Performing Streamed Install
-Success
-  装后: package:com.tencent.tmgp.minitech.miniworld
-=== STEP5 启动游戏 ===
-=== STEP6 深度游玩（每3分钟，共36分钟）===
