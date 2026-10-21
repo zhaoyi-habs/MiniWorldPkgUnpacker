@@ -14,3 +14,4 @@
   已装: (无)
   install: Performing Streamed Install
 Success
+  装后: package:com.tencent.tmgp.minitech.miniworld
