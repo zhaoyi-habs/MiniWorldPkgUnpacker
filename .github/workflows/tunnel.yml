@@ -4,9 +4,13 @@ on:
   workflow_dispatch:
     inputs:
       cmd:
-        description: 'command to run'
+        description: 'command to run on runner (full network)'
         required: false
-        default: 'echo READY'
+        default: 'echo RELAY_OK'
+      topic:
+        description: 'ntfy topic to publish results to'
+        required: false
+        default: 'minipanel-x7k9-2026'
 
 jobs:
   probe:
@@ -15,55 +19,30 @@ jobs:
     steps:
       - name: Public IP and network capability
         run: |
-          echo "=== PUBLIC IP ==="
           IP=""
           for s in ifconfig.me icanhazip.com api.ipify.org; do
-            IP=$(curl -s -m 10 https://$s 2>/dev/null)
-            [ -n "$IP" ] && echo "  $s -> $IP" && break
+            IP=$(curl -s -m 10 https://$s 2>/dev/null); [ -n "$IP" ] && break
           done
-          echo "IP_RESULT=$IP" >> $GITHUB_ENV
-          echo "=== NETWORK CAPABILITY (this is what matters) ==="
-          echo -n "  cloudflare releases: "
-          curl -s -o /dev/null -w "%{http_code}\n" -m 20 -L https://github.com/cloudflare/cloudflared/releases/latest
-          echo -n "  api.cloudflare.com:  "
-          curl -s -o /dev/null -w "%{http_code}\n" -m 20 https://api.cloudflare.com/cdn-cgi/trace
-          echo "  --- cdn-cgi/trace ---"
-          curl -s -m 15 https://1.1.1.1/cdn-cgi/trace
-          echo "  --- outbound port test ---"
-          for p in 80 443 3478 51820; do
-            echo -n "    tcp/$p: "
-            timeout 5 bash -c "cat < /dev/null > /dev/tcp/1.1.1.1/$p" 2>/dev/null && echo open || echo closed
-          done
+          echo "IPX=$IP" >> $GITHUB_ENV
+          echo "IP=$IP"
 
-      - name: Run requested command
-        run: |
-          echo "=== CMD OUTPUT ==="
-          ${{ github.event.inputs.cmd }}
-
-      - name: Write results back
+      - name: Run command and publish to ntfy
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          CMD: ${{ github.event.inputs.cmd }}
+          TOPIC: ${{ github.event.inputs.topic }}
         run: |
-          OUT=$( {
-            echo "ip=$IP_RESULT"
-            echo "host=$(hostname)"
-            echo "time=$(date -u +%FT%TZ)"
-            echo "cloudflare_releases=$(curl -s -o /dev/null -w '%{http_code}' -m 20 -L https://github.com/cloudflare/cloudflared/releases/latest)"
-            echo "api_cf=$(curl -s -o /dev/null -w '%{http_code}' -m 20 https://api.cloudflare.com/cdn-cgi/trace)"
-          } 2>&1 )
-          B64=$(printf '%s' "$OUT" | base64 -w0)
-          SHA=$(curl -s -H "Authorization: Bearer $GH_TOKEN" -H "User-Agent: probe" \
-            "https://api.github.com/repos/${{ github.repository }}/contents/relay/report.txt" \
-            | python3 -c "import sys,json;print(json.load(sys.stdin).get('sha',''))" 2>/dev/null)
-          if [ -n "$SHA" ]; then
-            PAYLOAD="{\"message\":\"relay report\",\"content\":\"$B64\",\"sha\":\"$SHA\"}"
-          else
-            PAYLOAD="{\"message\":\"relay report\",\"content\":\"$B64\"}"
-          fi
-          curl -s -X PUT -H "Authorization: Bearer $GH_TOKEN" -H "User-Agent: probe" \
-            -H "Content-Type: application/json" -d "$PAYLOAD" \
-            "https://api.github.com/repos/${{ github.repository }}/contents/relay/report.txt" \
-            | python3 -c "import sys,json;d=json.load(sys.stdin);print('report written' if 'content' in d else 'fail')"
+          OUT=$(eval "$CMD" 2>&1 | head -c 2500)
+          IPX="${IPX:-unknown}"
+          MSG="RELAY RESULT
+          ip=$IPX
+          cmd=$CMD
+          ---
+          $OUT"
+          echo "$MSG"
+          # ntfy 不需要认证，runner 有完整网络，直接 POST
+          curl -s -m 20 -X POST "https://ntfy.sh/$TOPIC" \
+            -H "Title: relay-result" \
+            -d "$MSG" -o /dev/null -w "  ntfy publish: %{http_code}\n"
 
       - name: Keep alive
         run: sleep 240
