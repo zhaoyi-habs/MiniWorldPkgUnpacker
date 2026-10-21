@@ -1,9 +1,25 @@
-=== 下载前 80MB 用于解析 ===
-head=83886080
-=== 尝试 pip 安装解析库 ===
-pip rc=0
-full=1772758908
-=== 解析 ===
-pyaxmlparser 失败: ModuleNotFoundError: No module named 'pyaxmlparser'
-manifest 中版本号候选: []
-UTF16 候选: ['1.59.0', '2.5.0', '3.4.39', '3.4.80']
+=== KVM / 虚拟化 ===
+crw-rw---- 1 root kvm 10, 232 Oct 21 04:47 /dev/kvm
+
+
+cpu flags: svm
+=== 资源 ===
+4
+               total        used        free      shared  buff/cache   available
+Mem:           15983         894       12978          36        2465       15089
+/dev/root       145G   60G   86G  42% /
+
+
+=== sudo 权限 ===
+SUDO OK
+
+
+=== apt 能否装 qemu ===
+qemu-system-x86:
+  Installed: (none)
+  Candidate: 1:8.2.2+ds-0ubuntu1.18
+
+
+=== 内核 ===
+Linux runnervmxehtw 7.0.0-1017-azure #17~24.04.1-Ubuntu SMP PREEMPT Thu Sep 24 18:46:57 UTC 2026 x86_64 x86_64 x86_64 GNU/Linux
+
