@@ -35,3 +35,4 @@ source.properties
 [===================================    ] 88% Unzipping... platform-tools/sqlite
 [===================================    ] 89% Unzipping... platform-tools/sqlite
 [=======================================] 100% Unzipping... platform-tools/sqlit
+=== STEP 4: 创建 AVD（手写配置，避免交互失败）===
