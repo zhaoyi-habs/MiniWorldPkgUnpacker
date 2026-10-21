@@ -4,3 +4,4 @@
 === PIL 安装 ===
   PIL OK
 === STEP2 AVD（软件GPU: ANGLE+Vulkan/SwiftShader, 8GB RAM）===
+  config 已写
