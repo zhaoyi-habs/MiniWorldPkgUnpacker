@@ -6,3 +6,7 @@ size=1772758908
 dl 48/48 in 0.5min
 merged=1772758908 match=True
 zip OK 5631
+=== gh upload ===
+rc=0 in 1.2min
+stdout: 
+stderr: 
