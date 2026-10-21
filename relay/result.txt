@@ -55,3 +55,4 @@ WARNING      | Failed to process .ini file /home/runner/.android/emu-update-last
 WARNING      | Failed to process .ini file /home/runner/.android/emu-update-last-check.ini for reading.
 qemu 进程: 1
   wait 0 (20s): boot_completed='1' devices=emulator-5554	device
+=== STEP 6: 环境探测 ===
