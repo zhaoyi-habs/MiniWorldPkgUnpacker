@@ -10,3 +10,4 @@ zip OK 5631
 rc=0 in 1.2min
 stdout: 
 stderr: 
+TOTAL 1.8min
