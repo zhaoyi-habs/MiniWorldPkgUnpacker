@@ -72,3 +72,4 @@ apk=1772758908 (1690.6MB) in 293s
 install in 11s:
 Performing Streamed Install
 adb: failed to install /home/runner/mw.apk: Failure [INSTALL_FAILED_NO_MATCHING_ABIS: INSTALL_FAILED_NO_MATCHING_ABIS: Failed to extract native libraries, res=-113]
+重试 install --no-incremental
