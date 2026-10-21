@@ -1,1 +1,1 @@
-OK|ui|[{"t": "Turn on sync?", "x": 217, "y": 504, "btn": false}, {"t": "No thanks", "x": 160, "y": 849, "btn": true}, {"t": "More", "x": 1762, "y": 849, "btn": true}]
+WAIT|0
