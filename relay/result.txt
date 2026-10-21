@@ -46,3 +46,4 @@ avd list:
 config.ini 路径: None
 config 调整失败: no config.ini
 === STEP 5: 启动模拟器（KVM + swiftshader）===
+已发起启动
