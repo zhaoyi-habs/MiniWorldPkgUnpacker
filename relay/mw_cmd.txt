@@ -1,1 +1,1 @@
-shell /home/runner/android-sdk/platform-tools/adb logcat -d -t 800 2>/dev/null | grep -i -E 'LoginActivity|wtlogin|sso|MSF|getToken|password|错误|失败|Toast' | tail -20
+tap 540 977
