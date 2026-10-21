@@ -3,3 +3,4 @@
   PIL OK
 === STEP2 AVD ===
 === STEP3 启动 ===
+  booted 40s
