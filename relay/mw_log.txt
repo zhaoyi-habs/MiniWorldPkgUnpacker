@@ -43,3 +43,4 @@ CMD: shell \$ANDROID_SDK_ROOT/platform-tools/adb shell input text 0987poiu
 CMD: shot
 CMD: ui
 CMD: tap 540 572
+CMD: shell /home/runner/android-sdk/platform-tools/adb shell input text 3928657028
