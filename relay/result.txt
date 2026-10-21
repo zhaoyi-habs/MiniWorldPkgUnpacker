@@ -50,3 +50,4 @@ config 调整失败: [Errno 2] No such file or directory: '/home/runner/.android
   wait 3 (80s): boot_completed='adb: no devices/emulators found' devices=List of devices attached
   wait 4 (100s): boot_completed='adb: no devices/emulators found' devices=List of devices attached
   wait 5 (120s): boot_completed='adb: no devices/emulators found' devices=List of devices attached
+  wait 6 (140s): boot_completed='adb: no devices/emulators found' devices=List of devices attached
