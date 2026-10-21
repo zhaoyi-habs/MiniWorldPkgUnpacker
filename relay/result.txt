@@ -39,3 +39,4 @@ source.properties
 发现 sysdir: /home/runner/android-sdk/system-images/android-33/google_apis_playstore/x86_64/
 config.ini 已写入，sysdir=/home/runner/android-sdk/system-images/android-33/google_apis_playstore/x86_64/
 avds: mw
+=== STEP 5: 启动模拟器（KVM + swiftshader）===
