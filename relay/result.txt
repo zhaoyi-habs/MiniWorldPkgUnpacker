@@ -1,3 +1,5 @@
 === SDK 现状 ===
 ls: cannot access '/home/runner/android-sdk': No such file or directory
 system-images: ls: cannot access '/home/runner/android-sdk/system-images': No such file or directory
+
+emulator bin: ls: cannot access '/home/runner/android-sdk/emulator/emulator': No such file or directory
