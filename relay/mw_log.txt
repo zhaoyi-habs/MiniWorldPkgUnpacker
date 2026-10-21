@@ -11,3 +11,4 @@ CMD: shell curl -sIL -m 30 -A 'Mozilla/5.0' 'https://d.apkpure.net/b/APK/com.ten
 CMD: shell curl -sIL -m 30 -A 'Mozilla/5.0' 'https://download.apkpure.com/b/APK/com.tencent.mobileqq?version=latest' | grep -iE '^HTTP|^content-length|^location' | tail -4
 CMD: shell curl -sIL -m 30 -A 'Mozilla/5.0' 'https://apkdownloadspot.com/?s=qq' | grep -iE '^HTTP|^content-length|^location' | tail -4
 CMD: inst https://d.apkpure.net/b/APK/com.tencent.mobileqq?version=latest
+CMD: start
