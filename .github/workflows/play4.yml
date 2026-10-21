@@ -97,11 +97,16 @@ jobs:
                       return mm.group(1) if mm else ""
                   txt = g("text")
                   if not txt: continue
+                  cls = g("class")
+                  clickable = g("clickable").lower() == "true"
+                  is_btn = ("Button" in cls) or clickable
+                  # 排除正文：含 HTML 转义换行 / 超长
+                  if "&#10;" in txt or len(txt) > 30: continue
                   b = g("bounds")
                   bm = re.match(r'\[(\d+),(\d+)\]\[(\d+),(\d+)\]', b)
                   if not bm: continue
                   x1,y1,x2,y2 = map(int, bm.groups())
-                  items.append((txt,(x1+x2)//2,(y1+y2)//2))
+                  items.append((txt,(x1+x2)//2,(y1+y2)//2,is_btn))
               return items
 
           def main():
@@ -214,15 +219,20 @@ jobs:
                       log(f"--- 轮{k+1} ({(k+1)*1.5:.0f}分钟) ---")
                       # 1) UI 解析 + 智能点击
                       items = dump_ui()
-                      texts = [t for t,x,y in items]
+                      texts = [t for t,x,y,b in items]
                       log("  UI文本: "+str(texts[:12]))
                       clicked=None
-                      for want in PRIO:
-                          for t,x,y in items:
-                              if want in t and not any(a in t for a in AVOID):
-                                  sh(f"{adb} shell input tap {x} {y} 2>&1",45)
-                                  clicked=f"{t}@{x},{y}"
-                                  break
+                      # 策略：按钮优先，再按 PRIO 顺序；匹配要求短文本且不含排除词
+                      for prefer_btn in (True, False):
+                          for want in PRIO:
+                              cand=[(t,x,y,b) for t,x,y,b in items if b==prefer_btn]
+                              for t,x,y,b in cand:
+                                  if want == t or (want in t and len(t) <= len(want)+6):
+                                      if any(a in t for a in AVOID): continue
+                                      sh(f"{adb} shell input tap {x} {y} 2>&1",45)
+                                      clicked=f"{t}@{x},{y}(btn={b})"
+                                      break
+                              if clicked: break
                           if clicked: break
                       if clicked:
                           log("  ✅ 点击: "+clicked)
@@ -231,6 +241,13 @@ jobs:
                           sh(f"{adb} shell input tap 960 700 2>&1",45)
                           sh(f"{adb} shell input tap 960 900 2>&1",45)
                           log("  (无匹配，点中心)")
+                      # 若误跳到浏览器/其他 App，杀回游戏
+                      cur=sh(f"{adb} shell dumpsys window 2>/dev/null|grep -m1 mCurrentFocus",60).strip()
+                      if "minitech" not in cur and ("chrome" in cur.lower() or "browser" in cur.lower()):
+                          log("  ⚠ 误入浏览器，回退")
+                          sh(f"{adb} shell am force-stop com.android.chrome 2>&1",60)
+                          sh(f"{adb} shell am start -n {PKG}/com.minitech.miniworld.StartupActivity 2>&1|tail -1",180)
+                          time.sleep(15)
                       time.sleep(6)
                       # 2) 截图
                       png=f"{HOME}/w{k}.png"
