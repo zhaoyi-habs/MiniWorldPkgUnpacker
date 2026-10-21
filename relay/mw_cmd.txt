@@ -1,1 +1,1 @@
-shell /home/runner/android-sdk/platform-tools/adb shell input touchscreen swipe 827 481 1500 481 800
+shot
