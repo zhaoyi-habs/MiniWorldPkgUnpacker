@@ -1,6 +1,6 @@
-cmd=echo T5
+cmd=echo B0
 exit=0
 host=runnervmxehtw
-ip=57.151.91.162
+ip=20.169.98.150
 ---
-T5
+B0
