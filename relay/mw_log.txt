@@ -48,3 +48,4 @@ CMD: tap 540 782
 CMD: shell /home/runner/android-sdk/platform-tools/adb shell input text 0987poiu
 CMD: shot
 CMD: ui
+CMD: tap 540 977
