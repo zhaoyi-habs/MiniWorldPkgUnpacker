@@ -64,3 +64,4 @@ android.hardware.camera.common-V1-ndk.so
 android.hardware.camera.device-V1-ndk.so
 android.hardware.camera.metadata-V1-ndk.so
 android.hardware.camera.provider-V1-ndk.so
+model: sdk_gphone64_x86_64
