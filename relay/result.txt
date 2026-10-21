@@ -1,3 +1,4 @@
 === 环境 ===
 下载 cmdline-tools 尝试 1
   size=153607504
+sdkmanager: True
