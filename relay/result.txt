@@ -43,3 +43,4 @@ Success
 activity: com.tencent.tmgp.minitech.miniworld/com.minitech.miniworld.StartupActivity
 === 截图 ===
   shot0 focus=
+  shot0 raw=533682
