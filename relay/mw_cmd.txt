@@ -1,1 +1,1 @@
-shell /home/runner/android-sdk/platform-tools/adb shell ps -A | grep -i mini | head -3
+shot
