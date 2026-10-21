@@ -1,1 +1,1 @@
-shell /home/runner/android-sdk/platform-tools/adb shell uiautomator dump /sdcard/ui2.xml >/dev/null 2>&1; /home/runner/android-sdk/platform-tools/adb shell cat /sdcard/ui2.xml 2>/dev/null | tr '<' '\n' | grep -E 'checkable="true"|clickable="true"' | grep -o 'bounds="[^"]*"' | head -20
+shell /home/runner/android-sdk/platform-tools/adb shell cat /sdcard/ui2.xml 2>/dev/null | tr '<' '\n' | grep '174,1080' | head -2
