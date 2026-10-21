@@ -1,2 +1,2 @@
-# t=1792551981625
-CMD> echo '=== 小米商店搜索API ==='; curl -s -m 25 -A 'Mozilla/5.0' 'https://app.mi.com/searchAll?keywords=%E8%BF%B7%E4%BD%A0%E4%B8%96%E7%95%8C&type=app' | head -c 900; echo; echo '=== 应用宝详情API ==='; curl -s -m 25 -A 'Mozilla/5.0' 'https://sj.qq.com/myapp/detail.htm?apkName=com.minitech.miniworld' -o /tmp/qq.html -w 'status=%{http_code} size=%{size_download}\n'; grep -oE 'versionName[^,]{0,30}|[0-9]+\.[0-9]+\.[0-9]+' /tmp/qq.html 2>/dev/null | head -8
+# t=1792551996984
+CMD> for u in https://apkpure.com https://www.apkmirror.com https://apkcombo.com https://apkmonk.com https://apps.evozi.com https://apk.support https://androidapksfree.com https://www.androidappsapk.com; do echo -n "  $u -> "; curl -s -o /dev/null -m 15 -w '%{http_code}' -A 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/120' "$u"; echo; done
