@@ -59,3 +59,4 @@ CMD: shell /home/runner/android-sdk/platform-tools/adb shell monkey -p com.tence
 CMD: ui
 CMD: tap 792 1546
 CMD: ui
+CMD: tap 177 1678
