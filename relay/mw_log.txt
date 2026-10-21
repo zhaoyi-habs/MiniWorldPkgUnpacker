@@ -1,4 +1,3 @@
-CMD: ui
 CMD: tap 177 1663
 CMD: tap 177 1678
 CMD: ui
@@ -78,3 +77,4 @@ CMD: shell /home/runner/android-sdk/platform-tools/adb shell getprop ro.product.
 CMD: shell /home/runner/android-sdk/platform-tools/adb shell curl -s -m 12 -o /dev/null -w 'baidu=%{http_code}' https://www.baidu.com ; echo ; /home/runner/android-sdk/platform-tools/adb shell curl -s -m 12 -o /dev/null -w 'qq=%{http_code}' https://qq.com
 CMD: tap 540 977
 CMD: shell /home/runner/android-sdk/platform-tools/adb logcat -d -t 800 2>/dev/null | grep -i -E 'LoginActivity|wtlogin|sso|MSF|getToken|password|错误|失败|Toast' | tail -20
+CMD: tap 540 977
