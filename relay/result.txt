@@ -46,3 +46,4 @@ config 调整失败: [Errno 2] No such file or directory: '/home/runner/.android
 已发起启动
   wait 0 (20s): boot_completed='* daemon not running; starting now at tcp:5037* daemon started successfullyadb: no devices/emulators found' devices=List of devices attached
   wait 1 (40s): boot_completed='adb: no devices/emulators found' devices=List of devices attached
+  wait 2 (60s): boot_completed='adb: no devices/emulators found' devices=List of devices attached
