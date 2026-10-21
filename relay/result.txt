@@ -1,15 +1,23 @@
-cmd=curl -sL -m 25 -A 'Mozilla/5.0 (iPhone)' 'https://sj.qq.com/myapp/detail.htm?apkName=com.minitech.miniworld' -o /tmp/a.html -w 'yingyongbao=%{http_code} size=%{size_download}\n'; grep -oE 'verName[^,]{0,25}' /tmp/a.html 2>/dev/null|head -2; curl -s -m 30 -A 'Mozilla/5.0' 'https://apps.evozi.com/downloader?package=com.minitech.miniworld&fetch=true' -o /tmp/e.json -w 'evozi=%{http_code} size=%{size_download}\n'; head -c 300 /tmp/e.json
+cmd=echo '=== 版本号 ==='; grep -oE '[0-9]+\.[0-9]+\.[0-9]+' /tmp/a.html | sort -u | head -10; echo '=== apk 链接 ==='; grep -oE 'https?://[^"'\'' ]*\.apk[^"'\'' ]*' /tmp/a.html | sort -u | head -5; echo '=== download 相关 ==='; grep -oE '"(apkUrl|downloadUrl|url)":"[^"]{0,120}' /tmp/a.html | head -5
 exit=0
 host=runnervmxehtw
 ip=20.169.98.150
 ---
-yingyongbao=200 size=327081
-evozi=200 size=6180
-<!doctype html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-    <meta name="theme-color" content="#006F86">
-    <title>Evozi Apps - La
+=== 版本号 ===
+0.0.5
+0.8.15
+1.0.0
+1.0.0880
+1.00.1450
+1.1.0
+1.166.583
+1.25.4
+1.35.26
+1.555.696
+=== apk 链接 ===
+http://imtt2.dd.qq.com/sjy.00008/sjy.00004/16891/apk/9EF26FBD8B14C076DEA951F2CA328080.apk?fsname=com.tencent.android.qqdownloader_9.2.9.apk
+http://imtt2.dd.qq.com/sjy.00009/sjy.00002/16891/apk/0D3178970754BC4A495018EAC2A36FE3.apk?fsname=com.tencent.tmgp.hy.wjwlsh_220.apk
+http://imtt2.dd.qq.com/sjy.00009/sjy.00002/16891/apk/0F94B1CB324EE4F471C95BA1127CE377.apk?fsname=com.tencent.tmgp.minitech.miniworld_80640.apk
+http://imtt2.dd.qq.com/sjy.00009/sjy.00002/16891/apk/14093012BBA86E798D50CDBE976A5913.apk?fsname=com.tencent.tmgp.hyh.mech_4141.apk
+http://imtt2.dd.qq.com/sjy.00009/sjy.00002/16891/apk/160C257AC0F7357C696DA73043E8E6E9.apk?fsname=com.tencent.tmgp.sm_100880.apk
+=== download 相关 ===
