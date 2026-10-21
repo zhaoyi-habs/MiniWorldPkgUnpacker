@@ -18,3 +18,4 @@ m-tools/make_f
 [=======================================] 100% Unzipping... platform-tools/sqlit
 === STEP 2: AVD ===
 sysdir: /home/runner/android-sdk/system-images/android-30/google_apis_playstore/x86_64/
+avds: mw30
