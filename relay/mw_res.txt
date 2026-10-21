@@ -1,1 +1,1 @@
-OK|shell|/bin/sh: 1: $ANDROID_SDK_ROOT/platform-tools/adb: not found
+WAIT|0
