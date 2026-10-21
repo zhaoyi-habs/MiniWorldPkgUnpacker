@@ -1,1 +1,3 @@
 CMD> echo READY
+# t=1792550261
+CMD> curl -s -m 15 https://api.ipify.org; echo; uname -a
