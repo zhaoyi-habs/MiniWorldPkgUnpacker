@@ -1,1 +1,2 @@
 === STEP1 SDK ===
+  sdkmanager: True
