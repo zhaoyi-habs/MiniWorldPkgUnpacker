@@ -28,3 +28,4 @@ avds: mw30
   wait 320s: 'adb: no devices/emulators found'
   wait 380s: 'adb: no devices/emulators found'
   wait 440s: 'adb: no devices/emulators found'
+  wait 500s: 'adb: no devices/emulators found'
