@@ -41,3 +41,4 @@ CMD: shell /home/runner/android-sdk/platform-tools/adb shell input keyevent 113;
 CMD: ui
 CMD: tap 177 1663
 CMD: tap 177 1678
+CMD: ui
