@@ -1,2 +1,3 @@
 === STEP1 SDK ===
   sdkmanager: True
+  sd30: /home/runner/android-sdk/system-images/android-30/google_apis_playstore/x86_64/
