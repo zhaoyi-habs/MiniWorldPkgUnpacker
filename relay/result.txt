@@ -7,3 +7,5 @@
   android 11
   GLES 196609
 === STEP4 安装 ===
+  install: Performing Streamed Install
+Success
