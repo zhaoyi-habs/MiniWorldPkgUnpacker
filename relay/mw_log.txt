@@ -1,4 +1,3 @@
-CMD: tap 177 1678
 CMD: ui
 CMD: tap 540 782
 CMD: shell for i in $(seq 1 20); do /home/runner/android-sdk/platform-tools/adb shell input keyevent 67; sleep 0.4; done
@@ -78,3 +77,4 @@ CMD: tap 540 977
 CMD: shell /home/runner/android-sdk/platform-tools/adb logcat -d -t 800 2>/dev/null | grep -i -E 'LoginActivity|wtlogin|sso|MSF|getToken|password|错误|失败|Toast' | tail -20
 CMD: tap 540 977
 CMD: shot
+CMD: key KEYCODE_BACK
