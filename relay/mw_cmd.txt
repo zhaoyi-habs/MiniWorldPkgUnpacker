@@ -1,1 +1,1 @@
-shell adb shell pm list packages | grep -i tencent
+shell $ANDROID_SDK_ROOT/platform-tools/adb shell pm list packages | grep -i -E 'qq|tencent'
