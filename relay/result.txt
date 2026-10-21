@@ -27,3 +27,4 @@ bridge: libndk_translation.so
 houdini64: ls: /system/lib64/libhoudini.so: No such file or directory
 houdini32: ls: /system/lib/libhoudini.so: No such file or directory
 已有 houdini: False
+=== 从 API30 镜像提取 houdini ===
