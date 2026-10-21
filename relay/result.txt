@@ -25,3 +25,4 @@ Success
 --- 轮3 (4分钟) ---
   UI文本: ['Welcome to Chrome', 'By using Chrome, you agree to the Google Terms of Service, and the Google Chrome and Chrome OS Additional Terms of Service.', 'Help make Chrome better by sending usage statistics and crash reports to Google.', 'Accept &amp; continue']
   (无匹配，点中心)
+  shot 1080x1920 色数=6751 变化0.03%
