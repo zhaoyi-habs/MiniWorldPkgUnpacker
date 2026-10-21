@@ -1,1 +1,1 @@
-shell $ANDROID_SDK_ROOT/platform-tools/adb shell pm list packages | grep -i -E 'qq|tencent'
+shell $ANDROID_SDK_ROOT/platform-tools/adb shell monkey -p com.tencent.mobileqq -c android.intent.category.LAUNCHER 1
