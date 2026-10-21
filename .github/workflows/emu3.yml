@@ -20,7 +20,7 @@ jobs:
         uses: actions/cache@v4
         with:
           path: /home/runner/.android/avd
-          key: android-avd-v5
+          key: android-avd-v6
       - name: Cache APK
         uses: actions/cache@v4
         with:
@@ -128,7 +128,27 @@ jobs:
               return False, 0
 
           log("=== 环境 ===")
+          CT=f"{HOME}/cmdtools.zip"
+          for attempt in range(3):
+              if os.path.exists(f"{SDK}/cmdline-tools/latest/bin/sdkmanager"): break
+              log(f"下载 cmdline-tools 尝试 {attempt+1}")
+              sh(f"rm -f {CT}",60)
+              sh(f"curl -sL -m 900 -A 'Mozilla/5.0' -o {CT} "
+                 f"'https://dl.google.com/android/repository/commandlinetools-linux-11076708_latest.zip'",900)
+              sz=os.path.getsize(CT) if os.path.exists(CT) else 0
+              log(f"  size={sz}")
+              if sz < 5*1024*1024: continue
+              os.makedirs(SDK,exist_ok=True)
+              sh(f"mkdir -p {SDK}/cmdline-tools/latest && unzip -q -o {CT} -d {SDK}/cmdline-tools/latest",300)
+              if os.path.isdir(f"{SDK}/cmdline-tools/latest/cmdline-tools"):
+                  sh(f"cp -r {SDK}/cmdline-tools/latest/cmdline-tools/* {SDK}/cmdline-tools/latest/ 2>/dev/null")
           log("sdkmanager: "+str(os.path.exists(f"{SDK}/cmdline-tools/latest/bin/sdkmanager")))
+          sm=f"{SDK}/cmdline-tools/latest/bin/sdkmanager"
+          if os.path.exists(sm):
+              sh(f"yes | {sm} --sdk_root={SDK} --licenses >/dev/null 2>&1",900)
+              log(sh(f"{sm} --sdk_root={SDK} --install 'platform-tools' 'emulator' "
+                     f"'platforms;android-30' 'platforms;android-33' "
+                     f"'system-images;android-30;google_apis_playstore;x86_64' 2>&1|tail -4",2400).strip()[-600:])
           log("emulator: "+str(os.path.exists(emu)))
           log("adb: "+str(os.path.exists(adb)))
           log("sysimages: "+sh(f"ls {SDK}/system-images 2>&1|head").strip())
