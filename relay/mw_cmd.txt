@@ -1,1 +1,1 @@
-shot
+shell /home/runner/android-sdk/platform-tools/adb shell uiautomator dump /sdcard/ui4.xml >/dev/null 2>&1; /home/runner/android-sdk/platform-tools/adb shell cat /sdcard/ui4.xml 2>/dev/null | tr '<' '\n' | grep -E 'clickable="true"' | grep -o -E 'text="[^"]*"|bounds="[^"]*"' | paste - - 2>/dev/null | head -20
