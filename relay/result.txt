@@ -12,3 +12,4 @@
   android: 11
   GPU 模式: 
   GLES 版本: 196609
+  bridge: libndk_translation.so
