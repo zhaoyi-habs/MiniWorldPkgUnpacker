@@ -1,6 +1,13 @@
-cmd=df -h / | tail -1
+cmd=echo '=== 尝试官方源 ==='; curl -s -m 20 -A 'Mozilla/5.0' 'https://miniworld.cn/' -o /dev/null -w 'miniworld.cn: %{http_code}\n'; echo '=== APKMirror 搜索 ==='; curl -s -m 25 -A 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)' 'https://www.apkmirror.com/?s=mini+world' | grep -oE 'apkmonk|Mini World[^<]{0,40}' | head -5; echo '=== 尝试 APKPure ==='; curl -s -m 25 -A 'Mozilla/5.0' 'https://apkpure.com/search?q=mini%20world' -o /dev/null -w 'apkpure: %{http_code}\n'
 exit=0
 host=runnervmxehtw
-ip=57.151.91.162
+ip=20.169.98.150
 ---
-/dev/root       145G   60G   86G  42% /
+=== 尝试官方源 ===
+miniworld.cn: 000
+=== APKMirror 搜索 ===
+Mini World: CREATA 1.7.15"  src="/wp-content/theme
+Mini World: CREATA 1.7.15" class="appRowTitle wrap
+Mini World: CREATA 1.7.15
+=== 尝试 APKPure ===
+apkpure: 403
