@@ -16,3 +16,4 @@
 Success
   装后: package:com.tencent.tmgp.minitech.miniworld
 === STEP5 启动游戏 ===
+=== STEP6 深度游玩（每3分钟，共36分钟）===
