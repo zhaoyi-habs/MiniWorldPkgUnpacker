@@ -1,2 +1,2 @@
-# t=1792551996984
-CMD> for u in https://apkpure.com https://www.apkmirror.com https://apkcombo.com https://apkmonk.com https://apps.evozi.com https://apk.support https://androidapksfree.com https://www.androidappsapk.com; do echo -n "  $u -> "; curl -s -o /dev/null -m 15 -w '%{http_code}' -A 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/120' "$u"; echo; done
+# t=1792552010380
+CMD> curl -s -m 30 -A 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/120' 'https://www.apkmirror.com/?s=com.minitech.miniworld' > /tmp/p.html; echo "size=$(stat -c%s /tmp/p.html)"; grep -oE 'href="/apk/[^"]+"' /tmp/p.html | sort -u | head -8; echo '--- 标题 ---'; grep -oE 'appRowTitle[^>]*>[^<]+' /tmp/p.html | head -5
