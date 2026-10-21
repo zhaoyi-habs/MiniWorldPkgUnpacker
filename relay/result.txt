@@ -7,3 +7,5 @@ No user sessions are running outdated binaries.
 
 No VM guests are running outdated hypervisor (qemu) binaries on this host.
 
+
+kvm: crw-rw---- 1 root kvm 10, 232 Oct 21 05:06 /dev/kvm
