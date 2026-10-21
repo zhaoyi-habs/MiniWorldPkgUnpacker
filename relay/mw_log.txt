@@ -22,3 +22,4 @@ CMD: tap 160 849
 CMD: shot
 CMD: ui
 CMD: start
+CMD: shot
