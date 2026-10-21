@@ -1,1 +1,1 @@
-shell /home/runner/android-sdk/platform-tools/adb shell uiautomator dump /sdcard/ui3.xml >/dev/null 2>&1; /home/runner/android-sdk/platform-tools/adb shell cat /sdcard/ui3.xml 2>/dev/null | tr '<' '\n' | grep 'CheckBox' | head -2
+tap 540 977
