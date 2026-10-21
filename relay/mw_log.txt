@@ -1,4 +1,3 @@
-CMD: shot
 CMD: shell /home/runner/android-sdk/platform-tools/adb shell getprop ro.product.cpu.abi; /home/runner/android-sdk/platform-tools/adb shell ping -c 2 -W 3 119.147.19.43 2>&1 | tail -3
 CMD: shell /home/runner/android-sdk/platform-tools/adb shell curl -s -m 12 -o /dev/null -w 'baidu=%{http_code}' https://www.baidu.com ; echo ; /home/runner/android-sdk/platform-tools/adb shell curl -s -m 12 -o /dev/null -w 'qq=%{http_code}' https://qq.com
 CMD: tap 540 977
@@ -78,3 +77,4 @@ CMD: shell /home/runner/android-sdk/platform-tools/adb shell uiautomator dump /s
 CMD: shot
 CMD: ui
 CMD: shell /home/runner/android-sdk/platform-tools/adb shell cmd connectivity airplane-mode enable 2>&1; /home/runner/android-sdk/platform-tools/adb shell settings put global airplane_mode_on 1 2>&1; echo done
+CMD: ui
