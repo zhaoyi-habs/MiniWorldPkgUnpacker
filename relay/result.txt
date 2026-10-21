@@ -1,3 +1,6 @@
-runner_online
-ip=57.151.91.162
+cmd=echo READY
+exit=0
 host=runnervmxehtw
+ip=57.151.91.162
+---
+READY
