@@ -1,3 +1,4 @@
 === probe ===
 size=1772758908 (1690.6MB)
 chunks=48 x 35MB, workers=24
+  [6/48] 755MB 44% | 59.37MB/s
