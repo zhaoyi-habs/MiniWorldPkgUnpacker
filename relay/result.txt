@@ -10,3 +10,4 @@
      A_https_imtt2 + android + ref2 -> 567:7351
      B_http_imtt2 + chrome + ref0 -> 302:0
      B_http_imtt2 + chrome + ref1 -> 200:985
+     B_http_imtt2 + chrome + ref2 -> 200:984
