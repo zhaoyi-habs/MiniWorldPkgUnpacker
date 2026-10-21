@@ -7,3 +7,4 @@ READY
 === 常驻监听 ===
 CMD: shot
 CMD: inst https://d.apkpure.com/b/APK/com.tencent.mobileqq?version=latest
+CMD: shell curl -sIL -m 30 -A 'Mozilla/5.0' 'https://d.apkpure.net/b/APK/com.tencent.mobileqq?version=latest' | grep -iE '^HTTP|^content-length|^location' | tail -4
