@@ -9,3 +9,4 @@
   booted 40s
   android: 11
   abilist: x86_64,x86,arm64-v8a,armeabi-v7a,armeabi
+  bridge: libndk_translation.so
