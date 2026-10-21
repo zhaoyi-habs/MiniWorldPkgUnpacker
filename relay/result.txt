@@ -35,3 +35,5 @@ mount 结果: ls: cannot access '/mnt/sys30': No such file or directory
 === 下载 APK ===
 apk=1772758908 in 298s
 === 安装 ===
+[-r -t] in 14s: Performing Streamed Install
+Success
