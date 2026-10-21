@@ -1,2 +1,1 @@
-OK|inst|size=5531|Performing Streamed Install
-adb: failed to install /home/runner/extra.apk: Failure [INSTALL_PARSE_FAILED_NOT_APK: Failed to parse /data/app/vmdl322421126.tmp/base.apk: Failed to load asset path /data/app/vmdl322421126.tmp/base.apk]
+WAIT|0
