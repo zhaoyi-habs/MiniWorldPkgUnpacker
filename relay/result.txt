@@ -22,3 +22,4 @@ Success
 --- 2分钟 ---
   proc: u0_a154        6153    303 27071312 2486084 0                 0 S com.tencent.tmgp.minitech.miniworld
   act: 
+  tomb: (无)
