@@ -1,7 +1,1 @@
-OK|shell|: 3
-10-21 11:29:31.930 32189 32189 I GoogleSDK: onBillingError errorCode:3, error:java.lang.Throwable: Google Play In-app Billing API version is less than 3
-10-21 11:31:39.620 32706 32706 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
-10-21 11:31:39.623 32706 32706 I AndroidRuntime: Using default boot image
-10-21 11:31:39.623 32706 32706 I AndroidRuntime: Leaving lock profiling enabled
-10-21 11:31:39.722 32706 32706 D AndroidRuntime: Calling main entry com.android.commands.uiautomator.Launcher
-10-21 11:31:40.765 32706 32706 D AndroidRuntime: Shutting down VM
+WAIT|0
