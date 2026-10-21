@@ -1,1 +1,1 @@
-OK|shell|net_on
+WAIT|0
