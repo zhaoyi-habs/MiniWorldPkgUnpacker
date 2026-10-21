@@ -1,1 +1,1 @@
-READY|0
+WAIT|0
