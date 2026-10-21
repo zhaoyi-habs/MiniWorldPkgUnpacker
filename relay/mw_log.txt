@@ -1,4 +1,3 @@
-CMD: ui
 CMD: shell for i in $(seq 1 20); do /home/runner/android-sdk/platform-tools/adb shell input keyevent 67; sleep 0.4; done
 CMD: ui
 CMD: tap 540 782
@@ -78,3 +77,4 @@ CMD: key KEYCODE_BACK
 CMD: shot
 CMD: ui
 CMD: tap 540 977
+CMD: ui
