@@ -7,3 +7,5 @@ CMD> curl -s -o /dev/null -w 'cloudflare=%{http_code}' -m 15 https://api.cloudfl
 CMD> echo FAST
 # t=1792550884
 CMD> echo FAST1
+# t=1792550888
+CMD> echo FAST2
