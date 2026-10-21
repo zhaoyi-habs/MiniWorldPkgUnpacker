@@ -1,4 +1,3 @@
-CMD: key KEYCODE_BACK
 CMD: ui
 CMD: tap 540 977
 CMD: ui
@@ -78,3 +77,4 @@ CMD: ui
 CMD: shot
 CMD: tap 960 1202
 CMD: ui
+CMD: shot
