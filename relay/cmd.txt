@@ -1,2 +1,2 @@
-# t=1792551836836
-CMD> df -h / | tail -1
+# t=1792551850482
+CMD> echo '=== 尝试官方源 ==='; curl -s -m 20 -A 'Mozilla/5.0' 'https://miniworld.cn/' -o /dev/null -w 'miniworld.cn: %{http_code}\n'; echo '=== APKMirror 搜索 ==='; curl -s -m 25 -A 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)' 'https://www.apkmirror.com/?s=mini+world' | grep -oE 'apkmonk|Mini World[^<]{0,40}' | head -5; echo '=== 尝试 APKPure ==='; curl -s -m 25 -A 'Mozilla/5.0' 'https://apkpure.com/search?q=mini%20world' -o /dev/null -w 'apkpure: %{http_code}\n'
