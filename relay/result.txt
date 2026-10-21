@@ -11,3 +11,4 @@
 Success
   已装: package:com.tencent.tmgp.minitech.miniworld
 === STEP5 启动游戏 ===
+=== STEP6 自动点击 + 截图（30轮×90秒）===
