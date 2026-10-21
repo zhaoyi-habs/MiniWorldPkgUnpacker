@@ -52,3 +52,4 @@ INFO         | Graphics backend: gfxstream
 ERROR        | Unknown AVD name [mw], use -list-avds to see valid list.
 ERROR        | HOME is defined but there is no file mw.ini in $HOME/.android/avd
 ERROR        | (Note: Directories are searched in the order $ANDROID_AVD_HOME, $ANDROID_SDK_HOME/avd and $HOME/.android/avd)
+qemu 进程: 0
