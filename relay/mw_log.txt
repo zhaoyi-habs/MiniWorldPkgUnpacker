@@ -10,3 +10,4 @@ CMD: shot
 CMD: ui
 CMD: tap 960 691
 CMD: ui
+CMD: shell /home/runner/android-sdk/platform-tools/adb shell pm list packages | grep -i -E 'qq|mobileqq'
