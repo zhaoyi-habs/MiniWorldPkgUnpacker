@@ -68,3 +68,4 @@ model: sdk_gphone64_x86_64
 android: 13
 === STEP 7: 下载 APK ===
 apk=1772758908 (1690.6MB) in 293s
+=== STEP 8: 安装 APK ===
