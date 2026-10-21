@@ -1,0 +1,118 @@
+name: Resident Relay
+
+on:
+  workflow_dispatch:
+    inputs:
+      minutes:
+        description: 'how long to stay resident'
+        required: false
+        default: '30'
+
+permissions:
+  contents: write
+
+jobs:
+  resident:
+    runs-on: ubuntu-latest
+    timeout-minutes: 340
+    steps:
+      - name: Run resident command loop
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+          MINUTES: ${{ github.event.inputs.minutes }}
+        run: |
+          mkdir -p relay
+          cat > relay/resident.py <<'PYEOF'
+          #!/usr/bin/env python3
+          """常驻命令循环：轮询 relay/cmd.txt，执行后写 relay/result.txt。
+          条件请求(If-None-Match)返回 304 不计入 GitHub API 限流。"""
+          import os, sys, json, time, base64, subprocess, urllib.request
+
+          TOKEN = os.environ.get("GH_TOKEN", "")
+          REPO = os.environ.get("GITHUB_REPOSITORY", "")
+          MINUTES = int(os.environ.get("MINUTES", "30"))
+          API = "https://api.github.com"
+
+
+          def api(path, method="GET", data=None, etag=None):
+              url = API + path
+              req = urllib.request.Request(url, method=method)
+              req.add_header("Authorization", "Bearer " + TOKEN)
+              req.add_header("User-Agent", "resident-relay")
+              req.add_header("Accept", "application/vnd.github+json")
+              if etag:
+                  req.add_header("If-None-Match", etag)
+              body = None
+              if data is not None:
+                  body = json.dumps(data).encode()
+                  req.add_header("Content-Type", "application/json")
+              try:
+                  with urllib.request.urlopen(req, body, timeout=20) as r:
+                      return r.status, json.loads(r.read().decode()), r.headers.get("ETag")
+              except urllib.error.HTTPError as e:
+                  if e.code == 304:
+                      return 304, None, etag
+                  if e.code == 200:
+                      return 200, json.loads(e.read().decode()), None
+                  return e.code, None, None
+              except Exception as e:
+                  return -1, None, None
+
+
+          def read_file(path, etag=None):
+              st, d, et = api(f"/repos/{REPO}/contents/{path}", etag=etag)
+              if st == 200 and d and "content" in d:
+                  return base64.b64decode(d["content"]).decode("utf-8", "replace"), et
+              return None, et
+
+
+          def write_file(path, content, msg="update"):
+              b64 = base64.b64encode(content.encode()).decode()
+              st, d, _ = api(f"/repos/{REPO}/contents/{path}")
+              sha = d.get("sha") if d else None
+              payload = {"message": msg, "content": b64}
+              if sha:
+                  payload["sha"] = sha
+              st2, d2, _ = api(f"/repos/{REPO}/contents/{path}", "PUT", payload)
+              return st2 in (200, 201)
+
+
+          def main():
+              if not TOKEN or not REPO:
+                  print("need GH_TOKEN and GITHUB_REPOSITORY"); return 1
+              try:
+                  ip = subprocess.run(["curl", "-s", "-m", "8", "https://ifconfig.me"],
+                                      capture_output=True, text=True).stdout.strip()
+              except Exception:
+                  ip = "?"
+              write_file("relay/result.txt", f"runner_online\nip={ip}\nhost={os.uname().nodename}\n")
+              print(f"resident online ip={ip}", flush=True)
+
+              etag, last = None, ""
+              end = time.time() + MINUTES * 60
+              print(f"loop for {MINUTES} min", flush=True)
+              while time.time() < end:
+                  txt, etag = read_file("relay/cmd.txt", etag)
+                  if txt:
+                      cur = ""
+                      for line in txt.splitlines():
+                          if line.strip().upper().startswith("CMD>"):
+                              cur = line.split(">", 1)[1].strip()
+                      if cur and cur != last:
+                          last = cur
+                          print(f"[{time.strftime('%H:%M:%S')}] exec: {cur}", flush=True)
+                          p = subprocess.run(cur, shell=True, capture_output=True, text=True, timeout=120)
+                          out = ((p.stdout or "") + (p.stderr or ""))[:3000]
+                          res = f"cmd={cur}\nexit={p.returncode}\nhost={os.uname().nodename}\nip={ip}\n---\n{out}"
+                          write_file("relay/result.txt", res, "result")
+                          print(f"[{time.strftime('%H:%M:%S')}] result written", flush=True)
+                  time.sleep(3)
+              print("loop finished", flush=True)
+              return 0
+
+
+          if __name__ == "__main__":
+              sys.exit(main())
+          PYEOF
+          python3 relay/resident.py
