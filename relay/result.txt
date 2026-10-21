@@ -19,3 +19,4 @@ Success
   已装: package:com.tencent.tmgp.minitech.miniworld
 === STEP5 启动游戏 ===
 === STEP6 游玩监控（每2.5分钟，共40分钟）===
+--- 2分钟 ---
