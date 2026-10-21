@@ -8,3 +8,4 @@ bin
 cmdline-tools
 lib
 source.properties
+sdkmanager: True
