@@ -65,3 +65,4 @@ CMD: ui
 CMD: key KEYCODE_BACK
 CMD: shot
 CMD: ui
+CMD: tap 520 796
