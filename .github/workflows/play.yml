@@ -1,0 +1,164 @@
+name: Play
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  p:
+    runs-on: ubuntu-latest
+    timeout-minutes: 340
+    steps:
+      - name: Cache SDK
+        uses: actions/cache@v4
+        with:
+          path: /home/runner/android-sdk
+          key: android-sdk-v2
+      - name: Cache AVD
+        uses: actions/cache@v4
+        with:
+          path: /home/runner/.android/avd
+          key: android-avd-v7
+      - name: Cache APK
+        uses: actions/cache@v4
+        with:
+          path: /home/runner/mw.apk
+          key: mw-apk-v1
+      - name: Play
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+        run: |
+          mkdir -p relay
+          cat > relay/play.py <<'PYEOF'
+          #!/usr/bin/env python3
+          """长时间等待游戏加载 + logcat 诊断 + 多次截图"""
+          import os, sys, json, time, base64, subprocess, urllib.request
+
+          TOKEN=os.environ.get("GH_TOKEN",""); REPO=os.environ.get("GITHUB_REPOSITORY","")
+          HOME=os.path.expanduser("~"); SDK=f"{HOME}/android-sdk"
+          PKG="com.tencent.tmgp.minitech.miniworld"
+          adb=f"{SDK}/platform-tools/adb"; emu=f"{SDK}/emulator/emulator"
+
+          def rep(m):
+              try:
+                  path=f"/repos/{REPO}/contents/relay/result.txt"
+                  req=urllib.request.Request("https://api.github.com"+path)
+                  req.add_header("Authorization","Bearer "+TOKEN); req.add_header("User-Agent","r")
+                  sha=None
+                  try:
+                      with urllib.request.urlopen(req,timeout=30) as r: sha=json.loads(r.read().decode()).get("sha")
+                  except Exception: pass
+                  p={"message":"play","content":base64.b64encode(m.encode()).decode()}
+                  if sha: p["sha"]=sha
+                  r2=urllib.request.Request("https://api.github.com"+path,method="PUT")
+                  r2.add_header("Authorization","Bearer "+TOKEN); r2.add_header("User-Agent","r")
+                  r2.add_header("Content-Type","application/json")
+                  urllib.request.urlopen(r2,json.dumps(p).encode(),timeout=90).read()
+              except Exception as e: print("rep",e)
+          def sh(c,t=600):
+              try:
+                  r=subprocess.run(c,shell=True,capture_output=True,text=True,timeout=t)
+                  return (r.stdout or "")+"\n"+(r.stderr or "")
+              except subprocess.TimeoutExpired: return "TIMEOUT"
+          out=[]
+          def log(s): out.append(s); print(s,flush=True); rep("\n".join(out))
+          def put(path,b64,msg="x"):
+              req=urllib.request.Request(f"https://api.github.com/repos/{REPO}/contents/{path}")
+              req.add_header("Authorization","Bearer "+TOKEN); req.add_header("User-Agent","r")
+              sha=None
+              try:
+                  with urllib.request.urlopen(req,timeout=30) as r: sha=json.loads(r.read().decode()).get("sha")
+              except Exception: pass
+              p={"message":msg,"content":b64}
+              if sha: p["sha"]=sha
+              r2=urllib.request.Request(f"https://api.github.com/repos/{REPO}/contents/{path}",method="PUT")
+              r2.add_header("Authorization","Bearer "+TOKEN); r2.add_header("User-Agent","r")
+              r2.add_header("Content-Type","application/json")
+              try: urllib.request.urlopen(r2,json.dumps(p).encode(),timeout=120).read(); return True
+              except Exception: return False
+
+          # 启动模拟器（含 KVM 修复）
+          log("=== 启动模拟器 ===")
+          sh("sudo chmod 666 /dev/kvm 2>&1 || true",60)
+          avd="mw30"
+          if not os.path.exists(f"{HOME}/.android/avd/{avd}"): avd="mw33"
+          sh(f"pkill -f qemu-system; sleep 3",60)
+          sh(f"nohup {emu} -avd {avd} -no-window -no-audio -no-boot-anim -gpu swiftshader_indirect "
+             f"-no-snapshot -memory 4096 -cores 4 -partition-size 8192 -qemu -enable-kvm "
+             f"> {HOME}/play.log 2>&1 &",60)
+          ok=False
+          for i in range(40):
+              time.sleep(20)
+              if sh(f"{adb} shell getprop sys.boot_completed 2>&1|tr -d '\\r\\n'",60).strip()=="1":
+                  ok=True; log(f"booted {20*(i+1)}s"); break
+          if not ok:
+              log("BOOT FAIL"); sys.exit(1)
+
+          log("android: "+sh(f"{adb} shell getprop ro.build.version.release",60).strip())
+          log("abilist: "+sh(f"{adb} shell getprop ro.product.cpu.abilist",60).strip())
+          log("已装: "+sh(f"{adb} shell pm list packages|grep -i mini",90).strip())
+
+          # 启动游戏
+          log("=== 启动游戏 ===")
+          sh(f"{adb} shell am force-stop {PKG} 2>&1",90)
+          sh(f"{adb} shell am start -n {PKG}/com.minitech.miniworld.StartupActivity 2>&1|tail -3",180)
+          time.sleep(10)
+
+          # 清 logcat
+          sh(f"{adb} logcat -c 2>&1",60)
+
+          log("=== 长时间等待 + 截图（每 3 分钟，共 30 分钟）===")
+          sh("pip install -q pillow 2>&1|tail -1",300)
+          prev=None
+          for k in range(10):
+              time.sleep(180)
+              # 进程状态
+              ps=sh(f"{adb} shell ps -A 2>/dev/null|grep -i minitech|head -3",90).strip()
+              focus=sh(f"{adb} shell dumpsys activity activities 2>/dev/null|grep -m1 topResumedActivity",90).strip()
+              # 内存/CPU
+              mem=sh(f"{adb} shell dumpsys meminfo {PKG} 2>/dev/null|head -5",120).strip()
+              log(f"--- 第{k+1}次 ({(k+1)*3}分钟) ---")
+              log("  proc: "+(ps[:200] or "(无进程)"))
+              log("  focus: "+focus[-90:])
+              log("  mem: "+mem[:200].replace("\n"," | "))
+              # 截图
+              png=f"{HOME}/p{k}.png"
+              sh(f"{adb} exec-out screencap -p > {png}",150)
+              if os.path.exists(png) and os.path.getsize(png)>1000:
+                  raw=open(png,'rb').read()
+                  try:
+                      from PIL import Image; import io, collections
+                      im=Image.open(png).convert("RGB")
+                      c=collections.Counter(im.getdata())
+                      top=c.most_common(2)
+                      uniq=len(c)
+                      # 与上一张比变化
+                      chg=""
+                      if prev is not None:
+                          d=sum(1 for p,q in zip(im.getdata(),prev.getdata()) if p!=q)
+                          chg=" 变化%.2f%%"%(d*100/(im.size[0]*im.size[1]))
+                      log(f"  shot: {len(raw)}B 唯一色={uniq} 主色={top[0][0]}{chg}")
+                      prev=im
+                      w,h=im.size
+                      if w>720: im=im.resize((720,int(h*720/w)))
+                      b=io.BytesIO(); im.save(b,"PNG",optimize=True); raw=b.getvalue()
+                  except Exception as e: log("  PIL: "+str(e)[:80])
+                  b64=base64.b64encode(raw).decode()
+                  CH=300000; n=(len(b64)+CH-1)//CH
+                  for i in range(min(n,12)):
+                      put(f"relay/p{k}_{i}.b64", b64[i*CH:(i+1)*CH], f"p{k}_{i}")
+                  put(f"relay/p{k}_meta.json", base64.b64encode(json.dumps({"chunks":n}).encode()).decode(), f"p{k}_meta")
+                  log(f"  回传 {min(n,12)} 片")
+              # 尝试点击（跳过可能的弹窗/开始按钮）
+              sh(f"{adb} shell input tap 540 1200 2>&1",60)
+              sh(f"{adb} shell input tap 540 960 2>&1",60)
+
+          log("=== logcat 关键错误 ===")
+          lc=sh(f"{adb} logcat -d -t 3000 2>/dev/null|grep -iE '{PKG}|minitech|unity|error|fatal|crash' | head -40",180)
+          log(lc.strip()[:2500] or "(无)")
+          log("DONE")
+          PYEOF
+          python3 relay/play.py
