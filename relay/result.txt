@@ -20,3 +20,18 @@ bin
 lib
 source.properties
 === STEP 3: 安装 SDK 组件 ===
+====================      ] 85% Unzipping... platform-tools/adb   
+[==================================     ] 85% Unzipping... platform-tools/adb   
+[==================================     ] 86% Unzipping... platform-tools/adb   
+[==================================     ] 86% Unzipping... platform-tools/etc1to
+[==================================     ] 86% Unzipping... platform-tools/fastbo
+[==================================     ] 87% Unzipping... platform-tools/fastbo
+[==================================     ] 87% Unzipping... platform-tools/hprof-
+[==================================     ] 87% Unzipping... platform-tools/lib64/
+[==================================     ] 87% Unzipping... platform-tools/make_f
+[==================================     ] 87% Unzipping... platform-tools/mke2fs
+[===================================    ] 88% Unzipping... platform-tools/mke2fs
+[===================================    ] 88% Unzipping... platform-tools/source
+[===================================    ] 88% Unzipping... platform-tools/sqlite
+[===================================    ] 89% Unzipping... platform-tools/sqlite
+[=======================================] 100% Unzipping... platform-tools/sqlit
