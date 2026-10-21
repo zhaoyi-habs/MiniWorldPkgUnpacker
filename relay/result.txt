@@ -13,3 +13,4 @@ nzipping... platform-tools/lib64/
 emulator: True
 adb: True
 sysimages: android-30
+API30 sysdir: /home/runner/android-sdk/system-images/android-30/google_apis_playstore/x86_64/
