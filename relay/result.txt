@@ -1,2 +1,3 @@
 === 启动模拟器 ===
 booted 40s
+android 11
