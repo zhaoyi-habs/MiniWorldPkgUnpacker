@@ -223,6 +223,15 @@ jobs:
                                   rep(RES, f"OK|click|{it['t']}@{it['x']},{it['y']}")
                                   break
                           else: rep(RES, f"MISS|click|{want}")
+                      elif op=="shell":
+                          r=sh(" ".join(parts[1:]),180)
+                          rep(RES,"OK|shell|"+r.strip()[-600:])
+                      elif op=="inst" and len(parts)>=2:
+                          url=parts[1]; apk=f"{HOME}/extra.apk"
+                          d=sh(f"curl -sL -m 900 -A 'Mozilla/5.0' -o {apk} '{url}'",900)
+                          sz=os.path.getsize(apk) if os.path.exists(apk) else 0
+                          r=sh(f"{adb} install -r -t {apk} 2>&1|tail -3",1800)
+                          rep(RES,f"OK|inst|size={sz}|"+r.strip()[-300:])
                       else:
                           rep(RES,"ERR|unknown")
                   time.sleep(0.25)
