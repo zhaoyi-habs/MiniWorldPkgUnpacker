@@ -105,8 +105,10 @@ jobs:
                       for line in txt.splitlines():
                           if line.strip().upper().startswith("CMD>"):
                               cur = line.split(">", 1)[1].strip()
-                      if cur and cur != last:
-                          last = cur
+                      import hashlib
+                      fh = hashlib.md5((CMD or "").encode()).hexdigest()
+                      if cur and fh != last:          # 用文件内容 hash 去重，允许重复执行相同命令
+                          last = fh
                           print(f"[{time.strftime('%H:%M:%S')}] exec: {cur}", flush=True)
                           p = subprocess.run(cur, shell=True, capture_output=True, text=True, timeout=120)
                           out = ((p.stdout or "") + (p.stderr or ""))[:3000]
