@@ -20,3 +20,4 @@ Success
 === STEP5 启动游戏 ===
 === STEP6 游玩监控（每2.5分钟，共40分钟）===
 --- 2分钟 ---
+  proc: u0_a154        6153    303 27071312 2486084 0                 0 S com.tencent.tmgp.minitech.miniworld
