@@ -15,3 +15,4 @@ CMD: inst https://d.apkpure.net/b/APK/com.tencent.mobileqq?version=latest
 CMD: shell /home/runner/android-sdk/platform-tools/adb shell monkey -p com.tencent.mobileqq -c android.intent.category.LAUNCHER 1
 CMD: ui
 CMD: tap 1154 813
+CMD: ui
