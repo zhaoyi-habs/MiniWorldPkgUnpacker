@@ -1,2 +1,1 @@
-OK|shell|/system/bin/sh: curl: inaccessible or not found
-/system/bin/sh: curl: inaccessible or not found
+WAIT|0
