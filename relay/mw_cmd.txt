@@ -1,1 +1,1 @@
-inst https://d.apkpure.net/b/APK/com.playmini.miniworld?version=latest
+shell /home/runner/android-sdk/platform-tools/adb shell monkey -p com.playmini.miniworld -c android.intent.category.LAUNCHER 1 2>&1|tail -2
