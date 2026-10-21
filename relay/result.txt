@@ -34,3 +34,4 @@ mount 结果: ls: cannot access '/mnt/sys30': No such file or directory
 镜像内 houdini 文件: (无)
 === 下载 APK ===
 apk=1772758908 in 298s
+=== 安装 ===
