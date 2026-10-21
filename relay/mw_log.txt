@@ -27,3 +27,4 @@ CMD: shell $ANDROID_SDK_ROOT/platform-tools/adb shell pm list packages | grep -i
 CMD: shell $ANDROID_SDK_ROOT/platform-tools/adb shell monkey -p com.tencent.mobileqq -c android.intent.category.LAUNCHER 1
 CMD: shot
 CMD: ui
+CMD: tap 1154 813
