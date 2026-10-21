@@ -5,3 +5,4 @@
      A_https_imtt2 + qqdown + ref0 -> 567:7352
      A_https_imtt2 + qqdown + ref1 -> 567:7351
      A_https_imtt2 + qqdown + ref2 -> 567:7352
+     A_https_imtt2 + android + ref0 -> 567:7352
