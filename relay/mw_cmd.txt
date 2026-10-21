@@ -1,1 +1,1 @@
-shell /home/runner/android-sdk/platform-tools/adb shell curl -s -m 12 -o /dev/null -w 'baidu=%{http_code}' https://www.baidu.com ; echo ; /home/runner/android-sdk/platform-tools/adb shell curl -s -m 12 -o /dev/null -w 'qq=%{http_code}' https://qq.com
+tap 540 977
