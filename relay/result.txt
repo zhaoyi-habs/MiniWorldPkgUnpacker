@@ -1,11 +1,6 @@
-cmd=curl -s -o /dev/null -w 'cloudflare=%{http_code}' -m 15 https://api.cloudflare.com/cdn-cgi/trace; echo; curl -s -m 15 https://1.1.1.1/cdn-cgi/trace | head -5
+cmd=echo FAST
 exit=0
 host=runnervmxehtw
 ip=57.151.91.162
 ---
-cloudflare=200
-fl=1025f113
-h=1.1.1.1
-ip=57.151.91.162
-ts=1792550278.000
-visit_scheme=https
+FAST
