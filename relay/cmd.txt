@@ -1,2 +1,13 @@
-# t=1792552010380
-CMD> curl -s -m 30 -A 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/120' 'https://www.apkmirror.com/?s=com.minitech.miniworld' > /tmp/p.html; echo "size=$(stat -c%s /tmp/p.html)"; grep -oE 'href="/apk/[^"]+"' /tmp/p.html | sort -u | head -8; echo '--- 标题 ---'; grep -oE 'appRowTitle[^>]*>[^<]+' /tmp/p.html | head -5
+# t=1792552049177
+CMD> 
+echo '=== A. 应用宝(跟随重定向) ==='
+curl -sL -m 25 -A 'Mozilla/5.0 (iPhone; CPU iPhone OS 14_0)' 'https://sj.qq.com/myapp/detail.htm?apkName=com.minitech.miniworld' -o /tmp/a.html -w 'status=%{http_code} size=%{size_download}\n'
+grep -oE '"versionName":"[^"]*"|apkName[^,]{0,40}' /tmp/a.html 2>/dev/null | head -3
+echo '=== B. evozi(Google Play) ==='
+curl -s -m 30 -A 'Mozilla/5.0' 'https://apps.evozi.com/downloader?package=com.minitech.miniworld&fetch=true' -o /tmp/e.json -w 'status=%{http_code} size=%{size_download}\n'
+head -c 400 /tmp/e.json 2>/dev/null
+echo
+echo '=== C. APKMirror 国内版专区 ==='
+curl -s -m 30 -A 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/120' 'https://www.apkmirror.com/apk/mini-world/' -o /tmp/m.html -w 'status=%{http_code} size=%{size_download}\n'
+grep -oE 'href="/apk/[^"]*mini-world[^"]*"' /tmp/m.html 2>/dev/null | sort -u | head -5
+
