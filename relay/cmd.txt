@@ -1,2 +1,2 @@
-# t=1792551969438
-CMD> echo '=== 应用宝搜索 ==='; curl -s -m 25 -A 'Mozilla/5.0' 'https://sj.qq.com/myapp/searchAjax.htm?kw=%E8%BF%B7%E4%BD%A0%E4%B8%96%E7%95%8C&pns=&sid=' | head -c 1200; echo; echo '=== 小米商店 ==='; curl -s -m 25 -A 'Mozilla/5.0' 'https://app.mi.com/details?id=com.minitech.miniworld' -o /dev/null -w 'status=%{http_code}\n'
+# t=1792551981625
+CMD> echo '=== 小米商店搜索API ==='; curl -s -m 25 -A 'Mozilla/5.0' 'https://app.mi.com/searchAll?keywords=%E8%BF%B7%E4%BD%A0%E4%B8%96%E7%95%8C&type=app' | head -c 900; echo; echo '=== 应用宝详情API ==='; curl -s -m 25 -A 'Mozilla/5.0' 'https://sj.qq.com/myapp/detail.htm?apkName=com.minitech.miniworld' -o /tmp/qq.html -w 'status=%{http_code} size=%{size_download}\n'; grep -oE 'versionName[^,]{0,30}|[0-9]+\.[0-9]+\.[0-9]+' /tmp/qq.html 2>/dev/null | head -8
