@@ -1,1 +1,1 @@
-key KEYCODE_BACK
+shot
