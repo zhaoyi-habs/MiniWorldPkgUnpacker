@@ -1,13 +1,2 @@
-size=1772758908
-  12/48 45%
-  24/48 66%
-  36/48 93%
-  48/48 100%
-dl 48/48 in 0.5min
-merged=1772758908 match=True
-zip OK 5631
-=== gh upload ===
-rc=0 in 1.2min
-stdout: 
-stderr: 
-TOTAL 1.8min
+=== 下载前 80MB 用于解析 ===
+head=83886080
