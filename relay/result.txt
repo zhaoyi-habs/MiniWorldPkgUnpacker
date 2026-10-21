@@ -43,3 +43,4 @@ More info on configuring VM acceleration on Linux:
 https://developer.android.com/studio/run/emulator-acceleration#vm-linux
 General information on acceleration: https://developer.android.com/studio/run/emulator-acceleration.
 === 回退 API33 ===
+API33 sysdir: /home/runner/android-sdk/system-images/android-33/google_apis_playstore/x86_64/
