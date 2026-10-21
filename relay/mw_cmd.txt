@@ -1,1 +1,1 @@
-tap 540 782
+shell /home/runner/android-sdk/platform-tools/adb shell input keyevent 113; /home/runner/android-sdk/platform-tools/adb shell input keyevent 29; /home/runner/android-sdk/platform-tools/adb shell input keyevent 67
