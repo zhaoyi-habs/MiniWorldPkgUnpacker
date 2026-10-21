@@ -71,3 +71,4 @@ CMD: ui
 CMD: shot
 CMD: tap 192 1100
 CMD: shot
+CMD: shell /home/runner/android-sdk/platform-tools/adb shell am force-stop com.tencent.mobileqq
