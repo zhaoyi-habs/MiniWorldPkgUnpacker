@@ -1,4 +1,3 @@
-CMD: shot
 CMD: tap 418 1663
 CMD: ui
 CMD: shell /home/runner/android-sdk/platform-tools/adb shell am force-stop com.tencent.mobileqq
@@ -78,3 +77,4 @@ CMD: shot
 CMD: shell /home/runner/android-sdk/platform-tools/adb shell input touchscreen swipe 827 481 1500 481 800
 CMD: shot
 CMD: tap 850 400
+CMD: shot
