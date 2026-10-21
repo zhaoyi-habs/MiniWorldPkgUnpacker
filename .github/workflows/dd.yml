@@ -1,0 +1,87 @@
+name: DD
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  dd:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - name: Diag download
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+        run: |
+          mkdir -p relay
+          cat > relay/dd.py <<'PYEOF'
+          #!/usr/bin/env python3
+          """诊断：找出能高速下载的组合"""
+          import os, subprocess, time, base64, json, urllib.request
+
+          TOKEN = os.environ.get("GH_TOKEN", "")
+          REPO = os.environ.get("GITHUB_REPOSITORY", "")
+          URLS = {
+            "A_https_imtt2": "https://imtt2.dd.qq.com/sjy.00009/sjy.00002/16891/apk/0F94B1CB324EE4F471C95BA1127CE377.apk?fsname=com.tencent.tmgp.minitech.miniworld_80640.apk",
+            "B_http_imtt2":  "http://imtt2.dd.qq.com/sjy.00009/sjy.00002/16891/apk/0F94B1CB324EE4F471C95BA1127CE377.apk?fsname=com.tencent.tmgp.minitech.miniworld_80640.apk",
+            "C_dd_myapp":    "https://imtt.dd.qq.com/sjy.00009/sjy.00002/16891/apk/0F94B1CB324EE4F471C95BA1127CE377.apk?fsname=com.tencent.tmgp.minitech.miniworld_80640.apk",
+          }
+          UAS = {
+            "chrome": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+            "qqdown": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) QQDownload/9.2.9",
+            "android": "Dalvik/2.1.0 (Linux; U; Android 12; SM-G991B Build/SP1A.210812.016)",
+          }
+          REFS = ["", "http://sj.qq.com/", "https://sj.qq.com/myapp/"]
+
+          def report(msg):
+              try:
+                  path = f"/repos/{REPO}/contents/relay/result.txt"
+                  req = urllib.request.Request("https://api.github.com" + path)
+                  req.add_header("Authorization", "Bearer " + TOKEN); req.add_header("User-Agent", "r")
+                  sha = None
+                  try:
+                      with urllib.request.urlopen(req, timeout=30) as r:
+                          sha = json.loads(r.read().decode()).get("sha")
+                  except Exception: pass
+                  p = {"message": "dd", "content": base64.b64encode(msg.encode()).decode()}
+                  if sha: p["sha"] = sha
+                  req2 = urllib.request.Request("https://api.github.com" + path, method="PUT")
+                  req2.add_header("Authorization", "Bearer " + TOKEN); req2.add_header("User-Agent", "r")
+                  req2.add_header("Content-Type", "application/json")
+                  urllib.request.urlopen(req2, json.dumps(p).encode(), timeout=60).read()
+              except Exception as e: print("rep fail", e)
+
+          out = []
+          out.append("=== Range 支持矩阵 (目标: HTTP 206 + 完整字节) ===")
+          report("\n".join(out))
+          best = None
+          for un, u in URLS.items():
+              for uan, ua in UAS.items():
+                  for ri, ref in enumerate(REFS):
+                      cmd = ["curl","-s","-m","25","-A",ua,"-r","0-1048575","-o","/tmp/x",
+                             "-w","%{http_code}:%{size_download}"]
+                      if ref: cmd += ["-H","Referer: "+ref]
+                      cmd.append(u)
+                      try:
+                          r = subprocess.run(cmd, capture_output=True, text=True, timeout=40)
+                          res = (r.stdout or "").strip()
+                      except Exception as e:
+                          res = "TIMEOUT"
+                      got = 0
+                      try: got = int(res.split(":")[1])
+                      except Exception: pass
+                      code = res.split(":")[0]
+                      ok = "✅" if code == "206" and got >= 1048000 else "  "
+                      line = f"  {ok} {un} + {uan} + ref{ri} -> {res}"
+                      out.append(line)
+                      if ok.strip():
+                          if best is None: best = (u, ua, ref)
+                      report("\n".join(out))
+          out.append("BEST=" + str(best)[:200])
+          report("\n".join(out))
+          print("\n".join(out))
+          PYEOF
+          python3 relay/dd.py
