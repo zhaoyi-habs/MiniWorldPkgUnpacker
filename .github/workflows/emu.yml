@@ -11,6 +11,16 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 340
     steps:
+      - name: Cache SDK
+        uses: actions/cache@v4
+        with:
+          path: /home/runner/android-sdk
+          key: android-sdk-v1
+      - name: Cache AVD
+        uses: actions/cache@v4
+        with:
+          path: /home/runner/.android/avd
+          key: android-avd-v1
       - name: Run emulator
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -107,11 +117,17 @@ jobs:
           log("=== STEP 4: 创建 AVD ===")
           avdm=f"{SDK}/cmdline-tools/latest/bin/avdmanager"
           sh(f"mkdir -p {HOME}/.android/avd")
-          r=sh(f"echo no | {avdm} create avd -n {AVD_NAME} -k '{IMG}' -d 'pixel_2' --force 2>&1 | tail -5",600)
-          log(r.strip()[-600:])
+          r=sh(f"printf 'no\\n' | {avdm} create avd -n {AVD_NAME} -k '{IMG}' --force 2>&1 | tail -8",600)
+          log(r.strip()[-800:])
+          log("avd list: "+sh(f"{SDK}/emulator/emulator -list-avds 2>&1 | head -3").strip())
           # 调大数据分区（APK 1.65GB + 数据）
-          cfg=f"{HOME}/.android/avd/{AVD_NAME}.avd/config.ini"
+          cfg=None
+          for cand in (f"{HOME}/.android/avd/{AVD_NAME}.avd/config.ini",
+                       f"{HOME}/.android/avd/{AVD_NAME}/config.ini"):
+              if os.path.exists(cand): cfg=cand; break
+          log("config.ini 路径: "+str(cfg))
           try:
+              if not cfg: raise FileNotFoundError("no config.ini")
               c=open(cfg).read()
               c=c.replace("disk.dataPartition.size = 800M","disk.dataPartition.size = 12G")
               if "disk.dataPartition.size" not in c: c+="\ndisk.dataPartition.size = 12G\n"
@@ -128,6 +144,9 @@ jobs:
                f"-partition-size 8192 -qemu -enable-kvm > {HOME}/emu.log 2>&1 &")
           sh(cmd,60)
           log("已发起启动")
+          time.sleep(30)
+          log("emu.log 尾部: "+sh(f"tail -20 {HOME}/emu.log 2>&1").strip()[-1000:])
+          log("qemu 进程: "+sh("ps aux | grep -c '[q]emu-system'").strip())
 
           adb=f"{SDK}/platform-tools/adb"
           # 等待 boot
@@ -182,6 +201,9 @@ jobs:
           sh(f"{adb} shell am start -n {PKG}/.MainActivity 2>&1 | tail -3",120)
           sh(f"{adb} shell monkey -p {PKG} -c android.intent.category.LAUNCHER 1 2>&1 | tail -3",120)
           log("已发起启动")
+          time.sleep(30)
+          log("emu.log 尾部: "+sh(f"tail -20 {HOME}/emu.log 2>&1").strip()[-1000:])
+          log("qemu 进程: "+sh("ps aux | grep -c '[q]emu-system'").strip())
 
           log("=== STEP 10: 截图回传 ===")
           def shrink(b64):
