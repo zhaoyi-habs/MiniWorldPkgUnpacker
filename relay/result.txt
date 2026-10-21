@@ -12,3 +12,5 @@
   bridge: libndk_translation.so
 === STEP4 安装 ===
   已装: (无)
+  install: Performing Streamed Install
+Success
