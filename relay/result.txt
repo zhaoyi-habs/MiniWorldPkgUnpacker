@@ -6,3 +6,4 @@
 === STEP2 AVD（软件GPU: ANGLE+Vulkan/SwiftShader, 8GB RAM）===
   config 已写
 === STEP3 启动 ===
+  /dev/kvm: crw-rw-rw- 1 root kvm 10, 232 Oct 21 07:44 /dev/kvm
