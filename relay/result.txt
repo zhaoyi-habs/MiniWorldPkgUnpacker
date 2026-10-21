@@ -14,3 +14,5 @@
   GLES 版本: 196609
   bridge: libndk_translation.so
 === STEP4 安装 ===
+  install: Performing Streamed Install
+Success
