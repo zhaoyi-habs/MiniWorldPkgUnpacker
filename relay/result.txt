@@ -1,13 +1,6 @@
-cmd=echo '=== 尝试官方源 ==='; curl -s -m 20 -A 'Mozilla/5.0' 'https://miniworld.cn/' -o /dev/null -w 'miniworld.cn: %{http_code}\n'; echo '=== APKMirror 搜索 ==='; curl -s -m 25 -A 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)' 'https://www.apkmirror.com/?s=mini+world' | grep -oE 'apkmonk|Mini World[^<]{0,40}' | head -5; echo '=== 尝试 APKPure ==='; curl -s -m 25 -A 'Mozilla/5.0' 'https://apkpure.com/search?q=mini%20world' -o /dev/null -w 'apkpure: %{http_code}\n'
+cmd=curl -s -m 30 -A 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/120' 'https://www.apkmirror.com/?s=mini+world' | grep -oE 'href="https://www.apkmirror.com/apk/[^"]*mini-world[^"]*"' | head -5; echo '=== 搜索国内版 ==='; curl -s -m 30 -A 'Mozilla/5.0' 'https://www.apkmirror.com/?s=%E8%BF%B7%E4%BD%A0%E4%B8%96%E7%95%8C' | grep -oE 'href="https://www.apkmirror.com/apk/[^"]*"' | head -3
 exit=0
 host=runnervmxehtw
-ip=57.151.91.162
+ip=20.169.98.150
 ---
-=== 尝试官方源 ===
-miniworld.cn: 000
-=== APKMirror 搜索 ===
-Mini World: CREATA 1.7.15"  src="/wp-content/theme
-Mini World: CREATA 1.7.15" class="appRowTitle wrap
-Mini World: CREATA 1.7.15
-=== 尝试 APKPure ===
-apkpure: 403
+=== 搜索国内版 ===
