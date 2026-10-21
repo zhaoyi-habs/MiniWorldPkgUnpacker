@@ -20,3 +20,4 @@ m-tools/make_f
 sysdir: /home/runner/android-sdk/system-images/android-30/google_apis_playstore/x86_64/
 avds: mw30
 === STEP 3: 启动 ===
+  wait 20s: '* daemon started successfullyadb: no devices/emulators found'
