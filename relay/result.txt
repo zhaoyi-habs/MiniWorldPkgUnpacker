@@ -59,3 +59,4 @@ qemu 进程: 0
   wait 3 (80s): boot_completed='adb: no devices/emulators found' devices=List of devices attached
   wait 4 (100s): boot_completed='adb: no devices/emulators found' devices=List of devices attached
   wait 5 (120s): boot_completed='adb: no devices/emulators found' devices=List of devices attached
+  wait 6 (140s): boot_completed='adb: no devices/emulators found' devices=List of devices attached
