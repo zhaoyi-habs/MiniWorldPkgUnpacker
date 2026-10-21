@@ -26,3 +26,4 @@ Success
   shot: 色数=1512 主色=(99, 99, 99)
   回传1片
 --- 5分钟 ---
+  proc: u0_a154        6153    303 27071312 2486276 0                 0 S com.tencent.tmgp.minitech.miniworld
