@@ -1,16 +1,1 @@
-OK|shell|bash arg: -p
-  bash arg: com.tencent.mobileqq
-  bash arg: -c
-  bash arg: android.intent.category.LAUNCHER
-  bash arg: 1
-Events injected: 1
-## Network stats: elapsed time=61ms (0ms mobile, 0ms wifi, 61ms not connected)
-
-args: [-p, com.tencent.mobileqq, -c, android.intent.category.LAUNCHER, 1]
- arg: "-p"
- arg: "com.tencent.mobileqq"
- arg: "-c"
- arg: "android.intent.category.LAUNCHER"
- arg: "1"
-data="com.tencent.mobileqq"
-data="android.intent.category.LAUNCHER"
+WAIT|0
