@@ -1,1 +1,1 @@
-shell /home/runner/android-sdk/platform-tools/adb shell cmd connectivity airplane-mode disable 2>&1; /home/runner/android-sdk/platform-tools/adb shell settings put global airplane_mode_on 0 2>&1; echo net_on
+inst https://d.apkpure.net/b/APK/com.playmini.miniworld?version=latest
