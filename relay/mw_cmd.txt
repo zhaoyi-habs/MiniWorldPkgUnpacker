@@ -1,1 +1,1 @@
-inst https://d.apkpure.net/b/APK/com.tencent.mobileqq?version=latest
+shell /home/runner/android-sdk/platform-tools/adb shell monkey -p com.tencent.mobileqq -c android.intent.category.LAUNCHER 1
