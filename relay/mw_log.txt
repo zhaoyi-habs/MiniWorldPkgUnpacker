@@ -75,3 +75,4 @@ CMD: shell /home/runner/android-sdk/platform-tools/adb shell am force-stop com.t
 CMD: shell /home/runner/android-sdk/platform-tools/adb shell monkey -p com.tencent.mobileqq -c android.intent.category.LAUNCHER 1
 CMD: tap 792 1546
 CMD: tap 177 1678
+CMD: tap 540 572
