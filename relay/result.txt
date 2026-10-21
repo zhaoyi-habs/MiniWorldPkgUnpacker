@@ -9,3 +9,4 @@ chunks=48 x 35MB, workers=24
   [36/48] 1599MB 94% | 59.46MB/s
   [42/48] 1657MB 98% | 57.37MB/s
   [48/48] 1691MB 100% | 51.94MB/s
+download done in 0.6 min, fails=[]
