@@ -1,3 +1,4 @@
 CMD> echo GH-BRIDGE-READY
 CMD> uname -a
 CMD> df -h | head -3
+CMD> uptime
