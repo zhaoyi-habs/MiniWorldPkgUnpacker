@@ -76,3 +76,4 @@ CMD: ui
 CMD: shot
 CMD: tap 810 620
 CMD: shot
+CMD: ui
