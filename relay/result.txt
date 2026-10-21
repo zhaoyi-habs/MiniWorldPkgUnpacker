@@ -41,3 +41,15 @@ config.ini 已写入，sysdir=/home/runner/android-sdk/system-images/android-33/
 avds: mw
 === STEP 5: 启动模拟器（KVM + swiftshader）===
 已发起启动
+emu.log 尾部: ts can be found here: /run/user/1001/avd/running/4503/jwks/bce865c7-bc5e-4a3e-86dd-90f082c2ea62/active.jwk
+INFO         | Scanning /run/user/1001/avd/running/4503/jwks/bce865c7-bc5e-4a3e-86dd-90f082c2ea62 for jwk keys.
+INFO         | Started GRPC server at 127.0.0.1:8554, security: Local, auth: +token
+INFO         | Advertising in: /run/user/1001/avd/running/pid_4503.ini
+INFO         | Activated packet streamer for bluetooth emulation
+INFO         | Successfully initialized netsim WiFi
+INFO         | Setting display: 0 configuration to: 1080x1920, dpi: 420x420 
+INFO         | setDisplayActiveConfig: id:0, 1080x1920
+INFO         | emulatorSetupEnvironment: Environment scene is not required
+USER_INFO    | Emulator is performing a full startup. This may take upto two minutes, or more.
+WARNING      | Failed to process .ini file /home/runner/.android/emu-update-last-check.ini for reading.
+WARNING      | Failed to process .ini file /home/runner/.android/emu-update-last-check.ini for reading.
