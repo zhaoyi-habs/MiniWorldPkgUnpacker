@@ -1,0 +1,284 @@
+name: Emu3
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  e:
+    runs-on: ubuntu-latest
+    timeout-minutes: 340
+    steps:
+      - name: Cache SDK
+        uses: actions/cache@v4
+        with:
+          path: /home/runner/android-sdk
+          key: android-sdk-v2
+      - name: Cache AVD
+        uses: actions/cache@v4
+        with:
+          path: /home/runner/.android/avd
+          key: android-avd-v5
+      - name: Cache APK
+        uses: actions/cache@v4
+        with:
+          path: /home/runner/mw.apk
+          key: mw-apk-v1
+      - name: Run
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+        run: |
+          mkdir -p relay
+          cat > relay/emu3.py <<'PYEOF'
+          #!/usr/bin/env python3
+          """综合：API30 诊断 → 若失败则 API33 + 注入 houdini → 装 APK → 启动 → 截图"""
+          import os, sys, json, time, base64, subprocess, urllib.request
+
+          TOKEN=os.environ.get("GH_TOKEN",""); REPO=os.environ.get("GITHUB_REPOSITORY","")
+          HOME=os.path.expanduser("~"); SDK=f"{HOME}/android-sdk"
+          PKG="com.tencent.tmgp.minitech.miniworld"
+          UA="Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/120"
+          APKURL=("https://imtt.dd.qq.com/sjy.00009/sjy.00002/16891/apk/"
+                  "0F94B1CB324EE4F471C95BA1127CE377.apk"
+                  "?fsname=com.tencent.tmgp.minitech.miniworld_80640.apk")
+
+          def rep(m):
+              try:
+                  path=f"/repos/{REPO}/contents/relay/result.txt"
+                  req=urllib.request.Request("https://api.github.com"+path)
+                  req.add_header("Authorization","Bearer "+TOKEN); req.add_header("User-Agent","r")
+                  sha=None
+                  try:
+                      with urllib.request.urlopen(req,timeout=30) as r: sha=json.loads(r.read().decode()).get("sha")
+                  except Exception: pass
+                  p={"message":"emu3","content":base64.b64encode(m.encode()).decode()}
+                  if sha: p["sha"]=sha
+                  r2=urllib.request.Request("https://api.github.com"+path,method="PUT")
+                  r2.add_header("Authorization","Bearer "+TOKEN); r2.add_header("User-Agent","r")
+                  r2.add_header("Content-Type","application/json")
+                  urllib.request.urlopen(r2,json.dumps(p).encode(),timeout=90).read()
+              except Exception as e: print("rep",e)
+          def sh(c,t=600):
+              try:
+                  r=subprocess.run(c,shell=True,capture_output=True,text=True,timeout=t)
+                  return (r.stdout or "")+"\n"+(r.stderr or "")
+              except subprocess.TimeoutExpired: return "TIMEOUT"
+          out=[]
+          def log(s): out.append(s); print(s,flush=True); rep("\n".join(out))
+          def put(path,b64,msg="x"):
+              req=urllib.request.Request(f"https://api.github.com/repos/{REPO}/contents/{path}")
+              req.add_header("Authorization","Bearer "+TOKEN); req.add_header("User-Agent","r")
+              sha=None
+              try:
+                  with urllib.request.urlopen(req,timeout=30) as r: sha=json.loads(r.read().decode()).get("sha")
+              except Exception: pass
+              p={"message":msg,"content":b64}
+              if sha: p["sha"]=sha
+              r2=urllib.request.Request(f"https://api.github.com/repos/{REPO}/contents/{path}",method="PUT")
+              r2.add_header("Authorization","Bearer "+TOKEN); r2.add_header("User-Agent","r")
+              r2.add_header("Content-Type","application/json")
+              try: urllib.request.urlopen(r2,json.dumps(p).encode(),timeout=120).read(); return True
+              except Exception: return False
+
+          adb=f"{SDK}/platform-tools/adb"; emu=f"{SDK}/emulator/emulator"
+
+          def write_avd(name, api, sysdir):
+              avdd=f"{HOME}/.android/avd/{name}.avd"
+              os.makedirs(avdd,exist_ok=True)
+              open(f"{HOME}/.android/avd/{name}.ini","w").write(
+                  f"avd.ini.encoding=UTF-8\npath={avdd}\npath.rel=avd/{name}.avd\ntarget=android-{api}\n")
+              open(f"{avdd}/config.ini","w").write(f"""AvdId={name}
+          PlayStore.enabled=false
+          abi.type=x86_64
+          avd.ini.displayname={name}
+          avd.ini.encoding=UTF-8
+          disk.dataPartition.size=12G
+          hw.audioInput=no
+          hw.audioOutput=no
+          hw.cpu.arch=x86_64
+          hw.cpu.ncore=4
+          hw.gpu.enabled=yes
+          hw.gpu.mode=swiftshader_indirect
+          hw.keyboard=yes
+          hw.lcd.density=420
+          hw.lcd.height=1920
+          hw.lcd.width=1080
+          hw.mainKeys=no
+          hw.ramSize=4096
+          image.sysdir.1={sysdir}
+          runtime.network.latency=none
+          runtime.network.speed=full
+          showDeviceFrame=no
+          tag.id=google_apis_playstore
+          """)
+              return avdd
+
+          def boot(name, logfile):
+              sh(f"pkill -f qemu-system 2>/dev/null; sleep 3",60)
+              sh(f"nohup {emu} -avd {name} -no-window -no-audio -no-boot-anim "
+                 f"-gpu swiftshader_indirect -no-snapshot -memory 4096 -cores 4 "
+                 f"-partition-size 8192 -qemu -enable-kvm > {logfile} 2>&1 &",60)
+              for i in range(40):
+                  time.sleep(20)
+                  st=sh(f"{adb} shell getprop sys.boot_completed 2>&1|tr -d '\\r\\n'",60).strip()
+                  if st=="1": return True, 20*(i+1)
+              return False, 0
+
+          log("=== 环境 ===")
+          log("sdkmanager: "+str(os.path.exists(f"{SDK}/cmdline-tools/latest/bin/sdkmanager")))
+          log("emulator: "+str(os.path.exists(emu)))
+          log("adb: "+str(os.path.exists(adb)))
+          log("sysimages: "+sh(f"ls {SDK}/system-images 2>&1|head").strip())
+
+          # ---- 找 API30 sysdir ----
+          sd30=None
+          for root,dirs,files in os.walk(f"{SDK}/system-images"):
+              if "android-30" in root and ("build.prop" in files or "kernel-ranchu" in files):
+                  sd30=root+"/"
+          log("API30 sysdir: "+str(sd30))
+          if sd30: log("内容: "+str(os.listdir(sd30))[:400])
+
+          # ---- 尝试 API30 ----
+          booted30=False
+          if sd30:
+              write_avd("mw30",30,sd30)
+              log("=== 尝试启动 API30 ===")
+              ok,sec=boot("mw30",f"{HOME}/emu30.log")
+              log(f"API30 boot={ok} in {sec}s")
+              if not ok:
+                  log("emu30.log 尾部:\n"+sh(f"tail -30 {HOME}/emu30.log 2>&1").strip()[-1500:])
+              booted30=ok
+              if ok:
+                  log("android: "+sh(f"{adb} shell getprop ro.build.version.release",60).strip())
+                  log("abilist: "+sh(f"{adb} shell getprop ro.product.cpu.abilist",60).strip())
+                  log("bridge: "+sh(f"{adb} shell getprop ro.dalvik.vm.native.bridge",60).strip())
+                  log("houdini64: "+sh(f"{adb} shell ls -l /system/lib64/libhoudini.so 2>&1",60).strip()[:200])
+                  log("houdini32: "+sh(f"{adb} shell ls -l /system/lib/libhoudini.so 2>&1",60).strip()[:200])
+
+          # ---- 若 API30 不可用，用 API33 ----
+          booted33=False
+          if not booted30:
+              log("=== 回退 API33 ===")
+              sm=f"{SDK}/cmdline-tools/latest/bin/sdkmanager"
+              sh(f"yes | {sm} --sdk_root={SDK} --licenses >/dev/null 2>&1",900)
+              sh(f"{sm} --sdk_root={SDK} --install 'system-images;android-33;google_apis_playstore;x86_64' 2>&1|tail -3",2400)
+              sd33=None
+              for root,dirs,files in os.walk(f"{SDK}/system-images"):
+                  if "android-33" in root and ("build.prop" in files or "kernel-ranchu" in files):
+                      sd33=root+"/"
+              log("API33 sysdir: "+str(sd33))
+              if sd33:
+                  write_avd("mw33",33,sd33)
+                  ok,sec=boot("mw33",f"{HOME}/emu33.log")
+                  log(f"API33 boot={ok} in {sec}s")
+                  booted33=ok
+                  if not ok: log(sh(f"tail -25 {HOME}/emu33.log").strip()[-1200:])
+                  if ok:
+                      log("android: "+sh(f"{adb} shell getprop ro.build.version.release",60).strip())
+                      log("bridge: "+sh(f"{adb} shell getprop ro.dalvik.vm.native.bridge",60).strip())
+
+          if not (booted30 or booted33):
+              log("ABORT: 无法启动任何模拟器"); sys.exit(1)
+
+          # ---- 注入 houdini（若不存在）----
+          has=sh(f"{adb} shell 'ls /system/lib64/libhoudini.so 2>/dev/null'",60).strip()
+          log("已有 houdini: "+str(bool(has)))
+          if not has and sd30:
+              log("=== 从 API30 镜像提取 houdini ===")
+              src=None
+              for c in (f"{sd30}system.img", f"{sd30}system-qemu.img"):
+                  if os.path.exists(c): src=c; break
+              log("system.img: "+str(src))
+              if src:
+                  sh("sudo apt-get install -y -qq android-sdk-libsparse-utils simg2img 2>&1|tail -2 || pip install -q simg2img 2>&1|tail -2",600)
+                  sh(f"simg2img {src} /tmp/sys30.raw 2>&1|tail -2",900)
+                  log("raw: "+sh("ls -l /tmp/sys30.raw 2>&1|head -1").strip())
+                  sh("mkdir -p /mnt/sys30 && sudo mount -o ro,loop /tmp/sys30.raw /mnt/sys30 2>&1|tail -2",300)
+                  log("mount 结果: "+sh("ls /mnt/sys30 2>&1|head -5").strip()[:200])
+                  found=sh("ls /mnt/sys30/lib64/ 2>/dev/null|grep -i houdini; ls /mnt/sys30/lib/ 2>/dev/null|grep -i houdini",120).strip()
+                  log("镜像内 houdini 文件: "+(found or "(无)"))
+                  if found:
+                      sh("mkdir -p /tmp/hou64 /tmp/hou32 && cp /mnt/sys30/lib64/libhoudini* /tmp/hou64/ 2>/dev/null; "
+                         "cp /mnt/sys30/lib/libhoudini* /tmp/hou32/ 2>/dev/null",180)
+                      log("提取: "+sh("ls -l /tmp/hou64 /tmp/hou32 2>&1|head -10").strip())
+                      sh(f"{adb} root 2>&1|tail -1",120)
+                      sh(f"{adb} remount 2>&1|tail -2",180)
+                      sh(f"{adb} push /tmp/hou64/libhoudini.so /system/lib64/ 2>&1|tail -2",300)
+                      sh(f"{adb} push /tmp/hou32/libhoudini.so /system/lib/ 2>&1|tail -2",300)
+                      sh(f"{adb} shell chmod 644 /system/lib64/libhoudini.so /system/lib/libhoudini.so 2>&1",120)
+                      sh(f"{adb} shell 'setprop ro.dalvik.vm.native.bridge libhoudini.so' 2>&1",120)
+                      log("注入后 bridge: "+sh(f"{adb} shell getprop ro.dalvik.vm.native.bridge",60).strip())
+                      log("注入后 houdini: "+sh(f"{adb} shell ls -l /system/lib64/libhoudini.so 2>&1",60).strip()[:150])
+                      sh(f"{adb} reboot 2>&1",60)
+                      time.sleep(90)
+                      for i in range(30):
+                          time.sleep(15)
+                          if sh(f"{adb} shell getprop sys.boot_completed 2>&1|tr -d '\\r\\n'",60).strip()=="1":
+                              log(f"重启完成 ({90+15*(i+1)}s)"); break
+                      log("重启后 abilist: "+sh(f"{adb} shell getprop ro.product.cpu.abilist",60).strip())
+                  sh("sudo umount /mnt/sys30 2>/dev/null || true",120)
+
+          # ---- 安装 APK ----
+          log("=== 下载 APK ===")
+          APK=f"{HOME}/mw.apk"
+          t0=time.time()
+          if not os.path.exists(APK) or os.path.getsize(APK)<1000000:
+              sh(f"curl -sL -m 1800 -A '{UA}' -o {APK} '{APKURL}'",1800)
+          log("apk=" + str(os.path.getsize(APK) if os.path.exists(APK) else 0) + f" in {time.time()-t0:.0f}s")
+
+          log("=== 安装 ===")
+          t1=time.time()
+          for extra in ("-r -t", "-r -t --no-incremental", "-r -t --abi arm64-v8a"):
+              r=sh(f"{adb} install {extra} {APK} 2>&1|tail -6",2400)
+              log(f"[{extra}] in {time.time()-t1:.0f}s: "+r.strip()[-400:])
+              if "Success" in r: log("✅ 安装成功"); break
+              if "NO_MATCHING_ABIS" not in r: break
+
+          log("已装: "+sh(f"{adb} shell pm list packages 2>&1|grep -i mini",120).strip())
+
+          # ---- 启动游戏 ----
+          log("=== 启动游戏 ===")
+          act=sh(f"{adb} shell 'cmd package resolve-activity --brief {PKG} 2>&1|tail -1'",120).strip()
+          log("activity: "+act)
+          if "/" in act and act.count(".")>0:
+              comp=act.split()[-1]
+              sh(f"{adb} shell am start -n {comp} 2>&1|tail -2",180)
+          sh(f"{adb} shell monkey -p {PKG} -c android.intent.category.LAUNCHER 1 2>&1|tail -2",180)
+          sh(f"{adb} shell input keyevent KEYCODE_HOME 2>&1",60)
+
+          # ---- 截图 ----
+          log("=== 截图 ===")
+          sh("pip install -q pillow 2>&1|tail -1",300)
+          for k in range(10):
+              time.sleep(40)
+              png=f"{HOME}/g{k}.png"
+              sh(f"{adb} exec-out screencap -p > {png}",150)
+              focus=sh(f"{adb} shell dumpsys activity activities 2>/dev/null|grep -m1 topResumedActivity",90).strip()
+              log(f"  shot{k} focus={focus[-100:]}")
+              if os.path.exists(png) and os.path.getsize(png)>1000:
+                  raw=open(png,'rb').read()
+                  log(f"  shot{k} raw={len(raw)}")
+                  try:
+                      from PIL import Image; import io
+                      im=Image.open(png).convert("RGB")
+                      w,h=im.size
+                      if w>720: im=im.resize((720,int(h*720/w)))
+                      b=io.BytesIO(); im.save(b,"PNG",optimize=True); raw=b.getvalue()
+                      log(f"  shot{k} 压缩后={len(raw)}")
+                  except Exception as e: log("  PIL: "+str(e)[:80])
+                  b64=base64.b64encode(raw).decode()
+                  CH=300000; n=(len(b64)+CH-1)//CH
+                  for i in range(min(n,12)):
+                      put(f"relay/g{k}_{i}.b64", b64[i*CH:(i+1)*CH], f"g{k}_{i}")
+                  put(f"relay/g{k}_meta.json", base64.b64encode(json.dumps({"chunks":n,"bytes":len(raw)}).encode()).decode(), f"g{k}_meta")
+                  log(f"  shot{k} 回传 {min(n,12)} 片")
+              # 尝试点击屏幕中央开始游戏
+              if k in (1,3,5):
+                  sh(f"{adb} shell input tap 540 960 2>&1",60)
+                  log(f"  shot{k}: 已点击中央")
+          log("DONE")
+          PYEOF
+          python3 relay/emu3.py
