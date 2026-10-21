@@ -1,0 +1,221 @@
+name: Emu
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  e:
+    runs-on: ubuntu-latest
+    timeout-minutes: 340
+    steps:
+      - name: Run emulator
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+        run: |
+          mkdir -p relay
+          cat > relay/emu.py <<'PYEOF'
+          #!/usr/bin/env python3
+          """在 runner 上用 KVM 起 Android 模拟器，安装 ARM APK，截图回传"""
+          import os, sys, json, time, base64, subprocess, urllib.request, shutil
+
+          TOKEN=os.environ.get("GH_TOKEN",""); REPO=os.environ.get("GITHUB_REPOSITORY","")
+          HOME=os.path.expanduser("~")
+          SDK=f"{HOME}/android-sdk"
+          AVD_NAME="mw"
+          API="33"
+          IMG=f"system-images;android-{API};google_apis_playstore;x86_64"
+
+          def rep(m):
+              try:
+                  path=f"/repos/{REPO}/contents/relay/result.txt"
+                  req=urllib.request.Request("https://api.github.com"+path)
+                  req.add_header("Authorization","Bearer "+TOKEN); req.add_header("User-Agent","r")
+                  sha=None
+                  try:
+                      with urllib.request.urlopen(req,timeout=30) as r: sha=json.loads(r.read().decode()).get("sha")
+                  except Exception: pass
+                  p={"message":"emu","content":base64.b64encode(m.encode()).decode()}
+                  if sha: p["sha"]=sha
+                  r2=urllib.request.Request("https://api.github.com"+path,method="PUT")
+                  r2.add_header("Authorization","Bearer "+TOKEN); r2.add_header("User-Agent","r")
+                  r2.add_header("Content-Type","application/json")
+                  urllib.request.urlopen(r2,json.dumps(p).encode(),timeout=90).read()
+              except Exception as e: print("rep",e)
+
+          def sh(c,t=600):
+              try:
+                  r=subprocess.run(c,shell=True,capture_output=True,text=True,timeout=t)
+                  return (r.stdout or "")+"\n"+(r.stderr or "")
+              except subprocess.TimeoutExpired:
+                  return "TIMEOUT"
+
+          def put(path, b64, msg="x"):
+              """写任意文件到仓库（用于回传图片分片）"""
+              req=urllib.request.Request(f"https://api.github.com/repos/{REPO}/contents/{path}")
+              req.add_header("Authorization","Bearer "+TOKEN); req.add_header("User-Agent","r")
+              sha=None
+              try:
+                  with urllib.request.urlopen(req,timeout=30) as r: sha=json.loads(r.read().decode()).get("sha")
+              except Exception: pass
+              p={"message":msg,"content":b64}
+              if sha: p["sha"]=sha
+              r2=urllib.request.Request(f"https://api.github.com/repos/{REPO}/contents/{path}",method="PUT")
+              r2.add_header("Authorization","Bearer "+TOKEN); r2.add_header("User-Agent","r")
+              r2.add_header("Content-Type","application/json")
+              try:
+                  urllib.request.urlopen(r2,json.dumps(p).encode(),timeout=120).read(); return True
+              except Exception: return False
+
+          out=[]
+          def log(s):
+              out.append(s); print(s,flush=True); rep("\n".join(out))
+
+          log("=== STEP 1: 环境准备 ===")
+          log(sh("java -version 2>&1 | head -2",300))
+          log(sh("sudo apt-get install -y -qq qemu-kvm libvirt-daemon-system 2>&1 | tail -3",600))
+          log("kvm: "+sh("ls -l /dev/kvm 2>&1 | head -1").strip())
+          log("groups: "+sh("id").strip())
+          log(sh("sudo chmod 666 /dev/kvm 2>&1 || true"))
+          log("kvm after chmod: "+sh("ls -l /dev/kvm").strip())
+
+          log("=== STEP 2: 下载 Android SDK cmdline-tools ===")
+          os.makedirs(SDK,exist_ok=True)
+          os.chdir(HOME)
+          TOOLS_URL="https://dl.google.com/android/repository/commandlinetools-linux-11076708_latest.zip"
+          r=sh(f"curl -sL -m 900 -o cmdtools.zip '{TOOLS_URL}' && ls -l cmdtools.zip",900)
+          log(r.strip()[:300])
+          sh("unzip -q -o cmdtools.zip")
+          # 目录结构校正
+          if os.path.isdir(f"{HOME}/cmdline-tools"):
+              sh(f"mkdir -p {SDK}/cmdline-tools && mv {HOME}/cmdline-tools {SDK}/cmdline-tools/latest")
+          else:
+              sh(f"mkdir -p {SDK}/cmdline-tools/latest && unzip -q -o cmdtools.zip -d {SDK}/cmdline-tools/latest")
+          log(sh(f"ls {SDK}/cmdline-tools/latest | head -5").strip())
+
+          log("=== STEP 3: 安装 SDK 组件 ===")
+          env=dict(os.environ); env["ANDROID_SDK_ROOT"]=SDK; env["ANDROID_HOME"]=SDK
+          env["PATH"]=f"{SDK}/cmdline-tools/latest/bin:"+env["PATH"]
+          sm=f"{SDK}/cmdline-tools/latest/bin/sdkmanager"
+          sh(f"yes | {sm} --sdk_root={SDK} --licenses > /dev/null 2>&1",900)
+          r=sh(f"{sm} --sdk_root={SDK} --install 'platform-tools' 'emulator' 'platforms;android-{API}' '{IMG}' 2>&1 | tail -8",2400)
+          log(r.strip()[-1200:])
+
+          log("=== STEP 4: 创建 AVD ===")
+          avdm=f"{SDK}/cmdline-tools/latest/bin/avdmanager"
+          sh(f"mkdir -p {HOME}/.android/avd")
+          r=sh(f"echo no | {avdm} create avd -n {AVD_NAME} -k '{IMG}' -d 'pixel_2' --force 2>&1 | tail -5",600)
+          log(r.strip()[-600:])
+          # 调大数据分区（APK 1.65GB + 数据）
+          cfg=f"{HOME}/.android/avd/{AVD_NAME}.avd/config.ini"
+          try:
+              c=open(cfg).read()
+              c=c.replace("disk.dataPartition.size = 800M","disk.dataPartition.size = 12G")
+              if "disk.dataPartition.size" not in c: c+="\ndisk.dataPartition.size = 12G\n"
+              c=c.replace("hw.gpu.enabled = no","hw.gpu.enabled = yes")
+              open(cfg,"w").write(c)
+              log("config.ini 已调整: "+str([l for l in c.splitlines() if 'dataPartition' in l or 'gpu.mode' in l or 'hw.gpu' in l]))
+          except Exception as e:
+              log("config 调整失败: "+str(e))
+
+          log("=== STEP 5: 启动模拟器（KVM + swiftshader）===")
+          emu=f"{SDK}/emulator/emulator"
+          cmd=(f"nohup {emu} -avd {AVD_NAME} -no-window -no-audio -no-boot-anim "
+               f"-gpu swiftshader_indirect -no-snapshot -memory 4096 -cores 4 "
+               f"-partition-size 8192 -qemu -enable-kvm > {HOME}/emu.log 2>&1 &")
+          sh(cmd,60)
+          log("已发起启动")
+
+          adb=f"{SDK}/platform-tools/adb"
+          # 等待 boot
+          ok=False
+          for i in range(60):
+              time.sleep(20)
+              st=sh(f"{adb} shell getprop sys.boot_completed 2>&1 | tr -d '\\r\\n'",60).strip()
+              dev=sh(f"{adb} devices 2>&1 | tail -2",60).strip().replace("\n"," | ")
+              log(f"  wait {i} ({20*(i+1)}s): boot_completed='{st}' devices={dev}")
+              if st=="1":
+                  ok=True; break
+          if not ok:
+              log("模拟器启动失败，日志尾部:")
+              log(sh(f"tail -30 {HOME}/emu.log").strip()[-1500:])
+              log("ABORT")
+              sys.exit(1)
+
+          log("=== STEP 6: 环境探测 ===")
+          log("ABI: "+sh(f"{adb} shell getprop ro.product.cpu.abi",60).strip())
+          log("ABI list: "+sh(f"{adb} shell getprop ro.product.cpu.abilist",60).strip())
+          log("native bridge: "+sh(f"{adb} shell getprop ro.dalvik.vm.native.bridge",60).strip())
+          log("houdini: "+sh(f"{adb} shell ls /system/lib64/ 2>/dev/null | grep -i -E 'houdini|ndk|arm' | head -5",60).strip())
+          log("model: "+sh(f"{adb} shell getprop ro.product.model",60).strip())
+          log("android: "+sh(f"{adb} shell getprop ro.build.version.release",60).strip())
+
+          log("=== STEP 7: 下载 APK ===")
+          APK=f"{HOME}/mw.apk"
+          URL=("https://imtt.dd.qq.com/sjy.00009/sjy.00002/16891/apk/"
+               "0F94B1CB324EE4F471C95BA1127CE377.apk"
+               "?fsname=com.tencent.tmgp.minitech.miniworld_80640.apk")
+          UA="Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/120"
+          t0=time.time()
+          sh(f"curl -sL -m 1800 -A '{UA}' -o {APK} '{URL}'",1800)
+          sz=os.path.getsize(APK) if os.path.exists(APK) else 0
+          log(f"apk={sz} ({sz/1048576:.1f}MB) in {time.time()-t0:.0f}s")
+
+          log("=== STEP 8: 安装 APK ===")
+          t1=time.time()
+          r=sh(f"{adb} install -r -t {APK} 2>&1 | tail -10",2400)
+          log(f"install in {time.time()-t1:.0f}s:\n"+r.strip()[-800:])
+          # 若整体安装失败，尝试分包（split apk 情形不适用，这里仅重试一次）
+          if "Success" not in r:
+              log("重试 install --no-incremental")
+              r2=sh(f"{adb} install -r -t --no-incremental {APK} 2>&1 | tail -6",2400)
+              log(r2.strip()[-600:])
+
+          log("=== STEP 9: 启动游戏 ===")
+          PKG="com.tencent.tmgp.minitech.miniworld"
+          log("installed: "+sh(f"{adb} shell pm list packages | grep -i mini | head -3",60).strip())
+          act=sh(f"{adb} shell cmd package resolve-activity --brief {PKG} 2>&1 | tail -2",90).strip()
+          log("activity: "+act)
+          sh(f"{adb} shell am start -n {PKG}/.MainActivity 2>&1 | tail -3",120)
+          sh(f"{adb} shell monkey -p {PKG} -c android.intent.category.LAUNCHER 1 2>&1 | tail -3",120)
+          log("已发起启动")
+
+          log("=== STEP 10: 截图回传 ===")
+          def shrink(b64):
+              return b64
+          for k in range(6):
+              time.sleep(45)
+              png=f"{HOME}/s{k}.png"
+              sh(f"{adb} exec-out screencap -p > {png}",120)
+              if os.path.exists(png) and os.path.getsize(png)>1000:
+                  raw=open(png,'rb').read()
+                  log(f"  shot{k}: {len(raw)} bytes")
+                  # 压缩：降采样到 720 宽
+                  try:
+                      from PIL import Image
+                      import io
+                      im=Image.open(png).convert("RGB")
+                      w,h=im.size
+                      if w>720: im=im.resize((720,int(h*720/w)))
+                      buf=io.BytesIO(); im.save(buf,"PNG",optimize=True)
+                      raw=buf.getvalue()
+                  except Exception as e:
+                      log("  (PIL 不可用: "+str(e)[:60]+")")
+                  b=base64.b64encode(raw).decode()
+                  CH=300000
+                  n=(len(b)+CH-1)//CH
+                  for i in range(min(n,12)):
+                      put(f"relay/s{k}_{i}.b64", b[i*CH:(i+1)*CH], f"s{k}_{i}")
+                  put(f"relay/s{k}_meta.json", base64.b64encode(json.dumps(
+                      {"chunks":n,"bytes":len(raw)}).encode()).decode(), f"s{k}_meta")
+                  log(f"  shot{k} 已回传 {min(n,12)} 片")
+              else:
+                  log(f"  shot{k}: 截图失败")
+              # 同时记录当前前台
+              log("  focus: "+sh(f"{adb} shell dumpsys activity activities 2>/dev/null | grep -m1 topResumedActivity",60).strip()[-120:])
+          log("DONE")
+          PYEOF
+          python3 relay/emu.py
