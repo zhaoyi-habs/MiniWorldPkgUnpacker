@@ -41,3 +41,4 @@ Success
 已装: package:com.tencent.tmgp.minitech.miniworld
 === 启动游戏 ===
 activity: com.tencent.tmgp.minitech.miniworld/com.minitech.miniworld.StartupActivity
+=== 截图 ===
