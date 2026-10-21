@@ -1,23 +1,6 @@
-cmd=echo '=== 版本号 ==='; grep -oE '[0-9]+\.[0-9]+\.[0-9]+' /tmp/a.html | sort -u | head -10; echo '=== apk 链接 ==='; grep -oE 'https?://[^"'\'' ]*\.apk[^"'\'' ]*' /tmp/a.html | sort -u | head -5; echo '=== download 相关 ==='; grep -oE '"(apkUrl|downloadUrl|url)":"[^"]{0,120}' /tmp/a.html | head -5
-exit=0
+cmd=U='http://imtt2.dd.qq.com/sjy.00009/sjy.00002/16891/apk/0F94B1CB324EE4F471C95BA1127CE377.apk?fsname=com.tencent.tmgp.minitech.miniworld_80640.apk'; echo '=== HEAD ==='; curl -sI -m 30 -A 'Mozilla/5.0' "$U" | grep -iE 'content-length|content-type|HTTP'; echo '=== 下载前100KB探测版本 ==='; curl -s -m 40 -A 'Mozilla/5.0' -r 0-200000 "$U" -o /tmp/head.apk -w 'partial=%{size_download}\n'; file /tmp/head.apk 2>/dev/null; python3 -c "
+exit=2
 host=runnervmxehtw
 ip=20.169.98.150
 ---
-=== 版本号 ===
-0.0.5
-0.8.15
-1.0.0
-1.0.0880
-1.00.1450
-1.1.0
-1.166.583
-1.25.4
-1.35.26
-1.555.696
-=== apk 链接 ===
-http://imtt2.dd.qq.com/sjy.00008/sjy.00004/16891/apk/9EF26FBD8B14C076DEA951F2CA328080.apk?fsname=com.tencent.android.qqdownloader_9.2.9.apk
-http://imtt2.dd.qq.com/sjy.00009/sjy.00002/16891/apk/0D3178970754BC4A495018EAC2A36FE3.apk?fsname=com.tencent.tmgp.hy.wjwlsh_220.apk
-http://imtt2.dd.qq.com/sjy.00009/sjy.00002/16891/apk/0F94B1CB324EE4F471C95BA1127CE377.apk?fsname=com.tencent.tmgp.minitech.miniworld_80640.apk
-http://imtt2.dd.qq.com/sjy.00009/sjy.00002/16891/apk/14093012BBA86E798D50CDBE976A5913.apk?fsname=com.tencent.tmgp.hyh.mech_4141.apk
-http://imtt2.dd.qq.com/sjy.00009/sjy.00002/16891/apk/160C257AC0F7357C696DA73043E8E6E9.apk?fsname=com.tencent.tmgp.sm_100880.apk
-=== download 相关 ===
+/bin/sh: 1: Syntax error: Unterminated quoted string
