@@ -1,6 +1,6 @@
-cmd=echo B4
+cmd=echo R1
 exit=0
 host=runnervmxehtw
 ip=57.151.91.162
 ---
-B4
+R1
