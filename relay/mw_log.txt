@@ -54,3 +54,4 @@ CMD: ui
 CMD: tap 80 1101
 CMD: tap 100 1101
 CMD: tap 120 1101
+CMD: tap 140 1101
