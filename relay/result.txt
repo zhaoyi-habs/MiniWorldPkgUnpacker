@@ -1,13 +1,15 @@
-cmd=for u in https://apkpure.com https://www.apkmirror.com https://apkcombo.com https://apkmonk.com https://apps.evozi.com https://apk.support https://androidapksfree.com https://www.androidappsapk.com; do echo -n "  $u -> "; curl -s -o /dev/null -m 15 -w '%{http_code}' -A 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/120' "$u"; echo; done
+cmd=curl -s -m 30 -A 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/120' 'https://www.apkmirror.com/?s=com.minitech.miniworld' > /tmp/p.html; echo "size=$(stat -c%s /tmp/p.html)"; grep -oE 'href="/apk/[^"]+"' /tmp/p.html | sort -u | head -8; echo '--- 标题 ---'; grep -oE 'appRowTitle[^>]*>[^<]+' /tmp/p.html | head -5
 exit=0
 host=runnervmxehtw
 ip=20.169.98.150
 ---
-  https://apkpure.com -> 403
-  https://www.apkmirror.com -> 200
-  https://apkcombo.com -> 000
-  https://apkmonk.com -> 000
-  https://apps.evozi.com -> 200
-  https://apk.support -> 000
-  https://androidapksfree.com -> 301
-  https://www.androidappsapk.com -> 000
+size=287600
+href="/apk/bandai-namco-entertainment-inc/%e3%83%89%e3%83%a9%e3%82%b4%e3%83%b3%e3%83%9c%e3%83%bc%e3%83%abz-%e3%83%89%e3%83%83%e3%82%ab%e3%83%b3%e3%83%90%e3%83%88%e3%83%ab/%e3%83%89%e3%83%a9%e3%82%b4%e3%83%b3%e3%83%9c%e3%83%bc%e3%83%abz-%e3%83%89%e3%83%83%e3%82%ab%e3%83%b3%e3%83%90%e3%83%88%e3%83%ab-6-6-7-release/"
+href="/apk/bandai-namco-entertainment-inc/%e3%83%89%e3%83%a9%e3%82%b4%e3%83%b3%e3%83%9c%e3%83%bc%e3%83%abz-%e3%83%89%e3%83%83%e3%82%ab%e3%83%b3%e3%83%90%e3%83%88%e3%83%ab/%e3%83%89%e3%83%a9%e3%82%b4%e3%83%b3%e3%83%9c%e3%83%bc%e3%83%abz-%e3%83%89%e3%83%83%e3%82%ab%e3%83%b3%e3%83%90%e3%83%88%e3%83%ab-6-6-7-release/#disqus_thread"
+href="/apk/bytedance-pte-ltd/capcut/capcut-video-editor-19-6-0-release/"
+href="/apk/bytedance-pte-ltd/capcut/capcut-video-editor-19-6-0-release/#disqus_thread"
+href="/apk/bytedance-pte-ltd/capcut/capcut-video-editor-19-7-0-release/"
+href="/apk/bytedance-pte-ltd/capcut/capcut-video-editor-19-7-0-release/#disqus_thread"
+href="/apk/bytedance-pte-ltd/capcut/capcut-video-editor-19-8-0-release/"
+href="/apk/bytedance-pte-ltd/capcut/capcut-video-editor-19-8-0-release/#disqus_thread"
+--- 标题 ---
