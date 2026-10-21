@@ -1,10 +1,9 @@
-cmd=for u in https://mnw.cn https://www.miniworld.cn https://miniworld.cn https://sj.qq.com https://app.mi.com; do echo -n "  $u -> "; curl -s -o /dev/null -m 15 -w '%{http_code}' -A 'Mozilla/5.0' "$u"; echo; done
+cmd=echo '=== 应用宝搜索 ==='; curl -s -m 25 -A 'Mozilla/5.0' 'https://sj.qq.com/myapp/searchAjax.htm?kw=%E8%BF%B7%E4%BD%A0%E4%B8%96%E7%95%8C&pns=&sid=' | head -c 1200; echo; echo '=== 小米商店 ==='; curl -s -m 25 -A 'Mozilla/5.0' 'https://app.mi.com/details?id=com.minitech.miniworld' -o /dev/null -w 'status=%{http_code}\n'
 exit=0
 host=runnervmxehtw
 ip=57.151.91.162
 ---
-  https://mnw.cn -> 000
-  https://www.miniworld.cn -> 000
-  https://miniworld.cn -> 000
-  https://sj.qq.com -> 200
-  https://app.mi.com -> 200
+=== 应用宝搜索 ===
+https://sj.qq.com
+=== 小米商店 ===
+status=302
