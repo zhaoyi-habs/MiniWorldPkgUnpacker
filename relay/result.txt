@@ -1,2 +1,4 @@
 === probe ===
 size=1772758908 (1690.6MB) accept_ranges=bytes
+=== download ===
+threads=16
