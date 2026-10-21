@@ -1,8 +1,10 @@
-cmd=grep -B12 'Mini World: CREATA' /tmp/s.html | grep -oE 'href="[^"]+"' | sort -u | head -8; echo '--- 直接看 appRow ---'; grep -oE '<a[^>]{0,200}appRowTitle[^>]{0,200}' /tmp/s.html | head -3
+cmd=for u in https://mnw.cn https://www.miniworld.cn https://miniworld.cn https://sj.qq.com https://app.mi.com; do echo -n "  $u -> "; curl -s -o /dev/null -m 15 -w '%{http_code}' -A 'Mozilla/5.0' "$u"; echo; done
 exit=0
 host=runnervmxehtw
 ip=20.169.98.150
 ---
-href="/apk/minovate-hong-kong-limited/mini-world-block-art/mini-world-block-art-1-7-15-release/"
-href="/apk/minovate-hong-kong-limited/mini-world-block-art/mini-world-block-art-1-7-15-release/#disqus_thread"
---- 直接看 appRow ---
+  https://mnw.cn -> 000
+  https://www.miniworld.cn -> 000
+  https://miniworld.cn -> 000
+  https://sj.qq.com -> 200
+  https://app.mi.com -> 200
