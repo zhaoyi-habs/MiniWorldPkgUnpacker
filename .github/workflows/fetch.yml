@@ -25,88 +25,141 @@ jobs:
           mkdir -p relay
           cat > relay/fetch.py <<'PYEOF'
           #!/usr/bin/env python3
-          """下载 APK（多线程）-> 分片 -> 上传到临时仓库"""
+          """多线程 Range 下载 APK -> 分片 -> 上传到临时仓库（无需安装任何软件）"""
           import os, sys, json, time, base64, subprocess, urllib.request, urllib.error
+          from concurrent.futures import ThreadPoolExecutor
 
           TOKEN = os.environ.get("GH_TOKEN", "")
-          PAT = os.environ.get("PAT", "")   # 运行时传入，不写进文件
+          PAT = os.environ.get("PAT", "")
           UP = os.environ.get("UPLOAD_REPO", "zhaoyi-habs/mw-apk-tmp")
+          REPO = os.environ.get("GITHUB_REPOSITORY", "")
           URL = ("http://imtt2.dd.qq.com/sjy.00009/sjy.00002/16891/apk/"
                  "0F94B1CB324EE4F471C95BA1127CE377.apk"
                  "?fsname=com.tencent.tmgp.minitech.miniworld_80640.apk")
           SRC = "/tmp/mw.apk"
-          CHUNK = 40 * 1024 * 1024
-
-          def sh(cmd, timeout=3600):
-              return subprocess.run(cmd, shell=True, capture_output=True, text=True, timeout=timeout)
+          UA = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/120"
 
           def report(msg):
-              b64 = base64.b64encode(msg.encode()).decode()
-              req = urllib.request.Request(
-                  f"https://api.github.com/repos/{os.environ.get('GITHUB_REPOSITORY')}/contents/relay/result.txt")
-              req.add_header("Authorization", "Bearer " + TOKEN)
-              req.add_header("User-Agent", "r")
-              sha = None
               try:
-                  with urllib.request.urlopen(req, timeout=30) as r:
-                      sha = json.loads(r.read().decode()).get("sha")
-              except Exception:
-                  pass
-              p = {"message": "progress", "content": b64}
-              if sha: p["sha"] = sha
-              d = json.dumps(p).encode()
-              req2 = urllib.request.Request(
-                  f"https://api.github.com/repos/{os.environ.get('GITHUB_REPOSITORY')}/contents/relay/result.txt",
-                  method="PUT")
-              req2.add_header("Authorization", "Bearer " + TOKEN)
-              req2.add_header("User-Agent", "r")
-              req2.add_header("Content-Type", "application/json")
-              try:
-                  urllib.request.urlopen(req2, d, timeout=60).read()
+                  path = f"/repos/{REPO}/contents/relay/result.txt"
+                  req = urllib.request.Request("https://api.github.com" + path)
+                  req.add_header("Authorization", "Bearer " + TOKEN)
+                  req.add_header("User-Agent", "r")
+                  sha = None
+                  try:
+                      with urllib.request.urlopen(req, timeout=30) as r:
+                          sha = json.loads(r.read().decode()).get("sha")
+                  except Exception:
+                      pass
+                  p = {"message": "progress", "content": base64.b64encode(msg.encode()).decode()}
+                  if sha: p["sha"] = sha
+                  req2 = urllib.request.Request("https://api.github.com" + path, method="PUT")
+                  req2.add_header("Authorization", "Bearer " + TOKEN)
+                  req2.add_header("User-Agent", "r")
+                  req2.add_header("Content-Type", "application/json")
+                  urllib.request.urlopen(req2, json.dumps(p).encode(), timeout=60).read()
               except Exception as e:
-                  print("report fail", e)
+                  print("report fail:", e)
+
+          def get_size():
+              req = urllib.request.Request(URL, method="HEAD")
+              req.add_header("User-Agent", UA)
+              with urllib.request.urlopen(req, timeout=60) as r:
+                  return int(r.headers.get("Content-Length", 0)), r.headers.get("Accept-Ranges", "")
+
+          def dl_range(args):
+              start, end, idx = args
+              for attempt in range(4):
+                  try:
+                      req = urllib.request.Request(URL)
+                      req.add_header("User-Agent", UA)
+                      req.add_header("Range", f"bytes={start}-{end}")
+                      with urllib.request.urlopen(req, timeout=280) as r:
+                          data = r.read()
+                      if len(data) == end - start + 1:
+                          return idx, data
+                  except Exception:
+                      time.sleep(2)
+              return idx, None
 
           def main():
               out = []
-              # 1. 装 aria2
-              out.append("=== install aria2 ===")
-              r = sh("apt-get install -y aria2 2>&1 | tail -2 || sudo apt-get install -y aria2 2>&1 | tail -2", 300)
-              out.append((r.stdout or "")[-300:])
+              # 1. 探测
+              try:
+                  size, ar = get_size()
+              except Exception as e:
+                  size, ar = 0, str(e)
+              out.append(f"=== probe ===\nsize={size} ({size/1048576:.1f}MB) accept_ranges={ar}")
               report("\n".join(out))
+              if size < 1024:
+                  out.append("无法获取大小，改用单线程"); report("\n".join(out))
 
-              # 2. 多线程下载
-              out.append("=== download (16 threads) ===")
+              # 2. 下载
+              out.append("=== download ===")
               t0 = time.time()
-              r = sh(f"aria2c -x 16 -s 16 -k 1M --timeout=600 --max-tries=5 "
-                     f"-o mw.apk -d /tmp '{URL}' 2>&1 | tail -15", 9000)
-              out.append((r.stdout or "")[-1500:])
+              ok = False
+              if size > 1024:
+                  N = 16
+                  chunk = (size + N - 1) // N
+                  ranges = []
+                  pos = 0
+                  for i in range(N):
+                      e = min(pos + chunk - 1, size - 1)
+                      ranges.append((pos, e, i))
+                      pos = e + 1
+                      if pos >= size: break
+                  out.append(f"threads={len(ranges)}")
+                  report("\n".join(out))
+                  results = {}
+                  with ThreadPoolExecutor(max_workers=len(ranges)) as ex:
+                      for idx, data in ex.map(dl_range, ranges):
+                          results[idx] = data
+                  if all(v is not None for v in results.values()):
+                      with open(SRC, "wb") as f:
+                          for i in range(len(ranges)):
+                              f.write(results[i])
+                      ok = True
+                  else:
+                      out.append("部分分片失败: " + str([k for k,v in results.items() if v is None]))
+              if not ok:
+                  out.append("fallback single thread")
+                  report("\n".join(out))
+                  subprocess.run(["curl","-sL","-m","5400","-A",UA,"-o",SRC,URL], timeout=5500)
               sz = os.path.getsize(SRC) if os.path.exists(SRC) else 0
-              out.append(f"size={sz} ({sz/1048576:.1f}MB) elapsed={time.time()-t0:.0f}s")
+              out.append(f"downloaded={sz} ({sz/1048576:.1f}MB) elapsed={time.time()-t0:.0f}s")
               report("\n".join(out))
-              if sz < 10 * 1024 * 1024:
-                  out.append("下载过小，中止"); report("\n".join(out)); return 1
+              if sz < 5 * 1024 * 1024:
+                  out.append("文件过小，中止"); report("\n".join(out)); return 1
 
-              # 3. 分片
-              out.append("=== split ===")
-              sh(f"rm -rf /tmp/parts && mkdir -p /tmp/parts && "
-                 f"split -b {CHUNK} -d -a 3 {SRC} /tmp/parts/p")
+              # 3. 校验 zip
+              import zipfile
+              try:
+                  z = zipfile.ZipFile(SRC)
+                  out.append(f"zip OK, entries={len(z.namelist())}")
+              except Exception as e:
+                  out.append(f"zip 校验失败: {type(e).__name__} (文件可能不完整)")
+              report("\n".join(out))
+
+              # 4. 分片上传
+              CHUNK = 40 * 1024 * 1024
+              n = (sz + CHUNK - 1) // CHUNK
+              out.append(f"=== upload {n} parts ===")
+              subprocess.run("rm -rf /tmp/parts && mkdir -p /tmp/parts", shell=True)
+              subprocess.run(f"split -b {CHUNK} -d -a 3 {SRC} /tmp/parts/p", shell=True)
               parts = sorted(os.listdir("/tmp/parts"))
-              out.append(f"parts={len(parts)}: {parts[:3]} ... {parts[-1:]}")
+              out.append(f"parts={len(parts)}")
               report("\n".join(out))
-
-              # 4. 上传到临时仓库
-              out.append("=== upload ===")
-              sh(f"rm -rf /tmp/up && git clone --depth 1 "
-                 f"https://x-access-token:{PAT}@github.com/{UP}.git /tmp/up", 300)
-              sh("rm -rf /tmp/up/parts && mkdir -p /tmp/up/parts")
-              sh("cp /tmp/parts/* /tmp/up/parts/")
-              manifest = {"size": sz, "parts": len(parts), "chunk": CHUNK,
-                          "name": "miniworld.apk"}
-              open("/tmp/up/parts/manifest.json", "w").write(json.dumps(manifest))
-              sh("cd /tmp/up && git config user.email a@b.c && git config user.name r && "
-                 "git add -A && git commit -m 'shards' && git push origin HEAD:main 2>&1 | tail -5", 1800)
-              out.append(f"uploaded {len(parts)} parts, total {sz/1048576:.1f}MB")
-              out.append(f"elapsed_total={time.time()-t0:.0f}s")
+              subprocess.run(f"rm -rf /tmp/up && git clone --depth 1 "
+                             f"https://x-access-token:{PAT}@github.com/{UP}.git /tmp/up 2>&1 | tail -3",
+                             shell=True, timeout=300)
+              subprocess.run("rm -rf /tmp/up/parts && mkdir -p /tmp/up/parts && cp /tmp/parts/* /tmp/up/parts/", shell=True)
+              json.dump({"size": sz, "parts": len(parts), "chunk": CHUNK, "name": "miniworld.apk"},
+                        open("/tmp/up/parts/manifest.json", "w"))
+              r = subprocess.run("cd /tmp/up && git config user.email a@b.c && git config user.name r && "
+                                 "git add -A && git commit -m shards && git push origin HEAD:main 2>&1 | tail -6",
+                                 shell=True, capture_output=True, text=True, timeout=2400)
+              out.append("git: " + (r.stdout or "")[-600:])
+              out.append(f"DONE elapsed_total={time.time()-t0:.0f}s")
               report("\n".join(out))
               print("\n".join(out))
               return 0
