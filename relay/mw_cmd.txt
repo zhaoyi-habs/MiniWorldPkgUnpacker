@@ -1,1 +1,1 @@
-shot
+shell /home/runner/android-sdk/platform-tools/adb shell am force-stop com.tencent.mobileqq
