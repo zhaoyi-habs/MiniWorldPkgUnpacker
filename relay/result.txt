@@ -13,3 +13,4 @@
      B_http_imtt2 + chrome + ref2 -> 200:984
      B_http_imtt2 + qqdown + ref0 -> 200:984
      B_http_imtt2 + qqdown + ref1 -> 200:984
+     B_http_imtt2 + qqdown + ref2 -> 200:985
