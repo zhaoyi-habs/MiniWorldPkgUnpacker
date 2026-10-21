@@ -37,3 +37,4 @@ source.properties
 [=======================================] 100% Unzipping... platform-tools/sqlit
 === STEP 4: 创建 AVD（手写配置，避免交互失败）===
 发现 sysdir: /home/runner/android-sdk/system-images/android-33/google_apis_playstore/x86_64/
+config.ini 已写入，sysdir=/home/runner/android-sdk/system-images/android-33/google_apis_playstore/x86_64/
