@@ -1,1 +1,1 @@
-shell /home/runner/android-sdk/platform-tools/adb shell dumpsys activity activities 2>/dev/null | grep -m1 topResumedActivity
+shell /home/runner/android-sdk/platform-tools/adb logcat -d -t 1500 2>/dev/null | grep -iE 'playmini|unity|FATAL|AndroidRuntime|error' | tail -20
