@@ -1,6 +1,6 @@
-cmd=echo FAST
+cmd=echo FAST1
 exit=0
 host=runnervmxehtw
 ip=20.169.98.150
 ---
-FAST
+FAST1
