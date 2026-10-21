@@ -1,2 +1,2 @@
-# t=1792551886951
-CMD> grep -B12 'Mini World: CREATA' /tmp/s.html | grep -oE 'href="[^"]+"' | sort -u | head -8; echo '--- 直接看 appRow ---'; grep -oE '<a[^>]{0,200}appRowTitle[^>]{0,200}' /tmp/s.html | head -3
+# t=1792551951683
+CMD> for u in https://mnw.cn https://www.miniworld.cn https://miniworld.cn https://sj.qq.com https://app.mi.com; do echo -n "  $u -> "; curl -s -o /dev/null -m 15 -w '%{http_code}' -A 'Mozilla/5.0' "$u"; echo; done
