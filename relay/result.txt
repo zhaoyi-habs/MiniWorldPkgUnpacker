@@ -16,3 +16,6 @@ zip OK entries=5631
   OK AndroidManifest.xml
   OK resources.arsc
   OK classes.dex
+=== upload to release ===
+upload FAIL: {}
+TOTAL 0.6 min
