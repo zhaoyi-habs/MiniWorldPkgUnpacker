@@ -1,1 +1,2 @@
 === 启动模拟器 ===
+sd=/home/runner/android-sdk/system-images/android-30/google_apis_playstore/x86_64/
