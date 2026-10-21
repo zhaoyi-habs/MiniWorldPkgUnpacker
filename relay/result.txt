@@ -42,3 +42,4 @@ If we see LINE_NOT_FOUND, the kvm gr
 More info on configuring VM acceleration on Linux:
 https://developer.android.com/studio/run/emulator-acceleration#vm-linux
 General information on acceleration: https://developer.android.com/studio/run/emulator-acceleration.
+=== 回退 API33 ===
