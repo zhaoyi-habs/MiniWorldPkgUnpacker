@@ -56,3 +56,4 @@ qemu 进程: 0
   wait 0 (20s): boot_completed='* daemon not running; starting now at tcp:5037* daemon started successfullyadb: no devices/emulators found' devices=List of devices attached
   wait 1 (40s): boot_completed='adb: no devices/emulators found' devices=List of devices attached
   wait 2 (60s): boot_completed='adb: no devices/emulators found' devices=List of devices attached
+  wait 3 (80s): boot_completed='adb: no devices/emulators found' devices=List of devices attached
