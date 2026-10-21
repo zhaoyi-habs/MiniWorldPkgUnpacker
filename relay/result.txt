@@ -61,3 +61,4 @@ activity: com.tencent.tmgp.minitech.miniworld/com.minitech.miniworld.StartupActi
   shot3 回传 3 片
   shot3: 已点击中央
   shot4 focus=
+  shot4 raw=534009
