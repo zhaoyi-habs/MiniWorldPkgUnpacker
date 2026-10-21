@@ -3,3 +3,8 @@
   size=153607504 type=/home/runner/cmdtools.zip: Zip archive data, at least v1.0 to extract, compressi
   sdkmanager exists: True
 最终 sdkmanager: True
+ls latest: NOTICE.txt
+bin
+cmdline-tools
+lib
+source.properties
