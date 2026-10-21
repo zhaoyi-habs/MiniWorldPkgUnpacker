@@ -1,6 +1,18 @@
-cmd=curl -s -m 30 -A 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/120' 'https://www.apkmirror.com/?s=mini+world' | grep -oE 'href="https://www.apkmirror.com/apk/[^"]*mini-world[^"]*"' | head -5; echo '=== 搜索国内版 ==='; curl -s -m 30 -A 'Mozilla/5.0' 'https://www.apkmirror.com/?s=%E8%BF%B7%E4%BD%A0%E4%B8%96%E7%95%8C' | grep -oE 'href="https://www.apkmirror.com/apk/[^"]*"' | head -3
+cmd=curl -s -m 30 -A 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/120' 'https://www.apkmirror.com/?s=mini+world' > /tmp/s.html; echo "size=$(stat -c%s /tmp/s.html)"; grep -oE 'href="[^"]*apkmirror[^"]*"' /tmp/s.html | sort -u | head -12
 exit=0
 host=runnervmxehtw
-ip=57.151.91.162
+ip=20.169.98.150
 ---
-=== 搜索国内版 ===
+size=327685
+href="/apkmirror-com-privacy-policy/"
+href="/premium?utm_source=apkmirror&utm_medium=banner&utm_campaign=site_promo&utm_content=No+ads%2C+dark+mode%2C+and+more+with+APKMirror+Premium"
+href="https://github.com/illogical-robot/apkmirror-public/issues"
+href="https://mastodon.social/@apkmirror"
+href="https://t.me/apkmirror_official"
+href="https://twitter.com/apkmirror"
+href="https://www.apkmirror.com/"
+href="https://www.apkmirror.com/?memberful_endpoint=auth"
+href="https://www.apkmirror.com/feed/"
+href="https://www.apkmirror.com/premium"
+href="https://www.apkmirror.com/wp-content/themes/APKMirror/images/apple-touch-icon-114x114.png"
+href="https://www.apkmirror.com/wp-content/themes/APKMirror/images/apple-touch-icon-120x120.png"
