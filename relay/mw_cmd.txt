@@ -1,1 +1,1 @@
-tap 540 572
+shell /home/runner/android-sdk/platform-tools/adb shell input text 3928657028
