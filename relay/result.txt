@@ -93,3 +93,4 @@ adb: device offline'
 WARNING      | adb command '/home/runner/android-sdk/platform-tools/adb -s emulator-5554 shell settings put system screen_off_timeout 2147483647 ' failed: 'adb: device offline'
 qemu 进程: 1
 === STEP 10: 截图回传 ===
+  shot0: 1235648 bytes
