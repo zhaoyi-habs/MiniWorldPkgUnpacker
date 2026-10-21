@@ -13,3 +13,4 @@ CMD: shell curl -sIL -m 30 -A 'Mozilla/5.0' 'https://apkdownloadspot.com/?s=qq' 
 CMD: inst https://d.apkpure.net/b/APK/com.tencent.mobileqq?version=latest
 CMD: start
 CMD: shot
+CMD: ui
