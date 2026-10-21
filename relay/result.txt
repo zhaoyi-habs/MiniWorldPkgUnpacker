@@ -69,3 +69,6 @@ android: 13
 === STEP 7: 下载 APK ===
 apk=1772758908 (1690.6MB) in 293s
 === STEP 8: 安装 APK ===
+install in 11s:
+Performing Streamed Install
+adb: failed to install /home/runner/mw.apk: Failure [INSTALL_FAILED_NO_MATCHING_ABIS: INSTALL_FAILED_NO_MATCHING_ABIS: Failed to extract native libraries, res=-113]
