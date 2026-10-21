@@ -5,3 +5,4 @@ install: Performing Streamed Install
 Success
 游戏已启动，进入常驻循环
 READY
+循环结束
