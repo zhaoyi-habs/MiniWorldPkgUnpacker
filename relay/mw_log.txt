@@ -1,4 +1,3 @@
-CMD: tap 540 977
 CMD: shot
 CMD: key KEYCODE_BACK
 CMD: shot
@@ -78,3 +77,4 @@ CMD: tap 1004 654
 CMD: ui
 CMD: shell /home/runner/android-sdk/platform-tools/adb shell cmd connectivity airplane-mode disable 2>&1; /home/runner/android-sdk/platform-tools/adb shell settings put global airplane_mode_on 0 2>&1; echo net_on
 CMD: inst https://d.apkpure.net/b/APK/com.playmini.miniworld?version=latest
+CMD: shell /home/runner/android-sdk/platform-tools/adb shell monkey -p com.playmini.miniworld -c android.intent.category.LAUNCHER 1 2>&1|tail -2
