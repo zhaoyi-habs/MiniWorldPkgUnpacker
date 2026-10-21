@@ -39,3 +39,4 @@ CMD: ui
 CMD: tap 540 572
 CMD: shell \$ANDROID_SDK_ROOT/platform-tools/adb shell input text 3928657028
 CMD: tap 540 782
+CMD: shell \$ANDROID_SDK_ROOT/platform-tools/adb shell input text 0987poiu
