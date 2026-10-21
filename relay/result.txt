@@ -1,2 +1,1 @@
-=== 启动模拟器 ===
-BOOT FAIL
+=== STEP1 SDK ===
