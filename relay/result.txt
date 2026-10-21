@@ -6,3 +6,4 @@ sysimages: ls: cannot access '/home/runner/android-sdk/system-images': No such f
 API30 sysdir: None
 === 回退 API33 ===
 API33 sysdir: None
+ABORT: 无法启动任何模拟器
