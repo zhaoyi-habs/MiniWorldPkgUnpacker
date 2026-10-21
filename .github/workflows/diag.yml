@@ -1,0 +1,85 @@
+name: Diag Download
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  diag:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - name: Diagnose
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+        run: |
+          mkdir -p relay
+          cat > relay/diag.py <<'PYEOF'
+          #!/usr/bin/env python3
+          """诊断：并发 curl range 下载是否可行"""
+          import os, subprocess, time, base64, json, urllib.request
+
+          TOKEN = os.environ.get("GH_TOKEN", "")
+          REPO = os.environ.get("GITHUB_REPOSITORY", "")
+          URL = ("https://imtt2.dd.qq.com/sjy.00009/sjy.00002/16891/apk/"
+                 "0F94B1CB324EE4F471C95BA1127CE377.apk"
+                 "?fsname=com.tencent.tmgp.minitech.miniworld_80640.apk")
+          SIZE = 1772758908
+
+          def report(msg):
+              try:
+                  path = f"/repos/{REPO}/contents/relay/result.txt"
+                  req = urllib.request.Request("https://api.github.com" + path)
+                  req.add_header("Authorization", "Bearer " + TOKEN)
+                  req.add_header("User-Agent", "r")
+                  sha = None
+                  try:
+                      with urllib.request.urlopen(req, timeout=30) as r:
+                          sha = json.loads(r.read().decode()).get("sha")
+                  except Exception:
+                      pass
+                  p = {"message": "diag", "content": base64.b64encode(msg.encode()).decode()}
+                  if sha: p["sha"] = sha
+                  req2 = urllib.request.Request("https://api.github.com" + path, method="PUT")
+                  req2.add_header("Authorization", "Bearer " + TOKEN)
+                  req2.add_header("User-Agent", "r")
+                  req2.add_header("Content-Type", "application/json")
+                  urllib.request.urlopen(req2, json.dumps(p).encode(), timeout=60).read()
+              except Exception as e:
+                  print("report fail", e)
+
+          out = []
+          # 1. 单个 range 测试
+          out.append("=== 单个 range 测试 (前 2MB) ===")
+          r = subprocess.run(["curl","-s","-m","60","-A","Mozilla/5.0","-r","0-2097151",
+                              "-o","/tmp/t1","-w","%{http_code} %{size_download}",URL],
+                             capture_output=True, text=True)
+          out.append("result: " + (r.stdout or ""))
+          out.append("file: " + (subprocess.run(["ls","-l","/tmp/t1"],capture_output=True,text=True).stdout or "")[:100])
+          report("\n".join(out))
+
+          # 2. 并发 8 个 range，各 5MB，测速度
+          out.append("=== 并发 8 路测速（各 5MB）===")
+          t0 = time.time()
+          subprocess.run("rm -f /tmp/sp_*", shell=True)
+          cmds = []
+          for i in range(8):
+              s = 100 * 1024 * 1024 + i * 5 * 1024 * 1024
+              e = s + 5 * 1024 * 1024 - 1
+              cmds.append(f'curl -s -m 120 -A Mozilla/5.0 -r {s}-{e} -o /tmp/sp_{i} "{URL}" &')
+          subprocess.run("; ".join(cmds) + " wait", shell=True, timeout=200)
+          tot = 0
+          for i in range(8):
+              p = f"/tmp/sp_{i}"
+              if os.path.exists(p): tot += os.path.getsize(p)
+          el = time.time() - t0
+          out.append(f"got={tot} bytes ({tot/1048576:.1f}MB) in {el:.1f}s -> {tot/1048576/el:.2f} MB/s")
+          if el > 0:
+              out.append(f"预估下载 1.65GB 需要: {1772758908/1048576/(tot/1048576/el)/60:.1f} 分钟")
+          report("\n".join(out))
+          print("\n".join(out))
+          PYEOF
+          python3 relay/diag.py
