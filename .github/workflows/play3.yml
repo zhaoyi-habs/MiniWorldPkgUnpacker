@@ -1,0 +1,258 @@
+name: Play3
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  p:
+    runs-on: ubuntu-latest
+    timeout-minutes: 340
+    steps:
+      - name: Cache SDK
+        uses: actions/cache@v4
+        with:
+          path: /home/runner/android-sdk
+          key: android-sdk-v2
+      - name: Cache APK
+        uses: actions/cache@v4
+        with:
+          path: /home/runner/mw.apk
+          key: mw-apk-v1
+      - name: Play
+        continue-on-error: true
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+        run: |
+          mkdir -p relay
+          cat > relay/play3.py <<'PYEOF'
+          #!/usr/bin/env python3
+          """软件GPU强化版：ANGLE+SwiftShader Vulkan(完整GLES3.x) + 8GB RAM + 全程容错"""
+          import os, sys, json, time, base64, subprocess, urllib.request, traceback
+
+          TOKEN=os.environ.get("GH_TOKEN",""); REPO=os.environ.get("GITHUB_REPOSITORY","")
+          HOME=os.path.expanduser("~"); SDK=f"{HOME}/android-sdk"
+          PKG="com.tencent.tmgp.minitech.miniworld"
+          adb=f"{SDK}/platform-tools/adb"; emu=f"{SDK}/emulator/emulator"
+          sm=f"{SDK}/cmdline-tools/latest/bin/sdkmanager"
+
+          def rep(m):
+              try:
+                  path=f"/repos/{REPO}/contents/relay/result.txt"
+                  req=urllib.request.Request("https://api.github.com"+path)
+                  req.add_header("Authorization","Bearer "+TOKEN); req.add_header("User-Agent","r")
+                  sha=None
+                  try:
+                      with urllib.request.urlopen(req,timeout=30) as r: sha=json.loads(r.read().decode()).get("sha")
+                  except Exception: pass
+                  p={"message":"play3","content":base64.b64encode(m.encode()).decode()}
+                  if sha: p["sha"]=sha
+                  r2=urllib.request.Request("https://api.github.com"+path,method="PUT")
+                  r2.add_header("Authorization","Bearer "+TOKEN); r2.add_header("User-Agent","r")
+                  r2.add_header("Content-Type","application/json")
+                  urllib.request.urlopen(r2,json.dumps(p).encode(),timeout=90).read()
+              except Exception as e: print("rep",e)
+          def sh(c,t=600):
+              try:
+                  r=subprocess.run(c,shell=True,capture_output=True,text=True,timeout=t)
+                  return (r.stdout or "")+"\n"+(r.stderr or "")
+              except subprocess.TimeoutExpired: return "TIMEOUT"
+          out=[]
+          def log(s):
+              out.append(s); print(s,flush=True)
+              rep("\n".join(out)[-60000:])
+          def put(path,b64,msg="x"):
+              try:
+                  req=urllib.request.Request(f"https://api.github.com/repos/{REPO}/contents/{path}")
+                  req.add_header("Authorization","Bearer "+TOKEN); req.add_header("User-Agent","r")
+                  sha=None
+                  try:
+                      with urllib.request.urlopen(req,timeout=30) as r: sha=json.loads(r.read().decode()).get("sha")
+                  except Exception: pass
+                  p={"message":msg,"content":b64}
+                  if sha: p["sha"]=sha
+                  r2=urllib.request.Request(f"https://api.github.com/repos/{REPO}/contents/{path}",method="PUT")
+                  r2.add_header("Authorization","Bearer "+TOKEN); r2.add_header("User-Agent","r")
+                  r2.add_header("Content-Type","application/json")
+                  urllib.request.urlopen(r2,json.dumps(p).encode(),timeout=120).read(); return True
+              except Exception: return False
+
+          def main():
+              log("=== STEP1 SDK ===")
+              if not os.path.exists(sm):
+                  CT=f"{HOME}/cmdtools.zip"
+                  for a in range(3):
+                      sh(f"rm -f {CT}",60)
+                      sh(f"curl -sL -m 900 -A 'Mozilla/5.0' -o {CT} "
+                         "'https://dl.google.com/android/repository/commandlinetools-linux-11076708_latest.zip'",900)
+                      sz=os.path.getsize(CT) if os.path.exists(CT) else 0
+                      log(f"  cmdtools try{a+1}: {sz}")
+                      if sz<5*1024*1024: continue
+                      os.makedirs(SDK,exist_ok=True)
+                      sh(f"mkdir -p {SDK}/cmdline-tools/latest && unzip -q -o {CT} -d {SDK}/cmdline-tools/latest",300)
+                      if os.path.isdir(f"{SDK}/cmdline-tools/latest/cmdline-tools"):
+                          sh(f"cp -r {SDK}/cmdline-tools/latest/cmdline-tools/* {SDK}/cmdline-tools/latest/ 2>/dev/null")
+                      if os.path.exists(sm): break
+              log("  sdkmanager: "+str(os.path.exists(sm)))
+              if os.path.exists(sm):
+                  sh(f"yes | {sm} --sdk_root={SDK} --licenses >/dev/null 2>&1",900)
+                  need=[]
+                  if not os.path.exists(f"{SDK}/platform-tools/adb"): need.append("'platform-tools'")
+                  if not os.path.exists(emu): need.append("'emulator'")
+                  sd=None
+                  for root,dirs,files in os.walk(f"{SDK}/system-images"):
+                      if "android-30" in root and "kernel-ranchu" in files: sd=root+"/"
+                  if not sd: need.append("'system-images;android-30;google_apis_playstore;x86_64'")
+                  if need:
+                      log("  安装: "+" ".join(need))
+                      log(sh(f"{sm} --sdk_root={SDK} --install "+" ".join(need)+" 2>&1|tail -3",2400).strip()[-400:])
+              sd=None
+              for root,dirs,files in os.walk(f"{SDK}/system-images"):
+                  if "android-30" in root and "kernel-ranchu" in files: sd=root+"/"; break
+              log("  sd30: "+str(sd))
+              if not sd: log("ABORT 无镜像"); return
+
+              # PIL：apt 优先（runner 上最稳）
+              log("=== PIL 安装 ===")
+              sh("sudo apt-get install -y -qq python3-pil 2>&1|tail -2",600)
+              try:
+                  from PIL import Image; import io, collections
+                  log("  PIL OK")
+              except Exception:
+                  sh("pip install -q --break-system-packages pillow 2>&1|tail -2",600)
+                  try:
+                      from PIL import Image; import io, collections
+                      log("  PIL OK (pip)")
+                  except Exception as e:
+                      log("  PIL 失败: "+str(e)[:100]); log("ABORT"); return
+
+              log("=== STEP2 AVD（软件GPU: ANGLE+Vulkan/SwiftShader, 8GB RAM）===")
+              AVD="mw30"; avdd=f"{HOME}/.android/avd/{AVD}.avd"
+              os.makedirs(avdd,exist_ok=True)
+              open(f"{HOME}/.android/avd/{AVD}.ini","w").write(
+                  f"avd.ini.encoding=UTF-8\npath={avdd}\npath.rel=avd/{AVD}.avd\ntarget=android-30\n")
+              open(f"{avdd}/config.ini","w").write(f"""AvdId={AVD}
+          PlayStore.enabled=false
+          abi.type=x86_64
+          avd.ini.displayname={AVD}
+          avd.ini.encoding=UTF-8
+          disk.dataPartition.size=14G
+          hw.audioInput=no
+          hw.audioOutput=no
+          hw.cpu.arch=x86_64
+          hw.cpu.ncore=4
+          hw.gpu.enabled=yes
+          hw.gpu.mode=angle_indirect
+          hw.gpu.angle_feature_override=enabled:DesktopNativeEmulation
+          hw.keyboard=yes
+          hw.lcd.density=420
+          hw.lcd.height=1920
+          hw.lcd.width=1080
+          hw.mainKeys=no
+          hw.ramSize=8192
+          hw.ram.lowWaterMark=512
+          image.sysdir.1={sd}
+          runtime.network.latency=none
+          runtime.network.speed=full
+          showDeviceFrame=no
+          tag.id=google_apis_playstore
+          """)
+              log("  config 已写")
+
+              log("=== STEP3 启动 ===")
+              sh("sudo chmod 666 /dev/kvm 2>&1 || true",60)
+              log("  /dev/kvm: "+sh("ls -l /dev/kvm 2>&1|head -1").strip())
+              sh("pkill -f qemu-system; sleep 3",60)
+              sh(f"rm -f {avdd}/*.lock 2>/dev/null",60)
+              sh(f"nohup {emu} -avd {AVD} -no-window -no-audio -no-boot-anim "
+                 f"-gpu angle_indirect -no-snapshot -memory 8192 -cores 4 "
+                 f"-partition-size 8192 -qemu -enable-kvm > {HOME}/play3.log 2>&1 &",60)
+              ok=False
+              for i in range(45):
+                  time.sleep(20)
+                  st=sh(f"{adb} shell getprop sys.boot_completed 2>&1|tr -d '\\r\\n'",60).strip()
+                  if st=="1": ok=True; log(f"  booted {20*(i+1)}s"); break
+                  if i%4==0: log(f"  wait {20*(i+1)}s: '{st[-40:]}'")
+              if not ok:
+                  log("BOOT FAIL:\n"+sh(f"tail -30 {HOME}/play3.log 2>&1").strip()[-1500:]); return
+              log("  android: "+sh(f"{adb} shell getprop ro.build.version.release",60).strip())
+              log("  GPU 模式: "+sh(f"{adb} shell getprop qemu.gles 2>&1",60).strip())
+              log("  GLES 版本: "+sh(f"{adb} shell getprop ro.opengles.version 2>&1",60).strip())
+              log("  bridge: "+sh(f"{adb} shell getprop ro.dalvik.vm.native.bridge",60).strip())
+
+              log("=== STEP4 安装 ===")
+              APK=f"{HOME}/mw.apk"
+              if PKG not in sh(f"{adb} shell pm list packages 2>&1",90):
+                  if not os.path.exists(APK) or os.path.getsize(APK)<1000000:
+                      t0=time.time()
+                      sh(f"curl -sL -m 1800 -A 'Mozilla/5.0' -o {APK} "
+                         "'https://imtt.dd.qq.com/sjy.00009/sjy.00002/16891/apk/0F94B1CB324EE4F471C95BA1127CE377.apk?fsname=com.tencent.tmgp.minitech.miniworld_80640.apk'",1800)
+                      log(f"  apk={os.path.getsize(APK) if os.path.exists(APK) else 0} in {time.time()-t0:.0f}s")
+                  r=sh(f"{adb} install -r -t {APK} 2>&1|tail -4",2400)
+                  log("  install: "+r.strip()[-300:])
+              log("  已装: "+sh(f"{adb} shell pm list packages|grep -i mini",90).strip())
+
+              log("=== STEP5 启动游戏 ===")
+              sh(f"{adb} shell am force-stop {PKG} 2>&1",90)
+              sh(f"{adb} shell am start -n {PKG}/com.minitech.miniworld.StartupActivity 2>&1|tail -2",180)
+              sh(f"{adb} logcat -c 2>&1",60)
+
+              log("=== STEP6 游玩监控（每2.5分钟，共40分钟）===")
+              prev=None
+              for k in range(16):
+                  try:
+                      time.sleep(150)
+                      ps=sh(f"{adb} shell ps -A 2>/dev/null|grep -i minitech|head -2",90).strip()
+                      act=sh(f"{adb} shell dumpsys activity activities 2>/dev/null|grep -m1 'topResumedActivity'",90).strip()
+                      tom=sh(f"{adb} shell ls /data/tombstones 2>/dev/null|head -3",60).strip()
+                      log(f"--- {(k+1)*2.5:.0f}分钟 ---")
+                      log("  proc: "+(ps[:150] or "(无进程)"))
+                      log("  act: "+act[-110:])
+                      log("  tomb: "+(tom[:60] or "(无)"))
+                      png=f"{HOME}/r{k}.png"
+                      sh(f"{adb} exec-out screencap -p > {png}",150)
+                      if os.path.exists(png) and os.path.getsize(png)>1000:
+                          raw=open(png,'rb').read()
+                          im=Image.open(png).convert("RGB")
+                          c=collections.Counter(im.getdata()); uniq=len(c); top=c.most_common(1)[0]
+                          chg=""
+                          if prev is not None:
+                              d=sum(1 for p,q in zip(im.getdata(),prev.getdata()) if p!=q)
+                              chg=" 变化%.2f%%"%(d*100/(im.size[0]*im.size[1]))
+                          log(f"  shot: 色数={uniq} 主色={top[0]}{chg}")
+                          prev=im
+                          w,h=im.size
+                          if w>720: im=im.resize((720,int(h*720/w)))
+                          b=io.BytesIO(); im.save(b,"PNG",optimize=True); raw=b.getvalue()
+                          b64=base64.b64encode(raw).decode()
+                          CH=300000; n=(len(b64)+CH-1)//CH
+                          for i in range(min(n,10)):
+                              put(f"relay/r{k}_{i}.b64", b64[i*CH:(i+1)*CH], f"r{k}_{i}")
+                          put(f"relay/r{k}_meta.json", base64.b64encode(json.dumps({"chunks":n}).encode()).decode(), f"r{k}_meta")
+                          log(f"  回传{min(n,10)}片")
+                      for x,y in [(540,960),(540,1300),(540,1650),(950,1750)]:
+                          sh(f"{adb} shell input tap {x} {y} 2>&1",45)
+                  except Exception as e:
+                      log(f"  轮{k}异常: "+traceback.format_exc()[-300:])
+
+              log("=== logcat 关键 ===")
+              lc=sh(f"{adb} logcat -d -t 5000 2>/dev/null|grep -iE 'minitech|unity|FATAL|AndroidRuntime|tombstone|crash|Exception|gl|vulkan' |head -40",200)
+              log((lc.strip()[:2500]) or "(无)")
+              log("DONE")
+
+          try:
+              main()
+          except Exception:
+              log("致命异常:\n"+traceback.format_exc()[-2000:])
+          PYEOF
+          python3 relay/play3.py || true
+      - name: Upload emu log
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: emulog
+          path: /home/runner/play3.log
+          if-no-files-found: ignore
