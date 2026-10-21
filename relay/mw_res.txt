@@ -1,1 +1,1 @@
-WAIT|0
+OK|shell|node index="0" text="" resource-id="com.tencent.mobileqq:id/slk" class="android.widget.CheckBox" package="com.tencent.mobileqq" content-desc="同意协议" checkable="true" checked="false" clickable="true" enabled="true" focusable="true" focused="false" scrollable="false" long-clickable="false" password="false" selected="false" bounds="[174,1080][216,1122]" />
