@@ -21,3 +21,4 @@
   ✅ C_dd_myapp + chrome + ref1 -> 206:1048576
   ✅ C_dd_myapp + chrome + ref2 -> 206:1048576
   ✅ C_dd_myapp + qqdown + ref0 -> 206:1048576
+  ✅ C_dd_myapp + qqdown + ref1 -> 206:1048576
