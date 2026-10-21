@@ -1,4 +1,3 @@
-=== 常驻监听 ===
 CMD: shot
 CMD: ui
 CMD: tap 960 691
@@ -78,3 +77,4 @@ CMD: tap 580 796
 CMD: shot
 CMD: tap 600 796
 CMD: shot
+CMD: tap 620 796
