@@ -3,3 +3,4 @@ sd=/home/runner/android-sdk/system-images/android-30/google_apis_playstore/x86_6
 booted
 install: Performing Streamed Install
 Success
+READY
