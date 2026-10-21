@@ -1,3 +1,15 @@
-runner_online
-ip=52.161.51.153
-host=runnervm8k3b6
+cmd=curl -sL -m 25 -A 'Mozilla/5.0 (iPhone)' 'https://sj.qq.com/myapp/detail.htm?apkName=com.minitech.miniworld' -o /tmp/a.html -w 'yingyongbao=%{http_code} size=%{size_download}\n'; grep -oE 'verName[^,]{0,25}' /tmp/a.html 2>/dev/null|head -2; curl -s -m 30 -A 'Mozilla/5.0' 'https://apps.evozi.com/downloader?package=com.minitech.miniworld&fetch=true' -o /tmp/e.json -w 'evozi=%{http_code} size=%{size_download}\n'; head -c 300 /tmp/e.json
+exit=0
+host=runnervmxehtw
+ip=20.169.98.150
+---
+yingyongbao=200 size=327081
+evozi=200 size=6180
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <meta name="theme-color" content="#006F86">
+    <title>Evozi Apps - La
