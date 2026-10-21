@@ -10,3 +10,4 @@
   wait 20s: ' started successfullyadb: device offline'
   booted 40s
   android: 11
+  GPU 模式: 
