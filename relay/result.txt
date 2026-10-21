@@ -78,3 +78,4 @@ adb: failed to install /home/runner/mw.apk: Failure [INSTALL_FAILED_NO_MATCHING_
 === STEP 9: 启动游戏 ===
 installed: 
 activity: No activity found
+已发起启动
