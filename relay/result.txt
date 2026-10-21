@@ -94,3 +94,4 @@ WARNING      | adb command '/home/runner/android-sdk/platform-tools/adb -s emula
 qemu 进程: 1
 === STEP 10: 截图回传 ===
   shot0: 1235648 bytes
+  (PIL 不可用: No module named 'PIL')
