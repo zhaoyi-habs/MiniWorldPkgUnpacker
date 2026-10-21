@@ -1,4 +1,3 @@
-CMD: ui
 CMD: shot
 CMD: tap 980 796
 CMD: tap 1004 654
@@ -78,3 +77,4 @@ CMD: shot
 CMD: tap 480 796
 CMD: shot
 CMD: tap 500 796
+CMD: shot
