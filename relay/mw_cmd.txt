@@ -1,1 +1,1 @@
-shell /home/runner/android-sdk/platform-tools/adb shell input touchscreen tap 540 977
+ui
