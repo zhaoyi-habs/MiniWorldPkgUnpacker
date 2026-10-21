@@ -1,1 +1,1 @@
-shell for i in $(seq 1 25); do /home/runner/android-sdk/platform-tools/adb shell input keyevent 67; done
+ui
