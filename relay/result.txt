@@ -3,3 +3,4 @@ booted 40s
 android 11
 install: Performing Streamed Install
 Success
+游戏已启动，进入常驻循环
