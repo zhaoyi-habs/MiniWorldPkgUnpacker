@@ -1,4 +1,3 @@
-CMD: tap 566 1101
 CMD: shot
 CMD: tap 540 977
 CMD: ui
@@ -78,3 +77,4 @@ CMD: tap 195 1101
 CMD: shell /home/runner/android-sdk/platform-tools/adb shell uiautomator dump /sdcard/ui3.xml >/dev/null 2>&1; /home/runner/android-sdk/platform-tools/adb shell cat /sdcard/ui3.xml 2>/dev/null | tr '<' '\n' | grep 'CheckBox' | head -2
 CMD: tap 540 977
 CMD: ui
+CMD: shot
