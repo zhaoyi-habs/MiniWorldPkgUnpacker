@@ -1,6 +1,3 @@
-cmd=U='http://imtt2.dd.qq.com/sjy.00009/sjy.00002/16891/apk/0F94B1CB324EE4F471C95BA1127CE377.apk?fsname=com.tencent.tmgp.minitech.miniworld_80640.apk'; echo '=== HEAD ==='; curl -sI -m 30 -A 'Mozilla/5.0' "$U" | grep -iE 'content-length|content-type|HTTP'; echo '=== 下载前100KB探测版本 ==='; curl -s -m 40 -A 'Mozilla/5.0' -r 0-200000 "$U" -o /tmp/head.apk -w 'partial=%{size_download}\n'; file /tmp/head.apk 2>/dev/null; python3 -c "
-exit=2
-host=runnervmxehtw
-ip=20.169.98.150
----
-/bin/sh: 1: Syntax error: Unterminated quoted string
+runner_online
+ip=20.168.157.84
+host=runnervm8k3b6
