@@ -15,3 +15,4 @@ adb: True
 sysimages: android-30
 API30 sysdir: /home/runner/android-sdk/system-images/android-30/google_apis_playstore/x86_64/
 内容: ['NOTICE.txt', 'system.img', 'vendor.img', 'VerifiedBootParams.textproto', 'package.xml', 'data', 'ramdisk.img', 'kernel-ranchu', 'encryptionkey.img', 'userdata.img', 'build.prop', 'source.properties', 'advancedFeatures.ini']
+=== 尝试启动 API30 ===
