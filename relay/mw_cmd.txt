@@ -1,1 +1,1 @@
-shell /home/runner/android-sdk/platform-tools/adb shell cat /sdcard/ui2.xml 2>/dev/null | tr '<' '\n' | grep '174,1080' | head -2
+tap 195 1101
