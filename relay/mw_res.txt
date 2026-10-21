@@ -1,1 +1,4 @@
-WAIT|0
+OK|shell|HTTP/2 302 
+location: https://data.winudf.com/APK/Y29tLnRlbmNlbnQubW9iaWxlcXFfODU2OF80NmM2NzgwNA?_p=Y29tLnRlbmNlbnQubW9iaWxlcXE%3D&filename=QQ_9.1.33_APKPure.apk&full_size=318049279&is_hot=true&k=6755bca82b52ac2e998041959b3bacb06adb2961&package_name=com.tencent.mobileqq&source=web&token=1792575073-e2da8020ba-0-67e1badd01ff957345be1dd22caa4b1a
+HTTP/2 200 
+content-length: 318049279
