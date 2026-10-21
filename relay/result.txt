@@ -8,3 +8,4 @@ avds: /bin/sh: 1: /home/runner/android-sdk/emulator/emulator: not found
   wait 20s: 'h: 1: /home/runner/android-sdk/platform-tools/adb: not found'
   wait 80s: 'h: 1: /home/runner/android-sdk/platform-tools/adb: not found'
   wait 140s: 'h: 1: /home/runner/android-sdk/platform-tools/adb: not found'
+  wait 200s: 'h: 1: /home/runner/android-sdk/platform-tools/adb: not found'
