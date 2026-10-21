@@ -1,6 +1,6 @@
 cmd=df -h / | tail -1
 exit=0
 host=runnervmxehtw
-ip=20.169.98.150
+ip=57.151.91.162
 ---
 /dev/root       145G   60G   86G  42% /
