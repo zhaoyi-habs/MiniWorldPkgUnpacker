@@ -1,4 +1,3 @@
-CMD: shell /home/runner/android-sdk/platform-tools/adb shell input touchscreen swipe 540 782 540 782 1200
 CMD: ui
 CMD: shell /home/runner/android-sdk/platform-tools/adb shell am force-stop com.tencent.mobileqq
 CMD: shell /home/runner/android-sdk/platform-tools/adb shell monkey -p com.tencent.mobileqq -c android.intent.category.LAUNCHER 1
@@ -78,3 +77,4 @@ CMD: tap 65 1101
 CMD: tap 80 1101
 CMD: tap 95 1101
 CMD: tap 540 977
+CMD: ui
