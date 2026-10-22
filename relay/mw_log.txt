@@ -33,3 +33,4 @@ CMD: inst https://d.apkpure.net/b/APK/com.tencent.mobileqq?version=latest
 CMD: shell /home/runner/android-sdk/platform-tools/adb shell pm list packages | grep -i -E 'minitech|mobileqq|playmini'
 CMD: shell /home/runner/android-sdk/platform-tools/adb shell am force-stop com.tencent.tmgp.minitech.miniworld; /home/runner/android-sdk/platform-tools/adb shell am force-stop com.playmini.miniworld; echo ok
 CMD: start
+CMD: ui
