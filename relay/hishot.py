@@ -1,5 +1,5 @@
 
-import os,io,base64,json,urllib.request
+import os,io,base64,json,urllib.request,time
 from PIL import Image
 TK=os.environ.get("GH_TOKEN"); REP=os.environ.get("GITHUB_REPOSITORY")
 def api(m,p,d=None):
@@ -25,5 +25,5 @@ CH=250000
 n=(len(data)+CH-1)//CH
 for i in range(n):
     put("relay/hi_%d.b64"%i, data[i*CH:(i+1)*CH])
-put("relay/hi_meta.json", json.dumps({"chunks":n,"size":str(im.size)}))
-print("OK chunks=%d size=%s"%(n,im.size))
+put("relay/hi_meta.json", json.dumps({"chunks":n,"size":str(im.size),"ts":int(time.time()*1000)}))
+print("OK ts=%d"%int(time.time()*1000))
