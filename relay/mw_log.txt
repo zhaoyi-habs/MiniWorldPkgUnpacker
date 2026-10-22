@@ -39,3 +39,4 @@ CMD: ui
 CMD: tap 980 796
 CMD: tap 1004 654
 CMD: ui
+CMD: shell /home/runner/android-sdk/platform-tools/adb shell am force-stop com.android.chrome; echo killed
