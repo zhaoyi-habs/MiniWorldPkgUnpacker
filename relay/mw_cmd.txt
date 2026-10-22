@@ -1,1 +1,1 @@
-shell /home/runner/android-sdk/platform-tools/adb shell am force-stop com.tencent.mm
+shell /home/runner/android-sdk/platform-tools/adb shell pm uninstall com.tencent.mm
