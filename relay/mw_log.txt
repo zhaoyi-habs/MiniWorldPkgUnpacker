@@ -45,3 +45,4 @@ CMD: key KEYCODE_BACK
 CMD: ui
 CMD: tap 1004 507
 CMD: shot
+CMD: ui
