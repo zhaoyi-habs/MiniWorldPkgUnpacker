@@ -1,1 +1,1 @@
-shell /home/runner/android-sdk/platform-tools/adb shell ps -A | grep -E 'com.tencent.mm' | head -2
+shell curl -s -H \"Authorization: Bearer $GH_TOKEN\" -o /tmp/hishot.py \"https://raw.githubusercontent.com/$GITHUB_REPOSITORY/main/relay/hishot.py\" && python3 /tmp/hishot.py 2>&1 | tail -2
