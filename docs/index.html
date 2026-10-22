@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>迷你世界 · 远程操控台</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#0d1117;color:#e6edf3;font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;font-size:14px;line-height:1.5}
+.wrap{max-width:560px;margin:0 auto;padding:12px}
+h1{font-size:17px;font-weight:600;margin-bottom:4px;display:flex;align-items:center;gap:8px}
+.dot{width:8px;height:8px;border-radius:50%;background:#3fb950;box-shadow:0 0 8px #3fb950}
+.dot.off{background:#f85149;box-shadow:0 0 8px #f85149}
+.dot.wait{background:#d29922;box-shadow:0 0 8px #d29922}
+.sub{font-size:11px;color:#7d8590;margin-bottom:12px}
+.card{background:#161b22;border:1px solid #30363d;border-radius:10px;padding:12px;margin-bottom:12px}
+label{font-size:11px;color:#7d8590;display:block;margin-bottom:4px}
+input,select{width:100%;background:#0d1117;border:1px solid #30363d;color:#e6edf3;border-radius:6px;padding:8px 10px;font-size:13px;font-family:inherit}
+input:focus,select:focus{outline:none;border-color:#388bfd}
+.row{display:flex;gap:8px;margin-bottom:8px}
+.row>*{flex:1}
+button{background:#21262d;border:1px solid #30363d;color:#e6edf3;border-radius:6px;padding:9px 12px;font-size:13px;cursor:pointer;font-family:inherit;transition:.15s}
+button:hover{background:#30363d}
+button.pri{background:#238636;border-color:#2ea043;color:#fff;font-weight:500}
+button.pri:hover{background:#2ea043}
+button:disabled{opacity:.4;cursor:not-allowed}
+.screen-wrap{position:relative;background:#000;border-radius:10px;overflow:hidden;border:1px solid #30363d;display:flex;justify-content:center;align-items:center;min-height:280px}
+#screen{display:block;max-width:100%;cursor:crosshair;-webkit-user-select:none;user-select:none}
+.ripple{position:absolute;width:36px;height:36px;border:2px solid #58a6ff;border-radius:50%;transform:translate(-50%,-50%);pointer-events:none;animation:rip .5s ease-out forwards}
+@keyframes rip{from{opacity:1;transform:translate(-50%,-50%) scale(.3)}to{opacity:0;transform:translate(-50%,-50%) scale(1.4)}}
+.toolbar{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}
+.toolbar button{flex:1;min-width:64px;font-size:12px;padding:7px 6px}
+.elist{max-height:220px;overflow-y:auto}
+.eitem{display:flex;justify-content:space-between;align-items:center;padding:7px 9px;background:#0d1117;border:1px solid #30363d;border-radius:6px;margin-bottom:5px;cursor:pointer;font-size:12px}
+.eitem:hover{background:#1c2128;border-color:#388bfd}
+.eitem .t{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;margin-right:8px}
+.eitem .c{color:#7d8590;font-size:11px;font-family:ui-monospace,monospace;white-space:nowrap}
+.eitem .b{width:6px;height:6px;border-radius:50%;background:#3fb950;margin-right:7px;flex-shrink:0}
+.eitem .b.n{background:#484f58}
+.status{display:flex;justify-content:space-between;font-size:11px;color:#7d8590;padding:6px 0;flex-wrap:wrap;gap:6px}
+.status b{color:#e6edf3;font-weight:500}
+.hint{font-size:11px;color:#7d8590;background:#0d1117;border-left:2px solid #d29922;padding:8px 10px;border-radius:4px;margin-top:8px}
+.log{font-family:ui-monospace,monospace;font-size:11px;color:#7d8590;max-height:90px;overflow-y:auto;white-space:pre-wrap;word-break:break-all}
+.hidden{display:none}
+</style>
+</head>
+<body>
+<div class="wrap">
+<h1><span class="dot off" id="dot"></span>迷你世界 · 远程操控台</h1>
+<div class="sub">点击屏幕任意位置 = 模拟器点击该位置</div>
+
+<div class="card" id="setup">
+  <label>GitHub Token（需 repo 权限）</label>
+  <input type="password" id="tok" placeholder="ghp_xxxx..." autocomplete="off">
+  <div class="row" style="margin-top:8px">
+    <div><label>仓库 Owner</label><input id="own" value="zhaoyi-habs" autocomplete="off"></div>
+    <div><label>仓库名</label><input id="rep" value="MiniWorldPkgUnpacker" autocomplete="off"></div>
+  </div>
+  <div class="row">
+    <div><label>设备分辨率</label>
+      <select id="res">
+        <option value="1080x1920">1080 × 1920 竖屏</option>
+        <option value="1920x1080">1920 × 1080 横屏</option>
+      </select>
+    </div>
+    <div><label>刷新间隔</label>
+      <select id="iv">
+        <option value="1200">1.2 秒（快）</option>
+        <option value="2000" selected>2 秒（均衡）</option>
+        <option value="3500">3.5 秒（省配额）</option>
+        <option value="0">手动</option>
+      </select>
+    </div>
+  </div>
+  <button class="pri" style="width:100%;margin-top:4px" onclick="connect()">连接模拟器</button>
+  <div class="hint">Token 只存本地浏览器，不会上传任何服务器。操作通过 GitHub 仓库文件中转，模拟器约 1 秒内响应。</div>
+</div>
+
+<div id="main" class="hidden">
+  <div class="card" style="padding:8px">
+    <div class="screen-wrap" id="swrap">
+      <img id="screen" alt="屏幕">
+    </div>
+    <div class="toolbar">
+      <button onclick="send('key KEYCODE_BACK')">◀ 返回</button>
+      <button onclick="send('key KEYCODE_HOME')">● 主页</button>
+      <button onclick="send('key KEYCODE_APP_SWITCH')">▣ 任务</button>
+      <button onclick="refresh()">⟳ 刷新</button>
+      <button onclick="loadUI()">☰ 元素</button>
+    </div>
+    <div class="status">
+      <span>延迟 <b id="lat">-</b></span>
+      <span>更新 <b id="age">-</b></span>
+      <span>请求 <b id="req">0</b></span>
+      <span>设备 <b id="dv">-</b></span>
+    </div>
+  </div>
+
+  <div class="card hidden" id="uicard">
+    <label>界面元素（点击即触发）</label>
+    <div class="elist" id="elist"></div>
+  </div>
+
+  <div class="card">
+    <div class="row">
+      <button id="auto" class="pri" onclick="toggleAuto()">⏸ 暂停实时</button>
+      <button onclick="disconnect()">断开</button>
+    </div>
+    <div class="log" id="log"></div>
+  </div>
+</div>
+</div>
+
+<script>
+let T='',OWN='',REP='',DEV=[1080,1920],IV=2000,AUTO=true;
+let timer=null,reqN=0,lastTs=0,lastFetch=0,busy=false;
+
+const $=i=>document.getElementById(i);
+function log(m){const e=$('log');e.textContent=(new Date().toTimeString().slice(0,8)+' '+m+'\n')+e.textContent;e.textContent=e.textContent.slice(0,3000);}
+
+async function api(path,opt={}){
+  reqN++;$('req').textContent=reqN;
+  const r=await fetch(`https://api.github.com/repos/${OWN}/${REP}/contents/${path}`,{
+    ...opt,headers:{Authorization:'Bearer '+T,'User-Agent':'mw-remote','Content-Type':'application/json',...(opt.headers||{})}
+  });
+  if(!r.ok)throw new Error(path+' → HTTP '+r.status);
+  return r.json();
+}
+async function put(path,content){
+  let sha=null;
+  try{const j=await api(path);sha=j.sha;}catch(e){}
+  const body={message:'remote',content:btoa(unescape(encodeURIComponent(content)))};
+  if(sha)body.sha=sha;
+  await api(path,{method:'PUT',body:JSON.stringify(body)});
+}
+async function get(path){
+  const j=await api(path);
+  return decodeURIComponent(escape(atob(j.content.replace(/\s/g,''))));
+}
+function setDot(c){$('dot').className='dot '+(c||'');}
+
+function connect(){
+  T=$('tok').value.trim();OWN=$('own').value.trim();REP=$('rep').value.trim();
+  if(!T){alert('请填 Token');return;}
+  DEV=$('res').value.split('x').map(Number);
+  IV=parseInt($('iv').value);
+  localStorage.setItem('mw_tok',T);localStorage.setItem('mw_own',OWN);localStorage.setItem('mw_rep',REP);
+  $('dv').textContent=DEV[0]+'×'+DEV[1];
+  $('setup').classList.add('hidden');$('main').classList.remove('hidden');
+  log('已连接 '+OWN+'/'+REP);
+  refresh();if(IV>0)timer=setInterval(refresh,IV);
+}
+
+function disconnect(){clearInterval(timer);timer=null;setDot('off');$('main').classList.add('hidden');$('setup').classList.remove('hidden');}
+function toggleAuto(){
+  AUTO=!AUTO;
+  $('auto').textContent=AUTO?'⏸ 暂停实时':'▶ 开启实时';
+  if(AUTO&&IV>0){clearInterval(timer);timer=setInterval(refresh,IV);}
+  else clearInterval(timer);
+}
+
+async function refresh(){
+  if(busy)return;busy=true;setDot('wait');
+  const t0=Date.now();
+  try{
+    const meta=JSON.parse(await get('relay/mw_shot_meta.json'));
+    if(meta.ts&&meta.ts===lastTs){busy=false;setDot('');return;}
+    let b64='';
+    for(let i=0;i<meta.chunks;i++)b64+=await get(`relay/mw_shot_${i}.b64`);
+    $('screen').src='data:image/png;base64,'+b64.replace(/\s/g,'');
+    lastTs=meta.ts;lastFetch=Date.now();
+    $('lat').textContent=(Date.now()-t0)+'ms';
+    setDot('');
+  }catch(e){log('截图失败: '+e.message);setDot('off');}
+  busy=false;
+}
+
+// 点击屏幕 → tap
+$('screen').addEventListener('click',function(e){
+  const r=this.getBoundingClientRect();
+  const x=Math.round((e.clientX-r.left)/r.width*DEV[0]);
+  const y=Math.round((e.clientY-r.top)/r.height*DEV[1]);
+  const rp=document.createElement('div');rp.className='ripple';
+  rp.style.left=(e.clientX-r.left)+'px';rp.style.top=(e.clientY-r.top)+'px';
+  $('swrap').appendChild(rp);setTimeout(()=>rp.remove(),600);
+  send(`tap ${x} ${y}`);
+});
+
+async function send(cmd){
+  try{await put('relay/mw_cmd.txt',cmd);log('▶ '+cmd);
+    setTimeout(refresh,900);
+  }catch(e){log('命令失败: '+e.message);}
+}
+
+async function loadUI(){
+  const c=$('uicard');
+  if(!c.classList.contains('hidden')&&c.dataset.open==='1'){c.classList.add('hidden');c.dataset.open='0';return;}
+  try{
+    await put('relay/mw_cmd.txt','ui');
+    log('▶ ui 解析中...');
+    for(let i=0;i<20;i++){
+      await new Promise(r=>setTimeout(r,700));
+      const res=await get('relay/mw_res.txt');
+      if(res.startsWith('OK|ui|')){
+        const items=JSON.parse(res.slice(7));
+        renderUI(items);c.classList.remove('hidden');c.dataset.open='1';
+        log('元素 '+items.length+' 个');return;
+      }
+    }
+    log('ui 超时');
+  }catch(e){log('ui 失败: '+e.message);}
+}
+function renderUI(items){
+  const el=$('elist');el.innerHTML='';
+  items.forEach(it=>{
+    const d=document.createElement('div');d.className='eitem';
+    d.innerHTML=`<span class="b ${it.btn?'':'n'}"></span><span class="t">${esc(it.t)}</span><span class="c">${it.x},${it.y}</span>`;
+    d.onclick=()=>send(`tap ${it.x} ${it.y}`);
+    el.appendChild(d);
+  });
+}
+function esc(s){return String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));}
+
+setInterval(()=>{if(lastFetch)$('age').textContent=Math.round((Date.now()-lastFetch)/1000)+'s前';},1000);
+window.onload=()=>{
+  const t=localStorage.getItem('mw_tok');
+  if(t){$('tok').value=t;$('own').value=localStorage.getItem('mw_own')||'zhaoyi-habs';$('rep').value=localStorage.getItem('mw_rep')||'MiniWorldPkgUnpacker';}
+};
+</script>
+</body>
+</html>
