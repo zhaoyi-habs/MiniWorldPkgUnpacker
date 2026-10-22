@@ -1,1 +1,1 @@
-OK|shell|checked="false"
+WAIT|0
