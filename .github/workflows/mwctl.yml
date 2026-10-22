@@ -175,11 +175,15 @@ jobs:
                   import io
                   im=Image.open(png).convert("RGB")
                   w,h=im.size
-                  if w>480: im=im.resize((480,int(h*480/w)))
-                  b=io.BytesIO(); im.save(b,"PNG",optimize=True); raw=b.getvalue()
+                  if w>400: im=im.resize((400,int(h*400/w)))
+                  b=io.BytesIO(); im.save(b,"JPEG",quality=45,optimize=True)
+                  raw=b.getvalue()
+                  try: os.remove(png)
+                  except Exception: pass
                   return raw, im.size
               except Exception:
-                  return open(png,'rb').read(), None
+                  try: return open(png,'rb').read(), None
+                  except Exception: return None,None
 
           # ---------- 常驻循环 ----------
           L("=== 常驻监听 ===")
@@ -200,10 +204,13 @@ jobs:
                           raw,size=shot()
                           if raw:
                               b=base64.b64encode(raw).decode()
-                              CH=280000; k=(len(b)+CH-1)//CH
-                              for i in range(min(k,10)):
-                                  rep(f"relay/mw_shot_{i}.b64", b[i*CH:(i+1)*CH])
-                              rep("relay/mw_shot_meta.json", json.dumps({"chunks":min(k,10),"size":str(size),"ts":int(time.time()*1000)}))
+                              rep("relay/latest.txt", f"{int(time.time()*1000)}\n{b}")
+                              try:
+                                  CH=280000; k=(len(b)+CH-1)//CH
+                                  for i in range(min(k,10)):
+                                      rep(f"relay/mw_shot_{i}.b64", b[i*CH:(i+1)*CH])
+                                  rep("relay/mw_shot_meta.json", json.dumps({"chunks":min(k,10),"size":str(size),"ts":int(time.time()*1000)}))
+                              except Exception: pass
                               rep(RES, f"OK|shot|{len(raw)}|{(time.time()-t0)*1000:.0f}ms")
                           else: rep(RES,"FAIL|shot")
                       elif op=="ui":
