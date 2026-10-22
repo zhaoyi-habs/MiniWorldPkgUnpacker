@@ -1,1 +1,1 @@
-OK|ui|[{"t": "Screenshot", "x": 527, "y": 867, "btn": true}, {"t": "Select", "x": 1392, "y": 867, "btn": true}]
+WAIT|0
