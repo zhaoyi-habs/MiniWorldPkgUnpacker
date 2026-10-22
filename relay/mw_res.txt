@@ -1,1 +1,1 @@
-OK|shell|killed
+WAIT|0
