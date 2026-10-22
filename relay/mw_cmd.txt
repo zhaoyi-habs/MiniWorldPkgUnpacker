@@ -1,1 +1,1 @@
-shell wc -c /tmp/t.py
+shell python3 /tmp/t.py 2>&1 | tail -2
