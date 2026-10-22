@@ -1,4 +1,3 @@
-CMD: ui
 CMD: tap 1600 850
 CMD: ui
 CMD: tap 1700 880
@@ -78,3 +77,4 @@ CMD: shell /home/runner/android-sdk/platform-tools/adb logcat -d -t 300 2>/dev/n
 CMD: shot
 CMD: key KEYCODE_BACK
 CMD: ui
+CMD: tap 195 1101
