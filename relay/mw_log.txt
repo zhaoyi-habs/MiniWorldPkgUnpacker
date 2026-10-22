@@ -25,3 +25,4 @@ CMD: shot
 CMD: ui
 CMD: shell /home/runner/android-sdk/platform-tools/adb shell input touchscreen swipe 960 900 960 250 400
 CMD: shot
+CMD: ui
