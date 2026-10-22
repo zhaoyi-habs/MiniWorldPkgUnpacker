@@ -97,3 +97,4 @@ CMD: shell /home/runner/android-sdk/platform-tools/adb shell am force-stop com.a
 CMD: start
 CMD: ui
 CMD: tap 960 691
+CMD: ui
