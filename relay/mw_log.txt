@@ -68,3 +68,4 @@ CMD: ui
 CMD: tap 1154 813
 CMD: tap 792 1546
 CMD: tap 177 1678
+CMD: ui
