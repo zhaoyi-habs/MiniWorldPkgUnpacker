@@ -1,0 +1,551 @@
+name: MwTS
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  c:
+    runs-on: ubuntu-latest
+    timeout-minutes: 340
+    steps:
+      - name: Cache SDK
+        uses: actions/cache@v4
+        with:
+          path: /home/runner/android-sdk
+          key: android-sdk-v2
+      - name: Cache APK
+        uses: actions/cache@v4
+        with:
+          path: /home/runner/mw.apk
+          key: mw-apk-v1
+
+      - name: Start emulator (background)
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+        run: |
+          sudo apt-get install -y -qq python3-pil ffmpeg 2>&1 | tail -1 || true
+          mkdir -p relay
+          cat > relay/mwctl.py <<'PYEOF'
+          #!/usr/bin/env python3
+          """常驻控制器：模拟器只启动一次，之后 0.25s 轮询命令，秒级响应"""
+          import os, sys, json, time, base64, subprocess, urllib.request, re, traceback
+
+          TOKEN=os.environ.get("GH_TOKEN",""); REPO=os.environ.get("GITHUB_REPOSITORY","")
+          HOME=os.path.expanduser("~"); SDK=f"{HOME}/android-sdk"
+          PKG="com.tencent.tmgp.minitech.miniworld"
+          adb=f"{SDK}/platform-tools/adb"; emu=f"{SDK}/emulator/emulator"
+          sm=f"{SDK}/cmdline-tools/latest/bin/sdkmanager"
+          CMD=f"relay/mw_cmd.txt"; RES=f"relay/mw_res.txt"
+          DEADLINE=time.time()+5.5*3600
+
+          def rep(path,msg):
+              try:
+                  req=urllib.request.Request(f"https://api.github.com/repos/{REPO}/contents/{path}")
+                  req.add_header("Authorization","Bearer "+TOKEN); req.add_header("User-Agent","r")
+                  sha=None
+                  try:
+                      with urllib.request.urlopen(req,timeout=20) as r: sha=json.loads(r.read().decode()).get("sha")
+                  except Exception: pass
+                  p={"message":"ctl","content":base64.b64encode(msg.encode()).decode()}
+                  if sha: p["sha"]=sha
+                  r2=urllib.request.Request(f"https://api.github.com/repos/{REPO}/contents/{path}",method="PUT")
+                  r2.add_header("Authorization","Bearer "+TOKEN); r2.add_header("User-Agent","r")
+                  r2.add_header("Content-Type","application/json")
+                  urllib.request.urlopen(r2,json.dumps(p).encode(),timeout=60).read(); return True
+              except Exception: return False
+
+          def get(path):
+              try:
+                  req=urllib.request.Request(f"https://api.github.com/repos/{REPO}/contents/{path}")
+                  req.add_header("Authorization","Bearer "+TOKEN); req.add_header("User-Agent","r")
+                  req.add_header("If-None-Match", getattr(get,"_etag_"+path.replace('/','_'),""))
+                  with urllib.request.urlopen(req,timeout=20) as r:
+                      j=json.loads(r.read().decode())
+                      setattr(get,"_etag_"+path.replace('/','_'), r.headers.get("ETag",""))
+                      return base64.b64decode(j["content"]).decode("utf-8","replace")
+              except urllib.error.HTTPError as e:
+                  if e.code==304: return None
+                  return None
+              except Exception: return None
+
+          def sh(c,t=600):
+              try:
+                  r=subprocess.run(c,shell=True,capture_output=True,text=True,timeout=t)
+                  return (r.stdout or "")+"\n"+(r.stderr or "")
+              except subprocess.TimeoutExpired: return "TIMEOUT"
+
+          log=[]
+          def L(s):
+              log.append(s); print(s,flush=True)
+              rep("relay/mw_log.txt","\n".join(log[-80:]))
+
+          # ---------- 启动 ----------
+          L("=== 启动模拟器 ===")
+          sd=None
+          for root,dirs,files in os.walk(f"{SDK}/system-images"):
+              if "android-30" in root and "kernel-ranchu" in files: sd=root+"/"; break
+          if not sd:
+              L("无镜像，安装中")
+              sh(f"yes | {sm} --sdk_root={SDK} --licenses >/dev/null 2>&1",900)
+              sh(f"{sm} --sdk_root={SDK} --install 'platform-tools' 'emulator' 'system-images;android-30;google_apis_playstore;x86_64' 2>&1|tail -2",2400)
+              for root,dirs,files in os.walk(f"{SDK}/system-images"):
+                  if "android-30" in root and "kernel-ranchu" in files: sd=root+"/"; break
+          L("sd="+str(sd))
+          if not sd: L("ABORT"); sys.exit(1)
+
+          AVD="mw30"; avdd=f"{HOME}/.android/avd/{AVD}.avd"
+          os.makedirs(avdd,exist_ok=True)
+          open(f"{HOME}/.android/avd/{AVD}.ini","w").write(
+              f"avd.ini.encoding=UTF-8\npath={avdd}\npath.rel=avd/{AVD}.avd\ntarget=android-30\n")
+          open(f"{avdd}/config.ini","w").write(f"""AvdId={AVD}
+          PlayStore.enabled=false
+          abi.type=x86_64
+          avd.ini.displayname={AVD}
+          avd.ini.encoding=UTF-8
+          disk.dataPartition.size=14G
+          hw.audioInput=no
+          hw.audioOutput=no
+          hw.cpu.arch=x86_64
+          hw.cpu.ncore=4
+          hw.gpu.enabled=yes
+          hw.gpu.mode=angle_indirect
+          hw.keyboard=yes
+          hw.lcd.density=420
+          hw.lcd.height=1080
+          hw.lcd.width=1920
+          hw.mainKeys=no
+          hw.ramSize=8192
+          image.sysdir.1={sd}
+          runtime.network.latency=none
+          runtime.network.speed=full
+          showDeviceFrame=no
+          tag.id=google_apis_playstore
+          """)
+          sh("sudo chmod 666 /dev/kvm 2>&1||true",60)
+          sh("pkill -f qemu-system; sleep 3",60)
+          sh(f"rm -f {avdd}/*.lock 2>/dev/null",60)
+          sh(f"nohup {emu} -avd {AVD} -no-window -no-audio -no-boot-anim -gpu angle_indirect "
+             f"-no-snapshot -memory 8192 -cores 4 -partition-size 8192 -qemu -enable-kvm "
+             f"> {HOME}/ctl.log 2>&1 &",60)
+          ok=False
+          for i in range(45):
+              time.sleep(10)
+              if sh(f"{adb} shell getprop sys.boot_completed 2>&1|tr -d '\\r\\n'",30).strip()=="1":
+                  ok=True; L(f"booted"); break
+          if not ok: L("BOOT FAIL:"+sh(f"tail -20 {HOME}/ctl.log").strip()[-800:]); sys.exit(1)
+
+          if PKG not in sh(f"{adb} shell pm list packages 2>&1",60):
+              APK=f"{HOME}/mw.apk"
+              if not os.path.exists(APK) or os.path.getsize(APK)<1000000:
+                  L("下载APK")
+                  sh(f"curl -sL -m 1800 -A 'Mozilla/5.0' -o {APK} "
+                     "'https://imtt.dd.qq.com/sjy.00009/sjy.00002/16891/apk/0F94B1CB324EE4F471C95BA1127CE377.apk?fsname=com.tencent.tmgp.minitech.miniworld_80640.apk'",1800)
+              L("install: "+sh(f"{adb} install -r -t {APK} 2>&1|tail -2",2400).strip()[-200:])
+          sh(f"{adb} shell am start -n {PKG}/com.minitech.miniworld.StartupActivity 2>&1|tail -1",180)
+          L("READY")
+          rep(RES, "READY|0")
+
+          def ui():
+              sh(f"{adb} shell uiautomator dump /sdcard/ui.xml >/dev/null 2>&1",60)
+              xml=sh(f"{adb} shell cat /sdcard/ui.xml 2>/dev/null",60)
+              items=[]
+              for m in re.finditer(r'<node[^>]*>', xml):
+                  tag=m.group(0)
+                  def g(k):
+                      mm=re.search(k+r'="([^"]*)"',tag); return mm.group(1) if mm else ""
+                  t=g("text")
+                  if not t or "&#10;" in t or len(t)>30: continue
+                  b=g("bounds"); bm=re.match(r'\[(\d+),(\d+)\]\[(\d+),(\d+)\]',b)
+                  if not bm: continue
+                  x1,y1,x2,y2=map(int,bm.groups())
+                  items.append({"t":t,"x":(x1+x2)//2,"y":(y1+y2)//2,
+                                "btn": ("Button" in g("class")) or g("clickable")=="true"})
+              return items
+
+          def shot():
+              png=f"{HOME}/s_{int(time.time())}.png"
+              sh(f"{adb} exec-out screencap -p > {png}",90)
+              if not os.path.exists(png) or os.path.getsize(png)<1000: return None,None
+              try:
+                  from PIL import Image
+                  import io
+                  im=Image.open(png).convert("RGB")
+                  w,h=im.size
+                  if w>400: im=im.resize((400,int(h*400/w)))
+                  b=io.BytesIO(); im.save(b,"JPEG",quality=45,optimize=True)
+                  raw=b.getvalue()
+                  try: os.remove(png)
+                  except Exception: pass
+                  return raw, im.size
+              except Exception:
+                  try: return open(png,'rb').read(), None
+                  except Exception: return None,None
+
+          # ---------- 常驻循环 ----------
+          L("=== 常驻监听 ===")
+          last=""
+          n=0
+          while time.time() < DEADLINE:
+              try:
+                  c = get(CMD)
+                  cur=c.strip() if c else ""
+                  # tap/click/key 允许重复执行（连点同一位置）
+                  op0=cur.split()[0] if cur else ""
+                  if cur and (cur!=last or op0 in ("tap","click","key")):
+                      last=cur
+                      parts=c.strip().split()
+                      op=parts[0]; L(f"CMD: {c.strip()}")
+                      t0=time.time()
+                      if op=="shot":
+                          raw,size=shot()
+                          if raw:
+                              b=base64.b64encode(raw).decode()
+                              rep("relay/latest.txt", f"{int(time.time()*1000)}\n{b}")
+                              try:
+                                  CH=280000; k=(len(b)+CH-1)//CH
+                                  for i in range(min(k,10)):
+                                      rep(f"relay/mw_shot_{i}.b64", b[i*CH:(i+1)*CH])
+                                  rep("relay/mw_shot_meta.json", json.dumps({"chunks":min(k,10),"size":str(size),"ts":int(time.time()*1000)}))
+                              except Exception: pass
+                              rep(RES, f"OK|shot|{len(raw)}|{(time.time()-t0)*1000:.0f}ms")
+                          else: rep(RES,"FAIL|shot")
+                      elif op=="ui":
+                          items=ui()
+                          rep(RES, "OK|ui|"+json.dumps(items, ensure_ascii=False))
+                      elif op=="tap" and len(parts)>=3:
+                          sh(f"{adb} shell input tap {parts[1]} {parts[2]} 2>&1",30)
+                          rep(RES, f"OK|tap|{parts[1]},{parts[2]}|{int(time.time()*1000)}")
+                      elif op=="key":
+                          sh(f"{adb} shell input keyevent {parts[1]}",30)
+                          rep(RES,"OK|key")
+                      elif op=="start":
+                          sh(f"{adb} shell am start -n {PKG}/com.minitech.miniworld.StartupActivity 2>&1|tail -1",120)
+                          rep(RES,"OK|start")
+                      elif op=="click" and len(parts)>=2:
+                          want=" ".join(parts[1:])
+                          for it in ui():
+                              if want in it["t"]:
+                                  sh(f"{adb} shell input tap {it['x']} {it['y']} 2>&1",30)
+                                  rep(RES, f"OK|click|{it['t']}@{it['x']},{it['y']}")
+                                  break
+                          else: rep(RES, f"MISS|click|{want}")
+                      elif op=="shell":
+                          r=sh(" ".join(parts[1:]),180)
+                          rep(RES,"OK|shell|"+r.strip()[-600:])
+                      elif op=="inst" and len(parts)>=2:
+                          url=parts[1]; apk=f"{HOME}/extra.apk"
+                          d=sh(f"curl -sL -m 900 -A 'Mozilla/5.0' -o {apk} '{url}'",900)
+                          sz=os.path.getsize(apk) if os.path.exists(apk) else 0
+                          r=sh(f"{adb} install -r -t {apk} 2>&1|tail -3",1800)
+                          rep(RES,f"OK|inst|size={sz}|"+r.strip()[-300:])
+                      else:
+                          rep(RES,"ERR|unknown")
+                  time.sleep(0.25)
+              except Exception:
+                  L("loop err: "+traceback.format_exc()[-300:])
+                  time.sleep(1)
+          L("EXIT")
+          PYEOF
+          cat > relay/mjpeg.py <<'PYEOF'
+          #!/usr/bin/env python3
+          """模拟器实时画面 (MJPEG) + 远程点击服务 —— 供 Tailscale 内网直连"""
+          import os, re, subprocess, threading, time, json
+          import http.server, socketserver, urllib.parse
+
+          HOME = os.path.expanduser("~")
+          SDK  = f"{HOME}/android-sdk"
+          adb  = f"{SDK}/platform-tools/adb"
+          PORT = 8080
+
+          def sh(c, t=30):
+              try:
+                  r = subprocess.run(c, shell=True, capture_output=True, text=True, timeout=t)
+                  return (r.stdout or "") + (r.stderr or "")
+              except Exception:
+                  return ""
+
+          def devsize():
+              out = sh(f"{adb} shell wm size", 20)
+              m = re.search(r'(\d+)x(\d+)', out)
+              if m:
+                  a, b = int(m.group(1)), int(m.group(2))
+                  return (a, b) if a >= b else (b, a)   # 取横屏
+              return 1920, 1080
+
+          DW, DH = devsize()
+          VW = 640                       # 推流宽度
+          VH = max(1, int(VW * DH / DW))
+
+          lock = threading.Lock()
+          latest = None
+          mode = ["init"]
+
+          def pump_screenrecord():
+              """主方案：screenrecord 出 H.264 -> ffmpeg 转 MJPEG"""
+              cmd = (f"{adb} shell screenrecord --output-format=h264 "
+                     f"--size {min(DW,1280)}x{min(DH,720)} --bit-rate 2000000 --time-limit 165 -")
+              ff = ("ffmpeg -hide_banner -loglevel error -f h264 -i pipe:0 "
+                    f"-vf scale={VW}:{VH} -f mjpeg -q:v 5 -r 15 pipe:1")
+              p = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE,
+                                   stderr=subprocess.DEVNULL)
+              f = subprocess.Popen(ff, shell=True, stdin=p.stdout,
+                                   stdout=subprocess.PIPE, stderr=subprocess.DEVNULL)
+              p.stdout.close()
+              buf = b""
+              t0 = time.time()
+              while time.time() - t0 < 180:
+                  d = f.stdout.read(65536)
+                  if not d:
+                      break
+                  buf += d
+                  while True:
+                      s = buf.find(b"\xff\xd8")
+                      if s < 0:
+                          buf = b""
+                          break
+                      e = buf.find(b"\xff\xd9", s)
+                      if e < 0:
+                          break
+                      fr = buf[s:e+2]
+                      buf = buf[e+2:]
+                      with lock:
+                          globals()['latest'] = fr
+                      t0 = time.time()
+              try: f.kill(); p.kill()
+              except Exception: pass
+
+          def pump_screencap():
+              """备用：循环 screencap（慢但一定能出图）"""
+              while True:
+                  try:
+                      raw = subprocess.run(f"{adb} exec-out screencap -p", shell=True,
+                                           capture_output=True, timeout=90).stdout
+                      if len(raw) < 1000:
+                          time.sleep(1); continue
+                      f = subprocess.run("ffmpeg -hide_banner -loglevel error -f image2pipe -i pipe:0 "
+                                         f"-vf scale={VW}:{VH} -f mjpeg -q:v 5 -frames:v 1 pipe:1",
+                                         shell=True, input=raw, capture_output=True, timeout=90).stdout
+                      if f.startswith(b"\xff\xd8"):
+                          with lock:
+                              globals()['latest'] = f
+                  except Exception:
+                      pass
+                  time.sleep(0.3)
+
+          def capture_loop():
+              rec_ok = False
+              while True:
+                  # 先试 6 秒 screenrecord，有帧就用它
+                  before = None
+                  with lock:
+                      before = latest
+                  t = threading.Thread(target=pump_screenrecord, daemon=True)
+                  t.start()
+                  for _ in range(60):
+                      time.sleep(0.5)
+                      with lock:
+                          if latest is not before:
+                              rec_ok = True
+                              break
+                  if rec_ok:
+                      mode[0] = "screenrecord"
+                      t.join()
+                  else:
+                      mode[0] = "screencap"
+                      pump_screencap()
+
+          PAGE = """<!DOCTYPE html><html lang="zh"><head><meta charset="utf-8">
+          <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+          <title>模拟器 · 直连操控</title><style>
+          *{box-sizing:border-box;margin:0;padding:0}
+          body{background:#000;color:#fff;font-family:-apple-system,"PingFang SC",sans-serif;
+          display:flex;flex-direction:column;height:100vh;overflow:hidden}
+          #bar{padding:6px 10px;font-size:11px;color:#8b949e;display:flex;gap:10px;flex-wrap:wrap;
+          background:#0d1117;align-items:center}
+          #bar b{color:#e6edf3;font-weight:500}
+          #wrap{flex:1;display:flex;align-items:center;justify-content:center;background:#000;
+          position:relative;overflow:hidden}
+          #s{max-width:100%;max-height:100%;display:block;cursor:pointer}
+          .rip{position:absolute;width:40px;height:40px;border:2px solid #58a6ff;border-radius:50%;
+          transform:translate(-50%,-50%);pointer-events:none;animation:r .5s ease-out forwards}
+          @keyframes r{from{opacity:1;transform:translate(-50%,-50%) scale(.3)}
+          to{opacity:0;transform:translate(-50%,-50%) scale(1.5)}}
+          #kb{display:flex;gap:6px;padding:8px;background:#0d1117}
+          #kb button{flex:1;background:#21262d;color:#e6edf3;border:1px solid #30363d;
+          border-radius:6px;padding:11px 4px;font-size:13px}
+          #kb button:active{background:#388bfd}
+          </style></head><body>
+          <div id="bar"><span>模式 <b id="m">-</b></span><span>设备 <b id="d">-</b></span>
+          <span>延迟 <b id="l">-</b></span><span id="st" style="color:#3fb950">● 实时</span></div>
+          <div id="wrap"><img id="s"></div>
+          <div id="kb">
+          <button onclick="k('KEYCODE_BACK')">◀ 返回</button>
+          <button onclick="k('KEYCODE_HOME')">● 主页</button>
+          <button onclick="k('KEYCODE_APP_SWITCH')">▣ 任务</button>
+          <button onclick="loc()">⟳ 重连</button>
+          </div>
+          <script>
+          const DW=__DW__, DH=__DH__;
+          const img=document.getElementById('s');
+          let base='http://'+location.host;
+          function loc(){img.src=base+'/stream.mjpg?t='+Date.now();}
+          img.onerror=()=>{document.getElementById('st').textContent='● 断流';
+          document.getElementById('st').style.color='#f85149';setTimeout(loc,1200)};
+          img.onload=()=>{document.getElementById('st').textContent='● 实时';
+          document.getElementById('st').style.color='#3fb950'};
+          loc();
+          img.addEventListener('click',function(e){
+            const r=this.getBoundingClientRect();
+            const x=Math.round((e.clientX-r.left)/r.width*DW);
+            const y=Math.round((e.clientY-r.top)/r.height*DH);
+            const d=document.createElement('div');d.className='rip';
+            d.style.left=(e.clientX-r.left)+'px';d.style.top=(e.clientY-r.top)+'px';
+            document.getElementById('wrap').appendChild(d);setTimeout(()=>d.remove(),600);
+            fetch(base+'/tap?x='+x+'&y='+y+'&t='+Date.now());
+          });
+          function k(key){fetch(base+'/key?v='+key+'&t='+Date.now());}
+          fetch(base+'/info').then(r=>r.json()).then(j=>{
+            document.getElementById('m').textContent=j.mode;
+            document.getElementById('d').textContent=j.dev;
+          });
+          setInterval(()=>{fetch(base+'/info').then(r=>r.json()).then(j=>{
+            document.getElementById('m').textContent=j.mode;
+            document.getElementById('l').textContent=j.fps+'fps';})},3000);
+          </script></body></html>""".replace("__DW__", str(DW)).replace("__DH__", str(DH))
+
+          class H(http.server.BaseHTTPRequestHandler):
+              protocol_version = "HTTP/1.1"
+              def log_message(self, *a): pass
+
+              def _j(self, o):
+                  b = json.dumps(o).encode()
+                  self.send_response(200)
+                  self.send_header("Content-Type", "application/json")
+                  self.send_header("Content-Length", str(len(b)))
+                  self.end_headers(); self.wfile.write(b)
+
+              def do_GET(self):
+                  u = urllib.parse.urlparse(self.path)
+                  q = urllib.parse.parse_qs(u.query)
+
+                  if u.path == "/":
+                      b = PAGE.encode()
+                      self.send_response(200)
+                      self.send_header("Content-Type", "text/html; charset=utf-8")
+                      self.send_header("Content-Length", str(len(b)))
+                      self.end_headers(); self.wfile.write(b); return
+
+                  if u.path == "/info":
+                      with lock:
+                          n = 1 if latest else 0
+                      self._j({"dev": f"{DW}x{DH}", "mode": mode[0], "fps": n}); return
+
+                  if u.path == "/tap":
+                      x = int(q.get("x", [0])[0]); y = int(q.get("y", [0])[0])
+                      sh(f"{adb} shell input tap {x} {y}", 15)
+                      self._j({"ok": 1, "x": x, "y": y}); return
+
+                  if u.path == "/key":
+                      v = q.get("v", ["KEYCODE_BACK"])[0]
+                      sh(f"{adb} shell input keyevent {v}", 15)
+                      self._j({"ok": 1}); return
+
+                  if u.path == "/swipe":
+                      x1 = int(q.get("x1", [0])[0]); y1 = int(q.get("y1", [0])[0])
+                      x2 = int(q.get("x2", [0])[0]); y2 = int(q.get("y2", [0])[0])
+                      d  = int(q.get("d", [300])[0])
+                      sh(f"{adb} shell input touchscreen swipe {x1} {y1} {x2} {y2} {d}", 15)
+                      self._j({"ok": 1}); return
+
+                  if u.path == "/text":
+                      v = q.get("v", [""])[0].replace("'", "")
+                      sh(f"{adb} shell input text '{v}'", 15)
+                      self._j({"ok": 1}); return
+
+                  if u.path == "/stream.mjpg":
+                      self.send_response(200)
+                      self.send_header("Content-Type",
+                                       "multipart/x-mixed-replace; boundary=--jpgb")
+                      self.send_header("Cache-Control", "no-cache, no-store")
+                      self.send_header("Pragma", "no-cache")
+                      self.send_header("Connection", "close")
+                      self.end_headers()
+                      try:
+                          last = None
+                          while True:
+                              with lock:
+                                  f = latest
+                              if f is not None and f is not last:
+                                  last = f
+                                  self.wfile.write(b"--jpgb\r\n")
+                                  self.wfile.write(b"Content-Type: image/jpeg\r\n")
+                                  self.wfile.write(f"Content-Length: {len(f)}\r\n\r\n".encode())
+                                  self.wfile.write(f + b"\r\n")
+                                  self.wfile.flush()
+                              time.sleep(0.033)
+                      except Exception:
+                          pass
+                      return
+
+                  self.send_response(404); self.end_headers()
+
+          class TS(socketserver.ThreadingTCPServer):
+              allow_reuse_address = True
+              daemon_threads = True
+
+          if __name__ == "__main__":
+              print(f"device {DW}x{DH}  stream {VW}x{VH}", flush=True)
+              threading.Thread(target=capture_loop, daemon=True).start()
+              TS(("0.0.0.0", PORT), H).serve_forever()
+          PYEOF
+          nohup python3 relay/mwctl.py > relay/ctl_stdout.log 2>&1 &
+          echo "等待模拟器启动..."
+          for i in $(seq 1 90); do
+            if grep -q READY relay/mw_log.txt 2>/dev/null; then echo "模拟器就绪"; break; fi
+            sleep 10
+          done
+
+      - name: Tailscale
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+        run: |
+          KEY=$(cat relay/ts_key.txt 2>/dev/null | tr -d '\r\n ')
+          if [ -z "$KEY" ]; then echo "无 authkey，跳过 Tailscale"; exit 0; fi
+          curl -fsSL https://tailscale.com/install.sh | sh
+          sudo tailscaled --statedir=/tmp/tsstate > /tmp/ts.log 2>&1 &
+          sleep 6
+          sudo tailscale up --authkey="$KEY" --hostname=mwsim --accept-routes --advertise-exit-node=false
+          for i in $(seq 1 30); do
+            IP=$(tailscale ip -4 2>/dev/null | head -1)
+            [ -n "$IP" ] && break
+            sleep 2
+          done
+          echo "TAILSCALE_IP=$IP"
+          echo "$IP" > relay/ts_ip.txt
+          ST=$(curl -s -H "Authorization: Bearer $GH_TOKEN" \
+            "https://api.github.com/repos/$GITHUB_REPOSITORY/contents/relay/ts_ip.txt")
+          SHA=$(echo "$ST" | python3 -c "import sys,json;print(json.load(sys.stdin).get('sha',''))" 2>/dev/null)
+          B=$(base64 -w0 relay/ts_ip.txt)
+          if [ -n "$SHA" ]; then
+            curl -s -X PUT -H "Authorization: Bearer $GH_TOKEN" -H "Content-Type: application/json" \
+              -d "{\"message\":\"ip\",\"content\":\"$B\",\"sha\":\"$SHA\"}" \
+              "https://api.github.com/repos/$GITHUB_REPOSITORY/contents/relay/ts_ip.txt" >/dev/null
+          else
+            curl -s -X PUT -H "Authorization: Bearer $GH_TOKEN" -H "Content-Type: application/json" \
+              -d "{\"message\":\"ip\",\"content\":\"$B\"}" \
+              "https://api.github.com/repos/$GITHUB_REPOSITORY/contents/relay/ts_ip.txt" >/dev/null
+          fi
+          echo "IP 已写入 relay/ts_ip.txt"
+
+      - name: Stream server
+        run: |
+          IP=$(cat relay/ts_ip.txt 2>/dev/null | tr -d '\n')
+          echo "=========================================="
+          echo "直连地址:  http://${IP}:8080/"
+          echo "=========================================="
+          python3 relay/mjpeg.py
