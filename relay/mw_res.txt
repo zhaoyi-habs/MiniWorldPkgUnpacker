@@ -1,1 +1,2 @@
-WAIT|0
+OK|shell|sendevent: /dev/input/event0: Permission denied
+sendevent: /dev/input/event0: Permission denied
