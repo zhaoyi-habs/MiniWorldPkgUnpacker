@@ -100,3 +100,4 @@ CMD: tap 960 691
 CMD: ui
 CMD: tap 980 796
 CMD: tap 1004 507
+CMD: ui
