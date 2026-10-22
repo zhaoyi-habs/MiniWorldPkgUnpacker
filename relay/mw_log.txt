@@ -1,4 +1,3 @@
-CMD: tap 980 796
 CMD: tap 1004 654
 CMD: shot
 CMD: ui
@@ -105,3 +104,4 @@ CMD: tap 1154 813
 CMD: ui
 CMD: shell /home/runner/android-sdk/platform-tools/adb shell am force-stop com.tencent.mobileqq
 CMD: shell /home/runner/android-sdk/platform-tools/adb shell am start -a android.intent.action.VIEW -d 'https://chatgpt.com'
+CMD: ui
