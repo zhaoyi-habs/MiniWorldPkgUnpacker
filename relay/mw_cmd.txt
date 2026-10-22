@@ -1,5 +1,1 @@
-shell 
-for u in  'https://d.apkpure.net/b/APK/com.minitech.miniworld?version=latest'  'https://d.apkpure.net/b/APK/com.minitech.miniworld.uc?version=latest'  'https://imtt.dd.qq.com/sjy.00009/sjy.00002/16891/apk/30edc3716b7bfa955fd613e97a225003.apk?fsname=com.minitech.miniworld_80580.apk' ; do
-  echo '--- '$u
-  curl -sIL -m 25 -A 'Mozilla/5.0' "$u" | grep -iE '^HTTP|^content-length' | tail -2
-done
+shell curl -sIL -m 20 -A 'Mozilla/5.0' 'https://d.apkpure.net/b/APK/com.minitech.miniworld?version=latest' | grep -iE '^HTTP|^content-length' | tail -3
