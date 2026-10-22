@@ -44,3 +44,4 @@ CMD: shell /home/runner/android-sdk/platform-tools/adb shell dumpsys activity to
 CMD: key KEYCODE_BACK
 CMD: ui
 CMD: tap 1004 507
+CMD: shot
