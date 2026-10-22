@@ -1,1 +1,1 @@
-shell /home/runner/android-sdk/platform-tools/adb shell am force-stop com.playmini.miniworld
+shell /home/runner/android-sdk/platform-tools/adb shell monkey -p com.tencent.tmgp.minitech.miniworld -c android.intent.category.LAUNCHER 1 2>&1|tail -1
