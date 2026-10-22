@@ -1,4 +1,3 @@
-CMD: tap 960 900
 CMD: ui
 CMD: tap 1500 900
 CMD: ui
@@ -78,3 +77,4 @@ CMD: shot
 CMD: ui
 CMD: tap 540 1033
 CMD: ui
+CMD: shell /home/runner/android-sdk/platform-tools/adb shell uiautomator dump /sdcard/v1.xml >/dev/null 2>&1; /home/runner/android-sdk/platform-tools/adb shell cat /sdcard/v1.xml 2>/dev/null | tr '<' '\n' | grep -oE 'text="[^"]*"|bounds="[^"]*"|content-desc="[^"]*"' | paste - - - 2>/dev/null | grep -iE '确定|confirm|ok|submit' | head -5
