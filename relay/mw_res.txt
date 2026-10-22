@@ -1,1 +1,1 @@
-OK|shell|Success
+WAIT|0
