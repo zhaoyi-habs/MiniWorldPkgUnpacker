@@ -1,1 +1,1 @@
-tap 267 736
+shell /home/runner/android-sdk/platform-tools/adb shell input text '581358@skymail.ink'
