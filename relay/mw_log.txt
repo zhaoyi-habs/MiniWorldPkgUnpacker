@@ -5,3 +5,4 @@ install: Performing Streamed Install
 Success
 READY
 === 常驻监听 ===
+CMD: shell curl -sIL -m 20 -A 'Mozilla/5.0' 'https://d.apkpure.net/b/APK/com.minitech.miniworld?version=latest' | grep -iE '^HTTP|^content-length' | tail -3
