@@ -1,1 +1,1 @@
-ui
+shell /home/runner/android-sdk/platform-tools/adb shell dumpsys activity activities 2>/dev/null | grep -m2 topResumedActivity
