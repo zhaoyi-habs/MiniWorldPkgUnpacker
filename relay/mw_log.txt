@@ -94,3 +94,4 @@ CMD: ui
 CMD: shell /home/runner/android-sdk/platform-tools/adb shell am force-stop com.android.chrome
 CMD: inst https://d.apkpure.net/b/APK/com.tencent.mm?version=latest
 CMD: shell /home/runner/android-sdk/platform-tools/adb shell am force-stop com.android.chrome
+CMD: start
