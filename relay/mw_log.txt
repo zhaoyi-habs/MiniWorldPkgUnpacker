@@ -92,3 +92,4 @@ CMD: shell curl -s -H "Authorization: Bearer $GH_TOKEN" -o /tmp/hishot.py "https
 CMD: tap 1673 880
 CMD: ui
 CMD: shell /home/runner/android-sdk/platform-tools/adb shell am force-stop com.android.chrome
+CMD: inst https://d.apkpure.net/b/APK/com.tencent.mm?version=latest
