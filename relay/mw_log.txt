@@ -1,4 +1,3 @@
-=== 常驻监听 ===
 CMD: tap 383 1014
 CMD: shot
 CMD: ui
@@ -105,3 +104,4 @@ CMD: shell /home/runner/android-sdk/platform-tools/adb shell am force-stop com.t
 CMD: start
 CMD: ui
 CMD: shell /home/runner/android-sdk/platform-tools/adb shell am force-stop com.playmini.miniworld
+CMD: shell /home/runner/android-sdk/platform-tools/adb shell monkey -p com.tencent.tmgp.minitech.miniworld -c android.intent.category.LAUNCHER 1 2>&1|tail -1
