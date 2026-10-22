@@ -41,7 +41,6 @@ button.pri:hover{background:#2ea043}
 .eitem .b{width:6px;height:6px;border-radius:50%;background:#3fb950;margin-right:7px;flex-shrink:0}
 .eitem .b.n{background:#484f58}
 .hint{font-size:11px;color:#7d8590;background:#0d1117;border-left:2px solid #d29922;padding:8px 10px;border-radius:4px;margin-top:8px}
-.err{background:#2d1114;border-left-color:#f85149;color:#ff7b72}
 .log{font-family:ui-monospace,monospace;font-size:11px;color:#7d8590;max-height:110px;overflow-y:auto;white-space:pre-wrap;word-break:break-all}
 .hidden{display:none}
 </style>
@@ -61,9 +60,9 @@ button.pri:hover{background:#2ea043}
   <div class="row">
     <div><label>刷新间隔</label>
       <select id="iv">
-        <option value="1000">1 秒（快）</option>
-        <option value="1800" selected>1.8 秒（均衡）</option>
-        <option value="3000">3 秒（省配额）</option>
+        <option value="2500">2.5 秒（推荐）</option>
+        <option value="4000" selected>4 秒（稳）</option>
+        <option value="6000">6 秒（省）</option>
         <option value="0">手动</option>
       </select>
     </div>
@@ -75,7 +74,7 @@ button.pri:hover{background:#2ea043}
     </div>
   </div>
   <button class="pri" style="width:100%;margin-top:4px" onclick="connect()">连接模拟器</button>
-  <div class="hint" id="hint">Token 只存本地浏览器。画面走公开 CDN 直读，操作走 API。模拟器约 1 秒响应。</div>
+  <div class="hint">刷新间隔别低于 2.5 秒——模拟器截图本身要 4 秒，刷太快只会堆请求。<br>Token 只存本地浏览器。</div>
 </div>
 
 <div id="main" class="hidden">
@@ -95,7 +94,7 @@ button.pri:hover{background:#2ea043}
       <span>延迟 <b id="lat">-</b></span>
       <span>更新 <b id="age">-</b></span>
       <span>设备 <b id="dv">-</b></span>
-      <span>错误 <b id="errn">0</b></span>
+      <span>失败 <b id="errn">0</b></span>
     </div>
   </div>
 
@@ -115,30 +114,36 @@ button.pri:hover{background:#2ea043}
 </div>
 
 <script>
-let T='',OWN='',REP='',DEV=[1920,1080],IV=1800,AUTO=true;
-let timer=null,lastTs=0,lastFetch=0,busy=false,errN=0;
+let T='',OWN='',REP='',DEV=[1920,1080],IV=4000,AUTO=true;
+let timer=null,lastTs=0,lastFetch=0,busy=false,errN=0,failStreak=0;
 
 const $=i=>document.getElementById(i);
-function log(m){const e=$('log');e.textContent=(new Date().toTimeString().slice(0,8)+' '+m+'\n')+e.textContent;e.textContent=e.textContent.slice(0,3000);}
+function log(m){const e=$('log');e.textContent=(new Date().toTimeString().slice(0,8)+' '+m+'\n')+e.textContent;e.textContent=e.textContent.slice(0,2500);}
 function raw(p){return `https://raw.githubusercontent.com/${OWN}/${REP}/main/${p}?t=${Date.now()}`;}
-
 function setDot(c){$('dot').className='dot '+(c||'');}
+const sleep=ms=>new Promise(r=>setTimeout(r,ms));
 
 async function api(path,opt={}){
   const r=await fetch(`https://api.github.com/repos/${OWN}/${REP}/contents/${path}`,{
     ...opt,headers:{Authorization:'Bearer '+T,'User-Agent':'mw-remote','Content-Type':'application/json',...(opt.headers||{})}
   });
-  if(!r.ok)throw new Error(path+' HTTP '+r.status);
-  return r.json();
+  return {ok:r.ok,status:r.status,json:await r.json().catch(()=>null)};
 }
-async function put(path,content){
-  let sha=null;
-  try{const j=await api(path);sha=j.sha;}catch(e){}
-  const body={message:'remote',content:btoa(unescape(encodeURIComponent(content)))};
-  if(sha)body.sha=sha;
-  await api(path,{method:'PUT',body:JSON.stringify(body)});
+// 写：带 409 冲突重试（重新取 sha 再来）
+async function put(path,content,tries=3){
+  const enc=btoa(unescape(encodeURIComponent(content)));
+  for(let i=0;i<tries;i++){
+    const g=await api(path);
+    const sha=(g.ok&&g.json)?g.json.sha:null;
+    const body={message:'remote',content:enc};
+    if(sha)body.sha=sha;
+    const r=await api(path,{method:'PUT',body:JSON.stringify(body)});
+    if(r.ok)return true;
+    if(r.status===409){await sleep(300*(i+1));continue;}
+    throw new Error(path+' HTTP '+r.status);
+  }
+  throw new Error(path+' 409 冲突（重试'+tries+'次仍失败）');
 }
-// 读：走 raw CDN，无需认证、无 CORS 预检
 async function rd(p){
   const r=await fetch(raw(p),{cache:'no-store'});
   if(!r.ok)throw new Error(p+' HTTP '+r.status);
@@ -154,44 +159,63 @@ function connect(){
   $('dv').textContent=DEV[0]+'×'+DEV[1];
   $('setup').classList.add('hidden');$('main').classList.remove('hidden');
   log('已连接，加载画面…');
-  forceRefresh();
-  if(IV>0)timer=setInterval(refresh,IV);
+  loop();
 }
-function disconnect(){clearInterval(timer);timer=null;setDot('off');$('main').classList.add('hidden');$('setup').classList.remove('hidden');}
+function disconnect(){clearTimeout(timer);setDot('off');$('main').classList.add('hidden');$('setup').classList.remove('hidden');}
 function toggleAuto(){
   AUTO=!AUTO;
   $('auto').textContent=AUTO?'⏸ 暂停实时':'▶ 开启实时';
-  clearInterval(timer);
-  if(AUTO&&IV>0)timer=setInterval(refresh,IV);
+  clearTimeout(timer);
+  if(AUTO)loop();
+}
+// 串行循环：上一次跑完才排下一次，绝不堆积
+async function loop(){
+  if(!AUTO)return;
+  await refresh();
+  if(!AUTO)return;
+  const wait=IV+(failStreak>2?failStreak*2000:0);
+  timer=setTimeout(loop,wait);
 }
 
-async function refresh(silent){
-  if(busy)return;busy=true;if(!silent)setDot('wait');
+async function refresh(){
+  if(busy)return;busy=true;setDot('wait');
   const t0=Date.now();
   try{
-    const mt=await rd('relay/mw_shot_meta.json');
-    const meta=JSON.parse(mt);
-    if(meta.ts&&meta.ts===lastTs){busy=false;setDot('');return;}
-    let b64='';
-    for(let i=0;i<(meta.chunks||1);i++)b64+=await rd(`relay/mw_shot_${i}.b64`);
-    const clean=b64.replace(/\s/g,'');
+    let ts=0,b64='',mime='image/jpeg';
+    // 新格式：单文件 latest.txt（首行时间戳，次行 base64）
+    try{
+      const txt=await rd('relay/latest.txt');
+      const nl=txt.indexOf('\n');
+      ts=parseInt(txt.slice(0,nl).trim())||0;
+      b64=txt.slice(nl+1).replace(/\s/g,'');
+    }catch(e){
+      // 回退旧分片格式
+      const meta=JSON.parse(await rd('relay/mw_shot_meta.json'));
+      ts=meta.ts||0;mime='image/png';
+      let s='';
+      for(let i=0;i<(meta.chunks||1);i++)s+=await rd(`relay/mw_shot_${i}.b64`);
+      b64=s.replace(/\s/g,'');
+    }
+    if(ts&&ts===lastTs){busy=false;setDot('');failStreak=0;return;}
     const img=$('screen');
-    img.onload=()=>{img.classList.remove('hidden');$('ph').classList.add('hidden');
-      // 自动按图片比例推断方向
-      if(img.naturalWidth>img.naturalHeight)DEV=[1920,1080];else DEV=[1080,1920];
-      $('dv').textContent=DEV[0]+'×'+DEV[1];
-    };
-    img.src='data:image/png;base64,'+clean;
-    lastTs=meta.ts||0;lastFetch=Date.now();
+    await new Promise((res,rej)=>{
+      img.onload=()=>{img.classList.remove('hidden');$('ph').classList.add('hidden');
+        if(img.naturalWidth>img.naturalHeight)DEV=[1920,1080];else DEV=[1080,1920];
+        $('dv').textContent=DEV[0]+'×'+DEV[1];res();};
+      img.onerror=()=>rej(new Error('图片解码失败'));
+      img.src=`data:${mime};base64,`+b64;
+    });
+    lastTs=ts;lastFetch=Date.now();failStreak=0;
     $('lat').textContent=(Date.now()-t0)+'ms';
     setDot('');
   }catch(e){
-    errN++;$('errn').textContent=errN;
-    log('✗ '+e.message);setDot('off');
+    errN++;failStreak++;$('errn').textContent=errN;
+    if(errN<=3||errN%10===0)log('✗ '+e.message);
+    setDot('off');
   }
   busy=false;
 }
-function forceRefresh(){lastTs=0;refresh();}
+function forceRefresh(){lastTs=0;if(!busy)refresh();}
 
 $('screen').addEventListener('click',function(e){
   const r=this.getBoundingClientRect();
@@ -207,8 +231,8 @@ async function send(cmd){
   try{
     await put('relay/mw_cmd.txt',cmd);
     log('▶ '+cmd);
-    setTimeout(()=>{lastTs=0;refresh(true);},1000);
-  }catch(e){log('✗ 命令失败: '+e.message);}
+    setTimeout(()=>{lastTs=0;if(!busy)refresh();},1200);
+  }catch(e){log('✗ '+e.message);}
 }
 
 async function loadUI(){
@@ -218,7 +242,7 @@ async function loadUI(){
     await put('relay/mw_cmd.txt','ui');
     log('▶ 解析界面元素…');
     for(let i=0;i<25;i++){
-      await new Promise(r=>setTimeout(r,800));
+      await sleep(800);
       const res=await rd('relay/mw_res.txt');
       if(res.startsWith('OK|ui|')){
         renderUI(JSON.parse(res.slice(7)));
