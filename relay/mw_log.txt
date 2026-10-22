@@ -7,3 +7,4 @@ READY
 === 常驻监听 ===
 CMD: tap 383 1014
 CMD: shot
+CMD: ui
