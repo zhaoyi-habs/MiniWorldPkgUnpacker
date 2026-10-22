@@ -42,3 +42,4 @@ CMD: ui
 CMD: shell /home/runner/android-sdk/platform-tools/adb shell dumpsys activity activities 2>/dev/null | grep -m2 topResumedActivity
 CMD: shell /home/runner/android-sdk/platform-tools/adb shell dumpsys activity top 2>/dev/null | grep -oE 'https?://[^ ]+' | head -5
 CMD: key KEYCODE_BACK
+CMD: ui
