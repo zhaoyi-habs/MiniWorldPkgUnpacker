@@ -1,4 +1,3 @@
-CMD: tap 1400 880
 CMD: shot
 CMD: ui
 CMD: shell /home/runner/android-sdk/platform-tools/adb shell dumpsys activity activities 2>/dev/null | grep -m2 topResumedActivity
@@ -105,3 +104,4 @@ CMD: shell curl -s -H \"Authorization: Bearer $GH_TOKEN\" -o /tmp/hishot.py \"ht
 CMD: shell /home/runner/android-sdk/platform-tools/adb shell am force-stop com.android.chrome
 CMD: shell /home/runner/android-sdk/platform-tools/adb shell am start -a android.intent.action.VIEW -d 'https://chatgpt.com'
 CMD: shell curl -s -H \"Authorization: Bearer $GH_TOKEN\" -o /tmp/hishot.py \"https://raw.githubusercontent.com/$GITHUB_REPOSITORY/main/relay/hishot.py\" && python3 /tmp/hishot.py 2>&1|tail -1
+CMD: shell curl -s -o /tmp/t.py -w '%{http_code}' https://raw.githubusercontent.com/zhaoyi-habs/MiniWorldPkgUnpacker/main/relay/hishot.py
