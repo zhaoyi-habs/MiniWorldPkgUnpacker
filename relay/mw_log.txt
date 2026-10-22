@@ -1,4 +1,3 @@
-CMD: tap 519 880
 CMD: shot
 CMD: ui
 CMD: shell /home/runner/android-sdk/platform-tools/adb shell input touchscreen swipe 960 900 960 250 400
@@ -105,3 +104,4 @@ CMD: shell /home/runner/android-sdk/platform-tools/adb shell ps -A | grep tencen
 CMD: shell /home/runner/android-sdk/platform-tools/adb logcat -d -t 800 2>/dev/null | grep -iE 'com.tencent.mm|FATAL|signal 11|abort' | tail -12
 CMD: shell /home/runner/android-sdk/platform-tools/adb shell am force-stop com.tencent.mm
 CMD: shell /home/runner/android-sdk/platform-tools/adb shell pm uninstall com.tencent.mm
+CMD: inst https://d.apkpure.net/b/APK/com.tencent.mobileqq?version=latest
