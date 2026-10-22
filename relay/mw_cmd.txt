@@ -1,1 +1,1 @@
-shell /home/runner/android-sdk/platform-tools/adb shell ps -A | grep tencent
+shell /home/runner/android-sdk/platform-tools/adb logcat -d -t 800 2>/dev/null | grep -iE 'com.tencent.mm|FATAL|signal 11|abort' | tail -12
