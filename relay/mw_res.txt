@@ -1,1 +1,4 @@
-WAIT|0
+OK|shell|location: https://apkpure.com//com.minitech.miniworld/versions
+HTTP/2 403 
+content-length: 5441
+permissions-policy: accelerometer=(),camera=(),clipboard-read=(),clipboard-write=(),geolocation=(),gyroscope=(),hid=(),magnetometer=(),microphone=(),payment=(),publickey-credentials-get=(),screen-wake-lock=(),serial=(),sync-xhr=(),usb=(),xr-spatial-tracking=*
