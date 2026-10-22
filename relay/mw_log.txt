@@ -1,5 +1,3 @@
-install: Performing Streamed Install
-Success
 READY
 === 常驻监听 ===
 CMD: tap 383 1014
@@ -106,3 +104,4 @@ CMD: ui
 CMD: shell /home/runner/android-sdk/platform-tools/adb shell dumpsys activity activities 2>/dev/null | grep -m1 topResumedActivity
 CMD: shell /home/runner/android-sdk/platform-tools/adb shell am force-stop com.tencent.tmgp.minitech.miniworld
 CMD: start
+CMD: ui
