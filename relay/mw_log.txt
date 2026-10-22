@@ -1,4 +1,3 @@
-CMD: tap 960 540
 CMD: shot
 CMD: tap 1400 850
 CMD: ui
@@ -78,3 +77,4 @@ CMD: shot
 CMD: shell /home/runner/android-sdk/platform-tools/adb shell sendevent /dev/input/event0 3 53 195; /home/runner/android-sdk/platform-tools/adb shell sendevent /dev/input/event0 3 54 1101
 CMD: tap 540 977
 CMD: shell /home/runner/android-sdk/platform-tools/adb logcat -d -t 300 2>/dev/null | grep -iE 'toast|协议|agree|checkbox|login' | tail -12
+CMD: shot
