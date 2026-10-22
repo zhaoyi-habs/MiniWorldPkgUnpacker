@@ -1,4 +1,3 @@
-CMD: ui
 CMD: tap 960 691
 CMD: ui
 CMD: tap 980 796
@@ -105,3 +104,4 @@ CMD: shell /home/runner/android-sdk/platform-tools/adb shell am force-stop com.p
 CMD: shell /home/runner/android-sdk/platform-tools/adb shell monkey -p com.tencent.tmgp.minitech.miniworld -c android.intent.category.LAUNCHER 1 2>&1|tail -1
 CMD: ui
 CMD: tap 960 691
+CMD: ui
