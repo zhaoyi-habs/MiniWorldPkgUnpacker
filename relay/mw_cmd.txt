@@ -1,1 +1,1 @@
-key KEYCODE_BACK
+tap 1525 1050
