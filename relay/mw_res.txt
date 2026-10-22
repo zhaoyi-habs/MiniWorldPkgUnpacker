@@ -1,1 +1,1 @@
-WAIT|0
+OK|ui|[{"t": "chatgpt.com", "x": 939, "y": 136, "btn": true}]
