@@ -1,1 +1,1 @@
-OK|shell|## Network stats: elapsed time=33ms (0ms mobile, 0ms wifi, 33ms not connected)
+WAIT|0
