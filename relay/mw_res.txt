@@ -1,2 +1,1 @@
-OK|inst|size=1060171073|Performing Streamed Install
-Success
+WAIT|0
