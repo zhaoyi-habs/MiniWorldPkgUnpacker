@@ -15,3 +15,4 @@ CMD: shot
 CMD: shell /home/runner/android-sdk/platform-tools/adb shell ps -A|grep -i playmini|head -2
 CMD: shot
 CMD: tap 960 540
+CMD: shot
