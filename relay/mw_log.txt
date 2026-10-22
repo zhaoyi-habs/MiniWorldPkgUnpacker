@@ -9,3 +9,5 @@ CMD: tap 539 1059
 CMD: tap 736 1143
 CMD: shot
 CMD: tap 957 503
+CMD: tap 707 1576
+CMD: tap 516 1878
