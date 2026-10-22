@@ -1,1 +1,1 @@
-WAIT|0
+OK|shell|u0_a155       31186    303 13901780 112724 0                  0 R com.tencent.mm:recovery
