@@ -16,3 +16,4 @@ CMD: shell /home/runner/android-sdk/platform-tools/adb shell ps -A|grep -i playm
 CMD: shot
 CMD: tap 960 540
 CMD: shot
+CMD: tap 1400 850
