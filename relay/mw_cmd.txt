@@ -1,1 +1,1 @@
-ui
+shell /home/runner/android-sdk/platform-tools/adb shell pm clear com.tencent.mobileqq 2>&1; echo cleared
