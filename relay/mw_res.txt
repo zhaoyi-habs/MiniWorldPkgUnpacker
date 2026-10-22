@@ -1,1 +1,1 @@
-OK|shell|OK chunks=1 size=(1280, 720)
+WAIT|0
