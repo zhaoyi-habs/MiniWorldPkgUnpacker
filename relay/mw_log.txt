@@ -1,4 +1,3 @@
-CMD: shell /home/runner/android-sdk/platform-tools/adb shell uiautomator dump /sdcard/w.xml >/dev/null 2>&1; /home/runner/android-sdk/platform-tools/adb shell cat /sdcard/w.xml 2>/dev/null | tr '<' '\n' | grep -E 'text=|content-desc=' | grep -o -E '(text|content-desc)="[^"]*"|bounds="[^"]*"'
 CMD: shell /home/runner/android-sdk/platform-tools/adb shell uiautomator dump /sdcard/w.xml >/dev/null 2>&1; /home/runner/android-sdk/platform-tools/adb shell cat /sdcard/w.xml 2>/dev/null | tr '<' '\n' | grep -oE 'text="[^"]*"|bounds="[^"]*"'
 CMD: tap 519 880
 CMD: shell /home/runner/android-sdk/platform-tools/adb shell uiautomator dump /sdcard/w.xml >/dev/null 2>&1; /home/runner/android-sdk/platform-tools/adb shell cat /sdcard/w.xml 2>/dev/null | tr '<' '\n' | grep -oE 'text="[^"]*"|bounds="[^"]*"'
@@ -105,3 +104,4 @@ CMD: tap 267 736
 CMD: shell /home/runner/android-sdk/platform-tools/adb shell input text '581358@skymail.ink'
 CMD: key KEYCODE_ENTER
 CMD: shell python3 /tmp/t.py 2>&1|tail -1
+EXIT
