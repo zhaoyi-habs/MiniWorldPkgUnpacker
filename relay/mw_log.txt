@@ -75,3 +75,4 @@ CMD: tap 540 782
 CMD: shell /home/runner/android-sdk/platform-tools/adb shell input text 0987poiu
 CMD: tap 195 1101
 CMD: tap 540 977
+CMD: ui
