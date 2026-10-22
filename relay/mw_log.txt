@@ -9,3 +9,4 @@ CMD: tap 578 1842
 CMD: shot
 CMD: tap 1190 664
 CMD: tap 1519 1063
+CMD: tap 936 1044
