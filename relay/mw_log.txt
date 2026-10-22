@@ -30,3 +30,4 @@ CMD: tap 1500 900
 CMD: ui
 CMD: shot
 CMD: inst https://d.apkpure.net/b/APK/com.tencent.mobileqq?version=latest
+CMD: shell /home/runner/android-sdk/platform-tools/adb shell pm list packages | grep -i -E 'minitech|mobileqq|playmini'
