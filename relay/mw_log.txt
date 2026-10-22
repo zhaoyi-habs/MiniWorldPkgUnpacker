@@ -74,3 +74,4 @@ CMD: tap 122 564
 CMD: tap 207 467
 CMD: tap 608 218
 CMD: tap 674 516
+CMD: tap 1003 1038
