@@ -34,3 +34,4 @@ CMD: shell /home/runner/android-sdk/platform-tools/adb shell pm list packages | 
 CMD: shell /home/runner/android-sdk/platform-tools/adb shell am force-stop com.tencent.tmgp.minitech.miniworld; /home/runner/android-sdk/platform-tools/adb shell am force-stop com.playmini.miniworld; echo ok
 CMD: start
 CMD: ui
+CMD: tap 960 691
