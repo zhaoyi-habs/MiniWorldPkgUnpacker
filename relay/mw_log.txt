@@ -40,3 +40,4 @@ CMD: tap 980 796
 CMD: tap 1004 654
 CMD: ui
 CMD: shell /home/runner/android-sdk/platform-tools/adb shell am force-stop com.android.chrome; echo killed
+CMD: shell /home/runner/android-sdk/platform-tools/adb shell monkey -p com.tencent.mobileqq -c android.intent.category.LAUNCHER 1 2>&1|tail -1
