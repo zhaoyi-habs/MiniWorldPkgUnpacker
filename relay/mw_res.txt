@@ -1,1 +1,1 @@
-OK|shell|u0_a155       16736    304 2565916 973336 0                   0 S com.playmini.miniworld
+WAIT|0
