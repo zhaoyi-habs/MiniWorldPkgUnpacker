@@ -1,4 +1,3 @@
-CMD: tap 1238 527
 CMD: shot
 CMD: shell /home/runner/android-sdk/platform-tools/adb shell ps -A|grep -i playmini|head -2
 CMD: shot
@@ -78,3 +77,4 @@ CMD: shell /home/runner/android-sdk/platform-tools/adb shell input touchscreen s
 CMD: shell /home/runner/android-sdk/platform-tools/adb shell uiautomator dump /sdcard/c4.xml >/dev/null 2>&1; /home/runner/android-sdk/platform-tools/adb shell cat /sdcard/c4.xml 2>/dev/null | tr '<' '\n' | grep -i 'checkbox' | grep -o 'checked="[a-z]*"' | head -2
 CMD: shot
 CMD: tap 195 1101
+CMD: shot
