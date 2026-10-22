@@ -55,3 +55,4 @@ CMD: tap 352 996
 CMD: ui
 CMD: tap 207 953
 CMD: tap 431 1063
+CMD: tap 972 1050
