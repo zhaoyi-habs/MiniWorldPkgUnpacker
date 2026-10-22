@@ -1,4 +1,3 @@
-CMD: tap 161 849
 CMD: shot
 CMD: ui
 CMD: tap 519 880
@@ -105,3 +104,4 @@ CMD: ui
 CMD: shell /home/runner/android-sdk/platform-tools/adb shell ps -A | grep -E 'com.tencent.mm' | head -2
 CMD: shell curl -s -H \"Authorization: Bearer $GH_TOKEN\" -o /tmp/hishot.py \"https://raw.githubusercontent.com/$GITHUB_REPOSITORY/main/relay/hishot.py\" && python3 /tmp/hishot.py 2>&1 | tail -2
 CMD: shell /home/runner/android-sdk/platform-tools/adb shell ps -A | grep tencent
+CMD: shell /home/runner/android-sdk/platform-tools/adb logcat -d -t 800 2>/dev/null | grep -iE 'com.tencent.mm|FATAL|signal 11|abort' | tail -12
