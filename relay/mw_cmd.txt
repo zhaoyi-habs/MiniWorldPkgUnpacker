@@ -1,1 +1,1 @@
-shell /home/runner/android-sdk/platform-tools/adb shell am start -a android.intent.action.VIEW -d 'https://chatgpt.com/auth/login'
+shell python3 /tmp/t.py 2>&1|tail -1
