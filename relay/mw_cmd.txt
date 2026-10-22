@@ -1,1 +1,1 @@
-tap 328 1002
+key KEYCODE_APP_SWITCH
