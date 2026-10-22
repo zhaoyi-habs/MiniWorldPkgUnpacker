@@ -188,8 +188,11 @@ jobs:
           while time.time() < DEADLINE:
               try:
                   c = get(CMD)
-                  if c and c.strip() and c.strip()!=last:
-                      last=c.strip()
+                  cur=c.strip() if c else ""
+                  # tap/click/key 允许重复执行（连点同一位置）
+                  op0=cur.split()[0] if cur else ""
+                  if cur and (cur!=last or op0 in ("tap","click","key")):
+                      last=cur
                       parts=c.strip().split()
                       op=parts[0]; L(f"CMD: {c.strip()}")
                       t0=time.time()
@@ -200,7 +203,7 @@ jobs:
                               CH=280000; k=(len(b)+CH-1)//CH
                               for i in range(min(k,10)):
                                   rep(f"relay/mw_shot_{i}.b64", b[i*CH:(i+1)*CH])
-                              rep("relay/mw_shot_meta.json", json.dumps({"chunks":min(k,10),"size":str(size)}))
+                              rep("relay/mw_shot_meta.json", json.dumps({"chunks":min(k,10),"size":str(size),"ts":int(time.time()*1000)}))
                               rep(RES, f"OK|shot|{len(raw)}|{(time.time()-t0)*1000:.0f}ms")
                           else: rep(RES,"FAIL|shot")
                       elif op=="ui":
@@ -208,7 +211,7 @@ jobs:
                           rep(RES, "OK|ui|"+json.dumps(items, ensure_ascii=False))
                       elif op=="tap" and len(parts)>=3:
                           sh(f"{adb} shell input tap {parts[1]} {parts[2]} 2>&1",30)
-                          rep(RES, f"OK|tap|{parts[1]},{parts[2]}")
+                          rep(RES, f"OK|tap|{parts[1]},{parts[2]}|{int(time.time()*1000)}")
                       elif op=="key":
                           sh(f"{adb} shell input keyevent {parts[1]}",30)
                           rep(RES,"OK|key")
