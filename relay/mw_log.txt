@@ -21,3 +21,4 @@ CMD: ui
 CMD: tap 1600 850
 CMD: ui
 CMD: tap 1700 880
+CMD: ui
