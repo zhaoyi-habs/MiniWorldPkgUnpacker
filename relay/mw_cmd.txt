@@ -1,1 +1,1 @@
-shell curl -s -H \"Authorization: Bearer $GH_TOKEN\" -o /tmp/hishot.py \"https://raw.githubusercontent.com/$GITHUB_REPOSITORY/main/relay/hishot.py\" && python3 /tmp/hishot.py 2>&1 | tail -2
+shell /home/runner/android-sdk/platform-tools/adb shell uiautomator dump /sdcard/g.xml >/dev/null 2>&1; /home/runner/android-sdk/platform-tools/adb shell cat /sdcard/g.xml 2>/dev/null | tr '<' '\n' | grep -oE 'text="[^"]*"|content-desc="[^"]*"|bounds="[^"]*"|class="[^"]*TextField[^"]*"'
