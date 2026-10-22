@@ -1,1 +1,1 @@
-shell curl -sIL -m 15 -A 'Mozilla/5.0' 'https://d.apkpure.net/b/APK/com.minitech.miniworld?version=latest' 2>&1 | grep -iE '^HTTP|^content-length|location' | tail -4
+inst https://d.apkpure.net/b/APK/com.playmini.miniworld?version=latest
