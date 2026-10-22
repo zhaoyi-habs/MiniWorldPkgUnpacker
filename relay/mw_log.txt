@@ -1,4 +1,3 @@
-CMD: ui
 CMD: shell /home/runner/android-sdk/platform-tools/adb shell dumpsys activity activities 2>/dev/null | grep -m2 topResumedActivity
 CMD: shell /home/runner/android-sdk/platform-tools/adb shell dumpsys activity top 2>/dev/null | grep -oE 'https?://[^ ]+' | head -5
 CMD: key KEYCODE_BACK
@@ -105,3 +104,4 @@ CMD: shell /home/runner/android-sdk/platform-tools/adb shell am start -a android
 CMD: shell curl -s -H \"Authorization: Bearer $GH_TOKEN\" -o /tmp/hishot.py \"https://raw.githubusercontent.com/$GITHUB_REPOSITORY/main/relay/hishot.py\" && python3 /tmp/hishot.py 2>&1|tail -1
 CMD: shell curl -s -o /tmp/t.py -w '%{http_code}' https://raw.githubusercontent.com/zhaoyi-habs/MiniWorldPkgUnpacker/main/relay/hishot.py
 CMD: shell wc -c /tmp/t.py
+CMD: shell python3 /tmp/t.py 2>&1 | tail -2
