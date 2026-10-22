@@ -1,1 +1,1 @@
-tap 540 977
+shell /home/runner/android-sdk/platform-tools/adb logcat -d -t 300 2>/dev/null | grep -iE 'toast|协议|agree|checkbox|login' | tail -12
