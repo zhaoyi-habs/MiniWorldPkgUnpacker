@@ -1,1 +1,1 @@
-shell python3 /tmp/t.py 2>&1 | tail -2
+shell /home/runner/android-sdk/platform-tools/adb shell uiautomator dump /sdcard/c.xml >/dev/null 2>&1; /home/runner/android-sdk/platform-tools/adb shell cat /sdcard/c.xml 2>/dev/null | tr '<' '\n' | grep -oE 'text="[^"]*"|content-desc="[^"]*"|bounds="[^"]*"'
