@@ -175,7 +175,7 @@ jobs:
                   import io
                   im=Image.open(png).convert("RGB")
                   w,h=im.size
-                  if w>900: im=im.resize((900,int(h*900/w)))
+                  if w>480: im=im.resize((480,int(h*480/w)))
                   b=io.BytesIO(); im.save(b,"PNG",optimize=True); raw=b.getvalue()
                   return raw, im.size
               except Exception:
