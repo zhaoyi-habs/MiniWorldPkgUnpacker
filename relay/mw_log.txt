@@ -68,3 +68,4 @@ CMD: tap 1495 1020
 CMD: tap 152 54
 CMD: tap 383 996
 CMD: tap 425 1050
+CMD: tap 523 327
