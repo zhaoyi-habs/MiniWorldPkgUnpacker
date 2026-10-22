@@ -1,1 +1,1 @@
-tap 978 1038
+key KEYCODE_BACK
