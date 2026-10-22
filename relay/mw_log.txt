@@ -1,4 +1,3 @@
-CMD: tap 1004 507
 CMD: shot
 CMD: ui
 CMD: shell /home/runner/android-sdk/platform-tools/adb shell input touchscreen swipe 960 850 960 400 500
@@ -105,3 +104,4 @@ CMD: shell /home/runner/android-sdk/platform-tools/adb shell input text '581358@
 CMD: shell python3 /tmp/t.py 2>&1|tail -1
 CMD: tap 111 800
 CMD: shell python3 /tmp/t.py 2>&1|tail -1
+CMD: key KEYCODE_BACK
