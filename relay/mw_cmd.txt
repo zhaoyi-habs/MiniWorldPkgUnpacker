@@ -1,1 +1,1 @@
-shell /home/runner/android-sdk/platform-tools/adb shell pm uninstall com.tencent.mm
+inst https://d.apkpure.net/b/APK/com.tencent.mobileqq?version=latest
