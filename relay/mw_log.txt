@@ -59,3 +59,4 @@ CMD: tap 972 1050
 CMD: tap 401 1026
 CMD: ui
 CMD: tap 413 1026
+CMD: tap 924 1008
