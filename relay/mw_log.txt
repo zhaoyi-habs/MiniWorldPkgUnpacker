@@ -104,3 +104,4 @@ CMD: ui
 CMD: shell /home/runner/android-sdk/platform-tools/adb shell pm list packages | grep -E 'tencent'
 CMD: shell /home/runner/android-sdk/platform-tools/adb shell monkey -p com.tencent.mm -c android.intent.category.LAUNCHER 1 2>&1|tail -1
 CMD: ui
+CMD: shell /home/runner/android-sdk/platform-tools/adb shell am force-stop com.android.chrome
