@@ -1,1 +1,1 @@
-tap 519 880
+shell /home/runner/android-sdk/platform-tools/adb shell uiautomator dump /sdcard/w.xml >/dev/null 2>&1; /home/runner/android-sdk/platform-tools/adb shell cat /sdcard/w.xml 2>/dev/null | tr '<' '\n' | grep -oE 'text="[^"]*"|bounds="[^"]*"'
