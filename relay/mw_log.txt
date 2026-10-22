@@ -37,3 +37,4 @@ CMD: tap 1513 1008
 CMD: tap 1574 1020
 CMD: tap 1592 1014
 CMD: ui
+CMD: tap 960 691
