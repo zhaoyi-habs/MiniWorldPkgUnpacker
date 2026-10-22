@@ -1,1 +1,1 @@
-shot
+shell /home/runner/android-sdk/platform-tools/adb shell sendevent /dev/input/event0 3 53 195; /home/runner/android-sdk/platform-tools/adb shell sendevent /dev/input/event0 3 54 1101
