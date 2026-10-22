@@ -87,3 +87,4 @@ put("relay/hi_meta.json", json.dumps({"chunks":n,"size":str(im.size)}))
 print("OK",n,im.size)
 
 PYEOF
+CMD: shell python3 relay/hishot.py 2>&1 | tail -3
