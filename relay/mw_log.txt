@@ -7,3 +7,4 @@ READY
 === 常驻监听 ===
 CMD: tap 539 1059
 CMD: tap 736 1143
+CMD: shot
