@@ -58,3 +58,4 @@ CMD: shell /home/runner/android-sdk/platform-tools/adb shell input touchscreen s
 CMD: shell /home/runner/android-sdk/platform-tools/adb shell uiautomator dump /sdcard/w.xml >/dev/null 2>&1; /home/runner/android-sdk/platform-tools/adb shell cat /sdcard/w.xml 2>/dev/null | tr '<' '\n' | grep -E 'text=|content-desc=' | grep -o -E '(text|content-desc)="[^"]*"|bounds="[^"]*"'
 CMD: shell /home/runner/android-sdk/platform-tools/adb shell uiautomator dump /sdcard/w.xml >/dev/null 2>&1; /home/runner/android-sdk/platform-tools/adb shell cat /sdcard/w.xml 2>/dev/null | tr '<' '\n' | grep -oE 'text="[^"]*"|bounds="[^"]*"'
 CMD: tap 519 880
+CMD: shell /home/runner/android-sdk/platform-tools/adb shell uiautomator dump /sdcard/w.xml >/dev/null 2>&1; /home/runner/android-sdk/platform-tools/adb shell cat /sdcard/w.xml 2>/dev/null | tr '<' '\n' | grep -oE 'text="[^"]*"|bounds="[^"]*"'
