@@ -1,4 +1,3 @@
-CMD: inst https://d.apkpure.net/b/APK/com.playmini.miniworld?version=latest
 CMD: shell /home/runner/android-sdk/platform-tools/adb shell monkey -p com.playmini.miniworld -c android.intent.category.LAUNCHER 1 2>&1|tail -1
 CMD: shot
 CMD: tap 1238 527
@@ -78,3 +77,4 @@ CMD: shell /home/runner/android-sdk/platform-tools/adb shell uiautomator dump /s
 CMD: tap 566 1101
 CMD: shell /home/runner/android-sdk/platform-tools/adb shell uiautomator dump /sdcard/c3.xml >/dev/null 2>&1; /home/runner/android-sdk/platform-tools/adb shell cat /sdcard/c3.xml 2>/dev/null | tr '<' '\n' | grep -i 'checkbox' | grep -o 'checked="[a-z]*"' | head -2
 CMD: shell /home/runner/android-sdk/platform-tools/adb shell input touchscreen swipe 195 1101 195 1101 150
+CMD: shell /home/runner/android-sdk/platform-tools/adb shell uiautomator dump /sdcard/c4.xml >/dev/null 2>&1; /home/runner/android-sdk/platform-tools/adb shell cat /sdcard/c4.xml 2>/dev/null | tr '<' '\n' | grep -i 'checkbox' | grep -o 'checked="[a-z]*"' | head -2
