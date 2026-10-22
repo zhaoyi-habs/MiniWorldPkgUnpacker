@@ -1,3 +1,1 @@
-OK|shell|r: Caused by: java.lang.UnsatisfiedLinkError: No implementation found for void com.tencent.mmkv.MMKV.jniInitialize(java.lang.String, java.lang.String, int, boolean, boolean, long) (tried Java_com_tencent_mmkv_MMKV_jniInitialize and Java_com_tencent_mmkv_MMKV_jniInitialize__Ljava_lang_String_2Ljava_lang_String_2IZZJ)
-10-22 02:29:25.901   515  1762 I ActivityManager: Process com.tencent.mm:recovery (pid 32459) has died: fg  TOP 
-10-22 02:29:25.908   515   560 I ActivityManager: Start proc 32495:com.tencent.mm:recovery/u0a155 for top-activity {com.tencent.mm/com.tencent.mm.recovery.ui.RecoveryUI}
+WAIT|0
