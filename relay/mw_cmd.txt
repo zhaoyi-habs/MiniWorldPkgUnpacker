@@ -1,1 +1,1 @@
-tap 1051 602
+key KEYCODE_HOME
