@@ -10,3 +10,4 @@ CMD: shell curl -sIL -m 15 -A 'Mozilla/5.0' 'https://d.apkpure.net/b/APK/com.min
 CMD: inst https://d.apkpure.net/b/APK/com.playmini.miniworld?version=latest
 CMD: shell /home/runner/android-sdk/platform-tools/adb shell monkey -p com.playmini.miniworld -c android.intent.category.LAUNCHER 1 2>&1|tail -1
 CMD: shot
+CMD: tap 1238 527
