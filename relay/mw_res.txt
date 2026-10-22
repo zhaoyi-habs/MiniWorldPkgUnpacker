@@ -1,1 +1,1 @@
-WAIT|0
+OK|shell|text="确定"	content-desc=""	bounds="[868,1155][1052,1250]"
