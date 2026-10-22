@@ -1,1 +1,3 @@
-WAIT|0
+OK|shell|package:com.tencent.mobileqq
+package:com.tencent.tmgp.minitech.miniworld
+package:com.playmini.miniworld
