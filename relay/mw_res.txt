@@ -1,2 +1,1 @@
-OK|shell|package:com.tencent.mm
-package:com.tencent.tmgp.minitech.miniworld
+WAIT|0
