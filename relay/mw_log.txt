@@ -1,4 +1,3 @@
-CMD: ui
 CMD: tap 980 796
 CMD: tap 1004 507
 CMD: shot
@@ -105,3 +104,4 @@ CMD: shell python3 /tmp/t.py 2>&1|tail -1
 CMD: tap 267 736
 CMD: shell /home/runner/android-sdk/platform-tools/adb shell input text '581358@skymail.ink'
 CMD: shell python3 /tmp/t.py 2>&1|tail -1
+CMD: tap 111 800
