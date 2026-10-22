@@ -60,9 +60,9 @@ button.pri:hover{background:#2ea043}
   <div class="row">
     <div><label>刷新间隔</label>
       <select id="iv">
-        <option value="2500">2.5 秒（推荐）</option>
-        <option value="4000" selected>4 秒（稳）</option>
-        <option value="6000">6 秒（省）</option>
+        <option value="8000">8 秒（推荐）</option>
+        <option value="12000" selected>12 秒（稳）</option>
+        <option value="20000">20 秒（省）</option>
         <option value="0">手动</option>
       </select>
     </div>
@@ -74,7 +74,7 @@ button.pri:hover{background:#2ea043}
     </div>
   </div>
   <button class="pri" style="width:100%;margin-top:4px" onclick="connect()">连接模拟器</button>
-  <div class="hint">刷新间隔别低于 2.5 秒——模拟器截图本身要 4 秒，刷太快只会堆请求。<br>Token 只存本地浏览器。</div>
+  <div class="hint">每轮 = 发截图命令 + 等模拟器渲染(约5秒) + 读回。选太短只会堆积失败。<br>Token 只存本地浏览器。</div>
 </div>
 
 <div id="main" class="hidden">
@@ -115,7 +115,7 @@ button.pri:hover{background:#2ea043}
 
 <script>
 let T='',OWN='',REP='',DEV=[1920,1080],IV=4000,AUTO=true;
-let timer=null,lastTs=0,lastFetch=0,busy=false,errN=0,failStreak=0;
+let timer=null,lastTs=0,lastFetch=0,busy=false,errN=0,failStreak=0,SHOT_WAIT=5000;
 
 const $=i=>document.getElementById(i);
 function log(m){const e=$('log');e.textContent=(new Date().toTimeString().slice(0,8)+' '+m+'\n')+e.textContent;e.textContent=e.textContent.slice(0,2500);}
@@ -181,6 +181,9 @@ async function refresh(){
   if(busy)return;busy=true;setDot('wait');
   const t0=Date.now();
   try{
+    // 关键：主动命令模拟器截一张新图，否则画面永远是旧的
+    await put('relay/mw_cmd.txt','shot',2);
+    await sleep(SHOT_WAIT);
     let ts=0,b64='',mime='image/jpeg';
     // 新格式：单文件 latest.txt（首行时间戳，次行 base64）
     try{
