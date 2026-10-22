@@ -1,1 +1,1 @@
-WAIT|0
+OK|shell|Starting: Intent { act=android.intent.action.VIEW dat=https://chatgpt.com/... }
