@@ -1,1 +1,1 @@
-OK|tap|310,1014|1792643712758
+OK|ui|[{"t": "Wednesday, Oct 21", "x": 868, "y": 148, "btn": true}, {"t": "Chrome", "x": 1786, "y": 330, "btn": true}, {"t": "Play Store", "x": 1786, "y": 508, "btn": true}, {"t": "Messages", "x": 1786, "y": 686, "btn": true}]
