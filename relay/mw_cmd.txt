@@ -1,1 +1,1 @@
-ui
+shell /home/runner/android-sdk/platform-tools/adb shell ps -A | grep -E 'com.tencent.mm' | head -2
