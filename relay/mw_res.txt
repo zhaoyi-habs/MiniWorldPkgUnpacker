@@ -1,1 +1,1 @@
-OK|ui|[{"t": "Welcome to Chrome", "x": 959, "y": 251, "btn": false}, {"t": "Accept &amp; continue", "x": 959, "y": 865, "btn": true}]
+WAIT|0
