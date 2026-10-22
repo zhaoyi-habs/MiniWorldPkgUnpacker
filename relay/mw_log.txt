@@ -8,3 +8,4 @@ READY
 CMD: tap 539 1059
 CMD: tap 736 1143
 CMD: shot
+CMD: tap 957 503
