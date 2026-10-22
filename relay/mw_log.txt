@@ -63,3 +63,4 @@ CMD: tap 540 782
 CMD: shell /home/runner/android-sdk/platform-tools/adb shell input touchscreen swipe 540 782 540 782 2000
 CMD: ui
 CMD: shell /home/runner/android-sdk/platform-tools/adb shell pm clear com.tencent.mobileqq 2>&1; echo cleared
+CMD: shell /home/runner/android-sdk/platform-tools/adb shell monkey -p com.tencent.mobileqq -c android.intent.category.LAUNCHER 1 2>&1|tail -1
