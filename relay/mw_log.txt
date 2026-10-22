@@ -91,3 +91,4 @@ CMD: shell python3 relay/hishot.py 2>&1 | tail -3
 CMD: shell curl -s -H "Authorization: Bearer $GH_TOKEN" -o /tmp/hishot.py "https://raw.githubusercontent.com/$GITHUB_REPOSITORY/main/relay/hishot.py" && python3 /tmp/hishot.py 2>&1 | tail -3
 CMD: tap 1673 880
 CMD: ui
+CMD: shell /home/runner/android-sdk/platform-tools/adb shell am force-stop com.android.chrome
