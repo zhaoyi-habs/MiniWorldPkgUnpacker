@@ -1,4 +1,3 @@
-CMD: shot
 CMD: ui
 CMD: tap 980 796
 CMD: tap 1004 654
@@ -105,3 +104,4 @@ CMD: shell /home/runner/android-sdk/platform-tools/adb shell monkey -p com.tence
 CMD: ui
 CMD: tap 1154 813
 CMD: ui
+CMD: shell /home/runner/android-sdk/platform-tools/adb shell am force-stop com.tencent.mobileqq
