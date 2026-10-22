@@ -66,3 +66,4 @@ CMD: shell /home/runner/android-sdk/platform-tools/adb shell pm clear com.tencen
 CMD: shell /home/runner/android-sdk/platform-tools/adb shell monkey -p com.tencent.mobileqq -c android.intent.category.LAUNCHER 1 2>&1|tail -1
 CMD: ui
 CMD: tap 1154 813
+CMD: tap 792 1546
