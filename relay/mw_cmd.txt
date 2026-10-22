@@ -1,1 +1,1 @@
-shell /home/runner/android-sdk/platform-tools/adb shell am force-stop com.tencent.tmgp.minitech.miniworld; /home/runner/android-sdk/platform-tools/adb shell am force-stop com.playmini.miniworld; echo ok
+start
