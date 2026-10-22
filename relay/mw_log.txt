@@ -39,3 +39,4 @@ CMD: ui
 CMD: tap 1400 880
 CMD: shot
 CMD: ui
+CMD: shell /home/runner/android-sdk/platform-tools/adb shell dumpsys activity activities 2>/dev/null | grep -m2 topResumedActivity
