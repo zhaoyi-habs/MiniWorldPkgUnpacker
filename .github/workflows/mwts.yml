@@ -46,13 +46,20 @@ jobs:
           curl -fsSL https://tailscale.com/install.sh | sh
           sudo tailscaled --statedir=/tmp/tsstate > /tmp/ts.log 2>&1 &
           sleep 6
-          sudo tailscale up --authkey="$KEY" --hostname=mwsim --accept-routes 2>&1 | tail -3
+          sudo tailscale up --authkey="$KEY" --hostname=mwsim --accept-routes > /tmp/ts_up.log 2>&1; echo "up exit=$?"; tail -5 /tmp/ts_up.log
           for i in $(seq 1 30); do
             IP=$(tailscale ip -4 2>/dev/null | head -1)
             [ -n "$IP" ] && break
             sleep 2
           done
           echo "TAILSCALE_IP=$IP"
+          {
+            echo "=== ts debug ==="
+            echo "up-out:"; cat /tmp/ts_up.log 2>/dev/null | tail -20
+            echo "status:"; tailscale status 2>&1 | tail -20
+            echo "ip:"; tailscale ip -4 2>&1
+            echo "tsd-log:"; tail -20 /tmp/ts.log 2>/dev/null
+          } > relay/ts_debug.txt 2>&1
           echo "$IP" > relay/ts_ip.txt
           ST=$(curl -s -H "Authorization: Bearer $GH_TOKEN" \
             "https://api.github.com/repos/$GITHUB_REPOSITORY/contents/relay/ts_ip.txt")
@@ -67,6 +74,10 @@ jobs:
               -d "{\"message\":\"ip\",\"content\":\"$B\"}" \
               "https://api.github.com/repos/$GITHUB_REPOSITORY/contents/relay/ts_ip.txt" >/dev/null
           fi
+          B2=$(base64 -w0 relay/ts_debug.txt)
+          curl -s -X PUT -H "Authorization: Bearer $GH_TOKEN" -H "Content-Type: application/json" \
+            -d "{\"message\":\"debug\",\"content\":\"$B2\"}" \
+            "https://api.github.com/repos/$GITHUB_REPOSITORY/contents/relay/ts_debug.txt" >/dev/null
           echo "IP 已写入 relay/ts_ip.txt"
 
       - name: Start emulator
