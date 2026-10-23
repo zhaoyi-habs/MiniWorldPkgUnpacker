@@ -22,14 +22,47 @@ jobs:
           path: /home/runner/mw.apk
           key: mw-apk-v1
 
-      - name: Start emulator
+      - name: Tailscale
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GITHUB_REPOSITORY: ${{ github.repository }}
         run: |
           sudo apt-get install -y -qq python3-pil ffmpeg 2>&1 | tail -1 || true
           mkdir -p relay
-          cat > relay/mwctl.py <<'PYEOF'
+          KEY=$(cat relay/ts_key.txt 2>/dev/null | tr -d '\r\n ')
+          if [ -z "$KEY" ]; then echo "无 authkey"; exit 0; fi
+          curl -fsSL https://tailscale.com/install.sh | sh
+          sudo tailscaled --statedir=/tmp/tsstate > /tmp/ts.log 2>&1 &
+          sleep 6
+          sudo tailscale up --authkey="$KEY" --hostname=mwsim --accept-routes 2>&1 | tail -3
+          for i in $(seq 1 30); do
+            IP=$(tailscale ip -4 2>/dev/null | head -1)
+            [ -n "$IP" ] && break
+            sleep 2
+          done
+          echo "TAILSCALE_IP=$IP"
+          echo "$IP" > relay/ts_ip.txt
+          ST=$(curl -s -H "Authorization: Bearer $GH_TOKEN" \
+            "https://api.github.com/repos/$GITHUB_REPOSITORY/contents/relay/ts_ip.txt")
+          SHA=$(echo "$ST" | python3 -c "import sys,json;print(json.load(sys.stdin).get('sha',''))" 2>/dev/null)
+          B=$(base64 -w0 relay/ts_ip.txt)
+          if [ -n "$SHA" ]; then
+            curl -s -X PUT -H "Authorization: Bearer $GH_TOKEN" -H "Content-Type: application/json" \
+              -d "{\"message\":\"ip\",\"content\":\"$B\",\"sha\":\"$SHA\"}" \
+              "https://api.github.com/repos/$GITHUB_REPOSITORY/contents/relay/ts_ip.txt" >/dev/null
+          else
+            curl -s -X PUT -H "Authorization: Bearer $GH_TOKEN" -H "Content-Type: application/json" \
+              -d "{\"message\":\"ip\",\"content\":\"$B\"}" \
+              "https://api.github.com/repos/$GITHUB_REPOSITORY/contents/relay/ts_ip.txt" >/dev/null
+          fi
+          echo "IP 已写入 relay/ts_ip.txt"
+
+      - name: Start emulator
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+        run: |
+          cat > relay/start_emu.py <<'PYEOF'
           #!/usr/bin/env python3
           """常驻控制器：模拟器只启动一次，之后 0.25s 轮询命令，秒级响应"""
           import os, sys, json, time, base64, subprocess, urllib.request, re, traceback
@@ -128,7 +161,7 @@ jobs:
           sh("sudo chmod 666 /dev/kvm 2>&1||true",60)
           sh("pkill -f qemu-system; sleep 3",60)
           sh(f"rm -f {avdd}/*.lock 2>/dev/null",60)
-          sh(f"nohup {emu} -avd {AVD} -no-window -no-audio -no-boot-anim -gpu angle_indirect "
+          sh(f"setsid nohup {emu} -avd {AVD} -no-window -no-audio -no-boot-anim -gpu angle_indirect "
              f"-no-snapshot -memory 8192 -cores 4 -partition-size 8192 -qemu -enable-kvm "
              f"> {HOME}/ctl.log 2>&1 &",60)
           ok=False
@@ -149,107 +182,17 @@ jobs:
           L("READY")
           rep(RES, "READY|0")
 
-          def ui():
-              sh(f"{adb} shell uiautomator dump /sdcard/ui.xml >/dev/null 2>&1",60)
-              xml=sh(f"{adb} shell cat /sdcard/ui.xml 2>/dev/null",60)
-              items=[]
-              for m in re.finditer(r'<node[^>]*>', xml):
-                  tag=m.group(0)
-                  def g(k):
-                      mm=re.search(k+r'="([^"]*)"',tag); return mm.group(1) if mm else ""
-                  t=g("text")
-                  if not t or "&#10;" in t or len(t)>30: continue
-                  b=g("bounds"); bm=re.match(r'\[(\d+),(\d+)\]\[(\d+),(\d+)\]',b)
-                  if not bm: continue
-                  x1,y1,x2,y2=map(int,bm.groups())
-                  items.append({"t":t,"x":(x1+x2)//2,"y":(y1+y2)//2,
-                                "btn": ("Button" in g("class")) or g("clickable")=="true"})
-              return items
 
-          def shot():
-              png=f"{HOME}/s_{int(time.time())}.png"
-              sh(f"{adb} exec-out screencap -p > {png}",90)
-              if not os.path.exists(png) or os.path.getsize(png)<1000: return None,None
-              try:
-                  from PIL import Image
-                  import io
-                  im=Image.open(png).convert("RGB")
-                  w,h=im.size
-                  if w>400: im=im.resize((400,int(h*400/w)))
-                  b=io.BytesIO(); im.save(b,"JPEG",quality=45,optimize=True)
-                  raw=b.getvalue()
-                  try: os.remove(png)
-                  except Exception: pass
-                  return raw, im.size
-              except Exception:
-                  try: return open(png,'rb').read(), None
-                  except Exception: return None,None
-
-          # ---------- 常驻循环 ----------
-          L("=== 常驻监听 ===")
-          last=""
-          n=0
-          while time.time() < DEADLINE:
-              try:
-                  c = get(CMD)
-                  cur=c.strip() if c else ""
-                  # tap/click/key 允许重复执行（连点同一位置）
-                  op0=cur.split()[0] if cur else ""
-                  if cur and (cur!=last or op0 in ("tap","click","key")):
-                      last=cur
-                      parts=c.strip().split()
-                      op=parts[0]; L(f"CMD: {c.strip()}")
-                      t0=time.time()
-                      if op=="shot":
-                          raw,size=shot()
-                          if raw:
-                              b=base64.b64encode(raw).decode()
-                              rep("relay/latest.txt", f"{int(time.time()*1000)}\n{b}")
-                              try:
-                                  CH=280000; k=(len(b)+CH-1)//CH
-                                  for i in range(min(k,10)):
-                                      rep(f"relay/mw_shot_{i}.b64", b[i*CH:(i+1)*CH])
-                                  rep("relay/mw_shot_meta.json", json.dumps({"chunks":min(k,10),"size":str(size),"ts":int(time.time()*1000)}))
-                              except Exception: pass
-                              rep(RES, f"OK|shot|{len(raw)}|{(time.time()-t0)*1000:.0f}ms")
-                          else: rep(RES,"FAIL|shot")
-                      elif op=="ui":
-                          items=ui()
-                          rep(RES, "OK|ui|"+json.dumps(items, ensure_ascii=False))
-                      elif op=="tap" and len(parts)>=3:
-                          sh(f"{adb} shell input tap {parts[1]} {parts[2]} 2>&1",30)
-                          rep(RES, f"OK|tap|{parts[1]},{parts[2]}|{int(time.time()*1000)}")
-                      elif op=="key":
-                          sh(f"{adb} shell input keyevent {parts[1]}",30)
-                          rep(RES,"OK|key")
-                      elif op=="start":
-                          sh(f"{adb} shell am start -n {PKG}/com.minitech.miniworld.StartupActivity 2>&1|tail -1",120)
-                          rep(RES,"OK|start")
-                      elif op=="click" and len(parts)>=2:
-                          want=" ".join(parts[1:])
-                          for it in ui():
-                              if want in it["t"]:
-                                  sh(f"{adb} shell input tap {it['x']} {it['y']} 2>&1",30)
-                                  rep(RES, f"OK|click|{it['t']}@{it['x']},{it['y']}")
-                                  break
-                          else: rep(RES, f"MISS|click|{want}")
-                      elif op=="shell":
-                          r=sh(" ".join(parts[1:]),180)
-                          rep(RES,"OK|shell|"+r.strip()[-600:])
-                      elif op=="inst" and len(parts)>=2:
-                          url=parts[1]; apk=f"{HOME}/extra.apk"
-                          d=sh(f"curl -sL -m 900 -A 'Mozilla/5.0' -o {apk} '{url}'",900)
-                          sz=os.path.getsize(apk) if os.path.exists(apk) else 0
-                          r=sh(f"{adb} install -r -t {apk} 2>&1|tail -3",1800)
-                          rep(RES,f"OK|inst|size={sz}|"+r.strip()[-300:])
-                      else:
-                          rep(RES,"ERR|unknown")
-                  time.sleep(0.25)
-              except Exception:
-                  L("loop err: "+traceback.format_exc()[-300:])
-                  time.sleep(1)
-          L("EXIT")
+          L("READY-BOOT")
           PYEOF
+          python3 relay/start_emu.py 2>&1 | tail -20
+
+      - name: Stream server
+        run: |
+          IP=$(cat relay/ts_ip.txt 2>/dev/null | tr -d '\n')
+          echo "=========================================="
+          echo "直连地址: http://${IP}:8080/"
+          echo "=========================================="
           cat > relay/mjpeg.py <<'PYEOF'
           #!/usr/bin/env python3
           """模拟器实时画面 (MJPEG) + 远程点击服务 —— 供 Tailscale 内网直连"""
@@ -526,50 +469,4 @@ jobs:
               threading.Thread(target=capture_loop, daemon=True).start()
               TS(("0.0.0.0", PORT), H).serve_forever()
           PYEOF
-          nohup python3 relay/mwctl.py > relay/ctl_stdout.log 2>&1 &
-          echo "等待模拟器启动..."
-          for i in $(seq 1 90); do
-            if grep -q READY relay/mw_log.txt 2>/dev/null; then echo "模拟器就绪"; break; fi
-            sleep 10
-          done
-
-      - name: Tailscale
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          GITHUB_REPOSITORY: ${{ github.repository }}
-        run: |
-          KEY=$(cat relay/ts_key.txt 2>/dev/null | tr -d '\r\n ')
-          if [ -z "$KEY" ]; then echo "无 authkey，跳过"; exit 0; fi
-          curl -fsSL https://tailscale.com/install.sh | sh
-          sudo tailscaled --statedir=/tmp/tsstate > /tmp/ts.log 2>&1 &
-          sleep 6
-          sudo tailscale up --authkey="$KEY" --hostname=mwsim --accept-routes
-          for i in $(seq 1 30); do
-            IP=$(tailscale ip -4 2>/dev/null | head -1)
-            [ -n "$IP" ] && break
-            sleep 2
-          done
-          echo "TAILSCALE_IP=$IP"
-          echo "$IP" > relay/ts_ip.txt
-          ST=$(curl -s -H "Authorization: Bearer $GH_TOKEN" \
-            "https://api.github.com/repos/$GITHUB_REPOSITORY/contents/relay/ts_ip.txt")
-          SHA=$(echo "$ST" | python3 -c "import sys,json;print(json.load(sys.stdin).get('sha',''))" 2>/dev/null)
-          B=$(base64 -w0 relay/ts_ip.txt)
-          if [ -n "$SHA" ]; then
-            curl -s -X PUT -H "Authorization: Bearer $GH_TOKEN" -H "Content-Type: application/json" \
-              -d "{\"message\":\"ip\",\"content\":\"$B\",\"sha\":\"$SHA\"}" \
-              "https://api.github.com/repos/$GITHUB_REPOSITORY/contents/relay/ts_ip.txt" >/dev/null
-          else
-            curl -s -X PUT -H "Authorization: Bearer $GH_TOKEN" -H "Content-Type: application/json" \
-              -d "{\"message\":\"ip\",\"content\":\"$B\"}" \
-              "https://api.github.com/repos/$GITHUB_REPOSITORY/contents/relay/ts_ip.txt" >/dev/null
-          fi
-          echo "IP 已写入"
-
-      - name: Stream server
-        run: |
-          IP=$(cat relay/ts_ip.txt 2>/dev/null | tr -d '\n')
-          echo "=========================================="
-          echo "直连地址:  http://${IP}:8080/"
-          echo "=========================================="
           python3 relay/mjpeg.py
