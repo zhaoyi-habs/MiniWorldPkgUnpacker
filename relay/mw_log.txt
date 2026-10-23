@@ -5,3 +5,4 @@ install: Performing Streamed Install
 Success
 READY
 === 常驻监听 ===
+CMD: shell python3 /tmp/t.py 2>&1|tail -1
