@@ -22,69 +22,13 @@ jobs:
           path: /home/runner/mw.apk
           key: mw-apk-v1
 
-      - name: Tailscale
+      - name: Start emulator
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GITHUB_REPOSITORY: ${{ github.repository }}
         run: |
           sudo apt-get install -y -qq python3-pil ffmpeg 2>&1 | tail -1 || true
           mkdir -p relay
-          KEY=$(cat relay/ts_key.txt 2>/dev/null | tr -d '\r\n ')
-          if [ -z "$KEY" ]; then echo "无 authkey"; exit 0; fi
-          case "$KEY" in
-            tskey-api-*)
-              echo "检测到 API key，正在换取 authkey..."
-              RAW=$(curl -s -X POST "https://api.tailscale.com/api/v2/tailnet/-/keys" \
-                -u "$KEY:" -H "Content-Type: application/json" \
-                -d '{"capabilities":{"devices":{"create":{"reusable":true,"preauthorized":true}}}}')
-              echo "API返回: ${RAW:0:200}"
-              KEY=$(echo "$RAW" | python3 -c "import sys,json;print(json.load(sys.stdin).get('key',''))" 2>/dev/null)
-              echo "换取到的 authkey: ${KEY:0:16}..."
-              ;;
-          esac
-          if [ -z "$KEY" ]; then echo "无有效 key"; exit 0; fi
-          curl -fsSL https://tailscale.com/install.sh | sh
-          sudo tailscaled --statedir=/tmp/tsstate > /tmp/ts.log 2>&1 &
-          sleep 6
-          sudo tailscale up --authkey="$KEY" --hostname=mwsim --accept-routes > /tmp/ts_up.log 2>&1; echo "up exit=$?"; tail -5 /tmp/ts_up.log
-          for i in $(seq 1 30); do
-            IP=$(tailscale ip -4 2>/dev/null | head -1)
-            [ -n "$IP" ] && break
-            sleep 2
-          done
-          echo "TAILSCALE_IP=$IP"
-          {
-            echo "=== ts debug ==="
-            echo "up-out:"; cat /tmp/ts_up.log 2>/dev/null | tail -20
-            echo "status:"; tailscale status 2>&1 | tail -20
-            echo "ip:"; tailscale ip -4 2>&1
-            echo "tsd-log:"; tail -20 /tmp/ts.log 2>/dev/null
-          } > relay/ts_debug.txt 2>&1
-          echo "$IP" > relay/ts_ip.txt
-          ST=$(curl -s -H "Authorization: Bearer $GH_TOKEN" \
-            "https://api.github.com/repos/$GITHUB_REPOSITORY/contents/relay/ts_ip.txt")
-          SHA=$(echo "$ST" | python3 -c "import sys,json;print(json.load(sys.stdin).get('sha',''))" 2>/dev/null)
-          B=$(base64 -w0 relay/ts_ip.txt)
-          if [ -n "$SHA" ]; then
-            curl -s -X PUT -H "Authorization: Bearer $GH_TOKEN" -H "Content-Type: application/json" \
-              -d "{\"message\":\"ip\",\"content\":\"$B\",\"sha\":\"$SHA\"}" \
-              "https://api.github.com/repos/$GITHUB_REPOSITORY/contents/relay/ts_ip.txt" >/dev/null
-          else
-            curl -s -X PUT -H "Authorization: Bearer $GH_TOKEN" -H "Content-Type: application/json" \
-              -d "{\"message\":\"ip\",\"content\":\"$B\"}" \
-              "https://api.github.com/repos/$GITHUB_REPOSITORY/contents/relay/ts_ip.txt" >/dev/null
-          fi
-          B2=$(base64 -w0 relay/ts_debug.txt)
-          curl -s -X PUT -H "Authorization: Bearer $GH_TOKEN" -H "Content-Type: application/json" \
-            -d "{\"message\":\"debug\",\"content\":\"$B2\"}" \
-            "https://api.github.com/repos/$GITHUB_REPOSITORY/contents/relay/ts_debug.txt" >/dev/null
-          echo "IP 已写入 relay/ts_ip.txt"
-
-      - name: Start emulator
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          GITHUB_REPOSITORY: ${{ github.repository }}
-        run: |
           cat > relay/start_emu.py <<'PYEOF'
           #!/usr/bin/env python3
           """常驻控制器：模拟器只启动一次，之后 0.25s 轮询命令，秒级响应"""
@@ -208,14 +152,13 @@ jobs:
 
           L("READY-BOOT")
           PYEOF
-          python3 relay/start_emu.py 2>&1 | tail -20
+          python3 relay/start_emu.py 2>&1 | tail -15
 
-      - name: Stream server
+      - name: Stream server and tunnel
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
         run: |
-          IP=$(cat relay/ts_ip.txt 2>/dev/null | tr -d '\n')
-          echo "=========================================="
-          echo "直连地址: http://${IP}:8080/"
-          echo "=========================================="
           cat > relay/mjpeg.py <<'PYEOF'
           #!/usr/bin/env python3
           """模拟器实时画面 (MJPEG) + 远程点击服务 —— 供 Tailscale 内网直连"""
@@ -492,4 +435,34 @@ jobs:
               threading.Thread(target=capture_loop, daemon=True).start()
               TS(("0.0.0.0", PORT), H).serve_forever()
           PYEOF
-          python3 relay/mjpeg.py
+          nohup python3 relay/mjpeg.py > relay/mjpeg.log 2>&1 &
+          sleep 5
+          echo "本地服务: $(curl -s -m 5 http://127.0.0.1:8080/ping)"
+          echo "建立公网隧道..."
+          nohup ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null \
+            -o ServerAliveInterval=60 -o ServerAliveCountMax=3 \
+            -R 80:localhost:8080 -N nokey@localhost.run > relay/tunnel.log 2>&1 &
+          URL=""
+          for i in $(seq 1 40); do
+            sleep 3
+            URL=$(grep -oE 'https://[a-z0-9.-]+\.(lhr\.life|localhost\.run)' relay/tunnel.log 2>/dev/null | head -1)
+            [ -n "$URL" ] && break
+          done
+          echo "TUNNEL_URL=$URL"
+          echo "$URL" > relay/tunnel_url.txt
+          B=$(base64 -w0 relay/tunnel_url.txt)
+          ST=$(curl -s -H "Authorization: Bearer $GH_TOKEN" \
+            "https://api.github.com/repos/$GITHUB_REPOSITORY/contents/relay/tunnel_url.txt")
+          SHA=$(echo "$ST" | python3 -c "import sys,json;print(json.load(sys.stdin).get('sha',''))" 2>/dev/null)
+          if [ -n "$SHA" ]; then
+            curl -s -X PUT -H "Authorization: Bearer $GH_TOKEN" -H "Content-Type: application/json" \
+              -d "{\"message\":\"url\",\"content\":\"$B\",\"sha\":\"$SHA\"}" \
+              "https://api.github.com/repos/$GITHUB_REPOSITORY/contents/relay/tunnel_url.txt" >/dev/null
+          else
+            curl -s -X PUT -H "Authorization: Bearer $GH_TOKEN" -H "Content-Type: application/json" \
+              -d "{\"message\":\"url\",\"content\":\"$B\"}" \
+              "https://api.github.com/repos/$GITHUB_REPOSITORY/contents/relay/tunnel_url.txt" >/dev/null
+          fi
+          echo "==== 隧道地址: $URL ===="
+          echo "保持隧道存活..."
+          while true; do sleep 60; done
