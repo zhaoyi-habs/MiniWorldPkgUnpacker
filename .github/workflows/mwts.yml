@@ -445,7 +445,10 @@ jobs:
           URL=""
           for i in $(seq 1 40); do
             sleep 3
-            URL=$(grep -oE 'https://[a-z0-9.-]+\.(lhr\.life|localhost\.run)' relay/tunnel.log 2>/dev/null | head -1)
+            URL=$(grep -oE 'https://[a-zA-Z0-9][a-zA-Z0-9.-]*\.lhr\.life' relay/tunnel.log 2>/dev/null | grep -v admin | head -1)
+            if [ -z "$URL" ]; then
+              URL=$(grep -oE 'https://[a-zA-Z0-9][a-zA-Z0-9.-]+\.(lhr\.life|localhost\.run)' relay/tunnel.log 2>/dev/null | grep -vE 'admin|ssh\.' | head -1)
+            fi
             [ -n "$URL" ] && break
           done
           echo "TUNNEL_URL=$URL"
@@ -463,6 +466,10 @@ jobs:
               -d "{\"message\":\"url\",\"content\":\"$B\"}" \
               "https://api.github.com/repos/$GITHUB_REPOSITORY/contents/relay/tunnel_url.txt" >/dev/null
           fi
+          B3=$(base64 -w0 relay/tunnel.log 2>/dev/null)
+          [ -n "$B3" ] && curl -s -X PUT -H "Authorization: Bearer $GH_TOKEN" -H "Content-Type: application/json" \
+            -d "{\"message\":\"tlog\",\"content\":\"$B3\"}" \
+            "https://api.github.com/repos/$GITHUB_REPOSITORY/contents/relay/tunnel.log" >/dev/null
           echo "==== 隧道地址: $URL ===="
           echo "保持隧道存活..."
           while true; do sleep 60; done
