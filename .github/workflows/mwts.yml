@@ -31,6 +31,18 @@ jobs:
           mkdir -p relay
           KEY=$(cat relay/ts_key.txt 2>/dev/null | tr -d '\r\n ')
           if [ -z "$KEY" ]; then echo "无 authkey"; exit 0; fi
+          case "$KEY" in
+            tskey-api-*)
+              echo "检测到 API key，正在换取 authkey..."
+              RAW=$(curl -s -X POST "https://api.tailscale.com/api/v2/tailnet/-/keys" \
+                -u "$KEY:" -H "Content-Type: application/json" \
+                -d '{"capabilities":{"devices":{"create":{"reusable":true,"preauthorized":true}}}}')
+              echo "API返回: ${RAW:0:200}"
+              KEY=$(echo "$RAW" | python3 -c "import sys,json;print(json.load(sys.stdin).get('key',''))" 2>/dev/null)
+              echo "换取到的 authkey: ${KEY:0:16}..."
+              ;;
+          esac
+          if [ -z "$KEY" ]; then echo "无有效 key"; exit 0; fi
           curl -fsSL https://tailscale.com/install.sh | sh
           sudo tailscaled --statedir=/tmp/tsstate > /tmp/ts.log 2>&1 &
           sleep 6
