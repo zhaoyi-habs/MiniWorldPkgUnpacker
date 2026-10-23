@@ -4,3 +4,4 @@ booted
 install: Performing Streamed Install
 Success
 READY
+READY-BOOT
