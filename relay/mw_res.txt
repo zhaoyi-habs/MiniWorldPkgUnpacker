@@ -1,1 +1,1 @@
-OK|shell|python3: can't open file '/tmp/t.py': [Errno 2] No such file or directory
+READY|0
